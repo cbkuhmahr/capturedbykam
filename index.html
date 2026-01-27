@@ -1,172 +1,118 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Capturedby_Kam</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capturedby_Kam</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --bg:#000000;
-      --green:#00FF66;
-      --font:'VT323', monospace;
+<style>
+:root{
+  --bg:#000000;
+  --green:#00FF66;
+  --font:'VT323', monospace;
+  --grid-gap:14px;
+  --grid-line:2px;
+}
 
-      /* Gallery line + spacing */
-      --grid-gap:14px;
-      --grid-line:2px;
-    }
+*{ box-sizing:border-box; }
 
-    *{ box-sizing:border-box; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--green);
+  font-family:var(--font);
+}
 
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--green);
-      font-family:var(--font);
-    }
+.page{
+  padding:24px 18px 60px;
+  max-width:520px;
+  margin:0 auto;
+}
 
-    .page{
-      padding:24px 18px 60px;
-      max-width:520px;
-      margin:0 auto;
-      text-align:center;
-    }
+.title{
+  margin:0 0 8px 0;
+  font-size:40px;
+}
 
-    .title{
-      margin:0 0 10px 0;
-      font-size:40px;
-      line-height:1.0;
-    }
+.tagline{
+  margin:0 0 22px 0;
+  font-size:18px;
+  line-height:1.3;
+}
 
-    .tagline{
-      margin:0 0 26px 0;
-      font-size:18px;
-      line-height:1.3;
-    }
+.menu{
+  display:flex;
+  gap:22px;
+  margin:0 0 26px 0;
+  font-size:22px;
+  flex-wrap:wrap;
+}
 
-    .menu{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin:0 0 26px 0;
-      font-size:22px;
-      flex-wrap:wrap;
-    }
+.menu a{
+  color:var(--green);
+  text-decoration:none;
+}
 
-    .menu a{
-      color:var(--green);
-      text-decoration:none;
-      white-space:nowrap;
-    }
+.menu a:hover{ text-decoration:underline; }
 
-    .menu a:hover{ text-decoration:underline; }
+.section{ margin-top:32px; }
 
-    .section{
-      margin-top:42px;
-      text-align:left;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:var(--grid-gap);
+}
 
-    .section h2{
-      margin:0 0 10px 0;
-      font-size:26px;
-    }
+.tile{
+  border:var(--grid-line) solid var(--green);
+  aspect-ratio:3 / 4;
+  overflow:hidden;
+}
 
-    .section p{
-      margin:0 0 10px 0;
-      font-size:18px;
-      line-height:1.35;
-      max-width:44ch;
-    }
+.tile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:var(--grid-gap);
-      margin-top:10px;
-    }
-
-    .tile{
-      border:var(--grid-line) solid var(--green);
-      aspect-ratio:3 / 4;
-      overflow:hidden;
-      display:block;
-      background:transparent;
-    }
-
-    .tile img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    iframe{
-      width:100%;
-      border:var(--grid-line) solid var(--green);
-      background:transparent;
-    }
-
-    @media (max-width:420px){
-      .menu{ font-size:20px; }
-      .grid{ gap:12px; }
-    }
-  </style>
+@media (max-width:420px){
+  .menu{ font-size:20px; gap:16px; }
+  .grid{ gap:12px; }
+}
+</style>
 </head>
 
 <body>
-  <div class="page">
-    <h1 class="title">Capturedby_Kam</h1>
+<div class="page">
 
-    <p class="tagline">
-      EVERY FRAME, EVERY PROJECT<br>
-      TIMELESS.AUTHNTC [CBK_EST.2025]
-    </p>
+<h1 class="title">Capturedby_Kam</h1>
 
-    <nav class="menu" aria-label="Main menu">
-      <a href="#about">ABOUT</a>
-      <a href="#contact">CONTACT</a>
-      <a href="#gallery">GALLERY</a>
-      <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-      <a href="https://www.youtube.com/channel/UCElF7AAZfFxECZuZ0yzzW5g" target="_blank" rel="noreferrer">YOUTUBE</a>
-    </nav>
+<p class="tagline">
+EVERY FRAME, EVERY PROJECT<br>
+TIMELESS.AUTHNTC [CBK_EST.2025]
+</p>
 
-    <section id="gallery" class="section" aria-label="Gallery">
-      <h2>GALLERY</h2>
+<nav class="menu">
+  <a href="about.html">ABOUT</a>
+  <a href="contact.html">CONTACT</a>
+  <a href="index.html">GALLERY</a>
+  <a href="https://www.instagram.com/capturedby_kam/" target="_blank">IG</a>
+  <a href="https://youtube.com/@capturedbykammedia?si=E7b2KKYCvbEXX-bR" target="_blank">YOUTUBE</a>
+</nav>
 
-      <div class="grid">
-        <a class="tile" href="images/01.jpg"><img src="images/01.jpg" alt="Gallery image 01"></a>
-        <a class="tile" href="images/02.jpg"><img src="images/02.jpg" alt="Gallery image 02"></a>
-        <a class="tile" href="images/03.jpg"><img src="images/03.jpg" alt="Gallery image 03"></a>
-        <a class="tile" href="images/04.jpg"><img src="images/04.jpg" alt="Gallery image 04"></a>
-        <a class="tile" href="images/05.jpg"><img src="images/05.jpg" alt="Gallery image 05"></a>
-        <a class="tile" href="images/06.jpg"><img src="images/06.jpg" alt="Gallery image 06"></a>
-      </div>
-    </section>
-
-    <section id="about" class="section" aria-label="About">
-      <h2>ABOUT</h2>
-      <p>
-        I’m Kam — a visual storyteller focused on timeless, authentic imagery.
-        Built for legacy, not likes.
-      </p>
-    </section>
-
-    <section id="contact" class="section" aria-label="Contact">
-      <h2>CONTACT</h2>
-      <p>Email: <a href="mailto:capturedbykammedia@gmail.com">capturedbykammedia@gmail.com</a></p>
-      <p>IG: <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="UCElF7AAZfFxECZuZ0yzzW5g">@capturedby_kam</a></p>
-
-      <iframe
-        src="https://docs.google.com/forms/d/e/1FAIpQLSeze8HP2hj-p5kLfDxvocaHESh9FMJ8uUcAmEOc-CwhHtuJ7Q/viewform?usp=dialog"
-        height="650"
-        loading="lazy"
-        title="Captured by Kam Contact Form">
-      </iframe>
-    </section>
-
+<section class="section">
+  <div class="grid">
+    <div class="tile"></div>
+    <div class="tile"></div>
+    <div class="tile"></div>
+    <div class="tile"></div>
+    <div class="tile"></div>
+    <div class="tile"></div>
   </div>
+</section>
+
+</div>
 </body>
 </html>
