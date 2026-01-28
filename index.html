@@ -13,6 +13,7 @@
   --green:#00FF66;
   --font:'VT323', monospace;
   --line:2px;
+  --gap:14px;
 }
 
 *{ box-sizing:border-box; }
@@ -46,7 +47,6 @@ body{
 
 .menu{
   display:flex;
-  justify-content:flex-start;
   gap:22px;
   margin:0 0 26px 0;
   font-size:24px;
@@ -62,7 +62,9 @@ body{
 
 .menu a:hover{ text-decoration:underline; }
 
-.section{ margin-top:26px; }
+.section{
+  margin-top:26px;
+}
 
 .section h2{
   margin:0 0 12px 0;
@@ -70,14 +72,36 @@ body{
   text-align:left;
 }
 
-.ig-frame{
-  width:100%;
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:var(--gap);
+}
+
+.tile{
   border:var(--line) solid var(--green);
+  aspect-ratio:3 / 4;
   overflow:hidden;
 }
 
+.tile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* If images aren't uploaded yet, keep empty tiles visible */
+.empty{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  opacity:0.8;
+}
+
 @media (max-width:420px){
-  .title{ font-size:40px; }
   .menu{ font-size:22px; gap:16px; }
 }
 </style>
@@ -98,22 +122,22 @@ body{
     <a href="contact.html">CONTACT</a>
     <a href="index.html">GALLERY</a>
     <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-    <a href="https://youtube.com/@capturedbykammedia?si=E7b2KKYCvbEXX-bR" target="_blank" rel="noreferrer">YOUTUBE</a>
+    <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
   </nav>
-<section class="section">
-  <h2>GALLERY</h2>
 
-  <div class="grid">
-    <div class="tile"><img src="images/01.jpg"></div>
-    <div class="tile"><img src="images/02.jpg"></div>
-    <div class="tile"><img src="images/03.jpg"></div>
-    <div class="tile"><img src="images/04.jpg"></div>
-    <div class="tile"><img src="images/05.jpg"></div>
-    <div class="tile"><img src="images/06.jpg"></div>
-  </div>
+  <section class="section" aria-label="Gallery">
+    <h2>GALLERY</h2>
 
-</section>
+    <div class="grid">
+      <div class="tile"><img src="images/01.jpg" alt="Gallery 01" onerror="this.remove(); this.parentElement.classList.add('empty'); this.parentElement.textContent='01';"></div>
+      <div class="tile"><img src="images/02.jpg" alt="Gallery 02" onerror="this.remove(); this.parentElement.classList.add('empty'); this.parentElement.textContent='02';"></div>
+      <div class="tile"><img src="images/03.jpg" alt="Gallery 03" onerror="this.remove(); this.parentElement.classList.add('empty'); this.parentElement.textContent='03';"></div>
+      <div class="tile"><img src="images/04.jpg" alt="Gallery 04" onerror="this.remove(); this.parentElement.classList.add('empty'); this.parentElement.textContent='04';"></div>
+      <div class="tile"><img src="images/05.jpg" alt="Gallery 05" onerror="this.remove(); this.parentElement.classList.add('empty'); this.parentElement.textContent='05';"></div>
+      <div class="tile"><img src="images/06.jpg" alt="Gallery 06" onerror="this.remove(); this.parentElement.classList.add('empty'); this.parentElement.textContent='06';"></div>
+    </div>
+  </section>
+
 </div>
-
 </body>
 </html>
