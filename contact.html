@@ -15,6 +15,8 @@
   --line:2px;
 }
 
+*{ box-sizing:border-box; }
+
 body{
   margin:0;
   background:var(--bg);
@@ -24,31 +26,65 @@ body{
 
 .page{
   padding:24px 18px 60px;
-  max-width:520px;
+  max-width:560px;
   margin:0 auto;
 }
 
-.title{ font-size:40px; margin:0 0 8px; }
-.tagline{ font-size:18px; margin:0 0 22px; }
+.title{
+  margin:0 0 8px 0;
+  font-size:44px;
+  line-height:1;
+  text-align:left;
+}
+
+.tagline{
+  margin:0 0 18px 0;
+  font-size:20px;
+  line-height:1.25;
+  text-align:left;
+}
 
 .menu{
   display:flex;
+  justify-content:flex-start;
   gap:22px;
-  margin-bottom:32px;
-  font-size:22px;
+  margin:0 0 26px 0;
+  font-size:24px;
+  flex-wrap:wrap;
 }
 
 .menu a{
   color:var(--green);
   text-decoration:none;
+  white-space:nowrap;
 }
 
 .menu a:hover{ text-decoration:underline; }
 
+h2{
+  margin:0 0 12px 0;
+  font-size:28px;
+}
+
+p{
+  margin:0 0 10px 0;
+  font-size:20px;
+  line-height:1.25;
+}
+
+a{ color:var(--green); }
+
+.form-frame{
+  margin-top:16px;
+  width:100%;
+  border:var(--line) solid var(--green);
+  overflow:hidden;
+}
+
 iframe{
   width:100%;
-  height:650px;
-  border:var(--line) solid var(--green);
+  height:700px;
+  border:0;
 }
 </style>
 </head>
@@ -56,21 +92,27 @@ iframe{
 <body>
 <div class="page">
 
-<h1 class="title">Capturedby_Kam</h1>
-<p class="tagline">CONTACT</p>
+  <h1 class="title">Capturedby_Kam</h1>
+  <p class="tagline">CONTACT</p>
 
-<nav class="menu">
-  <a href="index.html">GALLERY</a>
-  <a href="about.html">ABOUT</a>
-</nav>
+  <nav class="menu" aria-label="Contact menu">
+    <a href="index.html">GALLERY</a>
+    <a href="about.html">ABOUT</a>
+    <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
+    <a href="https://youtube.com/@capturedbykammedia?si=E7b2KKYCvbEXX-bR" target="_blank" rel="noreferrer">YOUTUBE</a>
+  </nav>
 
-<p>Email: capturedbykammedia@gmail.com</p>
+  <h2>CONTACT</h2>
 
-<iframe
-  src="https://docs.google.com/forms/d/e/1FAIpQLSeze8HP2hj-p5kLfDxvocaHESh9FMJ8uUcAmEOc-CwhHtuJ7Q/viewform?usp=dialog"
-  loading="lazy"
-  title="Contact form">
-</iframe>
+  <p>Email: <a href="mailto:capturedbykammedia@gmail.com">capturedbykammedia@gmail.com</a></p>
+
+  <div class="form-frame">
+    <iframe
+      src="REPLACE-WITH-YOUR-GOOGLE-FORM-EMBED-URL"
+      loading="lazy"
+      title="Captured by Kam Contact Form">
+    </iframe>
+  </div>
 
 </div>
 </body>
