@@ -4,111 +4,48 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Contact — Capturedby_Kam</title>
-
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --bg:#000000;
-  --green:#00FF66;
-  --font:'VT323', monospace;
-  --line:2px;
-}
-
+:root{ --bg:#000; --green:#00FF66; --font:'VT323', monospace; --line:2px; }
 *{ box-sizing:border-box; }
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--green);
-  font-family:var(--font);
-}
-
-.page{
-  padding:24px 18px 60px;
-  max-width:560px;
-  margin:0 auto;
-}
-
-.title{
-  margin:0 0 8px 0;
-  font-size:44px;
-  line-height:1;
-  text-align:left;
-}
-
-.tagline{
-  margin:0 0 18px 0;
-  font-size:20px;
-  line-height:1.25;
-  text-align:left;
-}
-
-.menu{
-  display:flex;
-  justify-content:flex-start;
-  gap:22px;
-  margin:0 0 26px 0;
-  font-size:24px;
-  flex-wrap:wrap;
-}
-
-.menu a{
-  color:var(--green);
-  text-decoration:none;
-  white-space:nowrap;
-}
-
+body{ margin:0; background:var(--bg); color:var(--green); font-family:var(--font); }
+.page{ padding:24px 18px 60px; max-width:560px; margin:0 auto; }
+.title{ margin:0 0 8px 0; font-size:44px; line-height:1; }
+.tagline{ margin:0 0 18px 0; font-size:20px; }
+.menu{ display:flex; gap:22px; margin:0 0 26px 0; font-size:24px; flex-wrap:wrap; }
+.menu a{ color:var(--green); text-decoration:none; white-space:nowrap; }
 .menu a:hover{ text-decoration:underline; }
-
-h2{
-  margin:0 0 12px 0;
-  font-size:28px;
-}
-
-p{
-  margin:0 0 10px 0;
-  font-size:20px;
-  line-height:1.25;
-}
-
+h2{ margin:0 0 12px 0; font-size:28px; }
+p{ margin:0 0 12px 0; font-size:20px; line-height:1.25; }
 a{ color:var(--green); }
 
-.form-frame{
-  margin-top:16px;
-  width:100%;
-  border:var(--line) solid var(--green);
-  overflow:hidden;
-}
+.form-frame{ border:var(--line) solid var(--green); margin-top:14px; overflow:hidden; }
+.form-frame iframe{ width:100%; height:1157px; border:0; display:block; }
 
-iframe{
-  width:100%;
-  height:700px;
-  border:0;
-}
+@media (max-width:420px){ .menu{ font-size:22px; gap:16px; } }
 </style>
 </head>
 
 <body>
 <div class="page">
-
   <h1 class="title">Capturedby_Kam</h1>
   <p class="tagline">CONTACT</p>
 
-  <nav class="menu" aria-label="Contact menu">
+  <nav class="menu">
     <a href="index.html">GALLERY</a>
     <a href="about.html">ABOUT</a>
+    <a href="services.html">SERVICES</a>
     <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-    <a href="https://youtube.com/@capturedbykammedia?si=E7b2KKYCvbEXX-bR" target="_blank" rel="noreferrer">YOUTUBE</a>
+    <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
   </nav>
 
   <h2>CONTACT</h2>
-
   <p>Email: <a href="mailto:capturedbykammedia@gmail.com">capturedbykammedia@gmail.com</a></p>
 
   <div class="form-frame">
     <iframe
-      src="REPLACE-WITH-YOUR-GOOGLE-FORM-EMBED-URL"
+      src="https://docs.google.com/forms/d/e/1FAIpQLSeze8HP2hj-p5kLfDxvocaHESh9FMJ8uUcAmEOc-CwhHtuJ7Q/viewform?embedded=true"
       loading="lazy"
       title="Captured by Kam Contact Form">
     </iframe>
