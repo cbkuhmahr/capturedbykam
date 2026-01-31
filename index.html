@@ -13,6 +13,7 @@
   --green:#00FF66;
   --font:'VT323', monospace;
   --line:2px;
+  --gap:14px;
 }
 
 *{ box-sizing:border-box; }
@@ -82,16 +83,54 @@ p{
   margin-top:14px;
 }
 
-.cta{
-  display:inline-block;
+/* GALLERY: horizontal “filmstrip” (images + video), swipe-friendly */
+.gallery-strip{
   border:var(--line) solid var(--green);
-  padding:8px 12px;
-  font-size:22px;
-  text-decoration:none;
-  color:var(--green);
+  padding:12px;
+  overflow-x:auto;
+  display:flex;
+  gap:var(--gap);
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+}
+
+.media{
+  flex:0 0 76%;
+  max-width:76%;
+  border:var(--line) solid var(--green);
+  scroll-snap-align:start;
+  background:#000;
+}
+
+.media-inner{
+  width:100%;
+  aspect-ratio:3 / 4;
+  display:block;
+  overflow:hidden;
+}
+
+.media img,
+.media video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.media-label{
+  font-size:18px;
+  padding:8px 10px;
+  border-top:var(--line) solid var(--green);
+  opacity:.95;
+}
+
+.hint{
+  font-size:18px;
+  opacity:.9;
   margin-top:10px;
 }
 
+/* FOOTER */
 .footer{
   margin-top:28px;
   padding-top:16px;
@@ -129,6 +168,7 @@ p{
 
 @media (max-width:420px){
   .menu{ font-size:22px; gap:16px; }
+  .media{ flex-basis:84%; max-width:84%; }
 }
 </style>
 </head>
@@ -144,7 +184,7 @@ p{
   </p>
 
   <nav class="menu" aria-label="Main menu">
-    <a href="index.html">HOME</a>
+    <a href="index.html">GALLERY</a>
     <a href="about.html">ABOUT</a>
     <a href="services.html">SERVICES</a>
     <a href="contact.html">CONTACT</a>
@@ -153,34 +193,111 @@ p{
   </nav>
 
   <section class="section">
-    <h2>WELCOME</h2>
-    <p>
-      Captured by Kam is built on presence, intention, and honest visual storytelling.
-      This isn’t content for the algorithm. It’s work designed to last.
-    </p>
-    <p>
-      Portraits. Seniors. Teams. Moments worth holding onto.
-    </p>
-  </section>
+    <h2>GALLERY</h2>
 
-  <section class="section">
-    <h2>THE WORK</h2>
-    <p>
-      Photography and video rooted in real energy. Clean frames.
-      No overproduction. No shortcuts.
-    </p>
-    <a class="cta" href="contact.html">START A CONVERSATION</a>
-  </section>
+    <div class="gallery-strip" aria-label="Swipe gallery">
+      <!-- IMAGES: update filenames ONLY if your GitHub names differ -->
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.01.JPG" alt="Gallery image 01" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 01</div>
+      </div>
 
-  <section class="section">
-    <h2>PHILOSOPHY</h2>
-    <div class="box">
-      <p style="margin-bottom:0;">
-        Show up.<br>
-        Be intentional.<br>
-        Frame it right.
-      </p>
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.02.JPG" alt="Gallery image 02" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 02</div>
+      </div>
+
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.03.JPG" alt="Gallery image 03" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 03</div>
+      </div>
+
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.04.JPG" alt="Gallery image 04" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 04</div>
+      </div>
+
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.05.JPG" alt="Gallery image 05" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 05</div>
+      </div>
+
+      <!-- SHORT VIDEO: drop your video file into /images/ and name it exactly like below -->
+      <div class="media">
+        <div class="media-inner">
+          <video src="images/video.01.MP4" controls playsinline preload="metadata"></video>
+        </div>
+        <div class="media-label">VIDEO 01</div>
+      </div>
+
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.06.JPG" alt="Gallery image 06" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 06</div>
+      </div>
+
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.07.JPG" alt="Gallery image 07" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 07</div>
+      </div>
+
+      <div class="media">
+        <div class="media-inner">
+          <video src="images/video.02.MP4" controls playsinline preload="metadata"></video>
+        </div>
+        <div class="media-label">VIDEO 02</div>
+      </div>
+
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.08.JPG" alt="Gallery image 08" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 08</div>
+      </div>
+
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.09.JPG" alt="Gallery image 09" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 09</div>
+      </div>
+
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.10.JPG" alt="Gallery image 10" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 10</div>
+      </div>
+
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.11.JPG" alt="Gallery image 11" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 11</div>
+      </div>
+
+      <div class="media">
+        <div class="media-inner">
+          <img src="images/images.12.JPG" alt="Gallery image 12" loading="lazy">
+        </div>
+        <div class="media-label">IMAGE 12</div>
+      </div>
     </div>
+
+    <div class="hint">Swipe → (if something shows a broken image icon, it means the filename in GitHub doesn’t match exactly.)</div>
   </section>
 
   <footer class="footer">
@@ -204,7 +321,7 @@ p{
         YouTube
       </a>
 
-      <a href="mailto:kam@capturedbykam.com">Contact</a>
+      <a href="contact.html">Contact</a>
     </div>
   </footer>
 
