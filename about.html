@@ -11,45 +11,24 @@
 *{ box-sizing:border-box; }
 body{ margin:0; background:var(--bg); color:var(--green); font-family:var(--font); }
 .page{ padding:24px 18px 60px; max-width:560px; margin:0 auto; }
-.title{ margin:0 0 8px 0; font-size:44px; line-height:1; }
+.title{ margin:0 0 8px 0; font-size:44px; line-height:1; text-align:left; }
 .title a{ color:var(--green); text-decoration:none; }
-.tagline{ margin:0 0 18px 0; font-size:20px; }
+.tagline{ margin:0 0 18px 0; font-size:20px; line-height:1.25; text-align:left; }
+
 .menu{ display:flex; gap:22px; margin:0 0 26px 0; font-size:24px; flex-wrap:wrap; }
 .menu a{ color:var(--green); text-decoration:none; white-space:nowrap; }
 .menu a:hover{ text-decoration:underline; }
+
 h2{ margin:0 0 12px 0; font-size:28px; }
 p{ margin:0 0 14px 0; font-size:20px; line-height:1.25; max-width:50ch; }
 
-.footer{
-  margin-top:28px;
-  padding-top:16px;
-  border-top:var(--line) solid var(--green);
-}
-
-.footer .brand-lines{
-  font-size:20px;
-  line-height:1.15;
-  margin-bottom:10px;
-}
-
-.footer .links{
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-  align-items:center;
-  font-size:20px;
-}
-
+/* FOOTER */
+.footer{ margin-top:28px; padding-top:16px; border-top:var(--line) solid var(--green); }
+.footer .brand-lines{ font-size:20px; line-height:1.15; margin-bottom:10px; }
+.footer .links{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; font-size:20px; }
 .footer a{ color:var(--green); text-decoration:none; }
 .footer a:hover{ text-decoration:underline; }
-
-.icon{
-  width:18px;
-  height:18px;
-  vertical-align:-3px;
-  margin-right:6px;
-  fill:var(--green);
-}
+.icon{ width:18px; height:18px; vertical-align:-3px; margin-right:6px; fill:var(--green); }
 
 @media (max-width:420px){ .menu{ font-size:22px; gap:16px; } }
 </style>
@@ -58,12 +37,17 @@ p{ margin:0 0 14px 0; font-size:20px; line-height:1.25; max-width:50ch; }
 <body>
 <div class="page">
   <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
-  <p class="tagline">ABOUT</p>
+
+  <p class="tagline">
+    EVERY FRAME, EVERY PROJECT<br>
+    TIMELESS.AUTHNTC [CBK_EST.2025]
+  </p>
 
   <nav class="menu" aria-label="Main menu">
     <a href="index.html">GALLERY</a>
     <a href="about.html">ABOUT</a>
     <a href="services.html">SERVICES</a>
+    <a href="services.html#terms">TERMS</a>
     <a href="contact.html">CONTACT</a>
     <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
     <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
@@ -71,7 +55,7 @@ p{ margin:0 0 14px 0; font-size:20px; line-height:1.25; max-width:50ch; }
 
   <h2>ABOUT</h2>
   <p>I’m Kam — a visual storyteller focused on timeless, authentic imagery.</p>
-  <p>Built for legacy, not likes. Clean. Honest. Intentional.</p>
+  <p>Legacy, not likes. Clean. Honest. Intentional.</p>
 
   <footer class="footer">
     <div class="brand-lines">
