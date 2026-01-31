@@ -1,9 +1,11 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Capturedby_Kam</title>
+
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
 <style>
@@ -12,47 +14,161 @@
   --green:#00FF66;
   --font:'VT323', monospace;
   --line:2px;
-  --gap:14px;
 }
-*{ box-sizing:border-box; }
-body{ margin:0; background:var(--bg); color:var(--green); font-family:var(--font); }
-.page{ padding:24px 18px 60px; max-width:560px; margin:0 auto; }
 
-.title{ margin:0 0 8px 0; font-size:44px; line-height:1; text-align:left; }
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--green);
+  font-family:var(--font);
+}
+
+.page{
+  padding:24px 18px 60px;
+  max-width:560px;
+  margin:0 auto;
+}
+
+.title{
+  margin:0 0 8px 0;
+  font-size:44px;
+  line-height:1;
+  text-align:left;
+}
 .title a{ color:var(--green); text-decoration:none; }
 
-.tagline{ margin:0 0 18px 0; font-size:20px; line-height:1.25; text-align:left; }
+.tagline{
+  margin:0 0 18px 0;
+  font-size:20px;
+  line-height:1.25;
+  text-align:left;
+}
 
 .menu{
-  display:flex; gap:22px; margin:0 0 26px 0;
-  font-size:24px; flex-wrap:wrap; text-align:left;
+  display:flex;
+  gap:22px;
+  margin:0 0 18px 0;
+  font-size:24px;
+  flex-wrap:wrap;
+  text-align:left;
 }
-.menu a{ color:var(--green); text-decoration:none; white-space:nowrap; }
+.menu a{
+  color:var(--green);
+  text-decoration:none;
+  white-space:nowrap;
+}
 .menu a:hover{ text-decoration:underline; }
 
-.section{ margin-top:26px; }
-.section h2{ margin:0 0 12px 0; font-size:28px; text-align:left; }
+.section{
+  margin-top:18px;
+}
 
-/* GRID */
-.grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:var(--gap); }
-.tile{ border:var(--line) solid var(--green); aspect-ratio:3 / 4; overflow:hidden; }
-.tile img{ width:100%; height:100%; object-fit:cover; display:block; }
+.section h2{
+  margin:0 0 12px 0;
+  font-size:28px;
+  text-align:left;
+}
+
+/* VIEWER (NON-GRID) */
+.viewer{
+  border:var(--line) solid var(--green);
+  position:relative;
+  overflow:hidden;
+  background:#000;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:pan-y;
+}
+
+.viewer-inner{
+  position:relative;
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.viewer img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.loading{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  letter-spacing:1px;
+  background:rgba(0,0,0,.65);
+}
+
+.hud{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:10px;
+  font-size:20px;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.controls{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.btn{
+  border:var(--line) solid var(--green);
+  background:transparent;
+  color:var(--green);
+  font-family:var(--font);
+  font-size:20px;
+  padding:6px 10px;
+  cursor:pointer;
+}
+.btn:active{ transform:translateY(1px); }
+
+.counter{
+  opacity:.95;
+}
 
 /* FOOTER */
 .footer{
-  margin-top:28px; padding-top:16px;
+  margin-top:28px;
+  padding-top:16px;
   border-top:var(--line) solid var(--green);
 }
-.footer .brand-lines{ font-size:20px; line-height:1.15; margin-bottom:10px; }
+.footer .brand-lines{
+  font-size:20px;
+  line-height:1.15;
+  margin-bottom:10px;
+}
 .footer .links{
-  display:flex; gap:14px; flex-wrap:wrap;
-  align-items:center; font-size:20px;
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  align-items:center;
+  font-size:20px;
 }
 .footer a{ color:var(--green); text-decoration:none; }
 .footer a:hover{ text-decoration:underline; }
-.icon{ width:18px; height:18px; vertical-align:-3px; margin-right:6px; fill:var(--green); }
 
-@media (max-width:420px){ .menu{ font-size:22px; gap:16px; } }
+.icon{
+  width:18px;
+  height:18px;
+  vertical-align:-3px;
+  margin-right:6px;
+  fill:var(--green);
+}
+
+@media (max-width:420px){
+  .menu{ font-size:22px; gap:16px; }
+}
 </style>
 </head>
 
@@ -72,26 +188,30 @@ body{ margin:0; background:var(--bg); color:var(--green); font-family:var(--font
     <a href="services.html">SERVICES</a>
     <a href="contact.html">CONTACT</a>
     <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-    <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
+    <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
   </nav>
 
   <section class="section" aria-label="Gallery">
-    <h2>GALLERY</h2>
+    <h2>GALLERY VIEWER</h2>
 
-<div class="grid">
-  <div class="tile"><img src="images/images.01.jpg" alt="Gallery 01"></div>
-  <div class="tile"><img src="images/images.02" alt="Gallery 02"></div>
-  <div class="tile"><img src="images/images.03" alt="Gallery 03"></div>
-  <div class="tile"><img src="images/images.04" alt="Gallery 04"></div>
-  <div class="tile"><img src="images/images.05" alt="Gallery 05"></div>
-  <div class="tile"><img src="images/images.06" alt="Gallery 06"></div>
-  <div class="tile"><img src="images/images.07" alt="Gallery 07"></div>
-  <div class="tile"><img src="images/images.08" alt="Gallery 08"></div>
-  <div class="tile"><img src="images/images.09" alt="Gallery 09"></div>
-  <div class="tile"><img src="images/images.10" alt="Gallery 10"></div>
-  <div class="tile"><img src="images/images.11" alt="Gallery 11"></div>
-  <div class="tile"><img src="images/images.12" alt="Gallery 12"></div>
-</div>
+    <div class="viewer" id="viewer">
+      <div class="viewer-inner">
+        <img id="hero" src="" alt="Captured by Kam — Gallery image">
+        <div class="loading" id="loading">LOADING… 30%</div>
+      </div>
+    </div>
+
+    <div class="hud">
+      <div class="controls">
+        <button class="btn" id="prevBtn">◀ PREV</button>
+        <button class="btn" id="nextBtn">NEXT ▶</button>
+      </div>
+      <div class="counter" id="counter">01 / 01</div>
+    </div>
+
+    <div class="hud" style="margin-top:6px; opacity:.9;">
+      <div>Swipe left/right on mobile. Tap NEXT/PREV on desktop.</div>
+    </div>
   </section>
 
   <footer class="footer">
@@ -108,18 +228,136 @@ body{ margin:0; background:var(--bg); color:var(--green); font-family:var(--font
         Instagram
       </a>
 
-      <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">
+      <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.6 4.6 12 4.6 12 4.6s-5.6 0-7.5.5A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.9.5 7.5.5 7.5.5s5.6 0 7.5-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/>
         </svg>
         YouTube
       </a>
 
-      <a href="contact.html">Contact</a>
-      <a href="mailto:kam@capturedbykam.com">Email</a>
+      <a href="mailto:kam@capturedbykam.com">Contact</a>
     </div>
   </footer>
 
 </div>
+
+<script>
+/*
+  IMPORTANT:
+  Your files (from your screenshot) are named like:
+  images.01.JPG, images.010.JPG, images.011.JPG, etc.
+  And they are inside the /images folder.
+  So the correct src is: images/images.01.JPG
+*/
+
+const files = [
+  "images.01.JPG",
+  "images.02.JPG",
+  "images.03.JPG",
+  "images.05.JPG",
+  "images.06.JPG",
+  "images.07.JPG",
+  "images.08.JPG",
+  "images.09.JPG",
+  "images.010.JPG",
+  "images.011.JPG",
+  "images.012.JPG",
+  "images.013.JPG",
+  "images.014.JPG"
+];
+
+// If you add more files later, just add them to this list.
+
+let index = 0;
+
+const hero = document.getElementById("hero");
+const loading = document.getElementById("loading");
+const counter = document.getElementById("counter");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+const vibePercents = [30, 7, 87];
+let vibeTimer = null;
+
+function startVibeLoader(){
+  let i = 0;
+  loading.style.display = "flex";
+  loading.textContent = `LOADING… ${vibePercents[i]}%`;
+  clearInterval(vibeTimer);
+  vibeTimer = setInterval(() => {
+    i = (i + 1) % vibePercents.length;
+    loading.textContent = `LOADING… ${vibePercents[i]}%`;
+  }, 220); // fast flicker vibe
+}
+
+function stopVibeLoader(){
+  clearInterval(vibeTimer);
+  loading.style.display = "none";
+}
+
+function setCounter(){
+  const cur = String(index + 1).padStart(2,"0");
+  const total = String(files.length).padStart(2,"0");
+  counter.textContent = `${cur} / ${total}`;
+}
+
+function preload(nextIdx){
+  const src = "images/" + files[nextIdx];
+  const img = new Image();
+  img.src = src;
+}
+
+function showImage(idx){
+  index = (idx + files.length) % files.length;
+  setCounter();
+
+  startVibeLoader();
+
+  const src = "images/" + files[index];
+  const test = new Image();
+
+  test.onload = () => {
+    hero.src = src;
+    stopVibeLoader();
+
+    // Preload neighbors for faster "download vibe"
+    preload((index + 1) % files.length);
+    preload((index - 1 + files.length) % files.length);
+  };
+
+  test.onerror = () => {
+    // If the filename or case is wrong, you'll see this.
+    loading.textContent = "NOT FOUND — check filename case (.JPG vs .jpg)";
+  };
+
+  test.src = src;
+}
+
+prevBtn.addEventListener("click", () => showImage(index - 1));
+nextBtn.addEventListener("click", () => showImage(index + 1));
+
+/* Swipe support */
+const viewer = document.getElementById("viewer");
+let startX = 0;
+let endX = 0;
+
+viewer.addEventListener("touchstart", (e) => {
+  startX = e.changedTouches[0].screenX;
+}, {passive:true});
+
+viewer.addEventListener("touchend", (e) => {
+  endX = e.changedTouches[0].screenX;
+  const dx = endX - startX;
+
+  if (Math.abs(dx) > 45) {
+    if (dx < 0) showImage(index + 1);
+    else showImage(index - 1);
+  }
+}, {passive:true});
+
+/* Initialize */
+showImage(0);
+</script>
+
 </body>
 </html>
