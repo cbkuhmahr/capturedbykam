@@ -96,6 +96,17 @@ body{
   display:block;
 }
 
+/* Placeholder tiles for missing uploads */
+.tile.empty{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  letter-spacing:1px;
+  opacity:.9;
+  text-transform:uppercase;
+}
+
 /* FOOTER */
 .footer{
   margin-top:28px;
@@ -161,18 +172,21 @@ body{
     <h2>GALLERY</h2>
 
     <div class="grid">
-      <div class="tile"><img src="images/01.jpg" alt="Gallery 01"></div>
-      <div class="tile"><img src="images/02.jpg" alt="Gallery 02"></div>
-      <div class="tile"><img src="images/03.jpg" alt="Gallery 03"></div>
-      <div class="tile"><img src="images/04.jpg" alt="Gallery 04"></div>
-      <div class="tile"><img src="images/05.jpg" alt="Gallery 05"></div>
-      <div class="tile"><img src="images/06.jpg" alt="Gallery 06"></div>
-      <div class="tile"><img src="images/07.jpg" alt="Gallery 07"></div>
-      <div class="tile"><img src="images/08.jpg" alt="Gallery 08"></div>
-      <div class="tile"><img src="images/09.jpg" alt="Gallery 09"></div>
-      <div class="tile"><img src="images/10.jpg" alt="Gallery 10"></div>
-      <div class="tile"><img src="images/11.jpg" alt="Gallery 11"></div>
-      <div class="tile"><img src="images/12.jpg" alt="Gallery 12"></div>
+      <div class="tile"><img src="images/images.01.JPG" alt="Gallery 01" loading="lazy"></div>
+      <div class="tile empty">UPLOAD 02</div>
+      <div class="tile"><img src="images/images.03.JPG" alt="Gallery 03" loading="lazy"></div>
+
+      <div class="tile empty">UPLOAD 04</div>
+      <div class="tile empty">UPLOAD 05</div>
+      <div class="tile"><img src="images/images.06.JPG" alt="Gallery 06" loading="lazy"></div>
+
+      <div class="tile empty">UPLOAD 07</div>
+      <div class="tile"><img src="images/images.08.JPG" alt="Gallery 08" loading="lazy"></div>
+      <div class="tile"><img src="images/images.09.JPG" alt="Gallery 09" loading="lazy"></div>
+
+      <div class="tile"><img src="images/images.010.JPG" alt="Gallery 10" loading="lazy"></div>
+      <div class="tile"><img src="images/images.011.JPG" alt="Gallery 11" loading="lazy"></div>
+      <div class="tile"><img src="images/images.012.JPG" alt="Gallery 12" loading="lazy"></div>
     </div>
   </section>
 
@@ -198,6 +212,7 @@ body{
       </a>
 
       <a href="contact.html">Contact</a>
+      <a href="services.html#terms">Terms</a>
     </div>
   </footer>
 
