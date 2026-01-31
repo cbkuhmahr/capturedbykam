@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Services — Capturedby_Kam</title>
+<title>Capturedby_Kam</title>
 
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
@@ -14,6 +14,7 @@
   --font:'VT323', monospace;
   --line:2px;
 }
+
 *{ box-sizing:border-box; }
 
 body{
@@ -30,29 +31,28 @@ body{
 }
 
 .title{
+  margin:0 0 8px 0;
   font-size:44px;
-  margin:0 0 6px 0;
   line-height:1;
 }
-
 .title a{
   color:var(--green);
   text-decoration:none;
 }
 
 .tagline{
-  font-size:20px;
   margin:0 0 18px 0;
+  font-size:20px;
+  line-height:1.25;
 }
 
 .menu{
   display:flex;
   gap:22px;
-  flex-wrap:wrap;
   margin:0 0 26px 0;
   font-size:24px;
+  flex-wrap:wrap;
 }
-
 .menu a{
   color:var(--green);
   text-decoration:none;
@@ -60,42 +60,71 @@ body{
 }
 .menu a:hover{ text-decoration:underline; }
 
-h2{
+.section{
+  margin-top:26px;
+}
+
+.section h2{
+  margin:0 0 12px 0;
   font-size:28px;
-  margin:26px 0 10px;
 }
 
-.card{
-  border:var(--line) solid var(--green);
-  padding:14px;
-  margin-bottom:14px;
-}
-
-.card h3{
-  margin:0 0 8px 0;
-  font-size:24px;
-}
-
-ul{
-  margin:0 0 10px 0;
-  padding-left:18px;
+p{
+  margin:0 0 14px 0;
   font-size:20px;
   line-height:1.25;
+  max-width:52ch;
+}
+
+.box{
+  border:var(--line) solid var(--green);
+  padding:14px;
+  margin-top:14px;
 }
 
 .cta{
-  border:var(--line) solid var(--green);
   display:inline-block;
+  border:var(--line) solid var(--green);
   padding:8px 12px;
-  font-size:20px;
+  font-size:22px;
   text-decoration:none;
   color:var(--green);
+  margin-top:10px;
 }
 
-.small{
-  font-size:18px;
-  opacity:.9;
-  margin-top:8px;
+.footer{
+  margin-top:28px;
+  padding-top:16px;
+  border-top:var(--line) solid var(--green);
+}
+
+.footer .brand-lines{
+  font-size:20px;
+  line-height:1.15;
+  margin-bottom:10px;
+}
+
+.footer .links{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  align-items:center;
+  font-size:20px;
+}
+
+.footer a{
+  color:var(--green);
+  text-decoration:none;
+}
+
+.footer a:hover{ text-decoration:underline; }
+
+.icon{
+  width:18px;
+  height:18px;
+  vertical-align:-3px;
+  margin-right:6px;
+  fill:var(--green);
 }
 
 @media (max-width:420px){
@@ -107,107 +136,77 @@ ul{
 <body>
 <div class="page">
 
-<h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
-<p class="tagline">SERVICES — CONTACT FOR PRICING</p>
+  <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
 
-<nav class="menu" aria-label="Main menu">
-  <a href="index.html">GALLERY</a>
-  <a href="about.html">ABOUT</a>
-  <a href="services.html">SERVICES</a>
-  <a href="contact.html">CONTACT</a>
-  <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-  <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
-</nav>
+  <p class="tagline">
+    EVERY FRAME, EVERY PROJECT<br>
+    TIMELESS.AUTHNTC [CBK_EST.2025]
+  </p>
 
-<h2>Senior Pictures</h2>
+  <nav class="menu" aria-label="Main menu">
+    <a href="index.html">HOME</a>
+    <a href="about.html">ABOUT</a>
+    <a href="services.html">SERVICES</a>
+    <a href="contact.html">CONTACT</a>
+    <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
+    <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
+  </nav>
 
-<div class="card">
-  <h3>Quick Session</h3>
-  <ul>
-    <li>Short, focused session</li>
-    <li>One location</li>
-    <li>One outfit</li>
-    <li>Edited digital images</li>
-    <li>Online gallery delivery</li>
-    <li>Print release</li>
-  </ul>
-  <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
-</div>
+  <section class="section">
+    <h2>WELCOME</h2>
+    <p>
+      Captured by Kam is built on presence, intention, and honest visual storytelling.
+      This isn’t content for the algorithm. It’s work designed to last.
+    </p>
+    <p>
+      Portraits. Seniors. Teams. Moments worth holding onto.
+    </p>
+  </section>
 
-<div class="card">
-  <h3>Full Session</h3>
-  <ul>
-    <li>Extended session</li>
-    <li>Up to two nearby locations</li>
-    <li>Multiple outfits</li>
-    <li>Expanded image set</li>
-    <li>Online gallery delivery</li>
-    <li>Print release</li>
-  </ul>
-  <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
-</div>
+  <section class="section">
+    <h2>THE WORK</h2>
+    <p>
+      Photography and video rooted in real energy. Clean frames.
+      No overproduction. No shortcuts.
+    </p>
+    <a class="cta" href="contact.html">START A CONVERSATION</a>
+  </section>
 
-<h2>Headshots</h2>
+  <section class="section">
+    <h2>PHILOSOPHY</h2>
+    <div class="box">
+      <p style="margin-bottom:0;">
+        Show up.<br>
+        Be intentional.<br>
+        Frame it right.
+      </p>
+    </div>
+  </section>
 
-<div class="card">
-  <h3>Single</h3>
-  <ul>
-    <li>Quick headshot session</li>
-    <li>One look</li>
-    <li>One retouched image</li>
-    <li>Digital delivery (web-ready)</li>
-  </ul>
-  <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
-</div>
+  <footer class="footer">
+    <div class="brand-lines">
+      <div>EVERY FRAME, EVERY PROJECT</div>
+      <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
+    </div>
 
-<div class="card">
-  <h3>Mini Set</h3>
-  <ul>
-    <li>Short session</li>
-    <li>1–2 looks</li>
-    <li>Multiple retouched images</li>
-    <li>Digital delivery (web + social)</li>
-  </ul>
-  <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
-  <div class="small">Simple, clean environments. No studio production.</div>
-</div>
+    <div class="links">
+      <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.5-.9a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2z"/>
+        </svg>
+        Instagram
+      </a>
 
-<h2>Team & Individual Sports Photos</h2>
+      <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.6 4.6 12 4.6 12 4.6s-5.6 0-7.5.5A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.9.5 7.5.5 7.5.5s5.6 0 7.5-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/>
+        </svg>
+        YouTube
+      </a>
 
-<div class="card">
-  <h3>Individual Coverage</h3>
-  <ul>
-    <li>Single athlete focus</li>
-    <li>Game-day or media-day setup</li>
-    <li>Edited digital images</li>
-    <li>Share-ready delivery</li>
-  </ul>
-  <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
-  <div class="small">Team packages and prints available upon request.</div>
-</div>
-
-<h2>Terms & Session Details</h2>
-
-<div class="card">
-  <p><strong>Booking & Payment</strong><br>
-  A <strong>50% non-refundable retainer</strong> is required to book and hold your session date.  
-  The remaining balance is due <strong>on or before the day of the session</strong>.</p>
-
-  <p><strong>Turnaround</strong><br>
-  Final edited images are delivered within <strong>7–14 days</strong>. Rush delivery may be available.</p>
-
-  <p><strong>Creative Direction</strong><br>
-  You’re booking my eye, my process, and my edit style. I guide posing, framing, and final image selection to deliver work that reflects the Captured by Kam look—timeless, intentional, and authentic.</p>
-
-  <p><strong>Image Delivery</strong><br>
-  Final edited images are delivered digitally via an online gallery. RAW / unedited files are not provided.</p>
-
-  <p><strong>Usage</strong><br>
-  Images are delivered for personal use unless a commercial agreement is arranged in advance.</p>
-
-  <p><strong>Rescheduling</strong><br>
-  Weather and life happen. When possible, sessions may be rescheduled to a new date.</p>
-</div>
+      <a href="mailto:kam@capturedbykam.com">Contact</a>
+    </div>
+  </footer>
 
 </div>
 </body>
