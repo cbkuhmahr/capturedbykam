@@ -1,28 +1,79 @@
-<!-- contact.html -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Contact — Capturedby_Kam</title>
+
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
 <style>
-:root{ --bg:#000; --green:#00FF66; --font:'VT323', monospace; --line:2px; }
+:root{
+  --bg:#000;
+  --green:#00FF66;
+  --font:'VT323', monospace;
+  --line:2px;
+}
+
 *{ box-sizing:border-box; }
-body{ margin:0; background:var(--bg); color:var(--green); font-family:var(--font); }
-.page{ padding:24px 18px 60px; max-width:560px; margin:0 auto; }
-.title{ margin:0 0 8px 0; font-size:44px; line-height:1; }
-.title a{ color:var(--green); text-decoration:none; }
-.tagline{ margin:0 0 18px 0; font-size:20px; }
-.menu{ display:flex; gap:22px; margin:0 0 26px 0; font-size:24px; flex-wrap:wrap; }
-.menu a{ color:var(--green); text-decoration:none; white-space:nowrap; }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--green);
+  font-family:var(--font);
+}
+
+.page{
+  padding:24px 18px 60px;
+  max-width:560px;
+  margin:0 auto;
+}
+
+.title{
+  margin:0 0 8px 0;
+  font-size:44px;
+  line-height:1;
+}
+.title a{
+  color:var(--green);
+  text-decoration:none;
+}
+
+.tagline{
+  margin:0 0 18px 0;
+  font-size:20px;
+  line-height:1.25;
+}
+
+.menu{
+  display:flex;
+  gap:22px;
+  margin:0 0 26px 0;
+  font-size:24px;
+  flex-wrap:wrap;
+}
+.menu a{
+  color:var(--green);
+  text-decoration:none;
+  white-space:nowrap;
+}
 .menu a:hover{ text-decoration:underline; }
-h2{ margin:0 0 12px 0; font-size:28px; }
-p{ margin:0 0 12px 0; font-size:20px; line-height:1.25; }
+
+h2{
+  margin:0 0 12px 0;
+  font-size:28px;
+}
+
+p{
+  margin:0 0 12px 0;
+  font-size:20px;
+  line-height:1.25;
+}
+
 a{ color:var(--green); }
 
-.form{
+.box{
   border:var(--line) solid var(--green);
   padding:14px;
   margin-top:14px;
@@ -31,7 +82,7 @@ a{ color:var(--green); }
 label{
   display:block;
   font-size:20px;
-  margin:10px 0 6px;
+  margin:12px 0 6px;
 }
 
 input, select, textarea{
@@ -45,7 +96,10 @@ input, select, textarea{
   outline:none;
 }
 
-textarea{ min-height:120px; resize:vertical; }
+textarea{
+  min-height:130px;
+  resize:vertical;
+}
 
 .btn{
   margin-top:12px;
@@ -54,32 +108,68 @@ textarea{ min-height:120px; resize:vertical; }
   color:var(--green);
   font-family:var(--font);
   font-size:20px;
-  padding:8px 10px;
+  padding:8px 12px;
   cursor:pointer;
 }
 
-.small{ font-size:18px; opacity:.9; margin-top:10px; }
+.btn:active{ transform:translateY(1px); }
 
+.small{
+  font-size:18px;
+  opacity:.9;
+  margin-top:10px;
+  line-height:1.25;
+}
+
+/* FOOTER */
 .footer{
   margin-top:28px;
   padding-top:16px;
   border-top:var(--line) solid var(--green);
 }
-.footer .brand-lines{ font-size:20px; line-height:1.15; margin-bottom:10px; }
-.footer .links{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; font-size:20px; }
-.footer a{ color:var(--green); text-decoration:none; }
+
+.footer .brand-lines{
+  font-size:20px;
+  line-height:1.15;
+  margin-bottom:10px;
+}
+
+.footer .links{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  align-items:center;
+  font-size:20px;
+}
+
+.footer a{
+  color:var(--green);
+  text-decoration:none;
+}
+
 .footer a:hover{ text-decoration:underline; }
 
-@media (max-width:420px){ .menu{ font-size:22px; gap:16px; } }
+.icon{
+  width:18px;
+  height:18px;
+  vertical-align:-3px;
+  margin-right:6px;
+  fill:var(--green);
+}
+
+@media (max-width:420px){
+  .menu{ font-size:22px; gap:16px; }
+}
 </style>
 </head>
 
 <body>
 <div class="page">
+
   <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
   <p class="tagline">CONTACT</p>
 
-  <nav class="menu">
+  <nav class="menu" aria-label="Main menu">
     <a href="index.html">GALLERY</a>
     <a href="about.html">ABOUT</a>
     <a href="services.html">SERVICES</a>
@@ -91,16 +181,18 @@ textarea{ min-height:120px; resize:vertical; }
   <h2>CONTACT</h2>
   <p>Email: <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a></p>
 
-  <div class="form">
+  <div class="box">
+    <h2 style="margin-top:0;">BOOKING REQUEST</h2>
+
     <form id="cbkForm">
-      <label for="type">What are you booking?</label>
-      <select id="type" required>
+      <label for="interest">I’m interested in:</label>
+      <select id="interest" required>
         <option value="">Select one</option>
-        <option>Senior Pictures</option>
-        <option>Headshots</option>
-        <option>Team / Sports</option>
-        <option>Brand / Content</option>
-        <option>Other</option>
+        <option value="Senior Pics">Senior Pics</option>
+        <option value="Headshots">Headshots</option>
+        <option value="Team Photos">Team Photos</option>
+        <option value="Videography">Videography</option>
+        <option value="Other">Other</option>
       </select>
 
       <label for="name">Your name</label>
@@ -109,14 +201,17 @@ textarea{ min-height:120px; resize:vertical; }
       <label for="when">Preferred date / timeframe</label>
       <input id="when" type="text" placeholder="Example: Feb 10 / weekends / ASAP" required>
 
-      <label for="msg">Details</label>
-      <textarea id="msg" placeholder="Location idea, goals, number of people, vibe, etc." required></textarea>
+      <label for="location">Location (city / venue)</label>
+      <input id="location" type="text" placeholder="Example: Toledo / Perrysburg / Ann Arbor" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" placeholder="Tell me the vibe, purpose, number of people, and anything important." required></textarea>
 
       <button class="btn" type="submit">SEND MESSAGE</button>
 
       <div class="small">
-        This button opens your email app with the message pre-filled.
-        If it doesn’t open, just email me directly: <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
+        This opens your email app with everything filled in. If it doesn’t open, email me directly:
+        <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
       </div>
     </form>
   </div>
@@ -126,10 +221,23 @@ textarea{ min-height:120px; resize:vertical; }
       <div>EVERY FRAME, EVERY PROJECT</div>
       <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
     </div>
+
     <div class="links">
-      <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
-      <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
-      <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.5-.9a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2z"/>
+        </svg>
+        Instagram
+      </a>
+
+      <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.6 4.6 12 4.6 12 4.6s-5.6 0-7.5.5A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.9.5 7.5.5 7.5.5s5.6 0 7.5-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/>
+        </svg>
+        YouTube
+      </a>
+
+      <a href="mailto:kam@capturedbykam.com">Contact</a>
     </div>
   </footer>
 
@@ -139,19 +247,21 @@ textarea{ min-height:120px; resize:vertical; }
 document.getElementById("cbkForm").addEventListener("submit", function(e){
   e.preventDefault();
 
-  const type = document.getElementById("type").value;
+  const interest = document.getElementById("interest").value;
   const name = document.getElementById("name").value;
   const when = document.getElementById("when").value;
-  const msg  = document.getElementById("msg").value;
+  const location = document.getElementById("location").value;
+  const message = document.getElementById("message").value;
 
-  const subject = encodeURIComponent(`CBK Booking — ${type} — ${name}`);
+  const subject = encodeURIComponent(`CBK Booking — ${interest} — ${name}`);
   const body = encodeURIComponent(
-`Booking Type: ${type}
+`I’m interested in: ${interest}
 Name: ${name}
-Preferred Date/Timeframe: ${when}
+Preferred date/timeframe: ${when}
+Location: ${location}
 
-Details:
-${msg}
+Message:
+${message}
 
 — sent from capturedbykam.com`
   );
