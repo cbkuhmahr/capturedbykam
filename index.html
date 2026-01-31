@@ -4,163 +4,55 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Capturedby_Kam</title>
-
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#000;
+  --bg:#000000;
   --green:#00FF66;
   --font:'VT323', monospace;
   --line:2px;
   --gap:14px;
 }
-
 *{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--green); font-family:var(--font); }
+.page{ padding:24px 18px 60px; max-width:560px; margin:0 auto; }
 
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--green);
-  font-family:var(--font);
-}
-
-.page{
-  padding:24px 18px 60px;
-  max-width:560px;
-  margin:0 auto;
-}
-
-.title{
-  margin:0 0 8px 0;
-  font-size:44px;
-  line-height:1;
-  text-align:left;
-}
+.title{ margin:0 0 8px 0; font-size:44px; line-height:1; text-align:left; }
 .title a{ color:var(--green); text-decoration:none; }
 
-.tagline{
-  margin:0 0 18px 0;
-  font-size:20px;
-  line-height:1.25;
-  text-align:left;
-}
+.tagline{ margin:0 0 18px 0; font-size:20px; line-height:1.25; text-align:left; }
 
 .menu{
-  display:flex;
-  gap:22px;
-  margin:0 0 26px 0;
-  font-size:24px;
-  flex-wrap:wrap;
+  display:flex; gap:22px; margin:0 0 26px 0;
+  font-size:24px; flex-wrap:wrap; text-align:left;
 }
-
-.menu a{
-  color:var(--green);
-  text-decoration:none;
-  white-space:nowrap;
-}
+.menu a{ color:var(--green); text-decoration:none; white-space:nowrap; }
 .menu a:hover{ text-decoration:underline; }
 
 .section{ margin-top:26px; }
-.section h2{ margin:0 0 12px 0; font-size:28px; }
+.section h2{ margin:0 0 12px 0; font-size:28px; text-align:left; }
 
-/* SWIPE GALLERY */
-.carousel{
-  display:flex;
-  gap:var(--gap);
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;
-  padding-bottom:8px;
-}
-.carousel::-webkit-scrollbar{ height:10px; }
-.carousel::-webkit-scrollbar-thumb{ background:rgba(0,255,102,.35); border-radius:8px; }
-
-.frame{
-  position:relative;
-  flex:0 0 78%;
-  max-width:360px;
-  border:var(--line) solid var(--green);
-  aspect-ratio:3/4;
-  overflow:hidden;
-  scroll-snap-align:start;
-}
-
-.frame img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-  opacity:0;
-  transition:opacity .25s ease;
-}
-
-/* Loader overlay: 30% -> 7% -> 87% */
-.loader{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  font-size:28px;
-  letter-spacing:1px;
-  background:rgba(0,0,0,.82);
-}
-.loader span{
-  display:inline-block;
-  min-width:6ch;
-}
-.loader span::before{
-  content:"30%";
-  animation:cbkLoad 1.05s steps(1,end) infinite;
-}
-@keyframes cbkLoad{
-  0%{ content:"30%"; }
-  33%{ content:"7%"; }
-  66%{ content:"87%"; }
-  100%{ content:"30%"; }
-}
-
-.hint{
-  margin-top:10px;
-  font-size:18px;
-  opacity:.9;
-}
+/* GRID */
+.grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:var(--gap); }
+.tile{ border:var(--line) solid var(--green); aspect-ratio:3 / 4; overflow:hidden; }
+.tile img{ width:100%; height:100%; object-fit:cover; display:block; }
 
 /* FOOTER */
 .footer{
-  margin-top:28px;
-  padding-top:16px;
+  margin-top:28px; padding-top:16px;
   border-top:var(--line) solid var(--green);
 }
-.footer .brand-lines{
-  font-size:20px;
-  line-height:1.15;
-  margin-bottom:10px;
-}
+.footer .brand-lines{ font-size:20px; line-height:1.15; margin-bottom:10px; }
 .footer .links{
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-  align-items:center;
-  font-size:20px;
+  display:flex; gap:14px; flex-wrap:wrap;
+  align-items:center; font-size:20px;
 }
 .footer a{ color:var(--green); text-decoration:none; }
 .footer a:hover{ text-decoration:underline; }
+.icon{ width:18px; height:18px; vertical-align:-3px; margin-right:6px; fill:var(--green); }
 
-.icon{
-  width:18px;
-  height:18px;
-  vertical-align:-3px;
-  margin-right:6px;
-  fill:var(--green);
-}
-
-@media (max-width:420px){
-  .menu{ font-size:22px; gap:16px; }
-  .frame{ flex-basis:86%; }
-}
+@media (max-width:420px){ .menu{ font-size:22px; gap:16px; } }
 </style>
 </head>
 
@@ -178,67 +70,28 @@ body{
     <a href="index.html">GALLERY</a>
     <a href="about.html">ABOUT</a>
     <a href="services.html">SERVICES</a>
-    <a href="services.html#terms">TERMS</a>
     <a href="contact.html">CONTACT</a>
     <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-    <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
+    <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
   </nav>
 
   <section class="section" aria-label="Gallery">
     <h2>GALLERY</h2>
 
-    <div class="carousel" aria-label="Swipe gallery">
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.01.JPG" alt="Gallery 01" loading="lazy">
-      </div>
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.02.JPG" alt="Gallery 02" loading="lazy">
-      </div>
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.03.JPG" alt="Gallery 03" loading="lazy">
-      </div>
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.04.JPG" alt="Gallery 04" loading="lazy">
-      </div>
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.05.JPG" alt="Gallery 05" loading="lazy">
-      </div>
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.06.JPG" alt="Gallery 06" loading="lazy">
-      </div>
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.07.JPG" alt="Gallery 07" loading="lazy">
-      </div>
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.08.JPG" alt="Gallery 08" loading="lazy">
-      </div>
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.09.JPG" alt="Gallery 09" loading="lazy">
-      </div>
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.010.JPG" alt="Gallery 10" loading="lazy">
-      </div>
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.011.JPG" alt="Gallery 11" loading="lazy">
-      </div>
-      <div class="frame">
-        <div class="loader"><span></span></div>
-        <img src="images/images.012.JPG" alt="Gallery 12" loading="lazy">
-      </div>
+    <div class="grid">
+      <div class="tile"><img src="images/01.JPG" alt="Gallery 01"></div>
+      <div class="tile"><img src="images/02.JPG" alt="Gallery 02"></div>
+      <div class="tile"><img src="images/03.JPG" alt="Gallery 03"></div>
+      <div class="tile"><img src="images/04.JPG" alt="Gallery 04"></div>
+      <div class="tile"><img src="images/05.JPG" alt="Gallery 05"></div>
+      <div class="tile"><img src="images/06.JPG" alt="Gallery 06"></div>
+      <div class="tile"><img src="images/07.JPG" alt="Gallery 07"></div>
+      <div class="tile"><img src="images/08.JPG" alt="Gallery 08"></div>
+      <div class="tile"><img src="images/09.JPG" alt="Gallery 09"></div>
+      <div class="tile"><img src="images/10.JPG" alt="Gallery 10"></div>
+      <div class="tile"><img src="images/11.JPG" alt="Gallery 11"></div>
+      <div class="tile"><img src="images/12.JPG" alt="Gallery 12"></div>
     </div>
-
-    <div class="hint">Swipe →</div>
   </section>
 
   <footer class="footer">
@@ -255,7 +108,7 @@ body{
         Instagram
       </a>
 
-      <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">
+      <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.6 4.6 12 4.6 12 4.6s-5.6 0-7.5.5A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.9.5 7.5.5 7.5.5s5.6 0 7.5-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/>
         </svg>
@@ -263,30 +116,10 @@ body{
       </a>
 
       <a href="contact.html">Contact</a>
-      <a href="services.html#terms">Terms</a>
+      <a href="mailto:kam@capturedbykam.com">Email</a>
     </div>
   </footer>
 
 </div>
-
-<script>
-(function(){
-  const imgs = document.querySelectorAll('.frame img');
-  imgs.forEach(img => {
-    const loader = img.parentElement.querySelector('.loader');
-    const done = () => {
-      img.style.opacity = '1';
-      if (loader) loader.style.display = 'none';
-    };
-    if (img.complete && img.naturalWidth > 0) done();
-    img.addEventListener('load', done);
-    img.addEventListener('error', () => {
-      if (loader) loader.innerHTML = '<span>?</span>';
-      img.style.opacity = '0';
-    });
-  });
-})();
-</script>
-
 </body>
 </html>
