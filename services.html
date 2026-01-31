@@ -29,9 +29,22 @@ body{
   margin:0 auto;
 }
 
-.title{ font-size:44px; margin:0 0 6px 0; line-height:1; }
-.title a{ color:var(--green); text-decoration:none; }
-.tagline{ font-size:20px; margin:0 0 18px 0; }
+.title{
+  font-size:44px;
+  margin:0 0 6px 0;
+  line-height:1;
+}
+
+.title a{
+  color:var(--green);
+  text-decoration:none;
+}
+
+.tagline{
+  font-size:20px;
+  margin:0 0 18px 0;
+  line-height:1.2;
+}
 
 .menu{
   display:flex;
@@ -83,39 +96,30 @@ ul{
   margin-top:8px;
 }
 
-/* TERMS */
 .terms{
   border:var(--line) solid var(--green);
   padding:14px;
-  margin:10px 0 22px;
+  margin-top:18px;
 }
-.terms h2{
+
+.terms p{
   margin:0 0 10px 0;
-  font-size:28px;
-}
-.terms ul{
-  margin:0;
-  padding-left:18px;
   font-size:20px;
   line-height:1.2;
 }
-.terms .small{
-  margin-top:10px;
-  font-size:18px;
-  opacity:.95;
-}
 
-/* FOOTER */
 .footer{
   margin-top:28px;
   padding-top:16px;
   border-top:var(--line) solid var(--green);
 }
+
 .footer .brand-lines{
   font-size:20px;
   line-height:1.15;
   margin-bottom:10px;
 }
+
 .footer .links{
   display:flex;
   gap:14px;
@@ -123,11 +127,13 @@ ul{
   align-items:center;
   font-size:20px;
 }
+
 .footer a{
   color:var(--green);
   text-decoration:none;
 }
 .footer a:hover{ text-decoration:underline; }
+
 .icon{
   width:18px;
   height:18px;
@@ -156,24 +162,6 @@ ul{
   <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
   <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
 </nav>
-
-<section class="terms" aria-label="Booking terms">
-  <h2>BOOKING TERMS</h2>
-  <ul>
-    <li>50% non-refundable retainer required to book and hold your date/time.</li>
-    <li>Remaining balance due the day of the shoot.</li>
-    <li>Your booking time is your booking time — no automatic extensions.</li>
-    <li>More time can be purchased if schedule permits:
-      <ul>
-        <li>Additional 30 minutes: $60</li>
-        <li>Additional hour: $90</li>
-      </ul>
-    </li>
-  </ul>
-  <div class="small">
-    No refunds. You’re paying for reserved time + creative work. If something feels off, contact me within 48 hours of delivery and I’ll work with you on a reasonable solution (ex: additional edits or a reshoot option), but payments are non-refundable.
-  </div>
-</section>
 
 <h2>Senior Pictures</h2>
 
@@ -253,6 +241,16 @@ ul{
   <div class="small">Team add-ons and prints available upon request.</div>
 </div>
 
+<h2 id="terms">BOOKING TERMS</h2>
+<div class="terms">
+  <p><strong>50% retainer required</strong> to lock your date. This retainer is non-refundable and non-transferable.</p>
+  <p><strong>Remaining balance due</strong> the day of the shoot.</p>
+  <p><strong>Time is time.</strong> No late fees and no automatic extensions. If you need more time and the schedule allows:</p>
+  <p>+ Additional 30 minutes: <strong>Contact for pricing</strong></p>
+  <p>+ Additional 1 hour: <strong>Contact for pricing</strong></p>
+  <p><strong>No refunds on delivered work.</strong> I put care into every session and edit, and I’ll make sure what we agree on is delivered. Because photography is a creative service, payments are for time, planning, and production—not a “returnable product.”</p>
+</div>
+
 <footer class="footer">
   <div class="brand-lines">
     <div>EVERY FRAME, EVERY PROJECT</div>
@@ -275,6 +273,7 @@ ul{
     </a>
 
     <a href="contact.html">Contact</a>
+    <a href="services.html#terms">Terms</a>
   </div>
 </footer>
 
