@@ -34,7 +34,6 @@ body{
   margin:0 0 6px 0;
   line-height:1;
 }
-
 .title a{
   color:var(--green);
   text-decoration:none;
@@ -43,6 +42,7 @@ body{
 .tagline{
   font-size:20px;
   margin:0 0 18px 0;
+  line-height:1.25;
 }
 
 .menu{
@@ -52,7 +52,6 @@ body{
   margin:0 0 26px 0;
   font-size:24px;
 }
-
 .menu a{
   color:var(--green);
   text-decoration:none;
@@ -76,6 +75,12 @@ h2{
   font-size:24px;
 }
 
+p{
+  margin:0 0 12px 0;
+  font-size:20px;
+  line-height:1.25;
+}
+
 ul{
   margin:0 0 10px 0;
   padding-left:18px;
@@ -96,6 +101,38 @@ ul{
   font-size:18px;
   opacity:.9;
   margin-top:8px;
+  line-height:1.25;
+}
+
+/* FOOTER */
+.footer{
+  margin-top:28px;
+  padding-top:16px;
+  border-top:var(--line) solid var(--green);
+}
+.footer .brand-lines{
+  font-size:20px;
+  line-height:1.15;
+  margin-bottom:10px;
+}
+.footer .links{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  align-items:center;
+  font-size:20px;
+}
+.footer a{
+  color:var(--green);
+  text-decoration:none;
+}
+.footer a:hover{ text-decoration:underline; }
+.icon{
+  width:18px;
+  height:18px;
+  vertical-align:-3px;
+  margin-right:6px;
+  fill:var(--green);
 }
 
 @media (max-width:420px){
@@ -107,107 +144,134 @@ ul{
 <body>
 <div class="page">
 
-<h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
-<p class="tagline">SERVICES — CONTACT FOR PRICING</p>
+  <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
+  <p class="tagline">SERVICES — CONTACT FOR PRICING</p>
 
-<nav class="menu" aria-label="Main menu">
-  <a href="index.html">GALLERY</a>
-  <a href="about.html">ABOUT</a>
-  <a href="services.html">SERVICES</a>
-  <a href="contact.html">CONTACT</a>
-  <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-  <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
-</nav>
+  <nav class="menu" aria-label="Main menu">
+    <a href="index.html">GALLERY</a>
+    <a href="about.html">ABOUT</a>
+    <a href="services.html">SERVICES</a>
+    <a href="contact.html">CONTACT</a>
+    <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
+    <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
+  </nav>
 
-<h2>Senior Pictures</h2>
+  <!-- TERMS AT TOP (AS REQUESTED) -->
+  <h2>TERMS</h2>
+  <div class="card">
+    <p><strong>Booking & Payment</strong><br>
+      A <strong>50% non-refundable retainer</strong> is required to block your session date.
+      The remaining balance is due <strong>the day of the shoot</strong>.
+    </p>
 
-<div class="card">
-  <h3>Quick Session</h3>
-  <ul>
-    <li>Short, focused session</li>
-    <li>One location</li>
-    <li>One outfit</li>
-    <li>Edited digital images</li>
-    <li>Online gallery delivery</li>
-    <li>Print release</li>
-  </ul>
-  <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
-</div>
+    <p><strong>Time</strong><br>
+      The booking schedule is the schedule. No late fees and no time extensions.
+      Additional time can be purchased <strong>if schedule permits</strong>.
+    </p>
 
-<div class="card">
-  <h3>Full Session</h3>
-  <ul>
-    <li>Extended session</li>
-    <li>Up to two nearby locations</li>
-    <li>Multiple outfits</li>
-    <li>Expanded image set</li>
-    <li>Online gallery delivery</li>
-    <li>Print release</li>
-  </ul>
-  <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
-</div>
+    <p><strong>Additional Time (if available)</strong><br>
+      Additional 30 minutes: <strong>$60</strong><br>
+      Additional hour: <strong>$90</strong>
+    </p>
 
-<h2>Headshots</h2>
+    <p><strong>Creative + Refunds</strong><br>
+      You’re booking my creative eye and edit style. Because photography is creative work and time is reserved specifically for you,
+      <strong>no refunds are issued once a session has been completed</strong>.
+    </p>
+  </div>
 
-<div class="card">
-  <h3>Single</h3>
-  <ul>
-    <li>Quick headshot session</li>
-    <li>One look</li>
-    <li>One retouched image</li>
-    <li>Digital delivery (web-ready)</li>
-  </ul>
-  <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
-</div>
+  <!-- SERVICES -->
+  <h2>Senior Pictures</h2>
 
-<div class="card">
-  <h3>Mini Set</h3>
-  <ul>
-    <li>Short session</li>
-    <li>1–2 looks</li>
-    <li>Multiple retouched images</li>
-    <li>Digital delivery (web + social)</li>
-  </ul>
-  <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
-  <div class="small">Simple, clean environments. No studio production.</div>
-</div>
+  <div class="card">
+    <h3>Quick Session</h3>
+    <ul>
+      <li>Short, focused session</li>
+      <li>One location</li>
+      <li>One outfit</li>
+      <li>Edited digital images</li>
+      <li>Online gallery delivery</li>
+      <li>Print release</li>
+    </ul>
+    <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
+  </div>
 
-<h2>Team & Individual Sports Photos</h2>
+  <div class="card">
+    <h3>Full Session</h3>
+    <ul>
+      <li>Extended session</li>
+      <li>Up to two nearby locations</li>
+      <li>Multiple outfits</li>
+      <li>Expanded image set</li>
+      <li>Online gallery delivery</li>
+      <li>Print release</li>
+    </ul>
+    <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
+  </div>
 
-<div class="card">
-  <h3>Individual Coverage</h3>
-  <ul>
-    <li>Single athlete focus</li>
-    <li>Game-day or media-day setup</li>
-    <li>Edited digital images</li>
-    <li>Share-ready delivery</li>
-  </ul>
-  <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
-  <div class="small">Team packages and prints available upon request.</div>
-</div>
+  <h2>Headshots</h2>
 
-<h2>Terms & Session Details</h2>
+  <div class="card">
+    <h3>Single</h3>
+    <ul>
+      <li>Quick headshot session</li>
+      <li>One look</li>
+      <li>One retouched image</li>
+      <li>Digital delivery (web-ready)</li>
+    </ul>
+    <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
+  </div>
 
-<div class="card">
-  <p><strong>Booking & Payment</strong><br>
-  A <strong>50% non-refundable retainer</strong> is required to book and hold your session date.  
-  The remaining balance is due <strong>on or before the day of the session</strong>.</p>
+  <div class="card">
+    <h3>Mini Set</h3>
+    <ul>
+      <li>Short session</li>
+      <li>1–2 looks</li>
+      <li>Multiple retouched images</li>
+      <li>Digital delivery (web + social)</li>
+    </ul>
+    <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
+    <div class="small">Simple, clean environments. No studio production.</div>
+  </div>
 
-  <p><strong>Turnaround</strong><br>
-  Final edited images are delivered within <strong>7–14 days</strong>. Rush delivery may be available.</p>
+  <h2>Team Individual Photos</h2>
 
-  <p><strong>Creative Direction</strong><br>
-  You’re booking my eye, my process, and my edit style. I guide posing, framing, and final image selection to deliver work that reflects the Captured by Kam look—timeless, intentional, and authentic.</p>
+  <div class="card">
+    <h3>Individual Coverage</h3>
+    <ul>
+      <li>Single athlete focus</li>
+      <li>Media-day or game-day setup</li>
+      <li>Edited digital images</li>
+      <li>Share-ready delivery</li>
+    </ul>
+    <a class="cta" href="contact.html">CONTACT FOR PRICING</a>
+    <div class="small">Team packages and prints available upon request.</div>
+  </div>
 
-  <p><strong>Image Delivery</strong><br>
-  Final edited images are delivered digitally via an online gallery. RAW / unedited files are not provided.</p>
+  <footer class="footer">
+    <div class="brand-lines">
+      <div>EVERY FRAME, EVERY PROJECT</div>
+      <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
+    </div>
 
-  <p><strong>Usage</strong><br>
-  Images are delivered for personal use unless a commercial agreement is arranged in advance.</p>
+    <div class="links">
+      <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.5-.9a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2z"/>
+        </svg>
+        Instagram
+      </a>
 
-  <p><strong>Rescheduling</strong><br>
-  Weather and life happen. When possible, sessions may be rescheduled to a new date.</p>
-</div>
+      <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.6 4.6 12 4.6 12 4.6s-5.6 0-7.5.5A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.9.5 7.5.5 7.5.5s5.6 0 7.5-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/>
+        </svg>
+        YouTube
+      </a>
+
+      <a href="mailto:kam@capturedbykam.com">Contact</a>
+    </div>
+  </footer>
 
 </div>
 </body>
