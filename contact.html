@@ -1,3 +1,4 @@
+<!-- contact.html -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -11,41 +12,63 @@
 *{ box-sizing:border-box; }
 body{ margin:0; background:var(--bg); color:var(--green); font-family:var(--font); }
 .page{ padding:24px 18px 60px; max-width:560px; margin:0 auto; }
-
 .title{ margin:0 0 8px 0; font-size:44px; line-height:1; }
 .title a{ color:var(--green); text-decoration:none; }
-
 .tagline{ margin:0 0 18px 0; font-size:20px; }
 .menu{ display:flex; gap:22px; margin:0 0 26px 0; font-size:24px; flex-wrap:wrap; }
 .menu a{ color:var(--green); text-decoration:none; white-space:nowrap; }
 .menu a:hover{ text-decoration:underline; }
-
 h2{ margin:0 0 12px 0; font-size:28px; }
 p{ margin:0 0 12px 0; font-size:20px; line-height:1.25; }
+a{ color:var(--green); }
 
-.card{ border:var(--line) solid var(--green); padding:14px; margin-top:14px; }
-.label{ font-size:20px; margin:10px 0 6px; opacity:.9; }
-input, select, textarea{
-  width:100%; background:#000; color:var(--green);
+.form{
   border:var(--line) solid var(--green);
-  padding:10px; font-family:var(--font); font-size:20px;
+  padding:14px;
+  margin-top:14px;
 }
-textarea{ min-height:140px; resize:vertical; }
+
+label{
+  display:block;
+  font-size:20px;
+  margin:10px 0 6px;
+}
+
+input, select, textarea{
+  width:100%;
+  border:var(--line) solid var(--green);
+  background:#000;
+  color:var(--green);
+  font-family:var(--font);
+  font-size:20px;
+  padding:8px 10px;
+  outline:none;
+}
+
+textarea{ min-height:120px; resize:vertical; }
 
 .btn{
-  display:inline-block; margin-top:12px;
+  margin-top:12px;
   border:var(--line) solid var(--green);
-  padding:8px 12px; font-size:22px;
-  color:var(--green); background:#000; cursor:pointer;
+  background:transparent;
+  color:var(--green);
+  font-family:var(--font);
+  font-size:20px;
+  padding:8px 10px;
+  cursor:pointer;
 }
-.btn:hover{ text-decoration:underline; }
 
-.footer{ margin-top:28px; padding-top:16px; border-top:var(--line) solid var(--green); }
+.small{ font-size:18px; opacity:.9; margin-top:10px; }
+
+.footer{
+  margin-top:28px;
+  padding-top:16px;
+  border-top:var(--line) solid var(--green);
+}
 .footer .brand-lines{ font-size:20px; line-height:1.15; margin-bottom:10px; }
 .footer .links{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; font-size:20px; }
 .footer a{ color:var(--green); text-decoration:none; }
 .footer a:hover{ text-decoration:underline; }
-.icon{ width:18px; height:18px; vertical-align:-3px; margin-right:6px; fill:var(--green); }
 
 @media (max-width:420px){ .menu{ font-size:22px; gap:16px; } }
 </style>
@@ -53,42 +76,49 @@ textarea{ min-height:140px; resize:vertical; }
 
 <body>
 <div class="page">
-
   <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
   <p class="tagline">CONTACT</p>
 
-  <nav class="menu" aria-label="Main menu">
+  <nav class="menu">
     <a href="index.html">GALLERY</a>
     <a href="about.html">ABOUT</a>
     <a href="services.html">SERVICES</a>
     <a href="contact.html">CONTACT</a>
     <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-    <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
+    <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
   </nav>
 
   <h2>CONTACT</h2>
   <p>Email: <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a></p>
 
-  <div class="card">
-    <div class="label">I’m interested in:</div>
-    <select id="reason">
-      <option>Senior Pics</option>
-      <option>Headshots</option>
-      <option>Team Photos</option>
-      <option>Videography</option>
-      <option>Other</option>
-    </select>
+  <div class="form">
+    <form id="cbkForm">
+      <label for="type">What are you booking?</label>
+      <select id="type" required>
+        <option value="">Select one</option>
+        <option>Senior Pictures</option>
+        <option>Headshots</option>
+        <option>Team / Sports</option>
+        <option>Brand / Content</option>
+        <option>Other</option>
+      </select>
 
-    <div class="label">Your name</div>
-    <input id="name" type="text" placeholder="First + last">
+      <label for="name">Your name</label>
+      <input id="name" type="text" placeholder="Full name" required>
 
-    <div class="label">Phone (optional)</div>
-    <input id="phone" type="text" placeholder="###-###-####">
+      <label for="when">Preferred date / timeframe</label>
+      <input id="when" type="text" placeholder="Example: Feb 10 / weekends / ASAP" required>
 
-    <div class="label">Message</div>
-    <textarea id="msg" placeholder="Date/location if you know it. What are we capturing?"></textarea>
+      <label for="msg">Details</label>
+      <textarea id="msg" placeholder="Location idea, goals, number of people, vibe, etc." required></textarea>
 
-    <button class="btn" id="send">OPEN EMAIL</button>
+      <button class="btn" type="submit">SEND MESSAGE</button>
+
+      <div class="small">
+        This button opens your email app with the message pre-filled.
+        If it doesn’t open, just email me directly: <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
+      </div>
+    </form>
   </div>
 
   <footer class="footer">
@@ -96,48 +126,39 @@ textarea{ min-height:140px; resize:vertical; }
       <div>EVERY FRAME, EVERY PROJECT</div>
       <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
     </div>
-
     <div class="links">
-      <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.5-.9a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2z"/>
-        </svg>
-        Instagram
-      </a>
-
-      <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.6 4.6 12 4.6 12 4.6s-5.6 0-7.5.5A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.9.5 7.5.5 7.5.5s5.6 0 7.5-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/>
-        </svg>
-        YouTube
-      </a>
-
-      <a href="index.html">Home</a>
-      <a href="mailto:kam@capturedbykam.com">Email</a>
+      <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
+      <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
+      <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
     </div>
   </footer>
 
 </div>
 
 <script>
-document.getElementById('send').addEventListener('click', () => {
-  const reason = document.getElementById('reason').value;
-  const name = document.getElementById('name').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const msg = document.getElementById('msg').value.trim();
+document.getElementById("cbkForm").addEventListener("submit", function(e){
+  e.preventDefault();
 
-  const subject = `Booking Inquiry — ${reason}`;
-  const body = [
-    `Reason: ${reason}`,
-    name ? `Name: ${name}` : null,
-    phone ? `Phone: ${phone}` : null,
-    ``,
-    msg || `(no message added)`
-  ].filter(Boolean).join('\n');
+  const type = document.getElementById("type").value;
+  const name = document.getElementById("name").value;
+  const when = document.getElementById("when").value;
+  const msg  = document.getElementById("msg").value;
 
-  window.location.href =
-    `mailto:kam@capturedbykam.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const subject = encodeURIComponent(`CBK Booking — ${type} — ${name}`);
+  const body = encodeURIComponent(
+`Booking Type: ${type}
+Name: ${name}
+Preferred Date/Timeframe: ${when}
+
+Details:
+${msg}
+
+— sent from capturedbykam.com`
+  );
+
+  window.location.href = `mailto:kam@capturedbykam.com?subject=${subject}&body=${body}`;
 });
 </script>
+
 </body>
 </html>
