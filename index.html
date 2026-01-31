@@ -54,10 +54,20 @@ body{
   font-size:24px;
   flex-wrap:wrap;
 }
-.menu a{
+.menu a,
+.menu a:link,
+.menu a:visited,
+.menu a:hover,
+.menu a:active,
+.menu a:focus{
   color:var(--green);
   text-decoration:none;
   white-space:nowrap;
+}
+
+.menu a:hover{
+  text-decoration:underline;
+}
 }
 .menu a:hover{ text-decoration:underline; }
 
@@ -183,14 +193,14 @@ p{
     TIMELESS.AUTHNTC [CBK_EST.2025]
   </p>
 
-  <section class="section"> </section>
-    <a href="index.html">GALLERY</a>
-    <a href="about.html">ABOUT</a>
-    <a href="services.html">SERVICES</a>
-    <a href="contact.html">CONTACT</a>
-    <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-    <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
-  </nav>
+<nav class="menu" aria-label="Primary">
+  <a href="index.html">GALLERY</a>
+  <a href="about.html">ABOUT</a>
+  <a href="services.html">SERVICES</a>
+  <a href="contact.html">CONTACT</a>
+  <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
+  <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
+</nav>
 
 <section class="section" aria-label="Gallery">
   <h2>GALLERY</h2>
@@ -489,58 +499,7 @@ showMedia(idx).catch(() => {
       </div>
 
       <div class="media">
-        <div class="media-inner">
-          <img src="images/images.07.JPG" alt="Gallery image 07" loading="lazy">
-        </div>
-        <div class="media-label">IMAGE 07</div>
-      </div>
-
-      <div class="media">
-        <div class="media-inner">
-          <video src="images/video.02.MP4" controls playsinline preload="metadata"></video>
-        </div>
-        <div class="media-label">VIDEO 02</div>
-      </div>
-
-      <div class="media">
-        <div class="media-inner">
-          <img src="images/images.08.JPG" alt="Gallery image 08" loading="lazy">
-        </div>
-        <div class="media-label">IMAGE 08</div>
-      </div>
-
-      <div class="media">
-        <div class="media-inner">
-          <img src="images/images.09.JPG" alt="Gallery image 09" loading="lazy">
-        </div>
-        <div class="media-label">IMAGE 09</div>
-      </div>
-
-      <div class="media">
-        <div class="media-inner">
-          <img src="images/images.10.JPG" alt="Gallery image 10" loading="lazy">
-        </div>
-        <div class="media-label">IMAGE 10</div>
-      </div>
-
-      <div class="media">
-        <div class="media-inner">
-          <img src="images/images.11.JPG" alt="Gallery image 11" loading="lazy">
-        </div>
-        <div class="media-label">IMAGE 11</div>
-      </div>
-
-      <div class="media">
-        <div class="media-inner">
-          <img src="images/images.12.JPG" alt="Gallery image 12" loading="lazy">
-        </div>
-        <div class="media-label">IMAGE 12</div>
-      </div>
-    </div>
-
-    <div class="hint">Swipe → (if something shows a broken image icon, it means the filename in GitHub doesn’t match exactly.)</div>
-  </section>
-
+        
   <footer class="footer">
     <div class="brand-lines">
       <div>EVERY FRAME, EVERY PROJECT</div>
