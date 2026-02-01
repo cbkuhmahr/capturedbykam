@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta show="dont-care" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CBK — Client Vault</title>
+
+  <style>
+    :root{
+      --bg: #0b0b0b;
+      --ink: #f5f5f5;
+      --muted: #bdbdbd;
+      --win: #101010;
+      --border: #2a2a2a;
+      --shadow: rgba(0,0,0,.55);
+      --btn: #141414;
+      --btnHover: #1d1d1d;
+      --accent: #f5f5f5;
+      --danger: #ff5c5c;
+      --radius: 12px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      overflow-x:hidden;
+    }
+
+    /* Subtle CRT scanline vibe */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.03),
+          rgba(255,255,255,0.03) 1px,
+          rgba(0,0,0,0) 3px,
+          rgba(0,0,0,0) 6px
+        );
+      mix-blend-mode: overlay;
+      opacity:.25;
+    }
+
+    .wrap{
+      min-height: 100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 28px 16px;
+    }
+
+    /* Finder-style window */
+    .window{
+      width:min(720px, 100%);
+      background: var(--win);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 22px 60px var(--shadow);
+      overflow:hidden;
+    }
+
+    .titlebar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: #0f0f0f;
+    }
+
+    .dots{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .dot{
+      width:10px; height:10px;
+      border-radius:50%;
+      border:1px solid #2e2e2e;
+      background:#161616;
+    }
+    .dot.red{ background:#ff5f57; border-color:#a43b36;}
+    .dot.yellow{ background:#febc2e; border-color:#9c7a1e;}
+    .dot.green{ background:#28c840; border-color:#1d7c2b;}
+
+    .title{
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      user-select:none;
+    }
+
+    .content{
+      padding: 22px 18px 18px;
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-family: var(--mono);
+      font-size: 18px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .bullets{
+      margin: 14px 0 20px;
+      padding: 0;
+      list-style:none;
+      display:grid;
+      gap:10px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .bullets li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .bullets .mark{
+      color: var(--ink);
+      opacity: .65;
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top: 6px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--btn);
+      color: var(--ink);
+      text-decoration:none;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing:.06em;
+      text-transform: uppercase;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      width: min(320px, 100%);
+      flex: 1 1 220px;
+    }
+    .btn:hover{
+      background: var(--btnHover);
+      border-color: #3a3a3a;
+      transform: translateY(-1px);
+    }
+    .btn:active{ transform: translateY(0px); }
+
+    .btn.primary{
+      border-color: #444;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+
+    .btn.secondary{
+      color: var(--muted);
+    }
+
+    .footer{
+      padding: 14px 18px 18px;
+      border-top: 1px solid var(--border);
+      color: #9a9a9a;
+      font-family: var(--mono);
+      font-size: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:space-between;
+    }
+
+    .footer a{
+      color: var(--ink);
+      opacity:.75;
+      text-decoration:none;
+      border-bottom:1px dashed rgba(255,255,255,.25);
+    }
+    .footer a:hover{ opacity:1; }
+
+    /* Tiny helper panel */
+    .hint{
+      margin-top: 18px;
+      padding: 12px 12px;
+      border: 1px dashed #2d2d2d;
+      border-radius: 10px;
+      color: #a8a8a8;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .hint strong{ color: var(--ink); opacity: .85; }
+
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <main class="window" role="main" aria-label="CBK Client Vault">
+      <div class="titlebar">
+        <div class="dots" aria-hidden="true">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+        </div>
+        <div class="title">Captured by Kam — Client Vault</div>
+        <div style="width:44px;"></div>
+      </div>
+
+      <div class="content">
+        <h1>CBK CLIENT VAULT</h1>
+
+        <ul class="bullets">
+          <li><span class="mark">•</span><span>Your gallery link + password were sent via email/text.</span></li>
+          <li><span class="mark">•</span><span>Review window: 48 hours.</span></li>
+          <li><span class="mark">•</span><span>Download window: 7 days.</span></li>
+        </ul>
+
+        <div class="actions">
+          <!-- TODO: Replace href="#" with your Pixieset gallery link later -->
+          <a class="btn primary" href="#" target="_blank" rel="noopener">OPEN GALLERY</a>
+
+          <!-- TODO: Replace with your real contact page or mailto -->
+          <a class="btn secondary" href="mailto:capturedbykammedia@gmail.com?subject=CBK%20Client%20Link%20Request&body=Hey%20Kam%2C%20I%20need%20a%20new%20download%20link%20for%20my%20gallery.%0A%0AName%3A%0ASession%20Date%3A%0A" target="_blank" rel="noopener">REQUEST NEW LINK</a>
+        </div>
+
+        <div class="hint">
+          <strong>Tip:</strong> If you don’t see your link, search your messages for “CBK” or “Captured by Kam.”
+          <br />
+          <strong>Lost it?</strong> Hit “Request New Link” and include your name + session date.
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>Every Frame, Every Project—timeless authenticity, Captured by Kam.</span>
+        <span><a href="/">Back to Home</a></span>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
