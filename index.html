@@ -197,14 +197,12 @@ p{
   <a href="services.html">SERVICES</a>
   <a href="contact.html">CONTACT</a>
 
-  <!-- ADDED: CLIENTS points to /clients/ (clients/index.html) -->
+  <!-- CLIENTS points to /clients/ (clients/index.html) -->
   <a href="clients/">CLIENTS</a>
 
   <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
   <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
 </nav>
-<p><a href="https://my.photoday.com/s/capturedbykam" target="_blank"></a></p>
-
 
 <section class="section" aria-label="Gallery">
   <h2>GALLERY</h2>
@@ -381,10 +379,6 @@ const mediaList = [
   { type:'image', src:'images/images.012.JPG' },
   { type:'image', src:'images/images.013.JPG' },
   { type:'image', src:'images/images.014.JPG' },
-
-  /* Later: videos (example)
-  { type:'video', src:'videos/clip.01.mp4' },
-  */
 ];
 
 let idx = 0;
@@ -423,7 +417,6 @@ async function showMedia(i){
   const item = mediaList[i];
   statusEl.textContent = formatChannel(i);
 
-  // hide both first
   imgEl.style.display = 'none';
   vidEl.style.display = 'none';
   vidEl.pause();
@@ -453,7 +446,6 @@ async function showMedia(i){
   overlay.classList.add('hidden');
 }
 
-// start
 showMedia(idx).catch(() => {
   overlay.classList.remove('hidden');
   overlayText.textContent = 'MEDIA ERROR (CHECK FILE NAME)';
