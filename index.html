@@ -1,371 +1,84 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Captured by Kam — Timeless Authenticity</title>
-  <meta name="description" content="Timeless & authentic photo + video. Legacy, not likes. Captured by Kam." />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gallery — Capturedby_Kam</title>
 
-  <!-- Social preview -->
-  <meta property="og:title" content="Captured by Kam" />
-  <meta property="og:description" content="Every frame, every project—timeless authenticity, Captured by Kam." />
-  <meta property="og:type" content="website" />
-  <!-- Optional: add an OG image later -->
-  <!-- <meta property="og:image" content="assets/og.jpg" /> -->
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'ui-sans-serif', 'system-ui'],
-            display: ['Space Grotesk', 'Inter', 'system-ui'],
-            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular']
-          },
-          colors: {
-            ink: '#0B0B0F',
-            fog: '#F4F4F5'
-          }
-        }
-      }
-    }
-  </script>
-
-  <style>
-    /* subtle “CBK cinematic” texture without being annoying */
-    .grain {
-      position: relative;
-      isolation: isolate;
-    }
-    .grain::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: .08;
-      mix-blend-mode: overlay;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
-      z-index: 1;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site.css">
 </head>
 
-<body class="bg-ink text-fog font-sans selection:bg-white/20">
-  <!-- Top bar -->
-  <header class="sticky top-0 z-50 border-b border-white/10 bg-ink/70 backdrop-blur">
-    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-      <a href="#top" class="flex items-baseline gap-3">
-        <span class="font-display text-lg tracking-tight">Captured by Kam</span>
-        <span class="hidden sm:inline font-mono text-xs text-white/60">Every frame, every project—timeless authenticity.</span>
-      </a>
+<body>
+  <div class="page">
+    <div class="top">
+      <div class="brand">
+        <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
+        <p class="tagline">GALLERY</p>
+      </div>
 
-      <nav class="hidden md:flex items-center gap-6 text-sm text-white/80">
-        <a class="hover:text-white" href="#work">Work</a>
-        <a class="hover:text-white" href="#services">Services</a>
-        <a class="hover:text-white" href="#about">About</a>
-        <a class="hover:text-white" href="#contact">Contact</a>
+      <nav class="menu" aria-label="Main menu">
+        <a class="pill" href="index.html">GALLERY</a>
+        <a class="pill" href="about.html">ABOUT</a>
+        <a class="pill" href="services.html">SERVICES</a>
+        <a class="pill" href="contact.html">CONTACT</a>
+
+        <a class="pill pill-solid" href="BOOK_URL_HERE" target="_blank" rel="noreferrer">BOOK</a>
+
+        <a class="pill" href="clients/">CLIENTS</a>
+        <a class="pill" href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
+        <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
       </nav>
-
-      <div class="flex items-center gap-2">
-        <a
-          class="inline-flex items-center justify-center rounded-full border border-white/15 px-4 py-2 text-sm hover:bg-white/10 transition"
-          href="https://www.youtube.com/@capturedbykammedia"
-          target="_blank" rel="noreferrer"
-        >YouTube</a>
-        <a
-          class="inline-flex items-center justify-center rounded-full bg-white text-ink px-4 py-2 text-sm font-semibold hover:opacity-90 transition"
-          href="#contact"
-        >Book</a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero -->
-  <section id="top" class="grain">
-    <div class="mx-auto max-w-6xl px-4 py-14 md:py-20">
-      <div class="grid md:grid-cols-12 gap-10 items-end">
-        <div class="md:col-span-7">
-          <p class="font-mono text-xs text-white/60 tracking-widest uppercase">THE ART OF PRESENCE</p>
-          <h1 class="mt-3 font-display text-4xl md:text-6xl leading-[1.05] tracking-tight">
-            Timeless & authentic photo + video —
-            <span class="text-white/80">built to outlive the moment.</span>
-          </h1>
-          <p class="mt-5 text-white/70 text-lg leading-relaxed max-w-xl">
-            Not for the feed. For the future. Real moments don’t expire — they echo.
-          </p>
-
-          <div class="mt-7 flex flex-col sm:flex-row gap-3">
-            <a href="#work"
-              class="inline-flex items-center justify-center rounded-full bg-white text-ink px-6 py-3 font-semibold hover:opacity-90 transition">
-              View Work
-            </a>
-            <a href="#services"
-              class="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 font-semibold hover:bg-white/10 transition">
-              See Services
-            </a>
-          </div>
-
-          <div class="mt-8 flex flex-wrap gap-3 text-xs font-mono text-white/60">
-            <span class="rounded-full border border-white/10 px-3 py-1">Portraits</span>
-            <span class="rounded-full border border-white/10 px-3 py-1">Sports</span>
-            <span class="rounded-full border border-white/10 px-3 py-1">Brands</span>
-            <span class="rounded-full border border-white/10 px-3 py-1">Events</span>
-          </div>
-        </div>
-
-        <!-- Hero visual placeholder -->
-        <div class="md:col-span-5">
-          <div class="rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
-            <div class="aspect-[4/5] bg-gradient-to-b from-white/10 to-transparent flex items-center justify-center p-6 text-center">
-              <div>
-                <p class="font-mono text-xs text-white/60">Drop your best image here:</p>
-                <p class="mt-2 text-white/80">assets/hero.jpg</p>
-                <p class="mt-4 text-white/60 text-sm">
-                  Replace this block with:
-                  <span class="font-mono"> &lt;img src="assets/hero.jpg" /&gt;</span>
-                </p>
-              </div>
-            </div>
-            <div class="p-5 border-t border-white/10">
-              <p class="text-sm text-white/70">
-                Fast first impression. One killer photo. No confusion.
-              </p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Work -->
-  <section id="work" class="mx-auto max-w-6xl px-4 py-14">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-      <div>
-        <h2 class="font-display text-3xl md:text-4xl tracking-tight">Work</h2>
-        <p class="mt-2 text-white/70 max-w-xl">Click filters. See the range. Keep it moving.</p>
-      </div>
-
-      <div class="flex flex-wrap gap-2" id="filters">
-        <button data-filter="all" class="filter-btn rounded-full bg-white text-ink px-4 py-2 text-sm font-semibold">All</button>
-        <button data-filter="portraits" class="filter-btn rounded-full border border-white/15 px-4 py-2 text-sm text-white/80 hover:bg-white/10 transition">Portraits</button>
-        <button data-filter="sports" class="filter-btn rounded-full border border-white/15 px-4 py-2 text-sm text-white/80 hover:bg-white/10 transition">Sports</button>
-        <button data-filter="brands" class="filter-btn rounded-full border border-white/15 px-4 py-2 text-sm text-white/80 hover:bg-white/10 transition">Brands</button>
-        <button data-filter="events" class="filter-btn rounded-full border border-white/15 px-4 py-2 text-sm text-white/80 hover:bg-white/10 transition">Events</button>
-      </div>
     </div>
 
-    <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <!-- Replace image src with your real files in assets/work/ -->
-      <a class="work-item group rounded-2xl border border-white/10 overflow-hidden bg-white/5" data-cat="sports" href="#contact">
-        <div class="aspect-[4/3] bg-white/10">
-          <img class="h-full w-full object-cover opacity-90 group-hover:opacity-100 transition"
-               src="assets/work/001.jpg" alt="Sports work sample">
-        </div>
-        <div class="p-4">
-          <p class="font-mono text-xs text-white/60">SPORTS</p>
-          <p class="mt-1 text-white/85">Media Day / Action / Team Energy</p>
-        </div>
-      </a>
+    <h2>GALLERY</h2>
+    <p>Simple grid. Clean. Add images later.</p>
 
-      <a class="work-item group rounded-2xl border border-white/10 overflow-hidden bg-white/5" data-cat="portraits" href="#contact">
-        <div class="aspect-[4/3] bg-white/10">
-          <img class="h-full w-full object-cover opacity-90 group-hover:opacity-100 transition"
-               src="assets/work/002.jpg" alt="Portrait work sample">
-        </div>
-        <div class="p-4">
-          <p class="font-mono text-xs text-white/60">PORTRAITS</p>
-          <p class="mt-1 text-white/85">Clean, confident, real</p>
-        </div>
-      </a>
-
-      <a class="work-item group rounded-2xl border border-white/10 overflow-hidden bg-white/5" data-cat="brands" href="#contact">
-        <div class="aspect-[4/3] bg-white/10">
-          <img class="h-full w-full object-cover opacity-90 group-hover:opacity-100 transition"
-               src="assets/work/003.jpg" alt="Brand work sample">
-        </div>
-        <div class="p-4">
-          <p class="font-mono text-xs text-white/60">BRANDS</p>
-          <p class="mt-1 text-white/85">Visual identity that sells</p>
-        </div>
-      </a>
-
-      <a class="work-item group rounded-2xl border border-white/10 overflow-hidden bg-white/5" data-cat="events" href="#contact">
-        <div class="aspect-[4/3] bg-white/10">
-          <img class="h-full w-full object-cover opacity-90 group-hover:opacity-100 transition"
-               src="assets/work/004.jpg" alt="Event work sample">
-        </div>
-        <div class="p-4">
-          <p class="font-mono text-xs text-white/60">EVENTS</p>
-          <p class="mt-1 text-white/85">Moments you can feel later</p>
-        </div>
-      </a>
-
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-5 flex flex-col justify-between">
-        <div>
-          <p class="font-mono text-xs text-white/60">TIP</p>
-          <p class="mt-2 text-white/75">
-            Keep your work grid at 9–18 bangers. Too many = people scroll forever and never book.
-          </p>
-        </div>
-        <a href="#contact" class="mt-5 inline-flex items-center justify-center rounded-full bg-white text-ink px-5 py-2.5 font-semibold hover:opacity-90 transition">
-          Get a quote
-        </a>
-      </div>
-
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
-        <p class="font-mono text-xs text-white/60">SOCIAL</p>
-        <p class="mt-2 text-white/75">Want the IG feed embedded here? We can. Buttons work fine for now.</p>
-        <div class="mt-4 flex gap-2">
-          <a class="rounded-full border border-white/15 px-4 py-2 text-sm hover:bg-white/10 transition"
-             href="https://www.instagram.com/CapturedBy_Kam" target="_blank" rel="noreferrer">Instagram</a>
-          <a class="rounded-full border border-white/15 px-4 py-2 text-sm hover:bg-white/10 transition"
-             href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Services -->
-  <section id="services" class="mx-auto max-w-6xl px-4 py-14">
-    <div class="flex items-end justify-between gap-6">
-      <div>
-        <h2 class="font-display text-3xl md:text-4xl tracking-tight">Services</h2>
-        <p class="mt-2 text-white/70">Clear options. Clear next step. Less “uhh what do I do now?”</p>
-      </div>
-    </div>
-
-    <div class="mt-8 grid md:grid-cols-3 gap-4">
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <p class="font-mono text-xs text-white/60">SPORTS</p>
-        <h3 class="mt-2 font-display text-xl">Media Days + Games</h3>
-        <p class="mt-2 text-white/70">Team posters, athlete portraits, action coverage.</p>
-        <a class="mt-5 inline-flex items-center justify-center rounded-full bg-white text-ink px-5 py-2.5 font-semibold hover:opacity-90 transition"
-           href="#contact">Book Sports</a>
-      </div>
-
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <p class="font-mono text-xs text-white/60">PORTRAITS</p>
-        <h3 class="mt-2 font-display text-xl">Families + Seniors</h3>
-        <p class="mt-2 text-white/70">Authentic, clean, confident portraits with cinematic touch.</p>
-        <a class="mt-5 inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-2.5 font-semibold hover:bg-white/10 transition"
-           href="#contact">Book Portraits</a>
-      </div>
-
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <p class="font-mono text-xs text-white/60">BRANDS</p>
-        <h3 class="mt-2 font-display text-xl">Content + Visual Identity</h3>
-        <p class="mt-2 text-white/70">Headshots, product, lifestyle, reels—built to convert.</p>
-        <a class="mt-5 inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-2.5 font-semibold hover:bg-white/10 transition"
-           href="#contact">Book Brand Shoot</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section id="about" class="mx-auto max-w-6xl px-4 py-14">
-    <div class="rounded-3xl border border-white/10 bg-white/5 p-7 md:p-10">
-      <p class="font-mono text-xs text-white/60 tracking-widest uppercase">LEGACY, NOT LIKES</p>
-      <h2 class="mt-3 font-display text-3xl md:text-4xl tracking-tight">Real moments. Crafted with intention.</h2>
-      <p class="mt-4 text-white/70 leading-relaxed max-w-3xl">
-        Captured by Kam is built for people who prefer timeless over trendy and real over rehearsed.
-        You bring the energy — I capture it with presence, style, and zero gimmicks.
+    <div class="box">
+      <p style="margin-bottom:0; font-family: var(--mono-font); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--green-dim);">
+        TIP: replace these placeholders with your real images.
       </p>
-      <div class="mt-6 flex flex-wrap gap-2 text-xs font-mono text-white/60">
-        <span class="rounded-full border border-white/10 px-3 py-1">Timeless</span>
-        <span class="rounded-full border border-white/10 px-3 py-1">Cinematic</span>
-        <span class="rounded-full border border-white/10 px-3 py-1">Authentic</span>
-        <span class="rounded-full border border-white/10 px-3 py-1">Intentional</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact" class="mx-auto max-w-6xl px-4 py-16">
-    <div class="grid md:grid-cols-12 gap-8">
-      <div class="md:col-span-6">
-        <h2 class="font-display text-3xl md:text-4xl tracking-tight">Let’s book it.</h2>
-        <p class="mt-3 text-white/70 max-w-lg">
-          Fastest way: email me the type of shoot, date, location, and your budget range.
-        </p>
-
-        <div class="mt-6 flex flex-col gap-3">
-          <a class="inline-flex items-center justify-center rounded-full bg-white text-ink px-6 py-3 font-semibold hover:opacity-90 transition"
-             href="mailto:capturedbykammedia@gmail.com?subject=Booking%20Request%20—%20Captured%20by%20Kam">
-            Email: capturedbykammedia@gmail.com
-          </a>
-
-          <a class="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 font-semibold hover:bg-white/10 transition"
-             href="https://www.instagram.com/CapturedBy_Kam" target="_blank" rel="noreferrer">
-            DM on Instagram: @CapturedBy_Kam
-          </a>
-
-          <!-- Optional: Replace with your Jotform link -->
-          <a class="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 font-semibold hover:bg-white/10 transition"
-             href="#" onclick="alert('Paste your Jotform link into this button (in index.html) and you’re live.'); return false;">
-            Booking Form (Jotform)
-          </a>
+      <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; margin-top:12px;">
+        <div class="card" style="margin-top:0; height:180px; display:flex; align-items:center; justify-content:center;">
+          <span style="font-family:var(--mono-font); font-size:12px; color:var(--green-dim);">IMAGE 1</span>
         </div>
-      </div>
-
-      <div class="md:col-span-6">
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <p class="font-mono text-xs text-white/60">QUICK BOOKING DETAILS</p>
-          <ul class="mt-3 space-y-2 text-white/70">
-            <li>• Type of shoot (sports / portraits / brand / event)</li>
-            <li>• Date + location</li>
-            <li>• Deliverables you want (prints, digital, video, etc.)</li>
-            <li>• Budget range</li>
-          </ul>
-          <p class="mt-4 text-white/60 text-sm">
-            Keep it simple. Clear info = faster quote.
-          </p>
+        <div class="card" style="margin-top:0; height:180px; display:flex; align-items:center; justify-content:center;">
+          <span style="font-family:var(--mono-font); font-size:12px; color:var(--green-dim);">IMAGE 2</span>
+        </div>
+        <div class="card" style="margin-top:0; height:180px; display:flex; align-items:center; justify-content:center;">
+          <span style="font-family:var(--mono-font); font-size:12px; color:var(--green-dim);">IMAGE 3</span>
+        </div>
+        <div class="card" style="margin-top:0; height:180px; display:flex; align-items:center; justify-content:center;">
+          <span style="font-family:var(--mono-font); font-size:12px; color:var(--green-dim);">IMAGE 4</span>
         </div>
       </div>
     </div>
 
-    <footer class="mt-14 border-t border-white/10 pt-6 text-white/50 text-sm flex flex-col sm:flex-row gap-2 justify-between">
-      <span>© <span id="year"></span> Captured by Kam</span>
-      <span class="font-mono">Every frame, every project—timeless authenticity, Captured by Kam.</span>
+    <footer class="footer">
+      <div class="brand-lines">
+        <div>EVERY FRAME, EVERY PROJECT</div>
+        <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
+      </div>
+
+      <div class="links">
+        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.5-.9a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2z"/>
+          </svg>
+          Instagram
+        </a>
+
+        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.6 4.6 12 4.6 12 4.6s-5.6 0-7.5.5A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.9.5 7.5.5 7.5.5s5.6 0 7.5-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/>
+          </svg>
+          YouTube
+        </a>
+
+        <a href="mailto:kam@capturedbykam.com">Contact</a>
+      </div>
     </footer>
-  </section>
-
-  <script>
-    // footer year
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // filter logic
-    const btns = document.querySelectorAll('.filter-btn');
-    const items = document.querySelectorAll('.work-item');
-
-    function setActive(btn) {
-      btns.forEach(b => {
-        b.classList.remove('bg-white', 'text-ink', 'font-semibold');
-        b.classList.add('border', 'border-white/15', 'text-white/80');
-      });
-      btn.classList.add('bg-white', 'text-ink', 'font-semibold');
-      btn.classList.remove('border', 'border-white/15', 'text-white/80');
-    }
-
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const filter = btn.getAttribute('data-filter');
-        setActive(btn);
-
-        items.forEach(card => {
-          const cat = card.getAttribute('data-cat');
-          const show = (filter === 'all' || cat === filter);
-          card.style.display = show ? '' : 'none';
-        });
-      });
-    });
-  </script>
+  </div>
 </body>
 </html>
