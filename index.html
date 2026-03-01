@@ -1,102 +1,459 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Captured by Kam</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Captured by Kam — Timeless Authenticity</title>
+  <meta name="description" content="Captured by Kam — Every Frame, Every Project — Timeless Authenticity. Premium visual storytelling with community heart." />
+  <meta name="theme-color" content="#0b0b0b" />
 
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="site.css">
-  <script src="site.js" defer></script>
+  <!-- Fonts: editorial mono + clean sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
 </head>
 
 <body>
-  <div class="page">
+  <!-- Top Bar -->
+  <header class="topbar" id="topbar">
+    <button class="icon-btn" id="menuBtn" aria-label="Open menu">
+      <span class="hamburger" aria-hidden="true"></span>
+    </button>
 
-    <div class="top">
-      <div class="brand">
-        <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
-        <p class="tagline">Every frame, every project — timeless authenticity, Captured by Kam.</p>
-      </div>
+    <div class="brandlock" role="banner" aria-label="Captured by Kam">
+      <div class="brand-name">CAPTURED BY KAM</div>
+      <div class="brand-tag">Every Frame, Every Project —<br/>Timeless Authenticity</div>
+      <div class="brand-est">Est. <span class="accent">2025</span></div>
+    </div>
 
-      <button class="hamburger" type="button" data-menu-open aria-controls="mobileMenu" aria-expanded="false">
-        Menu
-      </button>
+    <div class="topbar-right">
+      <a class="icon-btn" href="#signup" aria-label="Go to Sign Up">Sign Up</a>
+    </div>
+  </header>
 
-      <nav class="menu" aria-label="Main menu">
-        <a class="pill" href="index.html">Home</a>
-        <a class="pill" href="services.html">Services</a>
-        <a class="pill" href="about.html">About</a>
-        <a class="pill" href="order-photos.html">Pay</a>
-        <a class="pill pill-solid" href="contact.html">Book</a>
-        <a class="pill" href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-        <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+  <!-- Menu Overlay (Fear of God inspired) -->
+  <aside class="menu" id="menu" aria-hidden="true">
+    <div class="menu-inner">
+      <nav class="menu-nav" aria-label="Main">
+        <a href="#home" class="menu-link" data-close>Home</a>
+        <a href="#work" class="menu-link" data-close>Work</a>
+        <a href="#services" class="menu-link" data-close>Services</a>
+        <a href="#book" class="menu-link" data-close>Book Now</a>
+        <a href="#signup" class="menu-link" data-close>Sign Up</a>
+        <a href="#about" class="menu-link" data-close>About</a>
+        <a href="#contact" class="menu-link" data-close>Contact</a>
+        <a href="https://instagram.com/CapturedBy_Kam" target="_blank" rel="noopener" class="menu-link" data-close>IG</a>
+        <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noopener" class="menu-link" data-close>YouTube</a>
       </nav>
-    </div>
 
-    <div class="actions">
-      <a class="action-btn primary" href="order-photos.html">Pay / Order Photos</a>
-      <a class="action-btn secondary" href="contact.html">Book / Contact</a>
-    </div>
-
-    <!-- Mobile drawer -->
-    <div id="mobileMenu" class="drawer" aria-hidden="true">
-      <div class="drawer-panel">
-        <div class="drawer-head">
-          <div class="drawer-title">Menu</div>
-          <button class="drawer-close" type="button" data-menu-close>Close</button>
+      <div class="menu-foot">
+        <div class="menu-subhead">NOTES</div>
+        <div class="menu-note">
+          No price lists on the public pages. Pricing is only shown inside Sign Up.
         </div>
-        <a href="index.html">Home</a>
-        <a href="services.html">Services</a>
-        <a href="about.html">About</a>
-        <a href="order-photos.html">Pay</a>
-        <a href="contact.html">Book</a>
-        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
-        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+
+        <div class="menu-subhead" style="margin-top:18px;">CONTACT</div>
+        <a class="menu-sub" href="mailto:capturedbykammedia@gmail.com" data-close>capturedbykammedia@gmail.com</a>
+        <a class="menu-sub" href="https://instagram.com/CapturedBy_Kam" target="_blank" rel="noopener" data-close>@CapturedBy_Kam</a>
       </div>
+
+      <button class="menu-close" id="menuClose" aria-label="Close menu">Close</button>
     </div>
+  </aside>
 
-    <div class="card">
-      <p><strong>Timeless & authentic visuals.</strong> Seniors • Headshots • Sports • Events • Video.</p>
-      <p class="small">If you want something that looks good now and still hits years later — that’s the lane.</p>
-    </div>
+  <main class="pages" id="pages">
 
-    <h2>Start here</h2>
-    <div class="grid-2">
-      <div class="card" style="margin-top:0;">
-        <p><strong>Parents ordering photos</strong></p>
-        <p class="small">Step 1: enter athlete info • Step 2: PayPal checkout</p>
-        <a class="pill pill-solid" href="order-photos.html">Go to Pay</a>
-      </div>
-      <div class="card" style="margin-top:0;">
-        <p><strong>Book a shoot</strong></p>
-        <p class="small">Tell me what you need. You’ll email me directly from the form.</p>
-        <a class="pill" href="contact.html">Go to Booking</a>
-      </div>
-    </div>
+    <!-- HOME (dark chapter) -->
+    <section class="page page-dark" id="home" aria-label="Home">
+      <div class="page-inner center">
+        <div class="kicker">THE ART OF PRESENCE.</div>
 
-    <h2>Latest work</h2>
-    <div class="card">
-      <p class="small">Portfolio grid is being refreshed. For now, my latest is here:</p>
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-        <a class="pill pill-solid" href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
-        <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
-      </div>
-    </div>
+        <h1 class="hero">
+          Every Frame, Every Project —<br/>
+          Timeless Authenticity
+        </h1>
 
-    <footer class="footer">
-      <div class="brand-lines">
-        <div>Every frame, every project</div>
-        <div>Timeless authenticity — Captured by Kam</div>
-      </div>
-      <div class="links">
-        <a href="mailto:kam@capturedbykam.com">Email</a>
-        <a href="order-photos.html">Pay</a>
-        <a href="contact.html">Book</a>
-      </div>
-    </footer>
+        <p class="sub">
+          Not for the feed. For the future.
+        </p>
 
-  </div>
+        <div class="cta-row">
+          <a class="btn btn-light" href="#work">View Work</a>
+          <a class="btn btn-ghost" href="#book">Book Now</a>
+          <a class="btn btn-ghost" href="#signup">Sign Up</a>
+        </div>
+
+        <div class="fineprint">
+          Premium feel. Community heart. Grit + beauty. Built to outlive the moment.
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK (dark) -->
+    <section class="page page-dark" id="work" aria-label="Work">
+      <div class="page-inner">
+        <div class="section-top">
+          <h2 class="h2">Work</h2>
+          <div class="section-note">Selected projects. Replace the tiles with your real galleries.</div>
+        </div>
+
+        <div class="grid">
+          <!-- Replace these with thumbnails later -->
+          <a class="tile" href="#contact" aria-label="Project 1">
+            <div class="tile-cap">Senior Portraits</div>
+            <div class="tile-sub">Portrait • Natural light • Studio</div>
+          </a>
+
+          <a class="tile" href="#contact" aria-label="Project 2">
+            <div class="tile-cap">Youth Sports</div>
+            <div class="tile-sub">Game day • Media day • Posters</div>
+          </a>
+
+          <a class="tile" href="#contact" aria-label="Project 3">
+            <div class="tile-cap">Brand / Headshots</div>
+            <div class="tile-sub">Clean • Editorial • Confident</div>
+          </a>
+
+          <a class="tile" href="#contact" aria-label="Project 4">
+            <div class="tile-cap">Events / Video</div>
+            <div class="tile-sub">Cinematic recap • Real moments</div>
+          </a>
+        </div>
+
+        <div class="cta-row" style="margin-top:18px;">
+          <a class="btn btn-light" href="#book">Book Now</a>
+          <a class="btn btn-ghost" href="#signup">Sign Up</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES (light) -->
+    <section class="page page-light" id="services" aria-label="Services">
+      <div class="page-inner">
+        <h2 class="h2">Services</h2>
+
+        <p class="p">
+          Captured by Kam delivers premium visual storytelling with a point of view —
+          clean, intentional, and rooted in what’s real.
+          If you want glossy for glossy’s sake, I’m not your guy.
+          If you want your story to feel true and look timeless, we’re aligned.
+        </p>
+
+        <div class="service-list">
+          <div class="service-item">
+            <div class="service-title">Senior Photos</div>
+            <div class="service-desc">Cinematic portraits that feel like you — confident, honest, elevated.</div>
+          </div>
+          <div class="service-item">
+            <div class="service-title">Youth Sports</div>
+            <div class="service-desc">Media day, game coverage, posters, and on-site ordering.</div>
+          </div>
+          <div class="service-item">
+            <div class="service-title">Headshots / Brand</div>
+            <div class="service-desc">Minimal, clean, and professional — built for modern platforms.</div>
+          </div>
+          <div class="service-item">
+            <div class="service-title">Events</div>
+            <div class="service-desc">Real moments, fast movement, strong storytelling.</div>
+          </div>
+          <div class="service-item">
+            <div class="service-title">Video</div>
+            <div class="service-desc">Short cinematic recaps and brand visuals with emotion.</div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="callout-title">Pricing</div>
+          <div class="callout-text">
+            Pricing is not displayed on public pages.
+            If you’re ready to register or order, use <strong>Sign Up</strong>.
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn btn-dark" href="#book">Book Now</a>
+          <a class="btn btn-ghost-dark" href="#signup">Sign Up</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOK NOW (light, NO PRICES) -->
+    <section class="page page-light" id="book" aria-label="Book Now">
+      <div class="page-inner">
+        <h2 class="h2">Book Now</h2>
+
+        <p class="p">
+          Book Now is for custom work and direct communication.
+          Tell me what you’re looking for — I’ll follow up with next steps, availability, and direction.
+          (No pricing is shown here.)
+        </p>
+
+        <form class="form" id="bookNowForm">
+          <div class="field">
+            <label for="bn_interest">What are you looking for?</label>
+            <input id="bn_interest" name="bn_interest" type="text" placeholder="Senior session, team media day, event coverage..." required />
+          </div>
+
+          <div class="field two">
+            <div>
+              <label for="bn_name">Name</label>
+              <input id="bn_name" name="bn_name" type="text" required />
+            </div>
+            <div>
+              <label for="bn_email">Email</label>
+              <input id="bn_email" name="bn_email" type="email" required />
+            </div>
+          </div>
+
+          <div class="field two">
+            <div>
+              <label for="bn_phone">Phone</label>
+              <input id="bn_phone" name="bn_phone" type="tel" />
+            </div>
+            <div>
+              <label for="bn_date">Ideal Date / Time</label>
+              <input id="bn_date" name="bn_date" type="text" placeholder="Saturday 2pm" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="bn_details">Details</label>
+            <textarea id="bn_details" name="bn_details" rows="5" placeholder="Location, deadline, number of athletes/people, vibe…"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-dark">Send Request</button>
+            <a class="btn btn-ghost-dark" href="mailto:capturedbykammedia@gmail.com?subject=Booking%20Request%20(Captured%20by%20Kam)" target="_blank" rel="noopener">
+              Email Directly
+            </a>
+          </div>
+
+          <p class="small">
+            This opens an email draft on the client’s device (simple + reliable).
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <!-- SIGN UP (light; prices shown only inside this flow) -->
+    <section class="page page-light" id="signup" aria-label="Sign Up">
+      <div class="page-inner">
+        <h2 class="h2">Sign Up</h2>
+
+        <p class="p">
+          Sign Up is for registration and ordering. Choose a category, enter details, then select a package.
+          Pricing appears inside the flow only.
+        </p>
+
+        <div class="signup-cards">
+          <button class="card" type="button" data-flow="youth_sports">
+            <div class="card-title">Youth Sports Packages</div>
+            <div class="card-sub">On-site ordering + athlete details</div>
+          </button>
+
+          <button class="card" type="button" data-flow="seniors">
+            <div class="card-title">Senior Photos</div>
+            <div class="card-sub">Session registration</div>
+          </button>
+
+          <button class="card" type="button" data-flow="headshots">
+            <div class="card-title">Headshots / Brand</div>
+            <div class="card-sub">Individuals / teams</div>
+          </button>
+
+          <button class="card" type="button" data-flow="events_video">
+            <div class="card-title">Events / Video</div>
+            <div class="card-sub">Registration + add-ons</div>
+          </button>
+        </div>
+
+        <div class="signup-panel" id="signupPanel" hidden>
+          <div class="signup-head">
+            <div class="mono" id="flowTitle">Sign Up</div>
+            <button class="btn btn-ghost-dark" id="changeFlow" type="button">Change</button>
+          </div>
+
+          <form class="form" id="signupForm">
+            <input type="hidden" id="flowType" name="flowType" value="" />
+
+            <div class="field two">
+              <div>
+                <label for="su_client">Parent/Client Name</label>
+                <input id="su_client" name="su_client" type="text" required />
+              </div>
+              <div>
+                <label for="su_email">Email</label>
+                <input id="su_email" name="su_email" type="email" required />
+              </div>
+            </div>
+
+            <div class="field two">
+              <div>
+                <label for="su_phone">Phone</label>
+                <input id="su_phone" name="su_phone" type="tel" />
+              </div>
+              <div>
+                <label for="su_org">School / Team / Organization</label>
+                <input id="su_org" name="su_org" type="text" placeholder="Example: Perrysburg Youth Basketball" />
+              </div>
+            </div>
+
+            <!-- Youth Sports fields -->
+            <div class="field two flow-only" data-only="youth_sports">
+              <div>
+                <label for="su_athlete">Athlete Name</label>
+                <input id="su_athlete" name="su_athlete" type="text" />
+              </div>
+              <div>
+                <label for="su_number">Athlete Number</label>
+                <input id="su_number" name="su_number" type="text" />
+              </div>
+            </div>
+
+            <div class="field flow-only" data-only="youth_sports">
+              <label for="su_sport">Sport</label>
+              <input id="su_sport" name="su_sport" type="text" placeholder="Basketball, baseball, football, volleyball..." />
+            </div>
+
+            <!-- Seniors fields -->
+            <div class="field two flow-only" data-only="seniors">
+              <div>
+                <label for="su_grade">Grade</label>
+                <input id="su_grade" name="su_grade" type="text" placeholder="Example: 12th" />
+              </div>
+              <div>
+                <label for="su_school">School</label>
+                <input id="su_school" name="su_school" type="text" />
+              </div>
+            </div>
+
+            <!-- Headshots fields -->
+            <div class="field flow-only" data-only="headshots">
+              <label for="su_headshot_type">Headshot Type</label>
+              <select id="su_headshot_type" name="su_headshot_type">
+                <option value="" selected disabled>Select one</option>
+                <option>Individual</option>
+                <option>Team / Company</option>
+              </select>
+            </div>
+
+            <!-- Events/Video fields -->
+            <div class="field flow-only" data-only="events_video">
+              <label for="su_event_date">Event Date</label>
+              <input id="su_event_date" name="su_event_date" type="text" placeholder="Example: April 12, 2026" />
+            </div>
+
+            <div class="field">
+              <label for="su_notes">Notes</label>
+              <textarea id="su_notes" name="su_notes" rows="4" placeholder="Anything we should know? deadlines, locations, special requests…"></textarea>
+            </div>
+
+            <!-- Pricing appears ONLY here -->
+            <div class="pricing-box" id="pricingBox">
+              <div class="mono">Packages</div>
+              <div class="packages" id="packages"></div>
+
+              <div class="field">
+                <label for="su_package">Select Package</label>
+                <select id="su_package" name="su_package" required></select>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-dark">Submit Sign Up</button>
+              <a class="btn btn-ghost-dark" href="#contact">Questions?</a>
+            </div>
+
+            <p class="small">
+              Submitting creates an email order/registration to Captured by Kam (reliable, no third-party forms).
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT (light) -->
+    <section class="page page-light" id="about" aria-label="About">
+      <div class="page-inner">
+        <h2 class="h2">About</h2>
+
+        <p class="p">
+          Captured by Kam is premium visual storytelling rooted in real life — street, community, faith, family.
+          I don’t chase trendy. I document what matters.
+          Every shoot is built with intention: clean composition, honest emotion, and a timeless finish.
+        </p>
+
+        <div class="callout">
+          <div class="callout-title">This isn’t content for the algorithm.</div>
+          <div class="callout-text">
+            It’s for your future self. For your people. For the story you’ll want to remember.
+          </div>
+        </div>
+
+        <p class="p">
+          If you’re here for something real, we’re aligned.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn btn-dark" href="#book">Book Now</a>
+          <a class="btn btn-ghost-dark" href="#signup">Sign Up</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT (light) -->
+    <section class="page page-light" id="contact" aria-label="Contact">
+      <div class="page-inner">
+        <h2 class="h2">Contact</h2>
+
+        <div class="contact-grid">
+          <div class="contact-card">
+            <div class="mono">EMAIL</div>
+            <a class="contact-link" href="mailto:capturedbykammedia@gmail.com">capturedbykammedia@gmail.com</a>
+          </div>
+
+          <div class="contact-card">
+            <div class="mono">INSTAGRAM</div>
+            <a class="contact-link" href="https://instagram.com/CapturedBy_Kam" target="_blank" rel="noopener">@CapturedBy_Kam</a>
+          </div>
+
+          <div class="contact-card">
+            <div class="mono">YOUTUBE</div>
+            <a class="contact-link" href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noopener">Captured by Kam Media</a>
+          </div>
+        </div>
+
+        <div class="cta-row" style="margin-top:18px;">
+          <a class="btn btn-dark" href="#book">Book Now</a>
+          <a class="btn btn-ghost-dark" href="#signup">Sign Up</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- optional placeholders -->
+    <section class="page page-light" id="clients" aria-label="Client Services">
+      <div class="page-inner">
+        <h2 class="h2">Client Services</h2>
+        <p class="p">
+          Client galleries and delivery links are provided directly after booking or ordering.
+          If you need help accessing a gallery, email me with your name and the event/session.
+        </p>
+      </div>
+    </section>
+
+    <section class="page page-light" id="legal" aria-label="Legal Notices">
+      <div class="page-inner">
+        <h2 class="h2">Legal Notices</h2>
+        <p class="p">
+          All imagery and content © Captured by Kam. Unauthorized use or reproduction is not permitted.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="assets/app.js"></script>
 </body>
 </html>
