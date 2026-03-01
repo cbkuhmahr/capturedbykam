@@ -3,61 +3,82 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pay / Order — Capturedby_Kam</title>
+  <title>Pay / Order — Captured by Kam</title>
 
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="site.css">
+  <script src="site.js" defer></script>
 </head>
 
 <body>
   <div class="page">
+
     <div class="top">
       <div class="brand">
         <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
-        <p class="tagline">Pay / Order photos</p>
+        <p class="tagline">Pay / Order Photos</p>
       </div>
 
+      <button class="hamburger" type="button" data-menu-open aria-controls="mobileMenu" aria-expanded="false">Menu</button>
+
       <nav class="menu" aria-label="Main menu">
-        <a class="pill" href="index.html">Gallery</a>
-        <a class="pill" href="about.html">About</a>
+        <a class="pill" href="index.html">Home</a>
         <a class="pill" href="services.html">Services</a>
-        <a class="pill" href="contact.html">Contact</a>
-
-        <a class="pill" href="order-photos.html">Pay</a>
-        <a class="pill pill-solid" href="BOOK_URL_HERE" target="_blank" rel="noreferrer">Book</a>
-
-        <a class="pill" href="clients/">Clients</a>
+        <a class="pill" href="about.html">About</a>
+        <a class="pill pill-solid" href="order-photos.html">Pay</a>
+        <a class="pill" href="contact.html">Book</a>
         <a class="pill" href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
         <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
       </nav>
     </div>
 
-    <div class="card">
-      <p><strong>Parents:</strong> Choose a package and pay through PayPal (Venmo enabled).</p>
-      <p class="small">
-        In PayPal, add this in the note: <strong>Athlete Name + Jersey # + Team</strong>.
-      </p>
+    <div class="actions">
+      <a class="action-btn primary" href="order-photos.html">Pay / Order Photos</a>
+      <a class="action-btn secondary" href="contact.html">Book / Contact</a>
     </div>
 
-    <h2>Quick order note (optional)</h2>
-    <div class="card">
-      <p class="small">Fill this out, tap “Copy note”, then paste into the PayPal note at checkout.</p>
+    <div id="mobileMenu" class="drawer" aria-hidden="true">
+      <div class="drawer-panel">
+        <div class="drawer-head">
+          <div class="drawer-title">Menu</div>
+          <button class="drawer-close" type="button" data-menu-close>Close</button>
+        </div>
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="order-photos.html">Pay</a>
+        <a href="contact.html">Book</a>
+        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+    </div>
 
+    <div class="card">
+      <p><strong>How it works:</strong></p>
+      <p class="small">Step 1: enter athlete info (below) and copy the PayPal note.<br>
+      Step 2: choose a package and pay.</p>
+      <p class="small"><strong>Yes</strong> — PayPal checkout lets parents add a note. They paste the copied note into the “note to seller” field.</p>
+    </div>
+
+    <h2>Step 1 — Athlete info</h2>
+    <div class="card">
       <label for="athlete">Athlete name</label>
       <input id="athlete" type="text" placeholder="Miles Mosley">
 
-      <label for="jersey">Jersey #</label>
+      <label for="jersey">Athlete #</label>
       <input id="jersey" type="text" placeholder="23">
 
       <label for="team">Team</label>
       <input id="team" type="text" placeholder="Whitmer Panthers">
 
-      <button class="btn" id="copyNote" type="button">Copy note</button>
+      <button class="btn" id="copyNote" type="button">Copy PayPal note</button>
+      <button class="btn" id="emailNote" type="button" style="margin-left:8px;">Email this info to Kam</button>
+
       <div class="small" id="copyStatus" aria-live="polite" style="margin-top:10px;"></div>
     </div>
 
-    <h2>Packages</h2>
+    <h2>Step 2 — Pay</h2>
 
     <div class="card">
       <p><strong>🥉 ROOKIE — $25</strong></p>
@@ -79,49 +100,52 @@
 
     <footer class="footer">
       <div class="brand-lines">
-        <div>EVERY FRAME, EVERY PROJECT</div>
-        <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
+        <div>Every frame, every project</div>
+        <div>Timeless authenticity — Captured by Kam</div>
       </div>
-
       <div class="links">
         <a href="mailto:kam@capturedbykam.com">Email</a>
-        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
-        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="order-photos.html">Pay</a>
+        <a href="contact.html">Book</a>
       </div>
     </footer>
+
   </div>
 
-  <!-- PayPal SDK (ONLY ONCE) -->
+  <!-- PayPal SDK (once) -->
   <script
     src="https://www.paypal.com/sdk/js?client-id=BAA_WkQ3RFsOD-TFE6lhyMEI8dxgLM1vhYCJ-1Lg8S73CQmESQTnqWLkrDXGqqfpx3LCWBRQZT4WJuNzfI&components=hosted-buttons&enable-funding=venmo&currency=USD">
   </script>
 
   <script>
     // Render hosted buttons
-    paypal.HostedButtons({ hostedButtonId: "NUSD2T9G32H6E" })
-      .render("#paypal-container-rookie");
+    paypal.HostedButtons({ hostedButtonId: "NUSD2T9G32H6E" }).render("#paypal-container-rookie");
+    paypal.HostedButtons({ hostedButtonId: "SLHNF33CATTQ6" }).render("#paypal-container-allstar");
+    paypal.HostedButtons({ hostedButtonId: "AS63S2UBAE376" }).render("#paypal-container-mvp");
 
-    paypal.HostedButtons({ hostedButtonId: "SLHNF33CATTQ6" })
-      .render("#paypal-container-allstar");
-
-    paypal.HostedButtons({ hostedButtonId: "AS63S2UBAE376" })
-      .render("#paypal-container-mvp");
-
-    // Copy note helper
-    document.getElementById("copyNote").addEventListener("click", async () => {
+    function buildNote(){
       const athlete = (document.getElementById("athlete").value || "").trim();
       const jersey = (document.getElementById("jersey").value || "").trim();
       const team = (document.getElementById("team").value || "").trim();
+      return `CBK Sports Order — Athlete: ${athlete || "____"} | #${jersey || "____"} | Team: ${team || "____"}`;
+    }
 
-      const note = `CBK Order — Athlete: ${athlete || "____"} | #${jersey || "____"} | Team: ${team || "____"}`;
+    document.getElementById("copyNote").addEventListener("click", async () => {
+      const note = buildNote();
       const status = document.getElementById("copyStatus");
-
       try {
         await navigator.clipboard.writeText(note);
         status.textContent = "Copied. Paste that into the PayPal note at checkout.";
       } catch (e) {
-        status.textContent = "Couldn’t auto-copy (some browsers block it). Manually copy this: " + note;
+        status.textContent = "Couldn’t auto-copy. Manually copy this: " + note;
       }
+    });
+
+    document.getElementById("emailNote").addEventListener("click", () => {
+      const note = buildNote();
+      const subject = encodeURIComponent("CBK Sports Order Info");
+      const body = encodeURIComponent(note + "\n\nSent from capturedbykam.com");
+      window.location.href = `mailto:kam@capturedbykam.com?subject=${subject}&body=${body}`;
     });
   </script>
 </body>
