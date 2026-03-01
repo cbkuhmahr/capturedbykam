@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Contact — Capturedby_Kam</title>
+  <title>Book — Captured by Kam</title>
 
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="site.css">
+  <script src="site.js" defer></script>
 </head>
 
 <body>
@@ -16,34 +17,55 @@
     <div class="top">
       <div class="brand">
         <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
-        <p class="tagline">Contact</p>
+        <p class="tagline">Book / Contact</p>
       </div>
 
+      <button class="hamburger" type="button" data-menu-open aria-controls="mobileMenu" aria-expanded="false">Menu</button>
+
       <nav class="menu" aria-label="Main menu">
-        <a class="pill" href="index.html">Gallery</a>
-        <a class="pill" href="about.html">About</a>
+        <a class="pill" href="index.html">Home</a>
         <a class="pill" href="services.html">Services</a>
-        <a class="pill" href="contact.html">Contact</a>
-        <a class="pill pill-solid" href="BOOK_URL_HERE" target="_blank" rel="noreferrer">Book</a>
+        <a class="pill" href="about.html">About</a>
         <a class="pill" href="order-photos.html">Pay</a>
-        <a class="pill" href="clients/">Clients</a>
+        <a class="pill pill-solid" href="contact.html">Book</a>
         <a class="pill" href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
         <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
       </nav>
     </div>
 
-    <h2>Contact</h2>
+    <div class="actions">
+      <a class="action-btn primary" href="order-photos.html">Pay / Order Photos</a>
+      <a class="action-btn secondary" href="contact.html">Book / Contact</a>
+    </div>
+
+    <div id="mobileMenu" class="drawer" aria-hidden="true">
+      <div class="drawer-panel">
+        <div class="drawer-head">
+          <div class="drawer-title">Menu</div>
+          <button class="drawer-close" type="button" data-menu-close>Close</button>
+        </div>
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="order-photos.html">Pay</a>
+        <a href="contact.html">Book</a>
+        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+    </div>
+
+    <h2>Book a shoot</h2>
     <div class="card">
       <p>Email: <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a></p>
-      <p class="small">Fastest way: fill this out — it opens your email with everything pre-filled.</p>
+      <p class="small">Submit this and it opens your email app with everything filled in.</p>
 
-      <form id="cbkForm">
-        <label for="interest">Interested in</label>
+      <form id="cbkBookForm">
+        <label for="interest">I’m interested in</label>
         <select id="interest" required>
           <option value="">Select one</option>
           <option value="Senior Photos">Senior Photos</option>
           <option value="Headshots">Headshots</option>
-          <option value="Team Photos">Team Photos</option>
+          <option value="Sports / Team Day">Sports / Team Day</option>
           <option value="Event Coverage">Event Coverage</option>
           <option value="Videography">Videography</option>
           <option value="Other">Other</option>
@@ -53,112 +75,62 @@
         <input id="name" type="text" placeholder="Full name" required>
 
         <label for="when">Preferred date / timeframe</label>
-        <input id="when" type="text" placeholder="Example: Feb 10 / weekends / ASAP" required>
+        <input id="when" type="text" placeholder="Example: March 10 / weekends / ASAP" required>
 
-        <label for="location">Location</label>
-        <input id="location" type="text" placeholder="City / venue" required>
+        <label for="location">Location (city / venue)</label>
+        <input id="location" type="text" placeholder="Toledo / Perrysburg / etc." required>
 
-        <label for="message">Message</label>
-        <textarea id="message" placeholder="Tell me the vibe, purpose, number of people, and anything important." required></textarea>
+        <label for="message">Details</label>
+        <textarea id="message" placeholder="What’s the vibe? How many people? Any must-have shots?" required></textarea>
 
-        <button class="btn" type="submit">Send message</button>
+        <button class="btn" type="submit">Send booking request</button>
 
         <div class="small">
-          If this doesn’t open your email app, email me directly:
+          If it doesn’t open your email app, email me directly:
           <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
         </div>
       </form>
     </div>
 
-    <h2 id="pay">Payments (PayPal)</h2>
-    <div class="card">
-      <p><strong>PayPal is the main lane.</strong> Choose one option below.</p>
-
-      <hr>
-
-      <p><strong>Option A (simplest): PayPal.Me link</strong><br>
-        Create your PayPal.Me and paste it here:
-      </p>
-      <p class="small">
-        Replace: <code>PAYPAL_ME_URL_HERE</code> with your real link.
-        Include the athlete/team name in the PayPal note.
-      </p>
-      <a class="pill pill-solid" href="PAYPAL_ME_URL_HERE" target="_blank" rel="noreferrer">Pay with PayPal</a>
-
-      <hr>
-
-      <p><strong>Option B (cleanest for fixed packages): Hosted PayPal Buttons</strong><br>
-        If you create “Buy Now” buttons inside PayPal, you’ll get a Hosted Button ID for each package.
-        Then replace the placeholders below.
-      </p>
-
-      <!-- ROOKIE -->
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
-        <input type="hidden" name="cmd" value="_s-xclick">
-        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_ROOKIE">
-        <button class="btn" type="submit">Pay ROOKIE ($25)</button>
-      </form>
-
-      <!-- ALL-STAR -->
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
-        <input type="hidden" name="cmd" value="_s-xclick">
-        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_ALLSTAR">
-        <button class="btn" type="submit">Pay ALL-STAR ($40)</button>
-      </form>
-
-      <!-- MVP -->
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
-        <input type="hidden" name="cmd" value="_s-xclick">
-        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_MVP">
-        <button class="btn" type="submit">Pay MVP ($69)</button>
-      </form>
-
-      <p class="small">
-        When you’re ready, tell me your PayPal.Me link OR the 3 Hosted Button IDs and I’ll plug them in perfectly.
-      </p>
-    </div>
-
     <footer class="footer">
       <div class="brand-lines">
-        <div>EVERY FRAME, EVERY PROJECT</div>
-        <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
+        <div>Every frame, every project</div>
+        <div>Timeless authenticity — Captured by Kam</div>
       </div>
-
       <div class="links">
         <a href="mailto:kam@capturedbykam.com">Email</a>
-        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
-        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="order-photos.html">Pay</a>
+        <a href="contact.html">Book</a>
       </div>
     </footer>
 
   </div>
 
   <script>
-  document.getElementById("cbkForm").addEventListener("submit", function(e){
-    e.preventDefault();
+    document.getElementById("cbkBookForm").addEventListener("submit", function(e){
+      e.preventDefault();
 
-    const interest = document.getElementById("interest").value;
-    const name = document.getElementById("name").value;
-    const when = document.getElementById("when").value;
-    const location = document.getElementById("location").value;
-    const message = document.getElementById("message").value;
+      const interest = document.getElementById("interest").value;
+      const name = document.getElementById("name").value;
+      const when = document.getElementById("when").value;
+      const location = document.getElementById("location").value;
+      const message = document.getElementById("message").value;
 
-    const subject = encodeURIComponent(`CBK Booking — ${interest} — ${name}`);
-    const body = encodeURIComponent(
+      const subject = encodeURIComponent(`CBK Booking — ${interest} — ${name}`);
+      const body = encodeURIComponent(
 `I’m interested in: ${interest}
 Name: ${name}
 Preferred date/timeframe: ${when}
 Location: ${location}
 
-Message:
+Details:
 ${message}
 
 — sent from capturedbykam.com`
-    );
+      );
 
-    window.location.href = `mailto:kam@capturedbykam.com?subject=${subject}&body=${body}`;
-  });
+      window.location.href = `mailto:kam@capturedbykam.com?subject=${subject}&body=${body}`;
+    });
   </script>
-
 </body>
 </html>
