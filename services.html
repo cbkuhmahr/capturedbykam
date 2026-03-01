@@ -3,117 +3,112 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Services — Capturedby_Kam</title>
+  <title>Services — Captured by Kam</title>
 
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="site.css">
+  <script src="site.js" defer></script>
 </head>
 
 <body>
   <div class="page">
+
     <div class="top">
       <div class="brand">
         <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
-        <p class="tagline">Services — contact for pricing</p>
+        <p class="tagline">Services</p>
       </div>
 
+      <button class="hamburger" type="button" data-menu-open aria-controls="mobileMenu" aria-expanded="false">Menu</button>
+
       <nav class="menu" aria-label="Main menu">
-        <a class="pill" href="index.html">Gallery</a>
-        <a class="pill" href="about.html">About</a>
+        <a class="pill" href="index.html">Home</a>
         <a class="pill" href="services.html">Services</a>
-        <a class="pill" href="contact.html">Contact</a>
-
+        <a class="pill" href="about.html">About</a>
         <a class="pill" href="order-photos.html">Pay</a>
-        <a class="pill pill-solid" href="BOOK_URL_HERE" target="_blank" rel="noreferrer">Book</a>
-
-        <a class="pill" href="clients/">Clients</a>
+        <a class="pill pill-solid" href="contact.html">Book</a>
         <a class="pill" href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
         <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
       </nav>
     </div>
 
-    <div class="card">
-      <p><strong>Contact for pricing.</strong> I price based on the scope, location, and deliverables.</p>
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-        <a class="pill pill-solid" href="contact.html">Get a quote</a>
-        <a class="pill" href="order-photos.html">Pay / Order</a>
+    <div class="actions">
+      <a class="action-btn primary" href="order-photos.html">Pay / Order Photos</a>
+      <a class="action-btn secondary" href="contact.html">Book / Contact</a>
+    </div>
+
+    <div id="mobileMenu" class="drawer" aria-hidden="true">
+      <div class="drawer-panel">
+        <div class="drawer-head">
+          <div class="drawer-title">Menu</div>
+          <button class="drawer-close" type="button" data-menu-close>Close</button>
+        </div>
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="order-photos.html">Pay</a>
+        <a href="contact.html">Book</a>
+        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
       </div>
     </div>
 
-    <h2>Terms</h2>
     <div class="card">
-      <details>
-        <summary style="cursor:pointer; font-family:var(--mono-font); letter-spacing:.12em; text-transform:uppercase;">
-          Booking + payment (tap to expand)
-        </summary>
-        <div style="margin-top:12px;">
-          <p><strong>Retainer:</strong> 50% non-refundable to lock the date.</p>
-          <p><strong>Balance:</strong> due day-of shoot.</p>
-          <p><strong>Time:</strong> session time is session time. Extra time only if schedule allows.</p>
-          <p><strong>Extra time:</strong> 30 min ($40) • 1 hour ($50)</p>
-        </div>
-      </details>
-
-      <details style="margin-top:10px;">
-        <summary style="cursor:pointer; font-family:var(--mono-font); letter-spacing:.12em; text-transform:uppercase;">
-          Creative + reshoots (tap to expand)
-        </summary>
-        <div style="margin-top:12px;">
-          <p>You’re booking my creative eye + edit style.</p>
-          <p>No refunds after a session is completed. If there’s a real issue, contact me within 48 hours of gallery delivery to discuss a reshoot (availability-based).</p>
-        </div>
-      </details>
+      <p><strong>Public services:</strong> Seniors • Headshots • Sports • Events • Video.</p>
+      <p class="small">Pricing depends on scope + deliverables. Book/Contact and I’ll quote it clean.</p>
     </div>
 
-    <h2>Senior portraits</h2>
-    <div class="card">
-      <p><strong>Quick Session</strong> — focused, clean, one location vibe.</p>
-      <p class="small">One outfit • edited digital images • online gallery • print release</p>
-      <a class="pill" href="contact.html">Click for pricing</a>
-    </div>
-
-    <div class="card">
-      <p><strong>Full Session</strong> — multiple looks, more time, more variety.</p>
-      <p class="small">Multiple outfits • up to two nearby locations • expanded image set • online gallery • print release</p>
-      <a class="pill" href="contact.html">Click for pricing</a>
-    </div>
-
-    <h2>Headshots</h2>
-    <div class="card">
-      <p><strong>Single</strong> — quick, professional, clean.</p>
-      <p class="small">One look • retouched image(s) • web/social ready delivery</p>
-      <a class="pill" href="contact.html">Click for pricing</a>
-    </div>
-
-    <div class="card">
-      <p><strong>Mini Set</strong> — 1–2 looks, more options.</p>
-      <p class="small">Multiple retouched images • clean environment • no huge studio production</p>
-      <a class="pill" href="contact.html">Click for pricing</a>
-    </div>
-
-    <h2>Teams / sports</h2>
-    <div class="card">
-      <p><strong>Team + individual coverage</strong> — media day or game day setup.</p>
-      <p class="small">Share-ready edits • print options • parent ordering available</p>
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-        <a class="pill" href="contact.html">Book team day</a>
-        <a class="pill pill-solid" href="order-photos.html">Parents: Pay / Order</a>
+    <h2>Services</h2>
+    <div class="grid-2">
+      <div class="card" style="margin-top:0;">
+        <p><strong>Senior Portraits</strong></p>
+        <p class="small">Clean looks, real vibe, timeless delivery.</p>
+        <a class="pill" href="contact.html">Book / Quote</a>
       </div>
+
+      <div class="card" style="margin-top:0;">
+        <p><strong>Headshots</strong></p>
+        <p class="small">Professional, fast, sharp.</p>
+        <a class="pill" href="contact.html">Book / Quote</a>
+      </div>
+
+      <div class="card" style="margin-top:0;">
+        <p><strong>Sports / Team Days</strong></p>
+        <p class="small">Media day setups + parent ordering.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+          <a class="pill pill-solid" href="order-photos.html">Parents Pay</a>
+          <a class="pill" href="contact.html">Book Team Day</a>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:0;">
+        <p><strong>Events</strong></p>
+        <p class="small">Coverage built for memory + marketing.</p>
+        <a class="pill" href="contact.html">Book / Quote</a>
+      </div>
+    </div>
+
+    <h2>Terms (quick)</h2>
+    <div class="card">
+      <p class="small"><strong>Booking:</strong> 50% non-refundable retainer locks the date. Balance due day-of.</p>
+      <p class="small"><strong>Time:</strong> session time is session time. Extra time only if schedule allows.</p>
+      <p class="small"><strong>Extra time:</strong> 30 min ($40) • 1 hour ($50)</p>
+      <p class="small"><strong>Creative:</strong> no refunds after session completion. If there’s an issue, contact within 48 hours of gallery delivery.</p>
     </div>
 
     <footer class="footer">
       <div class="brand-lines">
-        <div>EVERY FRAME, EVERY PROJECT</div>
-        <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
+        <div>Every frame, every project</div>
+        <div>Timeless authenticity — Captured by Kam</div>
       </div>
-
       <div class="links">
         <a href="mailto:kam@capturedbykam.com">Email</a>
-        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
-        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="order-photos.html">Pay</a>
+        <a href="contact.html">Book</a>
       </div>
     </footer>
+
   </div>
 </body>
 </html>
