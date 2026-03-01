@@ -1,264 +1,150 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Contact — Capturedby_Kam</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact — Capturedby_Kam</title>
 
-<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-
-<style>
-:root{
-  --bg:#000;
-  --green:#00FF66;
-  --font:'VT323', monospace;
-  --line:2px;
-}
-
-*{ box-sizing:border-box; }
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--green);
-  font-family:var(--font);
-}
-
-.page{
-  padding:24px 18px 60px;
-  max-width:560px;
-  margin:0 auto;
-}
-
-.title{
-  margin:0 0 8px 0;
-  font-size:44px;
-  line-height:1;
-}
-.title a{
-  color:var(--green);
-  text-decoration:none;
-}
-
-.tagline{
-  margin:0 0 18px 0;
-  font-size:20px;
-  line-height:1.25;
-}
-
-.menu{
-  display:flex;
-  gap:22px;
-  margin:0 0 26px 0;
-  font-size:24px;
-  flex-wrap:wrap;
-}
-.menu a{
-  color:var(--green);
-  text-decoration:none;
-  white-space:nowrap;
-}
-.menu a:hover{ text-decoration:underline; }
-
-h2{
-  margin:0 0 12px 0;
-  font-size:28px;
-}
-
-p{
-  margin:0 0 12px 0;
-  font-size:20px;
-  line-height:1.25;
-}
-
-a{ color:var(--green); }
-
-.box{
-  border:var(--line) solid var(--green);
-  padding:14px;
-  margin-top:14px;
-}
-
-label{
-  display:block;
-  font-size:20px;
-  margin:12px 0 6px;
-}
-
-input, select, textarea{
-  width:100%;
-  border:var(--line) solid var(--green);
-  background:#000;
-  color:var(--green);
-  font-family:var(--font);
-  font-size:20px;
-  padding:8px 10px;
-  outline:none;
-}
-
-textarea{
-  min-height:130px;
-  resize:vertical;
-}
-
-.btn{
-  margin-top:12px;
-  border:var(--line) solid var(--green);
-  background:transparent;
-  color:var(--green);
-  font-family:var(--font);
-  font-size:20px;
-  padding:8px 12px;
-  cursor:pointer;
-}
-
-.btn:active{ transform:translateY(1px); }
-
-.small{
-  font-size:18px;
-  opacity:.9;
-  margin-top:10px;
-  line-height:1.25;
-}
-
-/* FOOTER */
-.footer{
-  margin-top:28px;
-  padding-top:16px;
-  border-top:var(--line) solid var(--green);
-}
-
-.footer .brand-lines{
-  font-size:20px;
-  line-height:1.15;
-  margin-bottom:10px;
-}
-
-.footer .links{
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-  align-items:center;
-  font-size:20px;
-}
-
-.footer a{
-  color:var(--green);
-  text-decoration:none;
-}
-
-.footer a:hover{ text-decoration:underline; }
-
-.icon{
-  width:18px;
-  height:18px;
-  vertical-align:-3px;
-  margin-right:6px;
-  fill:var(--green);
-}
-
-@media (max-width:420px){
-  .menu{ font-size:22px; gap:16px; }
-}
-</style>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site.css">
 </head>
 
 <body>
-<div class="page">
+  <div class="page">
 
-  <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
-  <p class="tagline">CONTACT</p>
-
-  <nav class="menu" aria-label="Main menu">
-    <a href="index.html">GALLERY</a>
-    <a href="about.html">ABOUT</a>
-    <a href="services.html">SERVICES</a>
-    <a href="contact.html">CONTACT</a>
-
-    <!-- ADDED: CLIENTS points to /clients/ (clients/index.html) -->
-    <a href="clients/">CLIENTS</a>
-
-    <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-    <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
-  </nav>
-
-  <h2>CONTACT</h2>
-  <p>Email: <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a></p>
-
-  <div class="box">
-    <h2 style="margin-top:0;">BOOKING REQUEST</h2>
-
-    <form id="cbkForm">
-      <label for="interest">Hello, I’m interested in:</label>
-      <select id="interest" required>
-        <option value="">Select one</option>
-        <option value="Senior Pics">Senior Pics</option>
-        <option value="Headshots">Headshots</option>
-        <option value="Team Photos">Team Photos</option>
-        <option value="Videography">Videography</option>
-        <option value="Other">Other</option>
-      </select>
-
-      <label for="name">Your name</label>
-      <input id="name" type="text" placeholder="Full name" required>
-
-      <label for="when">Preferred date / timeframe</label>
-      <input id="when" type="text" placeholder="Example: Feb 10 / weekends / ASAP" required>
-
-      <label for="location">Location (city / venue)</label>
-      <input id="location" type="text" placeholder="Example: Toledo / Perrysburg / Ann Arbor" required>
-
-      <label for="message">Message</label>
-      <textarea id="message" placeholder="Tell me the vibe, purpose, number of people, and anything important." required></textarea>
-
-      <button class="btn" type="submit">SEND MESSAGE</button>
-
-      <div class="small">
-        This opens your email app with everything filled in. If it doesn’t open, email me directly:
-        <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
+    <div class="top">
+      <div class="brand">
+        <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
+        <p class="tagline">Contact</p>
       </div>
-    </form>
+
+      <nav class="menu" aria-label="Main menu">
+        <a class="pill" href="index.html">Gallery</a>
+        <a class="pill" href="about.html">About</a>
+        <a class="pill" href="services.html">Services</a>
+        <a class="pill" href="contact.html">Contact</a>
+        <a class="pill pill-solid" href="BOOK_URL_HERE" target="_blank" rel="noreferrer">Book</a>
+        <a class="pill" href="order-photos.html">Pay</a>
+        <a class="pill" href="clients/">Clients</a>
+        <a class="pill" href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
+        <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      </nav>
+    </div>
+
+    <h2>Contact</h2>
+    <div class="card">
+      <p>Email: <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a></p>
+      <p class="small">Fastest way: fill this out — it opens your email with everything pre-filled.</p>
+
+      <form id="cbkForm">
+        <label for="interest">Interested in</label>
+        <select id="interest" required>
+          <option value="">Select one</option>
+          <option value="Senior Photos">Senior Photos</option>
+          <option value="Headshots">Headshots</option>
+          <option value="Team Photos">Team Photos</option>
+          <option value="Event Coverage">Event Coverage</option>
+          <option value="Videography">Videography</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label for="name">Your name</label>
+        <input id="name" type="text" placeholder="Full name" required>
+
+        <label for="when">Preferred date / timeframe</label>
+        <input id="when" type="text" placeholder="Example: Feb 10 / weekends / ASAP" required>
+
+        <label for="location">Location</label>
+        <input id="location" type="text" placeholder="City / venue" required>
+
+        <label for="message">Message</label>
+        <textarea id="message" placeholder="Tell me the vibe, purpose, number of people, and anything important." required></textarea>
+
+        <button class="btn" type="submit">Send message</button>
+
+        <div class="small">
+          If this doesn’t open your email app, email me directly:
+          <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
+        </div>
+      </form>
+    </div>
+
+    <h2 id="pay">Payments (PayPal)</h2>
+    <div class="card">
+      <p><strong>PayPal is the main lane.</strong> Choose one option below.</p>
+
+      <hr>
+
+      <p><strong>Option A (simplest): PayPal.Me link</strong><br>
+        Create your PayPal.Me and paste it here:
+      </p>
+      <p class="small">
+        Replace: <code>PAYPAL_ME_URL_HERE</code> with your real link.
+        Include the athlete/team name in the PayPal note.
+      </p>
+      <a class="pill pill-solid" href="PAYPAL_ME_URL_HERE" target="_blank" rel="noreferrer">Pay with PayPal</a>
+
+      <hr>
+
+      <p><strong>Option B (cleanest for fixed packages): Hosted PayPal Buttons</strong><br>
+        If you create “Buy Now” buttons inside PayPal, you’ll get a Hosted Button ID for each package.
+        Then replace the placeholders below.
+      </p>
+
+      <!-- ROOKIE -->
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_ROOKIE">
+        <button class="btn" type="submit">Pay ROOKIE ($25)</button>
+      </form>
+
+      <!-- ALL-STAR -->
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_ALLSTAR">
+        <button class="btn" type="submit">Pay ALL-STAR ($40)</button>
+      </form>
+
+      <!-- MVP -->
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_MVP">
+        <button class="btn" type="submit">Pay MVP ($69)</button>
+      </form>
+
+      <p class="small">
+        When you’re ready, tell me your PayPal.Me link OR the 3 Hosted Button IDs and I’ll plug them in perfectly.
+      </p>
+    </div>
+
+    <footer class="footer">
+      <div class="brand-lines">
+        <div>EVERY FRAME, EVERY PROJECT</div>
+        <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
+      </div>
+
+      <div class="links">
+        <a href="mailto:kam@capturedbykam.com">Email</a>
+        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+    </footer>
+
   </div>
 
-  <footer class="footer">
-    <div class="brand-lines">
-      <div>EVERY FRAME, EVERY PROJECT</div>
-      <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
-    </div>
+  <script>
+  document.getElementById("cbkForm").addEventListener("submit", function(e){
+    e.preventDefault();
 
-    <div class="links">
-      <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.5-.9a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2z"/>
-        </svg>
-        Instagram
-      </a>
+    const interest = document.getElementById("interest").value;
+    const name = document.getElementById("name").value;
+    const when = document.getElementById("when").value;
+    const location = document.getElementById("location").value;
+    const message = document.getElementById("message").value;
 
-      <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.6 4.6 12 4.6 12 4.6s-5.6 0-7.5.5A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.9.5 7.5.5 7.5.5s5.6 0 7.5-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/>
-        </svg>
-        YouTube
-      </a>
-
-      <a href="mailto:kam@capturedbykam.com">Contact</a>
-    </div>
-  </footer>
-
-</div>
-
-<script>
-document.getElementById("cbkForm").addEventListener("submit", function(e){
-  e.preventDefault();
-
-  const interest = document.getElementById("interest").value;
-  const name = document.getElementById("name").value;
-  const when = document.getElementById("when").value;
-  const location = document.getElementById("location").value;
-  const message = document.getElementById("message").value;
-
-  const subject = encodeURIComponent(`CBK Booking — ${interest} — ${name}`);
-  const body = encodeURIComponent(
+    const subject = encodeURIComponent(`CBK Booking — ${interest} — ${name}`);
+    const body = encodeURIComponent(
 `I’m interested in: ${interest}
 Name: ${name}
 Preferred date/timeframe: ${when}
@@ -268,11 +154,11 @@ Message:
 ${message}
 
 — sent from capturedbykam.com`
-  );
+    );
 
-  window.location.href = `mailto:kam@capturedbykam.com?subject=${subject}&body=${body}`;
-});
-</script>
+    window.location.href = `mailto:kam@capturedbykam.com?subject=${subject}&body=${body}`;
+  });
+  </script>
 
 </body>
 </html>
