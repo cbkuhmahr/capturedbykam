@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gallery — Capturedby_Kam</title>
+  <title>Capturedby_Kam — Gallery</title>
 
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -15,44 +15,58 @@
     <div class="top">
       <div class="brand">
         <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
-        <p class="tagline">GALLERY</p>
+        <p class="tagline">Timeless authenticity — built to outlive the moment.</p>
       </div>
 
       <nav class="menu" aria-label="Main menu">
-        <a class="pill" href="index.html">GALLERY</a>
-        <a class="pill" href="about.html">ABOUT</a>
-        <a class="pill" href="services.html">SERVICES</a>
-        <a class="pill" href="contact.html">CONTACT</a>
+        <a class="pill" href="index.html">Gallery</a>
+        <a class="pill" href="about.html">About</a>
+        <a class="pill" href="services.html">Services</a>
+        <a class="pill" href="contact.html">Contact</a>
 
-        <a class="pill pill-solid" href="BOOK_URL_HERE" target="_blank" rel="noreferrer">BOOK</a>
+        <a class="pill" href="order-photos.html">Pay</a>
+        <a class="pill pill-solid" href="BOOK_URL_HERE" target="_blank" rel="noreferrer">Book</a>
 
-        <a class="pill" href="clients/">CLIENTS</a>
+        <a class="pill" href="clients/">Clients</a>
         <a class="pill" href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
-        <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YOUTUBE</a>
+        <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
       </nav>
     </div>
 
-    <h2>GALLERY</h2>
-    <p>Simple grid. Clean. Add images later.</p>
+    <div class="card">
+      <p><strong>Every frame, every project — timeless authenticity, Captured by Kam.</strong></p>
+      <p>Senior portraits • Headshots • Team coverage • Events • Video when the story needs motion.</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+        <a class="pill pill-solid" href="contact.html">Contact</a>
+        <a class="pill" href="order-photos.html">Pay / Order</a>
+        <a class="pill" href="services.html">Services</a>
+      </div>
+    </div>
 
+    <h2>Featured work</h2>
     <div class="box">
-      <p style="margin-bottom:0; font-family: var(--mono-font); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--green-dim);">
-        TIP: replace these placeholders with your real images.
+      <p style="margin-bottom:10px; font-family: var(--mono-font); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--green-dim);">
+        Drop your images into /images/ and update these paths.
       </p>
-      <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; margin-top:12px;">
-        <div class="card" style="margin-top:0; height:180px; display:flex; align-items:center; justify-content:center;">
-          <span style="font-family:var(--mono-font); font-size:12px; color:var(--green-dim);">IMAGE 1</span>
+
+      <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px;">
+        <div class="card" style="margin-top:0; padding:0; overflow:hidden;">
+          <img src="images/sample-1.jpg" alt="Captured by Kam work 1" style="width:100%; height:220px; object-fit:cover; display:block;">
         </div>
-        <div class="card" style="margin-top:0; height:180px; display:flex; align-items:center; justify-content:center;">
-          <span style="font-family:var(--mono-font); font-size:12px; color:var(--green-dim);">IMAGE 2</span>
+        <div class="card" style="margin-top:0; padding:0; overflow:hidden;">
+          <img src="images/sample-2.jpg" alt="Captured by Kam work 2" style="width:100%; height:220px; object-fit:cover; display:block;">
         </div>
-        <div class="card" style="margin-top:0; height:180px; display:flex; align-items:center; justify-content:center;">
-          <span style="font-family:var(--mono-font); font-size:12px; color:var(--green-dim);">IMAGE 3</span>
+        <div class="card" style="margin-top:0; padding:0; overflow:hidden;">
+          <img src="images/sample-3.jpg" alt="Captured by Kam work 3" style="width:100%; height:220px; object-fit:cover; display:block;">
         </div>
-        <div class="card" style="margin-top:0; height:180px; display:flex; align-items:center; justify-content:center;">
-          <span style="font-family:var(--mono-font); font-size:12px; color:var(--green-dim);">IMAGE 4</span>
+        <div class="card" style="margin-top:0; padding:0; overflow:hidden;">
+          <img src="images/sample-4.jpg" alt="Captured by Kam work 4" style="width:100%; height:220px; object-fit:cover; display:block;">
         </div>
       </div>
+
+      <p class="small" style="margin-top:12px;">
+        Tip: rename your real files to sample-1.jpg / sample-2.jpg etc, or just change the paths above.
+      </p>
     </div>
 
     <footer class="footer">
@@ -62,21 +76,9 @@
       </div>
 
       <div class="links">
-        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.5-.9a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2z"/>
-          </svg>
-          Instagram
-        </a>
-
-        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.6 4.6 12 4.6 12 4.6s-5.6 0-7.5.5A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.9.5 7.5.5 7.5.5s5.6 0 7.5-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/>
-          </svg>
-          YouTube
-        </a>
-
-        <a href="mailto:kam@capturedbykam.com">Contact</a>
+        <a href="mailto:kam@capturedbykam.com">Email</a>
+        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
       </div>
     </footer>
   </div>
