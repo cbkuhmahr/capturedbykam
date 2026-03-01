@@ -3,84 +3,100 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Capturedby_Kam — Gallery</title>
+  <title>Captured by Kam</title>
 
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="site.css">
+  <script src="site.js" defer></script>
 </head>
 
 <body>
   <div class="page">
+
     <div class="top">
       <div class="brand">
         <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
-        <p class="tagline">Timeless authenticity — built to outlive the moment.</p>
+        <p class="tagline">Every frame, every project — timeless authenticity, Captured by Kam.</p>
       </div>
 
+      <button class="hamburger" type="button" data-menu-open aria-controls="mobileMenu" aria-expanded="false">
+        Menu
+      </button>
+
       <nav class="menu" aria-label="Main menu">
-        <a class="pill" href="index.html">Gallery</a>
-        <a class="pill" href="about.html">About</a>
+        <a class="pill" href="index.html">Home</a>
         <a class="pill" href="services.html">Services</a>
-        <a class="pill" href="contact.html">Contact</a>
-
+        <a class="pill" href="about.html">About</a>
         <a class="pill" href="order-photos.html">Pay</a>
-        <a class="pill pill-solid" href="BOOK_URL_HERE" target="_blank" rel="noreferrer">Book</a>
-
-        <a class="pill" href="clients/">Clients</a>
+        <a class="pill pill-solid" href="contact.html">Book</a>
         <a class="pill" href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
         <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
       </nav>
     </div>
 
-    <div class="card">
-      <p><strong>Every frame, every project — timeless authenticity, Captured by Kam.</strong></p>
-      <p>Senior portraits • Headshots • Team coverage • Events • Video when the story needs motion.</p>
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-        <a class="pill pill-solid" href="contact.html">Contact</a>
-        <a class="pill" href="order-photos.html">Pay / Order</a>
-        <a class="pill" href="services.html">Services</a>
+    <div class="actions">
+      <a class="action-btn primary" href="order-photos.html">Pay / Order Photos</a>
+      <a class="action-btn secondary" href="contact.html">Book / Contact</a>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div id="mobileMenu" class="drawer" aria-hidden="true">
+      <div class="drawer-panel">
+        <div class="drawer-head">
+          <div class="drawer-title">Menu</div>
+          <button class="drawer-close" type="button" data-menu-close>Close</button>
+        </div>
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="order-photos.html">Pay</a>
+        <a href="contact.html">Book</a>
+        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
       </div>
     </div>
 
-    <h2>Featured work</h2>
-    <div class="box">
-      <p style="margin-bottom:10px; font-family: var(--mono-font); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--green-dim);">
-        Drop your images into /images/ and update these paths.
-      </p>
+    <div class="card">
+      <p><strong>Timeless & authentic visuals.</strong> Seniors • Headshots • Sports • Events • Video.</p>
+      <p class="small">If you want something that looks good now and still hits years later — that’s the lane.</p>
+    </div>
 
-      <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px;">
-        <div class="card" style="margin-top:0; padding:0; overflow:hidden;">
-          <img src="images/sample-1.jpg" alt="Captured by Kam work 1" style="width:100%; height:220px; object-fit:cover; display:block;">
-        </div>
-        <div class="card" style="margin-top:0; padding:0; overflow:hidden;">
-          <img src="images/sample-2.jpg" alt="Captured by Kam work 2" style="width:100%; height:220px; object-fit:cover; display:block;">
-        </div>
-        <div class="card" style="margin-top:0; padding:0; overflow:hidden;">
-          <img src="images/sample-3.jpg" alt="Captured by Kam work 3" style="width:100%; height:220px; object-fit:cover; display:block;">
-        </div>
-        <div class="card" style="margin-top:0; padding:0; overflow:hidden;">
-          <img src="images/sample-4.jpg" alt="Captured by Kam work 4" style="width:100%; height:220px; object-fit:cover; display:block;">
-        </div>
+    <h2>Start here</h2>
+    <div class="grid-2">
+      <div class="card" style="margin-top:0;">
+        <p><strong>Parents ordering photos</strong></p>
+        <p class="small">Step 1: enter athlete info • Step 2: PayPal checkout</p>
+        <a class="pill pill-solid" href="order-photos.html">Go to Pay</a>
       </div>
+      <div class="card" style="margin-top:0;">
+        <p><strong>Book a shoot</strong></p>
+        <p class="small">Tell me what you need. You’ll email me directly from the form.</p>
+        <a class="pill" href="contact.html">Go to Booking</a>
+      </div>
+    </div>
 
-      <p class="small" style="margin-top:12px;">
-        Tip: rename your real files to sample-1.jpg / sample-2.jpg etc, or just change the paths above.
-      </p>
+    <h2>Latest work</h2>
+    <div class="card">
+      <p class="small">Portfolio grid is being refreshed. For now, my latest is here:</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+        <a class="pill pill-solid" href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
+        <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
     </div>
 
     <footer class="footer">
       <div class="brand-lines">
-        <div>EVERY FRAME, EVERY PROJECT</div>
-        <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
+        <div>Every frame, every project</div>
+        <div>Timeless authenticity — Captured by Kam</div>
       </div>
-
       <div class="links">
         <a href="mailto:kam@capturedbykam.com">Email</a>
-        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
-        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="order-photos.html">Pay</a>
+        <a href="contact.html">Book</a>
       </div>
     </footer>
+
   </div>
 </body>
 </html>
