@@ -34,51 +34,47 @@
     </div>
 
     <div class="card">
-      <p><strong>Parents:</strong> select a package and pay through PayPal.</p>
-      <p class="small">In the PayPal note, include: Athlete Name + Jersey # + Team.</p>
-    </div>
-
-    <h2>Option A — PayPal.Me (fastest)</h2>
-    <div class="card">
-      <p>Replace the link below with your PayPal.Me link.</p>
-      <a class="pill pill-solid" href="PAYPAL_ME_URL_HERE" target="_blank" rel="noreferrer">Pay with PayPal</a>
-      <p class="small">Example: PAYPAL_ME_URL_HERE → https://www.paypal.me/YourName</p>
-    </div>
-
-    <h2>Option B — PayPal Buttons (best for fixed packages)</h2>
-    <div class="card">
-      <p class="small">Once you create your buttons inside PayPal, you’ll get a unique <code>hosted_button_id</code> for each package. Then replace the 3 placeholders below.</p>
-
-      <hr>
-
-      <p><strong>ROOKIE — $25</strong></p>
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
-        <input type="hidden" name="cmd" value="_s-xclick">
-        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_ROOKIE">
-        <button class="btn" type="submit">Pay ROOKIE ($25)</button>
-      </form>
-
-      <hr>
-
-      <p><strong>ALL-STAR — $40</strong></p>
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
-        <input type="hidden" name="cmd" value="_s-xclick">
-        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_ALLSTAR">
-        <button class="btn" type="submit">Pay ALL-STAR ($40)</button>
-      </form>
-
-      <hr>
-
-      <p><strong>MVP — $69</strong></p>
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
-        <input type="hidden" name="cmd" value="_s-xclick">
-        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_MVP">
-        <button class="btn" type="submit">Pay MVP ($69)</button>
-      </form>
-
-      <p class="small" style="margin-top:12px;">
-        Send me your 3 hosted_button_id values and I’ll plug them in perfectly.
+      <p><strong>Parents:</strong> Choose a package and pay through PayPal (Venmo enabled).</p>
+      <p class="small">
+        In PayPal, add this in the note: <strong>Athlete Name + Jersey # + Team</strong>.
       </p>
+    </div>
+
+    <h2>Quick order note (optional)</h2>
+    <div class="card">
+      <p class="small">Fill this out, tap “Copy note”, then paste into the PayPal note at checkout.</p>
+
+      <label for="athlete">Athlete name</label>
+      <input id="athlete" type="text" placeholder="Miles Mosley">
+
+      <label for="jersey">Jersey #</label>
+      <input id="jersey" type="text" placeholder="23">
+
+      <label for="team">Team</label>
+      <input id="team" type="text" placeholder="Whitmer Panthers">
+
+      <button class="btn" id="copyNote" type="button">Copy note</button>
+      <div class="small" id="copyStatus" aria-live="polite" style="margin-top:10px;"></div>
+    </div>
+
+    <h2>Packages</h2>
+
+    <div class="card">
+      <p><strong>🥉 ROOKIE — $25</strong></p>
+      <p class="small">Digital download • 1 wallet sheet (4) • 1 — 5×7 team</p>
+      <div id="paypal-container-rookie"></div>
+    </div>
+
+    <div class="card">
+      <p><strong>🥈 ALL-STAR — $40</strong></p>
+      <p class="small">2 — 5×7 individuals • 2 wallet sheets (8) • 1 — 5×7 team • Digital download</p>
+      <div id="paypal-container-allstar"></div>
+    </div>
+
+    <div class="card">
+      <p><strong>🥇 MVP — $69 🔥</strong></p>
+      <p class="small">1 — 8×10 poster • 2 — 5×7 • 2 wallet sheets (8) • 1 — 5×7 team • High-res digital</p>
+      <div id="paypal-container-mvp"></div>
     </div>
 
     <footer class="footer">
@@ -94,5 +90,39 @@
       </div>
     </footer>
   </div>
+
+  <!-- PayPal SDK (ONLY ONCE) -->
+  <script
+    src="https://www.paypal.com/sdk/js?client-id=BAA_WkQ3RFsOD-TFE6lhyMEI8dxgLM1vhYCJ-1Lg8S73CQmESQTnqWLkrDXGqqfpx3LCWBRQZT4WJuNzfI&components=hosted-buttons&enable-funding=venmo&currency=USD">
+  </script>
+
+  <script>
+    // Render hosted buttons
+    paypal.HostedButtons({ hostedButtonId: "NUSD2T9G32H6E" })
+      .render("#paypal-container-rookie");
+
+    paypal.HostedButtons({ hostedButtonId: "SLHNF33CATTQ6" })
+      .render("#paypal-container-allstar");
+
+    paypal.HostedButtons({ hostedButtonId: "AS63S2UBAE376" })
+      .render("#paypal-container-mvp");
+
+    // Copy note helper
+    document.getElementById("copyNote").addEventListener("click", async () => {
+      const athlete = (document.getElementById("athlete").value || "").trim();
+      const jersey = (document.getElementById("jersey").value || "").trim();
+      const team = (document.getElementById("team").value || "").trim();
+
+      const note = `CBK Order — Athlete: ${athlete || "____"} | #${jersey || "____"} | Team: ${team || "____"}`;
+      const status = document.getElementById("copyStatus");
+
+      try {
+        await navigator.clipboard.writeText(note);
+        status.textContent = "Copied. Paste that into the PayPal note at checkout.";
+      } catch (e) {
+        status.textContent = "Couldn’t auto-copy (some browsers block it). Manually copy this: " + note;
+      }
+    });
+  </script>
 </body>
 </html>
