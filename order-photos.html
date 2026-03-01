@@ -1,119 +1,98 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Order Sports Photos | Captured by Kam</title>
-  <meta name="description" content="Order sports photos through PhotoDay. Find your team, choose a package, ship to home." />
-  <style>
-    :root{--bg:#000;--fg:#fff;--muted:#bdbdbd;--line:rgba(255,255,255,.18);--btn:#fff;--btnfg:#000;
-      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;}
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--mono);letter-spacing:.2px}
-    a{color:var(--fg);text-decoration:none} a:hover{text-decoration:underline}
-    .topbar{position:sticky;top:0;z-index:10;display:flex;gap:14px;align-items:center;padding:10px 14px;
-      border-bottom:1px solid var(--line);background:rgba(0,0,0,.92);backdrop-filter:blur(6px);font-size:14px}
-    .brand{font-weight:700}.spacer{flex:1}
-    .wrap{max-width:980px;margin:0 auto;padding:26px 14px 60px}
-    .window{border:1px solid var(--line);padding:14px;border-radius:10px}
-    .title{font-size:22px;margin:0 0 10px}
-    .tag{color:var(--muted);font-size:13px;margin:0 0 18px;line-height:1.5}
-    .ctaRow{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 18px}
-    .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 12px;border-radius:10px;
-      border:1px solid var(--line);min-width:220px;font-weight:700}
-    .btn.primary{background:var(--btn);color:var(--btnfg);border-color:transparent}
-    .btn.secondary{background:transparent;color:var(--fg)}
-    .grid{display:grid;grid-template-columns:1fr;gap:12px}
-    @media(min-width:820px){.grid{grid-template-columns:1.1fr .9fr}}
-    .card{border:1px solid var(--line);border-radius:12px;padding:14px}
-    .card h3{margin:0 0 6px;font-size:16px}
-    .small{color:var(--muted);font-size:13px;line-height:1.45}
-    .list{margin:10px 0 0;padding-left:18px;color:var(--fg);font-size:14px;line-height:1.55}
-    .badge{display:inline-block;padding:3px 8px;border:1px solid var(--line);border-radius:999px;font-size:12px;
-      color:var(--muted);margin-left:8px}
-    .most{color:#000;background:#fff;border-color:transparent}
-    .footer{margin-top:18px;color:var(--muted);font-size:12px}
-    .rule{margin:14px 0;border-top:1px solid var(--line)}
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pay / Order — Capturedby_Kam</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site.css">
 </head>
+
 <body>
-  <div class="topbar">
-    <span class="brand">Captured by Kam</span>
-    <a href="index.html">Home</a>
-    <a href="order-photos.html">Order Photos</a>
-    <span class="spacer"></span>
-    <a href="mailto:kam@capturedbykam.com">Email</a>
-    <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
-    <a href="https://instagram.com/CapturedBy_Kam" target="_blank" rel="noreferrer">IG</a>
+  <div class="page">
+    <div class="top">
+      <div class="brand">
+        <h1 class="title"><a href="index.html">Capturedby_Kam</a></h1>
+        <p class="tagline">Pay / Order photos</p>
+      </div>
+
+      <nav class="menu" aria-label="Main menu">
+        <a class="pill" href="index.html">Gallery</a>
+        <a class="pill" href="about.html">About</a>
+        <a class="pill" href="services.html">Services</a>
+        <a class="pill" href="contact.html">Contact</a>
+
+        <a class="pill" href="order-photos.html">Pay</a>
+        <a class="pill pill-solid" href="BOOK_URL_HERE" target="_blank" rel="noreferrer">Book</a>
+
+        <a class="pill" href="clients/">Clients</a>
+        <a class="pill" href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">IG</a>
+        <a class="pill" href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      </nav>
+    </div>
+
+    <div class="card">
+      <p><strong>Parents:</strong> select a package and pay through PayPal.</p>
+      <p class="small">In the PayPal note, include: Athlete Name + Jersey # + Team.</p>
+    </div>
+
+    <h2>Option A — PayPal.Me (fastest)</h2>
+    <div class="card">
+      <p>Replace the link below with your PayPal.Me link.</p>
+      <a class="pill pill-solid" href="PAYPAL_ME_URL_HERE" target="_blank" rel="noreferrer">Pay with PayPal</a>
+      <p class="small">Example: PAYPAL_ME_URL_HERE → https://www.paypal.me/YourName</p>
+    </div>
+
+    <h2>Option B — PayPal Buttons (best for fixed packages)</h2>
+    <div class="card">
+      <p class="small">Once you create your buttons inside PayPal, you’ll get a unique <code>hosted_button_id</code> for each package. Then replace the 3 placeholders below.</p>
+
+      <hr>
+
+      <p><strong>ROOKIE — $25</strong></p>
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_ROOKIE">
+        <button class="btn" type="submit">Pay ROOKIE ($25)</button>
+      </form>
+
+      <hr>
+
+      <p><strong>ALL-STAR — $40</strong></p>
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_ALLSTAR">
+        <button class="btn" type="submit">Pay ALL-STAR ($40)</button>
+      </form>
+
+      <hr>
+
+      <p><strong>MVP — $69</strong></p>
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:10px;">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="HOSTED_BUTTON_ID_MVP">
+        <button class="btn" type="submit">Pay MVP ($69)</button>
+      </form>
+
+      <p class="small" style="margin-top:12px;">
+        Send me your 3 hosted_button_id values and I’ll plug them in perfectly.
+      </p>
+    </div>
+
+    <footer class="footer">
+      <div class="brand-lines">
+        <div>EVERY FRAME, EVERY PROJECT</div>
+        <div>TIMELESS.AUTHNTC [CBK_EST.2025]</div>
+      </div>
+
+      <div class="links">
+        <a href="mailto:kam@capturedbykam.com">Email</a>
+        <a href="https://www.instagram.com/capturedby_kam/" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+    </footer>
   </div>
-
-  <main class="wrap">
-    <section class="window">
-      <h1 class="title">Order Sports Photos</h1>
-      <p class="tag">Fast. Online. Shipped to your home. No envelopes. No order forms.</p>
-
-      <div class="ctaRow">
-        <!-- PhotoDay Storefront Link (Studio Identifier) -->
-        <a class="btn primary" href="https://my.photoday.com/s/capturedbykam" target="_blank" rel="noreferrer">
-          FIND YOUR TEAM → (PhotoDay)
-        </a>
-
-        <a class="btn secondary" href="mailto:kam@capturedbykam.com?subject=Sports%20Media%20Day%20Booking">
-          BOOK A MEDIA DAY
-        </a>
-      </div>
-
-      <div class="grid">
-        <div class="card">
-          <h3>How it works</h3>
-          <ol class="list">
-            <li>Tap <b>Find Your Team</b>.</li>
-            <li>Locate your athlete.</li>
-            <li>Choose your package.</li>
-            <li>Add extras if you want.</li>
-            <li>Checkout — prints ship directly to you.</li>
-          </ol>
-          <div class="rule"></div>
-          <p class="small">
-            Can’t find your athlete? Email me with the team name + player name.
-          </p>
-        </div>
-
-        <div class="card">
-          <h3>Packages</h3>
-
-          <p class="small"><b>🥉 ROOKIE — $25</b></p>
-          <ul class="list">
-            <li>1× 5×7 individual</li>
-            <li>1× wallet sheet (4 wallets)</li>
-            <li>1× 5×7 team</li>
-          </ul>
-
-          <p class="small"><b>🥈 ALL-STAR — $40</b> <span class="badge most">Most Popular</span></p>
-          <ul class="list">
-            <li>2× 5×7 individuals</li>
-            <li>2× wallet sheets (4 wallets each)</li>
-            <li>1× 5×7 team</li>
-            <li>Web-size digital (social sharing)</li>
-          </ul>
-
-          <p class="small"><b>🥇 MVP — $69</b></p>
-          <ul class="list">
-            <li>1× 8×10 individual</li>
-            <li>2× 5×7 individuals</li>
-            <li>2× wallet sheets (4 wallets each)</li>
-            <li>1× 5×7 team</li>
-            <li>High-res digital (printable quality)</li>
-            <li>CBK social media graphic</li>
-          </ul>
-
-          <div class="rule"></div>
-          <p class="small"><b>Add-Ons:</b> Jumbo heads • Posters • Extra prints • Digital upgrades</p>
-        </div>
-      </div>
-
-      <p class="footer">Every frame, every project—timeless authenticity, Captured by Kam.</p>
-    </section>
-  </main>
 </body>
 </html>
