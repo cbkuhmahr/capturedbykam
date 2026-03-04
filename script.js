@@ -1,80 +1,41 @@
-const tabs = Array.from(document.querySelectorAll(".tab"));
-const pages = Array.from(document.querySelectorAll("[data-page]"));
+// ====== SETTINGS YOU CAN CHANGE ======
+const BOOKING_EMAIL = "capturedbykammedia@gmail.com";
+const ORDER_FORM_URL = ""; // <-- paste your real order form link here when ready
+// =====================================
 
-function activatePage(id) {
-  const current = document.querySelector(".page.is-active");
-  const next = document.getElementById(id);
+document.getElementById("yearNow").textContent = new Date().getFullYear();
 
-  if (!next || current === next) return;
-
-  // tab states
-  tabs.forEach(t => {
-    const active = t.dataset.target === id;
-    t.classList.toggle("is-active", active);
-    t.setAttribute("aria-selected", active ? "true" : "false");
-  });
-
-  // page transition
-  if (current) {
-    current.classList.add("is-leaving");
-    current.classList.remove("is-active");
-
-    // after leave animation, clean up
-    setTimeout(() => current.classList.remove("is-leaving"), 260);
-  }
-
-  next.classList.add("is-active");
-
-  // optional: update hash for shareable links
-  history.replaceState(null, "", `#${id}`);
-}
-
-// click tabs
-tabs.forEach(tab => {
-  tab.addEventListener("click", () => activatePage(tab.dataset.target));
-});
-
-// internal jump buttons
-document.addEventListener("click", (e) => {
-  const jump = e.target.closest("[data-jump]");
-  if (!jump) return;
+// Booking form -> opens email with prefilled subject/body
+document.getElementById("bookingForm").addEventListener("submit", (e) => {
   e.preventDefault();
-  activatePage(jump.dataset.jump);
+
+  const fd = new FormData(e.target);
+  const name = (fd.get("name") || "").toString().trim();
+  const email = (fd.get("email") || "").toString().trim();
+  const service = (fd.get("service") || "").toString().trim();
+  const datetime = (fd.get("datetime") || "").toString().trim();
+  const notes = (fd.get("notes") || "").toString().trim();
+
+  const subject = encodeURIComponent(`Booking Request — ${service}`);
+  const body = encodeURIComponent(
+`Name: ${name}
+Email: ${email}
+Service: ${service}
+Preferred date/time: ${datetime}
+
+Notes:
+${notes || "(none)"}
+`
+  );
+
+  window.location.href = `mailto:${BOOKING_EMAIL}?subject=${subject}&body=${body}`;
 });
 
-// hash routing on load
-const hash = (window.location.hash || "").replace("#", "");
-if (hash && document.getElementById(hash)) activatePage(hash);
-
-// mailto form submit (BOOK + SIGNUP)
-function sendMailFromForm(form, subjectPrefix) {
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const data = new FormData(form);
-    const entries = Object.fromEntries(data.entries());
-
-    const to = "capturedbykammedia@gmail.com";
-    const subject = `${subjectPrefix} — ${entries.name || "New Inquiry"}`;
-
-    const bodyLines = [
-      "Captured by Kam — Inquiry",
-      "--------------------------------",
-      ...Object.entries(entries).map(([k, v]) => `${k}: ${v}`),
-      "--------------------------------",
-      "IG: @CapturedBy_Kam",
-      "YouTube: https://www.youtube.com/@capturedbykammedia"
-    ];
-
-    const body = encodeURIComponent(bodyLines.join("\n"));
-    const mailto = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${body}`;
-
-    window.location.href = mailto;
-  });
-}
-
-const bookForm = document.getElementById("bookForm");
-const signUpForm = document.getElementById("signUpForm");
-
-if (bookForm) sendMailFromForm(bookForm, "BOOKING REQUEST");
-if (signUpForm) sendMailFromForm(signUpForm, "ONLINE SIGN UP");
+// Order form button
+document.getElementById("orderBtn").addEventListener("click", () => {
+  if (!ORDER_FORM_URL) {
+    alert("Order form link not set yet. Paste it into script.js (ORDER_FORM_URL).");
+    return;
+  }
+  window.open(ORDER_FORM_URL, "_blank", "noopener,noreferrer");
+});
