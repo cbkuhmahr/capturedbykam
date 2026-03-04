@@ -3,52 +3,326 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CAPTUREDBY_KAM</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Captured by Kam — Every frame, every project — timeless authenticity, Captured by Kam.</title>
 
-  <!-- Mono vibe similar to what you showed -->
+  <!-- Mono typed vibe -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Captured by Kam — Every frame, every project — timeless authenticity, Captured by Kam." />
 </head>
 
 <body>
-  <header class="top">
-    <div class="wrap">
+  <div class="app">
+
+    <!-- LEFT: vertical page-tabs -->
+    <aside class="rail" aria-label="Primary navigation">
       <div class="brand">
-        <div class="b1">CAPTUREDBY_KAM</div>
-        <div class="b2">Every Frame, Every Project</div>
-        <div class="b2">Timeless Authenticity</div>
-        <div class="b3">Est. 2025</div>
+        <div class="brand__name">CAPTURED BY KAM</div>
+        <div class="brand__tag">Every frame, every project — timeless authenticity, Captured by Kam.</div>
+        <div class="brand__est">EST. 2025</div>
       </div>
 
-      <nav class="nav" aria-label="Primary">
-        <a href="#about">About</a>
-        <span class="pipe">|</span>
-        <a href="#services">Services</a>
-        <span class="pipe">|</span>
-        <a href="#book">Book</a>
-        <span class="pipe">|</span>
-        <a href="#gallery">Gallery</a>
-        <span class="pipe">|</span>
-        <a href="#order">Online Order Form</a>
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <button class="tab is-active" role="tab" aria-selected="true" data-target="about">
+          <span class="tab__text">ABOUT</span>
+        </button>
+        <button class="tab" role="tab" aria-selected="false" data-target="services">
+          <span class="tab__text">SERVICES</span>
+        </button>
+        <button class="tab" role="tab" aria-selected="false" data-target="book">
+          <span class="tab__text">BOOK</span>
+        </button>
+        <button class="tab" role="tab" aria-selected="false" data-target="gallery">
+          <span class="tab__text">GALLERY</span>
+        </button>
+        <button class="tab" role="tab" aria-selected="false" data-target="signup">
+          <span class="tab__text">ONLINE SIGN UP</span>
+        </button>
       </nav>
-    </div>
-  </header>
 
-  <main>
-    <!-- FULL-WIDTH CINEMATIC HERO -->
-    <section class="hero" aria-label="Hero image">
-      <!-- Put your photo in the repo as hero.jpg -->
-      <img src="hero.jpg" alt="" class="heroImg" />
-    </section>
+      <div class="rail__footer">
+        <div class="rail__line">Toledo, OH</div>
+        <div class="rail__line">
+          IG: <a href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">@CapturedBy_Kam</a>
+        </div>
+        <div class="rail__line">
+          YouTube: <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">@capturedbykammedia</a>
+        </div>
+        <div class="rail__line">
+          Email: <a href="mailto:capturedbykammedia@gmail.com">capturedbykammedia@gmail.com</a>
+        </div>
+      </div>
+    </aside>
 
-    <!-- Placeholders so menu clicks work -->
-    <section id="about" class="section"></section>
-    <section id="services" class="section"></section>
-    <section id="book" class="section"></section>
-    <section id="gallery" class="section"></section>
-    <section id="order" class="section"></section>
-  </main>
+    <!-- RIGHT: book-page viewport -->
+    <main class="stage" aria-label="Content">
+      <div class="book" aria-live="polite">
+
+        <!-- ABOUT -->
+        <section class="page is-active" id="about" data-page>
+          <header class="page__header">
+            <div class="page__kicker">PAGE 01</div>
+            <h1 class="page__title">ABOUT</h1>
+            <div class="page__rule"></div>
+          </header>
+
+          <div class="page__grid">
+            <div class="photo-slot" aria-label="Photo placeholder">
+              <div class="photo-slot__label">DROP A HERO PHOTO HERE</div>
+              <div class="photo-slot__hint">Replace with your image in HTML later (easy swap).</div>
+            </div>
+
+            <div class="copy">
+              <p>
+                I shoot with intention. Clean, cinematic, honest. No gimmicks. No over-editing.
+              </p>
+              <p>
+                Whether it’s sports, seniors, brands, or events — the goal is the same:
+                <span class="em">timeless authenticity</span>.
+              </p>
+
+              <div class="callout">
+                <div class="callout__title">THE ART OF PRESENCE</div>
+                <div class="callout__body">
+                  Real moments don’t expire — they echo.
+                </div>
+              </div>
+
+              <div class="cta-row">
+                <a class="btn" href="#" data-jump="book">BOOK NOW</a>
+                <a class="btn btn--ghost" href="#" data-jump="gallery">VIEW GALLERY</a>
+              </div>
+            </div>
+          </div>
+
+          <footer class="page__footer">
+            <div class="fineprint">Captured by Kam — legacy over likes.</div>
+          </footer>
+        </section>
+
+        <!-- SERVICES -->
+        <section class="page" id="services" data-page>
+          <header class="page__header">
+            <div class="page__kicker">PAGE 02</div>
+            <h1 class="page__title">SERVICES</h1>
+            <div class="page__rule"></div>
+          </header>
+
+          <div class="cards">
+            <article class="card">
+              <div class="card__top">
+                <div class="card__title">YOUTH SPORTS PACKAGES</div>
+                <div class="card__meta">Media Day • Posters • Action Coverage</div>
+              </div>
+              <p class="card__body">
+                Team and athlete visuals that feel premium, not cheesy. Clean lighting, strong edits, real emotion.
+              </p>
+              <div class="card__actions">
+                <a class="btn" href="#" data-jump="signup">SIGN UP</a>
+                <a class="btn btn--ghost" href="#" data-jump="book">BOOK</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__top">
+                <div class="card__title">SENIOR PHOTOS</div>
+                <div class="card__meta">Modern • Editorial • True-to-you</div>
+              </div>
+              <p class="card__body">
+                No awkward posing. We build something that feels confident, timeless, and you’ll still love later.
+              </p>
+              <div class="card__actions">
+                <a class="btn" href="#" data-jump="book">BOOK</a>
+                <a class="btn btn--ghost" href="#" data-jump="gallery">SEE EXAMPLES</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__top">
+                <div class="card__title">BRAND / HEADSHOTS</div>
+                <div class="card__meta">Clean • Minimal • High-trust</div>
+              </div>
+              <p class="card__body">
+                Make your business look like it has its life together. Sharp visuals that sell without screaming.
+              </p>
+              <div class="card__actions">
+                <a class="btn" href="#" data-jump="book">BOOK</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__top">
+                <div class="card__title">EVENTS + VIDEO</div>
+                <div class="card__meta">Cinematic coverage • Social cuts</div>
+              </div>
+              <p class="card__body">
+                I capture the story — not just “people standing around.” Photo + video packages available.
+              </p>
+              <div class="card__actions">
+                <a class="btn" href="#" data-jump="book">BOOK</a>
+              </div>
+            </article>
+          </div>
+
+          <footer class="page__footer">
+            <div class="fineprint">Want a custom package? Hit “Book” and tell me what you’re building.</div>
+          </footer>
+        </section>
+
+        <!-- BOOK -->
+        <section class="page" id="book" data-page>
+          <header class="page__header">
+            <div class="page__kicker">PAGE 03</div>
+            <h1 class="page__title">BOOK</h1>
+            <div class="page__rule"></div>
+          </header>
+
+          <div class="form-shell">
+            <p class="form-lead">
+              Keep it simple. Tell me what you need. This sends an email to Kam.
+            </p>
+
+            <form class="form" id="bookForm">
+              <label class="field">
+                <span class="field__label">I’M INTERESTED IN</span>
+                <select class="field__control" name="interest" required>
+                  <option value="" selected disabled>Choose one…</option>
+                  <option>Youth Sports Packages</option>
+                  <option>Senior Photos</option>
+                  <option>Brand / Headshots</option>
+                  <option>Events</option>
+                  <option>Video</option>
+                  <option>Other</option>
+                </select>
+              </label>
+
+              <div class="row">
+                <label class="field">
+                  <span class="field__label">NAME</span>
+                  <input class="field__control" name="name" type="text" required />
+                </label>
+
+                <label class="field">
+                  <span class="field__label">PHONE</span>
+                  <input class="field__control" name="phone" type="tel" />
+                </label>
+              </div>
+
+              <label class="field">
+                <span class="field__label">EMAIL</span>
+                <input class="field__control" name="email" type="email" required />
+              </label>
+
+              <label class="field">
+                <span class="field__label">DETAILS</span>
+                <textarea class="field__control field__control--area" name="details" rows="5" placeholder="Dates, location, athletes count, vibe, anything important…"></textarea>
+              </label>
+
+              <div class="actions">
+                <button class="btn" type="submit">SEND TO KAM</button>
+                <button class="btn btn--ghost" type="button" data-jump="services">VIEW SERVICES</button>
+              </div>
+
+              <div class="form-note">
+                <span class="mono-pill">NOTE</span>
+                This uses your device email app (no backend). If you want a real submit-to-inbox form, we’ll connect Jotform or Formspree later.
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- GALLERY -->
+        <section class="page" id="gallery" data-page>
+          <header class="page__header">
+            <div class="page__kicker">PAGE 04</div>
+            <h1 class="page__title">GALLERY</h1>
+            <div class="page__rule"></div>
+          </header>
+
+          <div class="gallery">
+            <div class="tile"><span>PHOTO 01</span></div>
+            <div class="tile"><span>PHOTO 02</span></div>
+            <div class="tile"><span>PHOTO 03</span></div>
+            <div class="tile"><span>PHOTO 04</span></div>
+            <div class="tile"><span>PHOTO 05</span></div>
+            <div class="tile"><span>PHOTO 06</span></div>
+            <div class="tile"><span>PHOTO 07</span></div>
+            <div class="tile"><span>PHOTO 08</span></div>
+          </div>
+
+          <footer class="page__footer">
+            <div class="fineprint">Replace these tiles with your images — I’ll show you the exact swap when you’re ready.</div>
+          </footer>
+        </section>
+
+        <!-- ONLINE SIGN UP -->
+        <section class="page" id="signup" data-page>
+          <header class="page__header">
+            <div class="page__kicker">PAGE 05</div>
+            <h1 class="page__title">ONLINE SIGN UP</h1>
+            <div class="page__rule"></div>
+          </header>
+
+          <div class="form-shell">
+            <p class="form-lead">
+              This is the quick “I’m in” signup. Same email-send flow.
+            </p>
+
+            <form class="form" id="signUpForm">
+              <label class="field">
+                <span class="field__label">I’M SIGNING UP FOR</span>
+                <select class="field__control" name="signup_for" required>
+                  <option value="" selected disabled>Choose one…</option>
+                  <option>Youth Sports Packages</option>
+                  <option>Senior Photos</option>
+                  <option>Brand / Headshots</option>
+                  <option>Event Coverage</option>
+                </select>
+              </label>
+
+              <div class="row">
+                <label class="field">
+                  <span class="field__label">NAME</span>
+                  <input class="field__control" name="name" type="text" required />
+                </label>
+
+                <label class="field">
+                  <span class="field__label">PHONE</span>
+                  <input class="field__control" name="phone" type="tel" />
+                </label>
+              </div>
+
+              <label class="field">
+                <span class="field__label">EMAIL</span>
+                <input class="field__control" name="email" type="email" required />
+              </label>
+
+              <label class="field">
+                <span class="field__label">NOTES</span>
+                <textarea class="field__control field__control--area" name="notes" rows="4" placeholder="Athlete name/number, team, date, location, etc…"></textarea>
+              </label>
+
+              <div class="actions">
+                <button class="btn" type="submit">SEND</button>
+                <button class="btn btn--ghost" type="button" data-jump="book">BOOK INSTEAD</button>
+              </div>
+
+              <div class="form-note">
+                <span class="mono-pill">TIP</span>
+                If you want this to look exactly like your Jotform, we can embed the Jotform link right here later.
+              </div>
+            </form>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
