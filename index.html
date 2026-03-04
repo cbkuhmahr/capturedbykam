@@ -2,326 +2,148 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Captured by Kam — Every frame, every project — timeless authenticity, Captured by Kam.</title>
-
-  <!-- Mono typed vibe -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Capturedby_Kam</title>
+  <meta name="description" content="Capturedby_Kam — Every Frame, Every Project — Timeless Authenticity. Est. 2025" />
   <link rel="stylesheet" href="styles.css" />
-  <meta name="description" content="Captured by Kam — Every frame, every project — timeless authenticity, Captured by Kam." />
 </head>
 
 <body>
-  <div class="app">
+  <header class="top">
+    <!-- BRAND BLOCK (desktop: upper-left, mobile: centered) -->
+    <div class="brand" aria-label="Captured by Kam brand block">
+      <div class="brand-name">Capturedby_Kam</div>
 
-    <!-- LEFT: vertical page-tabs -->
-    <aside class="rail" aria-label="Primary navigation">
-      <div class="brand">
-        <div class="brand__name">CAPTURED BY KAM</div>
-        <div class="brand__tag">Every frame, every project — timeless authenticity, Captured by Kam.</div>
-        <div class="brand__est">EST. 2025</div>
+      <div class="brand-tagline">
+        Every Frame, Every Project —<br />
+        Timeless Authenticity
       </div>
 
-      <nav class="tabs" role="tablist" aria-label="Sections">
-        <button class="tab is-active" role="tab" aria-selected="true" data-target="about">
-          <span class="tab__text">ABOUT</span>
-        </button>
-        <button class="tab" role="tab" aria-selected="false" data-target="services">
-          <span class="tab__text">SERVICES</span>
-        </button>
-        <button class="tab" role="tab" aria-selected="false" data-target="book">
-          <span class="tab__text">BOOK</span>
-        </button>
-        <button class="tab" role="tab" aria-selected="false" data-target="gallery">
-          <span class="tab__text">GALLERY</span>
-        </button>
-        <button class="tab" role="tab" aria-selected="false" data-target="signup">
-          <span class="tab__text">ONLINE SIGN UP</span>
-        </button>
-      </nav>
+      <div class="brand-est">
+        Est. <a class="brand-year" href="#about" aria-label="Est. 2025 link">2025</a>
+      </div>
+    </div>
 
-      <div class="rail__footer">
-        <div class="rail__line">Toledo, OH</div>
-        <div class="rail__line">
-          IG: <a href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">@CapturedBy_Kam</a>
+    <!-- NAV (kept clean + simple) -->
+    <nav class="nav" aria-label="Site navigation">
+      <a class="nav-link" href="#about">About</a>
+      <a class="nav-link" href="#services">Services</a>
+      <a class="nav-link" href="#book">Book</a>
+      <a class="nav-link" href="#gallery">Gallery</a>
+      <a class="nav-link" href="#order">Online Order Form</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section id="about" class="chapter">
+      <h2>About</h2>
+      <p>
+        Timeless &amp; authentic visuals — captured with intention.
+        Replace this text with your short about paragraph.
+      </p>
+    </section>
+
+    <section id="services" class="chapter">
+      <h2>Services</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Youth Sports Packages</h3>
+          <p>Media days, action shots, team posters, prints + digital.</p>
         </div>
-        <div class="rail__line">
-          YouTube: <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">@capturedbykammedia</a>
+        <div class="card">
+          <h3>Senior Photos</h3>
+          <p>Clean portraits, cinematic edits, print-ready delivery.</p>
         </div>
-        <div class="rail__line">
-          Email: <a href="mailto:capturedbykammedia@gmail.com">capturedbykammedia@gmail.com</a>
+        <div class="card">
+          <h3>Events</h3>
+          <p>Parties, celebrations, community moments — documented right.</p>
+        </div>
+        <div class="card">
+          <h3>Video</h3>
+          <p>Highlight reels, promos, story-driven short visuals.</p>
         </div>
       </div>
-    </aside>
+    </section>
 
-    <!-- RIGHT: book-page viewport -->
-    <main class="stage" aria-label="Content">
-      <div class="book" aria-live="polite">
+    <section id="book" class="chapter">
+      <h2>Book</h2>
+      <p>Send a booking request. This will open your email app with everything filled in.</p>
 
-        <!-- ABOUT -->
-        <section class="page is-active" id="about" data-page>
-          <header class="page__header">
-            <div class="page__kicker">PAGE 01</div>
-            <h1 class="page__title">ABOUT</h1>
-            <div class="page__rule"></div>
-          </header>
+      <form class="form" id="bookingForm">
+        <label>
+          Name
+          <input name="name" type="text" autocomplete="name" required />
+        </label>
 
-          <div class="page__grid">
-            <div class="photo-slot" aria-label="Photo placeholder">
-              <div class="photo-slot__label">DROP A HERO PHOTO HERE</div>
-              <div class="photo-slot__hint">Replace with your image in HTML later (easy swap).</div>
-            </div>
+        <label>
+          Email
+          <input name="email" type="email" autocomplete="email" required />
+        </label>
 
-            <div class="copy">
-              <p>
-                I shoot with intention. Clean, cinematic, honest. No gimmicks. No over-editing.
-              </p>
-              <p>
-                Whether it’s sports, seniors, brands, or events — the goal is the same:
-                <span class="em">timeless authenticity</span>.
-              </p>
+        <label>
+          What are you booking?
+          <select name="service" required>
+            <option value="" disabled selected>Select one</option>
+            <option>Youth Sports Packages</option>
+            <option>Senior Photos</option>
+            <option>Events</option>
+            <option>Video</option>
+            <option>Other</option>
+          </select>
+        </label>
 
-              <div class="callout">
-                <div class="callout__title">THE ART OF PRESENCE</div>
-                <div class="callout__body">
-                  Real moments don’t expire — they echo.
-                </div>
-              </div>
+        <label>
+          Preferred date/time
+          <input name="datetime" type="text" placeholder="Example: Sat 3/15 @ 4pm" required />
+        </label>
 
-              <div class="cta-row">
-                <a class="btn" href="#" data-jump="book">BOOK NOW</a>
-                <a class="btn btn--ghost" href="#" data-jump="gallery">VIEW GALLERY</a>
-              </div>
-            </div>
-          </div>
+        <label>
+          Notes
+          <textarea name="notes" rows="4" placeholder="Location, vibe, must-have shots, etc."></textarea>
+        </label>
 
-          <footer class="page__footer">
-            <div class="fineprint">Captured by Kam — legacy over likes.</div>
-          </footer>
-        </section>
+        <button type="submit">Send Booking Request</button>
+        <p class="hint">No spam. Just a clean request email.</p>
+      </form>
+    </section>
 
-        <!-- SERVICES -->
-        <section class="page" id="services" data-page>
-          <header class="page__header">
-            <div class="page__kicker">PAGE 02</div>
-            <h1 class="page__title">SERVICES</h1>
-            <div class="page__rule"></div>
-          </header>
+    <section id="gallery" class="chapter">
+      <h2>Gallery</h2>
+      <p>Drop your photos here later. For now: placeholders.</p>
 
-          <div class="cards">
-            <article class="card">
-              <div class="card__top">
-                <div class="card__title">YOUTH SPORTS PACKAGES</div>
-                <div class="card__meta">Media Day • Posters • Action Coverage</div>
-              </div>
-              <p class="card__body">
-                Team and athlete visuals that feel premium, not cheesy. Clean lighting, strong edits, real emotion.
-              </p>
-              <div class="card__actions">
-                <a class="btn" href="#" data-jump="signup">SIGN UP</a>
-                <a class="btn btn--ghost" href="#" data-jump="book">BOOK</a>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card__top">
-                <div class="card__title">SENIOR PHOTOS</div>
-                <div class="card__meta">Modern • Editorial • True-to-you</div>
-              </div>
-              <p class="card__body">
-                No awkward posing. We build something that feels confident, timeless, and you’ll still love later.
-              </p>
-              <div class="card__actions">
-                <a class="btn" href="#" data-jump="book">BOOK</a>
-                <a class="btn btn--ghost" href="#" data-jump="gallery">SEE EXAMPLES</a>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card__top">
-                <div class="card__title">BRAND / HEADSHOTS</div>
-                <div class="card__meta">Clean • Minimal • High-trust</div>
-              </div>
-              <p class="card__body">
-                Make your business look like it has its life together. Sharp visuals that sell without screaming.
-              </p>
-              <div class="card__actions">
-                <a class="btn" href="#" data-jump="book">BOOK</a>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card__top">
-                <div class="card__title">EVENTS + VIDEO</div>
-                <div class="card__meta">Cinematic coverage • Social cuts</div>
-              </div>
-              <p class="card__body">
-                I capture the story — not just “people standing around.” Photo + video packages available.
-              </p>
-              <div class="card__actions">
-                <a class="btn" href="#" data-jump="book">BOOK</a>
-              </div>
-            </article>
-          </div>
-
-          <footer class="page__footer">
-            <div class="fineprint">Want a custom package? Hit “Book” and tell me what you’re building.</div>
-          </footer>
-        </section>
-
-        <!-- BOOK -->
-        <section class="page" id="book" data-page>
-          <header class="page__header">
-            <div class="page__kicker">PAGE 03</div>
-            <h1 class="page__title">BOOK</h1>
-            <div class="page__rule"></div>
-          </header>
-
-          <div class="form-shell">
-            <p class="form-lead">
-              Keep it simple. Tell me what you need. This sends an email to Kam.
-            </p>
-
-            <form class="form" id="bookForm">
-              <label class="field">
-                <span class="field__label">I’M INTERESTED IN</span>
-                <select class="field__control" name="interest" required>
-                  <option value="" selected disabled>Choose one…</option>
-                  <option>Youth Sports Packages</option>
-                  <option>Senior Photos</option>
-                  <option>Brand / Headshots</option>
-                  <option>Events</option>
-                  <option>Video</option>
-                  <option>Other</option>
-                </select>
-              </label>
-
-              <div class="row">
-                <label class="field">
-                  <span class="field__label">NAME</span>
-                  <input class="field__control" name="name" type="text" required />
-                </label>
-
-                <label class="field">
-                  <span class="field__label">PHONE</span>
-                  <input class="field__control" name="phone" type="tel" />
-                </label>
-              </div>
-
-              <label class="field">
-                <span class="field__label">EMAIL</span>
-                <input class="field__control" name="email" type="email" required />
-              </label>
-
-              <label class="field">
-                <span class="field__label">DETAILS</span>
-                <textarea class="field__control field__control--area" name="details" rows="5" placeholder="Dates, location, athletes count, vibe, anything important…"></textarea>
-              </label>
-
-              <div class="actions">
-                <button class="btn" type="submit">SEND TO KAM</button>
-                <button class="btn btn--ghost" type="button" data-jump="services">VIEW SERVICES</button>
-              </div>
-
-              <div class="form-note">
-                <span class="mono-pill">NOTE</span>
-                This uses your device email app (no backend). If you want a real submit-to-inbox form, we’ll connect Jotform or Formspree later.
-              </div>
-            </form>
-          </div>
-        </section>
-
-        <!-- GALLERY -->
-        <section class="page" id="gallery" data-page>
-          <header class="page__header">
-            <div class="page__kicker">PAGE 04</div>
-            <h1 class="page__title">GALLERY</h1>
-            <div class="page__rule"></div>
-          </header>
-
-          <div class="gallery">
-            <div class="tile"><span>PHOTO 01</span></div>
-            <div class="tile"><span>PHOTO 02</span></div>
-            <div class="tile"><span>PHOTO 03</span></div>
-            <div class="tile"><span>PHOTO 04</span></div>
-            <div class="tile"><span>PHOTO 05</span></div>
-            <div class="tile"><span>PHOTO 06</span></div>
-            <div class="tile"><span>PHOTO 07</span></div>
-            <div class="tile"><span>PHOTO 08</span></div>
-          </div>
-
-          <footer class="page__footer">
-            <div class="fineprint">Replace these tiles with your images — I’ll show you the exact swap when you’re ready.</div>
-          </footer>
-        </section>
-
-        <!-- ONLINE SIGN UP -->
-        <section class="page" id="signup" data-page>
-          <header class="page__header">
-            <div class="page__kicker">PAGE 05</div>
-            <h1 class="page__title">ONLINE SIGN UP</h1>
-            <div class="page__rule"></div>
-          </header>
-
-          <div class="form-shell">
-            <p class="form-lead">
-              This is the quick “I’m in” signup. Same email-send flow.
-            </p>
-
-            <form class="form" id="signUpForm">
-              <label class="field">
-                <span class="field__label">I’M SIGNING UP FOR</span>
-                <select class="field__control" name="signup_for" required>
-                  <option value="" selected disabled>Choose one…</option>
-                  <option>Youth Sports Packages</option>
-                  <option>Senior Photos</option>
-                  <option>Brand / Headshots</option>
-                  <option>Event Coverage</option>
-                </select>
-              </label>
-
-              <div class="row">
-                <label class="field">
-                  <span class="field__label">NAME</span>
-                  <input class="field__control" name="name" type="text" required />
-                </label>
-
-                <label class="field">
-                  <span class="field__label">PHONE</span>
-                  <input class="field__control" name="phone" type="tel" />
-                </label>
-              </div>
-
-              <label class="field">
-                <span class="field__label">EMAIL</span>
-                <input class="field__control" name="email" type="email" required />
-              </label>
-
-              <label class="field">
-                <span class="field__label">NOTES</span>
-                <textarea class="field__control field__control--area" name="notes" rows="4" placeholder="Athlete name/number, team, date, location, etc…"></textarea>
-              </label>
-
-              <div class="actions">
-                <button class="btn" type="submit">SEND</button>
-                <button class="btn btn--ghost" type="button" data-jump="book">BOOK INSTEAD</button>
-              </div>
-
-              <div class="form-note">
-                <span class="mono-pill">TIP</span>
-                If you want this to look exactly like your Jotform, we can embed the Jotform link right here later.
-              </div>
-            </form>
-          </div>
-        </section>
-
+      <div class="gallery">
+        <div class="thumb" aria-hidden="true"></div>
+        <div class="thumb" aria-hidden="true"></div>
+        <div class="thumb" aria-hidden="true"></div>
+        <div class="thumb" aria-hidden="true"></div>
+        <div class="thumb" aria-hidden="true"></div>
+        <div class="thumb" aria-hidden="true"></div>
       </div>
-    </main>
+    </section>
 
-  </div>
+    <section id="order" class="chapter">
+      <h2>Online Order Form</h2>
+      <p>
+        Link your real order form here when ready (Jotform / whatever).
+        For now, this button is a placeholder.
+      </p>
+      <button type="button" id="orderBtn">Open Order Form</button>
+      <p class="hint">
+        When you have the real link, paste it in <code>script.js</code> (look for <code>ORDER_FORM_URL</code>).
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>© <span id="yearNow"></span> Capturedby_Kam</div>
+    <div class="footer-links">
+      <a href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">IG: @CapturedBy_Kam</a>
+      <span class="dot">•</span>
+      <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      <span class="dot">•</span>
+      <a href="mailto:capturedbykammedia@gmail.com">capturedbykammedia@gmail.com</a>
+    </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>
