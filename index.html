@@ -1,150 +1,369 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Capturedby_Kam</title>
-  <meta name="description" content="Capturedby_Kam — Every Frame, Every Project — Timeless Authenticity. Est. 2025" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capturedby_Kam — Every frame, Every Project — Timeless Authenticity, Captured by Kam</title>
+
+  <style>
+    :root{
+      --bg:#000;
+      --text:#B7B6AC;
+      --muted:#545245;
+      --line:rgba(183,182,172,.18);
+      --shadow:rgba(0,0,0,.65);
+      --maxw:1040px;
+      --radius:18px;
+
+      /* “Book chapter” feel */
+      --panel: rgba(255,255,255,.03);
+      --panel2: rgba(255,255,255,.02);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      letter-spacing:.2px;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:26px 16px;
+    }
+
+    .frame{
+      width:min(var(--maxw), 100%);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      overflow:hidden;
+      background:linear-gradient(180deg, var(--panel), transparent 55%);
+      box-shadow:0 18px 70px var(--shadow);
+    }
+
+    .top{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
+      padding:18px 18px 14px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width: 240px;
+    }
+    .brand .name{
+      font-size:15px;
+      text-transform:none;
+      letter-spacing:.4px;
+    }
+    .brand .tagline{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.25;
+      max-width: 720px;
+    }
+
+    .social{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .main{
+      display:grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 520px;
+    }
+
+    /* Left vertical “chapters” */
+    .chapters{
+      border-right:1px solid var(--line);
+      padding:16px 10px;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 70%);
+    }
+    .chapterBtn{
+      width:100%;
+      display:flex;
+      justify-content:flex-start;
+      align-items:center;
+      gap:10px;
+      padding:12px 12px;
+      margin:6px 0;
+      border-radius:14px;
+      border:1px solid transparent;
+      background:transparent;
+      color:var(--text);
+      cursor:pointer;
+      font:inherit;
+      text-align:left;
+      letter-spacing:.2px;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .chapterBtn:hover{
+      transform: translateX(2px);
+      background: rgba(255,255,255,.03);
+      border-color: var(--line);
+    }
+    .chapterBtn[aria-current="page"]{
+      background: rgba(255,255,255,.05);
+      border-color: rgba(183,182,172,.35);
+    }
+    .chapterNum{
+      color:var(--muted);
+      font-size:12px;
+      min-width:34px;
+    }
+
+    /* Content “pages” */
+    .pages{
+      position:relative;
+      padding:18px;
+      overflow:hidden;
+    }
+
+    .page{
+      position:absolute;
+      inset:18px;
+      padding:20px;
+      border:1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      opacity:0;
+      transform: translateX(16px);
+      pointer-events:none;
+      transition: opacity .22s ease, transform .22s ease;
+    }
+    .page.active{
+      opacity:1;
+      transform: translateX(0);
+      pointer-events:auto;
+    }
+
+    .page h2{
+      margin:0 0 10px 0;
+      font-size:16px;
+      letter-spacing:.4px;
+      font-weight:600;
+    }
+    .page p{
+      margin:0 0 12px 0;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:13px;
+      max-width: 70ch;
+    }
+
+    .ctaRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      padding:10px 12px;
+      border-radius: 999px;
+      font-size:12px;
+      color:var(--text);
+    }
+    .pill:hover{
+      border-color: rgba(183,182,172,.35);
+      background: rgba(255,255,255,.03);
+      text-decoration:none;
+    }
+
+    .foot{
+      padding:12px 18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:space-between;
+      color:var(--muted);
+      font-size:12px;
+      background:rgba(255,255,255,.01);
+    }
+
+    /* Mobile */
+    @media (max-width: 860px){
+      .main{ grid-template-columns: 1fr; }
+      .chapters{
+        border-right:none;
+        border-bottom:1px solid var(--line);
+        display:flex;
+        gap:8px;
+        overflow:auto;
+        padding:10px;
+      }
+      .chapterBtn{
+        min-width: 170px;
+        margin:0;
+      }
+      .page{
+        inset:14px;
+      }
+      .brand .tagline{ max-width: 100%; }
+    }
+  </style>
 </head>
 
 <body>
-  <header class="top">
-    <!-- BRAND BLOCK (desktop: upper-left, mobile: centered) -->
-    <div class="brand" aria-label="Captured by Kam brand block">
-      <div class="brand-name">Capturedby_Kam</div>
+  <div class="wrap">
+    <div class="frame">
+      <header class="top">
+        <!-- BRAND NAME + TAGLINE ALWAYS TOGETHER -->
+        <div class="brand">
+          <div class="name">Capturedby_Kam</div>
+          <div class="tagline">Every frame, Every Project — Timeless Authenticity, Captured by Kam</div>
+        </div>
 
-      <div class="brand-tagline">
-        Every Frame, Every Project —<br />
-        Timeless Authenticity
-      </div>
+        <nav class="social" aria-label="Social links">
+          <a href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">IG</a>
+          <span>•</span>
+          <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+        </nav>
+      </header>
 
-      <div class="brand-est">
-        Est. <a class="brand-year" href="#about" aria-label="Est. 2025 link">2025</a>
-      </div>
+      <section class="main">
+        <aside class="chapters" aria-label="Chapters">
+          <button class="chapterBtn" data-page="about" aria-current="page">
+            <span class="chapterNum">01</span><span>About</span>
+          </button>
+          <button class="chapterBtn" data-page="services">
+            <span class="chapterNum">02</span><span>Services</span>
+          </button>
+          <button class="chapterBtn" data-page="book">
+            <span class="chapterNum">03</span><span>Book</span>
+          </button>
+          <button class="chapterBtn" data-page="gallery">
+            <span class="chapterNum">04</span><span>Gallery</span>
+          </button>
+          <button class="chapterBtn" data-page="order">
+            <span class="chapterNum">05</span><span>Online Order Form</span>
+          </button>
+        </aside>
+
+        <div class="pages">
+          <article class="page active" id="page-about">
+            <h2>About</h2>
+            <p>
+              Timeless & authentic visuals — captured clean, intentional, and real.
+              No gimmicks. No “algorithm bait.” Just work that feels like you.
+            </p>
+            <div class="ctaRow">
+              <a class="pill" href="mailto:capturedbykammedia@gmail.com">Email: capturedbykammedia@gmail.com</a>
+              <a class="pill" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">View IG</a>
+            </div>
+          </article>
+
+          <article class="page" id="page-services">
+            <h2>Services</h2>
+            <p>Keep it simple and high-quality. Here’s what’s public-facing right now:</p>
+            <p>
+              • Youth Sports Packages<br/>
+              • Seniors / Headshots<br/>
+              • Events<br/>
+              • Video
+            </p>
+            <div class="ctaRow">
+              <button class="pill" data-jump="book">Book a session →</button>
+              <button class="pill" data-jump="order">Online order form →</button>
+            </div>
+          </article>
+
+          <article class="page" id="page-book">
+            <h2>Book</h2>
+            <p>
+              Replace this with your booking method:
+              a simple form, email link, or a calendar link.
+            </p>
+            <div class="ctaRow">
+              <a class="pill" href="mailto:capturedbykammedia@gmail.com?subject=CBK%20Booking%20Request">Send booking request</a>
+              <button class="pill" data-jump="services">See services →</button>
+            </div>
+          </article>
+
+          <article class="page" id="page-gallery">
+            <h2>Gallery</h2>
+            <p>
+              Drop in your gallery link(s) here (Pixieset, Squarespace, Google Drive, whatever you’re using).
+              Keep it clean. No clutter.
+            </p>
+            <div class="ctaRow">
+              <a class="pill" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">Current work on IG</a>
+            </div>
+          </article>
+
+          <article class="page" id="page-order">
+            <h2>Online Order Form</h2>
+            <p>
+              This button is where your Jotform link goes.
+              Paste it in the href below and you’re live.
+            </p>
+            <div class="ctaRow">
+              <a class="pill" href="#" target="_blank" rel="noreferrer">Open Order Form</a>
+              <button class="pill" data-jump="gallery">Back to gallery →</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <div>© <span id="year"></span> Capturedby_Kam</div>
+        <div>
+          <a href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">@CapturedBy_Kam</a>
+          <span> • </span>
+          <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+        </div>
+      </footer>
     </div>
+  </div>
 
-    <!-- NAV (kept clean + simple) -->
-    <nav class="nav" aria-label="Site navigation">
-      <a class="nav-link" href="#about">About</a>
-      <a class="nav-link" href="#services">Services</a>
-      <a class="nav-link" href="#book">Book</a>
-      <a class="nav-link" href="#gallery">Gallery</a>
-      <a class="nav-link" href="#order">Online Order Form</a>
-    </nav>
-  </header>
+  <script>
+    const btns = Array.from(document.querySelectorAll(".chapterBtn"));
+    const pages = {
+      about: document.getElementById("page-about"),
+      services: document.getElementById("page-services"),
+      book: document.getElementById("page-book"),
+      gallery: document.getElementById("page-gallery"),
+      order: document.getElementById("page-order"),
+    };
 
-  <main class="wrap">
-    <section id="about" class="chapter">
-      <h2>About</h2>
-      <p>
-        Timeless &amp; authentic visuals — captured with intention.
-        Replace this text with your short about paragraph.
-      </p>
-    </section>
+    function show(pageKey){
+      Object.values(pages).forEach(p => p.classList.remove("active"));
+      pages[pageKey].classList.add("active");
 
-    <section id="services" class="chapter">
-      <h2>Services</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Youth Sports Packages</h3>
-          <p>Media days, action shots, team posters, prints + digital.</p>
-        </div>
-        <div class="card">
-          <h3>Senior Photos</h3>
-          <p>Clean portraits, cinematic edits, print-ready delivery.</p>
-        </div>
-        <div class="card">
-          <h3>Events</h3>
-          <p>Parties, celebrations, community moments — documented right.</p>
-        </div>
-        <div class="card">
-          <h3>Video</h3>
-          <p>Highlight reels, promos, story-driven short visuals.</p>
-        </div>
-      </div>
-    </section>
+      btns.forEach(b => b.setAttribute("aria-current", "false"));
+      const activeBtn = btns.find(b => b.dataset.page === pageKey);
+      if(activeBtn) activeBtn.setAttribute("aria-current","page");
+    }
 
-    <section id="book" class="chapter">
-      <h2>Book</h2>
-      <p>Send a booking request. This will open your email app with everything filled in.</p>
+    btns.forEach(b => b.addEventListener("click", () => show(b.dataset.page)));
 
-      <form class="form" id="bookingForm">
-        <label>
-          Name
-          <input name="name" type="text" autocomplete="name" required />
-        </label>
+    document.querySelectorAll("[data-jump]").forEach(el=>{
+      el.addEventListener("click", () => show(el.dataset.jump));
+    });
 
-        <label>
-          Email
-          <input name="email" type="email" autocomplete="email" required />
-        </label>
-
-        <label>
-          What are you booking?
-          <select name="service" required>
-            <option value="" disabled selected>Select one</option>
-            <option>Youth Sports Packages</option>
-            <option>Senior Photos</option>
-            <option>Events</option>
-            <option>Video</option>
-            <option>Other</option>
-          </select>
-        </label>
-
-        <label>
-          Preferred date/time
-          <input name="datetime" type="text" placeholder="Example: Sat 3/15 @ 4pm" required />
-        </label>
-
-        <label>
-          Notes
-          <textarea name="notes" rows="4" placeholder="Location, vibe, must-have shots, etc."></textarea>
-        </label>
-
-        <button type="submit">Send Booking Request</button>
-        <p class="hint">No spam. Just a clean request email.</p>
-      </form>
-    </section>
-
-    <section id="gallery" class="chapter">
-      <h2>Gallery</h2>
-      <p>Drop your photos here later. For now: placeholders.</p>
-
-      <div class="gallery">
-        <div class="thumb" aria-hidden="true"></div>
-        <div class="thumb" aria-hidden="true"></div>
-        <div class="thumb" aria-hidden="true"></div>
-        <div class="thumb" aria-hidden="true"></div>
-        <div class="thumb" aria-hidden="true"></div>
-        <div class="thumb" aria-hidden="true"></div>
-      </div>
-    </section>
-
-    <section id="order" class="chapter">
-      <h2>Online Order Form</h2>
-      <p>
-        Link your real order form here when ready (Jotform / whatever).
-        For now, this button is a placeholder.
-      </p>
-      <button type="button" id="orderBtn">Open Order Form</button>
-      <p class="hint">
-        When you have the real link, paste it in <code>script.js</code> (look for <code>ORDER_FORM_URL</code>).
-      </p>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div>© <span id="yearNow"></span> Capturedby_Kam</div>
-    <div class="footer-links">
-      <a href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">IG: @CapturedBy_Kam</a>
-      <span class="dot">•</span>
-      <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
-      <span class="dot">•</span>
-      <a href="mailto:capturedbykammedia@gmail.com">capturedbykammedia@gmail.com</a>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
