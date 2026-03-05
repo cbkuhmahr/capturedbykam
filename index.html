@@ -7,9 +7,8 @@
 
   <style>
     :root{
-      /* Your CBK “worksheet” vibe */
-      --bg: #B7B6AC;
-      --text: #545245;
+      --bg:#B7B6AC;
+      --text:#545245;
       --muted: rgba(84,82,69,.72);
       --line: rgba(84,82,69,.22);
       --paper: rgba(255,255,255,.18);
@@ -17,11 +16,10 @@
       --shadow: rgba(0,0,0,.12);
 
       --radius: 14px;
-      --maxw: 980px;
-      --bookW: min(980px, calc(100vw - 90px));
+      --bookW: min(980px, calc(100vw - 110px));
       --bookH: min(620px, calc(100vh - 120px));
 
-      /* turn speed (JS changes this) */
+      /* JS adjusts for “thick book” feel */
       --turnDur: 720ms;
     }
 
@@ -29,87 +27,89 @@
     html,body{ height:100%; }
     body{
       margin:0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
-      letter-spacing: .2px;
+      background:var(--bg);
+      color:var(--text);
+      font-family:"SF Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      letter-spacing:.2px;
     }
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ text-decoration:underline; }
 
-    a{ color: inherit; text-decoration:none; }
-    a:hover{ text-decoration: underline; }
-
-    /* ===== Logo block (top-left) ===== */
+    /* ===== Logo (top-left) ===== */
     .logo{
       position: fixed;
       left: 22px;
       top: 18px;
       display:flex;
       flex-direction:column;
-      gap: 4px;
+      gap: 3px;              /* tighter */
       z-index: 50;
       user-select:none;
-      cursor: pointer;
+      cursor:pointer;
     }
     .logo .name{
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: .35px;
     }
     .logo .tagline{
-      font-size: 11px;
-      line-height: 1.12;
+      font-size: 10.5px;     /* smaller */
+      line-height: 1.12;     /* closer */
       color: var(--muted);
       max-width: 360px;
     }
     .logo .est{
+      margin-top: 6px;
       font-size: 11px;
       color: var(--muted);
-      margin-top: 6px;
     }
     .logo .est b{
-      font-weight: 700;
+      font-weight: 800;
       color: #1f51ff;
     }
 
-    /* ===== Sideways vertical nav (right side) ===== */
+    /* ===== Right-side vertical stack (rotated text) ===== */
     .nav-rail{
       position: fixed;
-      right: 12px;
+      right: 18px;
       top: 50%;
-      transform: translateY(-50%) rotate(-90deg);
-      transform-origin: right center;
+      transform: translateY(-50%);
       z-index: 50;
-    }
-    .nav-rail ul{
-      list-style:none;
-      padding:0;
-      margin:0;
       display:flex;
+      flex-direction:column;
       gap: 18px;
       align-items:center;
     }
-    .nav-rail button{
+
+    .navBtn{
       appearance:none;
       border:none;
-      background: transparent;
+      background:transparent;
       font: inherit;
       color: var(--text);
       cursor:pointer;
-      padding: 6px 2px;
-      letter-spacing:.25px;
-      font-size: 11px;
       opacity:.92;
-      border-bottom: 1px solid transparent;
-      transition: opacity .15s ease, border-color .15s ease;
+      padding: 10px 8px;          /* big hit area */
+      border-radius: 10px;
+      border: 1px solid transparent;
+      transition: opacity .15s ease, border-color .15s ease, background .15s ease;
+
+      /* This is the “tilt your head” part */
+      transform: rotate(-90deg);
+      transform-origin: center;
       white-space: nowrap;
+      font-size: 11px;
+      letter-spacing: .25px;
     }
-    .nav-rail button:hover{
+    .navBtn:hover{
       opacity: 1;
       border-color: var(--line);
+      background: rgba(255,255,255,.08);
     }
-    .nav-rail button.active{
+    .navBtn.active{
       opacity: 1;
       border-color: rgba(84,82,69,.55);
+      background: rgba(255,255,255,.12);
     }
 
     /* ===== Stage ===== */
@@ -129,6 +129,7 @@
       perspective: 1400px;
     }
 
+    /* Frame */
     .book::before{
       content:"";
       position:absolute;
@@ -139,6 +140,7 @@
       box-shadow: 0 18px 45px var(--shadow);
     }
 
+    /* Spine hint */
     .spine{
       position:absolute;
       top: 10px;
@@ -149,6 +151,28 @@
       background: rgba(84,82,69,.14);
       border-radius: 999px;
       pointer-events:none;
+      z-index: 2;
+    }
+
+    /* Page edge stack (thickness vibe) */
+    .edge{
+      position:absolute;
+      top: 12px;
+      bottom: 12px;
+      right: 12px;
+      width: 26px;
+      border-left: 1px solid rgba(84,82,69,.16);
+      border-radius: 0 12px 12px 0;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(84,82,69,.10) 0px,
+          rgba(84,82,69,.10) 2px,
+          rgba(84,82,69,.05) 2px,
+          rgba(84,82,69,.05) 5px
+        );
+      opacity: .55;
+      pointer-events:none;
       z-index: 1;
     }
 
@@ -158,8 +182,8 @@
       transform-style: preserve-3d;
       transform-origin: left center;
       border-radius: calc(var(--radius) - 2px);
-      z-index: 2;
       transition: transform var(--turnDur) cubic-bezier(.2,.8,.2,1);
+      z-index: 3;
     }
 
     .face{
@@ -170,19 +194,16 @@
       border: 1px solid rgba(84,82,69,.18);
       overflow:hidden;
     }
-
-    .front{
-      background: linear-gradient(180deg, var(--paper), var(--paper2));
-    }
+    .front{ background: linear-gradient(180deg, var(--paper), var(--paper2)); }
     .back{
       transform: rotateY(180deg);
       background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
     }
 
-    /* Blank home = truly blank */
+    /* Home is blank */
     .homeBlank{ height:100%; width:100%; }
 
-    /* Page content styling (after flipping) */
+    /* Inner page content (only seen after flip) */
     .content{
       padding: 20px;
       display:flex;
@@ -191,7 +212,7 @@
     }
     .h{
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing:.35px;
     }
     .p{
@@ -212,7 +233,6 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
       border: 1px solid rgba(84,82,69,.25);
       border-radius: 999px;
       padding: 10px 12px;
@@ -225,42 +245,40 @@
     .pill:hover{ background: rgba(255,255,255,.14); }
 
     @media (prefers-reduced-motion: reduce){
-      .page{ transition: none; }
-      .nav-rail button{ transition:none; }
+      .page{ transition:none; }
+      .navBtn{ transition:none; }
     }
 
     @media (max-width: 700px){
       :root{
-        --bookW: calc(100vw - 56px);
+        --bookW: calc(100vw - 70px);
         --bookH: min(560px, calc(100vh - 140px));
       }
       .logo{ left: 14px; top: 14px; }
-      .nav-rail{ right: 6px; }
-      .nav-rail ul{ gap: 14px; }
+      .nav-rail{ right: 8px; gap: 14px; }
+      .navBtn{ font-size: 10.5px; padding: 10px 6px; }
     }
   </style>
 </head>
 
 <body>
-
   <div class="logo" id="logo" title="Home">
     <div class="name">Capturedby_Kam</div>
-    <div class="tagline">Every Frame, Every Project — Timeless Authenticity</div>
+    <div class="tagline">Every Frame, Every Project —<br/>Timeless Authenticity</div>
     <div class="est">Est. <b>2025</b></div>
   </div>
 
-  <nav class="nav-rail" aria-label="Primary">
-    <ul>
-      <li><button class="navBtn active" data-target="1">About</button></li>
-      <li><button class="navBtn" data-target="2">Services</button></li>
-      <li><button class="navBtn" data-target="3">Book</button></li>
-      <li><button class="navBtn" data-target="4">Gallery</button></li>
-      <li><button class="navBtn" data-target="5">Online Order Form</button></li>
-    </ul>
-  </nav>
+  <div class="nav-rail" aria-label="Primary">
+    <button class="navBtn" data-target="1">About</button>
+    <button class="navBtn" data-target="2">Services</button>
+    <button class="navBtn" data-target="3">Book</button>
+    <button class="navBtn" data-target="4">Gallery</button>
+    <button class="navBtn" data-target="5">Online Order Form</button>
+  </div>
 
   <main class="stage">
     <section class="book" aria-label="Book">
+      <div class="edge"></div>
       <div class="spine"></div>
 
       <!-- Page 0 (Home / blank) -->
@@ -274,18 +292,7 @@
         <div class="face front">
           <div class="content">
             <div class="h">About</div>
-            <div class="p">
-              (You said you’ll adjust this later.)<br/>
-              Drop your short about here — keep it tight, intentional, and real.
-            </div>
-
-            <div class="card">
-              <div class="p">
-                Email: <a href="mailto:capturedbykammedia@gmail.com">capturedbykammedia@gmail.com</a><br/>
-                IG: <a href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">@CapturedBy_Kam</a><br/>
-                YouTube: <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">Captured by Kam Media</a>
-              </div>
-            </div>
+            <div class="p">(You’ll adjust this.) Keep it short and clean.</div>
           </div>
         </div>
         <div class="face back"></div>
@@ -296,24 +303,19 @@
         <div class="face front">
           <div class="content">
             <div class="h">Services</div>
-            <div class="p">Stacked options (no spread-out grid).</div>
-
             <div class="stack">
               <div class="card">
                 <div class="h">Youth Sports Packages</div>
                 <div class="p">Media days, action shots, team posters, prints + digital.</div>
               </div>
-
               <div class="card">
                 <div class="h">Senior Photos</div>
                 <div class="p">Clean portraits, cinematic edits, print-ready delivery.</div>
               </div>
-
               <div class="card">
                 <div class="h">Events</div>
                 <div class="p">Parties, celebrations, community moments — documented right.</div>
               </div>
-
               <div class="card">
                 <div class="h">Video</div>
                 <div class="p">Highlight reels, promos, story-driven short visuals.</div>
@@ -329,10 +331,9 @@
         <div class="face front">
           <div class="content">
             <div class="h">Book</div>
-            <div class="p">Click → email draft opens with the basics.</div>
-
+            <div class="p">For now: email draft opens with the basics.</div>
             <a class="pill"
-               href="mailto:capturedbykammedia@gmail.com?subject=CBK%20Booking%20Request&body=Name:%0AEmail:%0AWhat%20are%20you%20booking%3F%0APreferred%20date%2Ftime:%0ANotes:%0A">
+              href="mailto:kam@capturedbykam.com?subject=CBK%20Booking%20Request&body=Name:%0AEmail:%0AWhat%20are%20you%20booking%3F%0APreferred%20date%2Ftime:%0ANotes:%0A">
               Send Booking Request
             </a>
           </div>
@@ -345,10 +346,9 @@
         <div class="face front">
           <div class="content">
             <div class="h">Gallery</div>
-            <div class="p">Put your gallery link(s) here. For now, IG is the clean default.</div>
-
+            <div class="p">Link this to your real gallery later. IG works for now.</div>
             <a class="pill" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">
-              View Gallery on IG
+              View IG
             </a>
           </div>
         </div>
@@ -360,8 +360,7 @@
         <div class="face front">
           <div class="content">
             <div class="h">Online Order Form</div>
-            <div class="p">Paste your Jotform link into ORDER_FORM_URL in the script.</div>
-
+            <div class="p">Paste your Jotform link into ORDER_FORM_URL.</div>
             <a class="pill" id="orderLink" href="#" target="_blank" rel="noreferrer">
               Open Order Form
             </a>
@@ -374,31 +373,21 @@
   </main>
 
   <script>
-    // ==== SETTINGS ====
     const ORDER_FORM_URL = "PASTE_YOUR_JOTFORM_LINK_HERE";
 
-    // ==== BOOK LOGIC ====
     const root = document.documentElement;
     const pages = Array.from(document.querySelectorAll(".page"));
     const navBtns = Array.from(document.querySelectorAll(".navBtn"));
     const logo = document.getElementById("logo");
     const orderLink = document.getElementById("orderLink");
 
-    orderLink.href = (ORDER_FORM_URL && ORDER_FORM_URL.startsWith("http"))
-      ? ORDER_FORM_URL
-      : "#";
+    orderLink.href = (ORDER_FORM_URL && ORDER_FORM_URL.startsWith("http")) ? ORDER_FORM_URL : "#";
 
-    let currentIndex = 0; // 0 = home blank
-    let turnToken = 0;    // cancels in-flight turns
+    let currentIndex = 0;  // 0 = blank home
+    let turnToken = 0;
 
     const prefersReducedMotion = window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    function setNavActive(targetIndex){
-      navBtns.forEach(b => b.classList.remove("active"));
-      const btn = navBtns.find(b => Number(b.dataset.target) === targetIndex);
-      if(btn) btn.classList.add("active");
-    }
 
     function render(){
       pages.forEach((page, i) => {
@@ -406,8 +395,10 @@
         page.style.transform = (i < currentIndex) ? "rotateY(-180deg)" : "rotateY(0deg)";
       });
 
-      if(currentIndex === 0){
-        navBtns.forEach(b => b.classList.remove("active"));
+      navBtns.forEach(b => b.classList.remove("active"));
+      if(currentIndex !== 0){
+        const btn = navBtns.find(b => Number(b.dataset.target) === currentIndex);
+        if(btn) btn.classList.add("active");
       }
     }
 
@@ -420,53 +411,37 @@
       if(prefersReducedMotion){
         currentIndex = target;
         render();
-        if(target !== 0) setNavActive(target);
         return;
       }
 
-      // If already there, no drama.
       if(target === currentIndex) return;
 
       const distance = Math.abs(target - currentIndex);
       const dir = target > currentIndex ? 1 : -1;
 
-      // Bulk flip fast, last flip slower (feels like a thick book settling)
       const FAST_DUR = "260ms";
       const FINAL_DUR = "720ms";
-      const FAST_STEP_DELAY = 180;  // ms between page turns (tweakable)
-      const FINAL_STEP_DELAY = 520; // ms to let final page land
+      const FAST_STEP_DELAY = 180;
+      const FINAL_STEP_DELAY = 520;
 
-      // If it's a multi-page travel, use fast turns.
-      if(distance >= 2) root.style.setProperty("--turnDur", FAST_DUR);
-      else root.style.setProperty("--turnDur", FINAL_DUR);
+      root.style.setProperty("--turnDur", (distance >= 2) ? FAST_DUR : FINAL_DUR);
 
-      // Turn page-by-page
       while(currentIndex !== target){
-        if(myToken !== turnToken) return; // cancelled by a newer click
+        if(myToken !== turnToken) return;
 
         const next = currentIndex + dir;
-
-        // If this next step is the FINAL step, slow it down for the last “settle”
-        if(next === target){
-          root.style.setProperty("--turnDur", FINAL_DUR);
-        }
+        if(next === target) root.style.setProperty("--turnDur", FINAL_DUR);
 
         currentIndex = next;
         render();
 
-        // Wait: quick for bulk flips, longer for final landing
         const isFinal = (currentIndex === target);
         await sleep(isFinal ? FINAL_STEP_DELAY : FAST_STEP_DELAY);
       }
-
-      if(target !== 0) setNavActive(target);
     }
 
     navBtns.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const target = Number(btn.dataset.target);
-        turnTo(target);
-      });
+      btn.addEventListener("click", () => turnTo(Number(btn.dataset.target)));
     });
 
     logo.addEventListener("click", () => turnTo(0));
