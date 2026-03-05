@@ -3,367 +3,475 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Capturedby_Kam — Every frame, Every Project — Timeless Authenticity, Captured by Kam</title>
+  <title>Capturedby_Kam</title>
 
   <style>
     :root{
-      --bg:#000;
-      --text:#B7B6AC;
-      --muted:#545245;
-      --line:rgba(183,182,172,.18);
-      --shadow:rgba(0,0,0,.65);
-      --maxw:1040px;
-      --radius:18px;
+      /* Your CBK “worksheet” vibe */
+      --bg: #B7B6AC;
+      --text: #545245;
+      --muted: rgba(84,82,69,.72);
+      --line: rgba(84,82,69,.22);
+      --paper: rgba(255,255,255,.18);
+      --paper2: rgba(255,255,255,.10);
+      --shadow: rgba(0,0,0,.12);
 
-      /* “Book chapter” feel */
-      --panel: rgba(255,255,255,.03);
-      --panel2: rgba(255,255,255,.02);
+      --radius: 14px;
+      --maxw: 980px;
+      --bookW: min(980px, calc(100vw - 90px));
+      --bookH: min(620px, calc(100vh - 120px));
+
+      /* turn speed (JS changes this) */
+      --turnDur: 720ms;
     }
 
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
       margin:0;
-      background:var(--bg);
-      color:var(--text);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      letter-spacing:.2px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      letter-spacing: .2px;
     }
 
-    a{ color:inherit; text-decoration:none; }
-    a:hover{ text-decoration:underline; }
+    a{ color: inherit; text-decoration:none; }
+    a:hover{ text-decoration: underline; }
 
-    .wrap{
-      min-height:100%;
+    /* ===== Logo block (top-left) ===== */
+    .logo{
+      position: fixed;
+      left: 22px;
+      top: 18px;
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+      z-index: 50;
+      user-select:none;
+      cursor: pointer;
+    }
+    .logo .name{
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: .35px;
+    }
+    .logo .tagline{
+      font-size: 11px;
+      line-height: 1.12;
+      color: var(--muted);
+      max-width: 360px;
+    }
+    .logo .est{
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .logo .est b{
+      font-weight: 700;
+      color: #1f51ff;
+    }
+
+    /* ===== Sideways vertical nav (right side) ===== */
+    .nav-rail{
+      position: fixed;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: right center;
+      z-index: 50;
+    }
+    .nav-rail ul{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:flex;
+      gap: 18px;
+      align-items:center;
+    }
+    .nav-rail button{
+      appearance:none;
+      border:none;
+      background: transparent;
+      font: inherit;
+      color: var(--text);
+      cursor:pointer;
+      padding: 6px 2px;
+      letter-spacing:.25px;
+      font-size: 11px;
+      opacity:.92;
+      border-bottom: 1px solid transparent;
+      transition: opacity .15s ease, border-color .15s ease;
+      white-space: nowrap;
+    }
+    .nav-rail button:hover{
+      opacity: 1;
+      border-color: var(--line);
+    }
+    .nav-rail button.active{
+      opacity: 1;
+      border-color: rgba(84,82,69,.55);
+    }
+
+    /* ===== Stage ===== */
+    .stage{
+      height:100%;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:26px 16px;
+      padding: 80px 22px 22px;
     }
 
-    .frame{
-      width:min(var(--maxw), 100%);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      overflow:hidden;
-      background:linear-gradient(180deg, var(--panel), transparent 55%);
-      box-shadow:0 18px 70px var(--shadow);
+    /* ===== Book ===== */
+    .book{
+      width: var(--bookW);
+      height: var(--bookH);
+      position: relative;
+      perspective: 1400px;
     }
 
-    .top{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      justify-content:space-between;
-      padding:18px 18px 14px;
-      border-bottom:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+    .book::before{
+      content:"";
+      position:absolute;
+      inset: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+      box-shadow: 0 18px 45px var(--shadow);
     }
 
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      min-width: 240px;
-    }
-    .brand .name{
-      font-size:15px;
-      text-transform:none;
-      letter-spacing:.4px;
-    }
-    .brand .tagline{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.25;
-      max-width: 720px;
-    }
-
-    .social{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      font-size:12px;
-      color:var(--muted);
-      white-space:nowrap;
-    }
-
-    .main{
-      display:grid;
-      grid-template-columns: 220px 1fr;
-      min-height: 520px;
-    }
-
-    /* Left vertical “chapters” */
-    .chapters{
-      border-right:1px solid var(--line);
-      padding:16px 10px;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 70%);
-    }
-    .chapterBtn{
-      width:100%;
-      display:flex;
-      justify-content:flex-start;
-      align-items:center;
-      gap:10px;
-      padding:12px 12px;
-      margin:6px 0;
-      border-radius:14px;
-      border:1px solid transparent;
-      background:transparent;
-      color:var(--text);
-      cursor:pointer;
-      font:inherit;
-      text-align:left;
-      letter-spacing:.2px;
-      transition:transform .12s ease, background .12s ease, border-color .12s ease;
-    }
-    .chapterBtn:hover{
-      transform: translateX(2px);
-      background: rgba(255,255,255,.03);
-      border-color: var(--line);
-    }
-    .chapterBtn[aria-current="page"]{
-      background: rgba(255,255,255,.05);
-      border-color: rgba(183,182,172,.35);
-    }
-    .chapterNum{
-      color:var(--muted);
-      font-size:12px;
-      min-width:34px;
-    }
-
-    /* Content “pages” */
-    .pages{
-      position:relative;
-      padding:18px;
-      overflow:hidden;
+    .spine{
+      position:absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 50%;
+      width: 2px;
+      transform: translateX(-1px);
+      background: rgba(84,82,69,.14);
+      border-radius: 999px;
+      pointer-events:none;
+      z-index: 1;
     }
 
     .page{
       position:absolute;
-      inset:18px;
-      padding:20px;
-      border:1px solid var(--line);
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
-      opacity:0;
-      transform: translateX(16px);
-      pointer-events:none;
-      transition: opacity .22s ease, transform .22s ease;
-    }
-    .page.active{
-      opacity:1;
-      transform: translateX(0);
-      pointer-events:auto;
+      inset: 10px;
+      transform-style: preserve-3d;
+      transform-origin: left center;
+      border-radius: calc(var(--radius) - 2px);
+      z-index: 2;
+      transition: transform var(--turnDur) cubic-bezier(.2,.8,.2,1);
     }
 
-    .page h2{
-      margin:0 0 10px 0;
-      font-size:16px;
-      letter-spacing:.4px;
-      font-weight:600;
-    }
-    .page p{
-      margin:0 0 12px 0;
-      color:var(--muted);
-      line-height:1.55;
-      font-size:13px;
-      max-width: 70ch;
+    .face{
+      position:absolute;
+      inset:0;
+      border-radius: calc(var(--radius) - 2px);
+      backface-visibility: hidden;
+      border: 1px solid rgba(84,82,69,.18);
+      overflow:hidden;
     }
 
-    .ctaRow{
+    .front{
+      background: linear-gradient(180deg, var(--paper), var(--paper2));
+    }
+    .back{
+      transform: rotateY(180deg);
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+    }
+
+    /* Blank home = truly blank */
+    .homeBlank{ height:100%; width:100%; }
+
+    /* Page content styling (after flipping) */
+    .content{
+      padding: 20px;
       display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:14px;
+      flex-direction:column;
+      gap: 14px;
     }
+    .h{
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing:.35px;
+    }
+    .p{
+      font-size: 11px;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 78ch;
+    }
+    .card{
+      border: 1px solid rgba(84,82,69,.20);
+      border-radius: 12px;
+      background: rgba(255,255,255,.10);
+      padding: 12px;
+    }
+    .stack{ display:flex; flex-direction:column; gap: 10px; }
+
     .pill{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.02);
-      padding:10px 12px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      border: 1px solid rgba(84,82,69,.25);
       border-radius: 999px;
-      font-size:12px;
-      color:var(--text);
+      padding: 10px 12px;
+      background: rgba(255,255,255,.10);
+      font-size: 11px;
+      color: var(--text);
+      cursor:pointer;
+      width: fit-content;
     }
-    .pill:hover{
-      border-color: rgba(183,182,172,.35);
-      background: rgba(255,255,255,.03);
-      text-decoration:none;
+    .pill:hover{ background: rgba(255,255,255,.14); }
+
+    @media (prefers-reduced-motion: reduce){
+      .page{ transition: none; }
+      .nav-rail button{ transition:none; }
     }
 
-    .foot{
-      padding:12px 18px;
-      border-top:1px solid var(--line);
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      justify-content:space-between;
-      color:var(--muted);
-      font-size:12px;
-      background:rgba(255,255,255,.01);
-    }
-
-    /* Mobile */
-    @media (max-width: 860px){
-      .main{ grid-template-columns: 1fr; }
-      .chapters{
-        border-right:none;
-        border-bottom:1px solid var(--line);
-        display:flex;
-        gap:8px;
-        overflow:auto;
-        padding:10px;
+    @media (max-width: 700px){
+      :root{
+        --bookW: calc(100vw - 56px);
+        --bookH: min(560px, calc(100vh - 140px));
       }
-      .chapterBtn{
-        min-width: 170px;
-        margin:0;
-      }
-      .page{
-        inset:14px;
-      }
-      .brand .tagline{ max-width: 100%; }
+      .logo{ left: 14px; top: 14px; }
+      .nav-rail{ right: 6px; }
+      .nav-rail ul{ gap: 14px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="frame">
-      <header class="top">
-        <!-- BRAND NAME + TAGLINE ALWAYS TOGETHER -->
-        <div class="brand">
-          <div class="name">Capturedby_Kam</div>
-          <div class="tagline">Every frame, Every Project — Timeless Authenticity, Captured by Kam</div>
-        </div>
 
-        <nav class="social" aria-label="Social links">
-          <a href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">IG</a>
-          <span>•</span>
-          <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
-        </nav>
-      </header>
-
-      <section class="main">
-        <aside class="chapters" aria-label="Chapters">
-          <button class="chapterBtn" data-page="about" aria-current="page">
-            <span class="chapterNum">01</span><span>About</span>
-          </button>
-          <button class="chapterBtn" data-page="services">
-            <span class="chapterNum">02</span><span>Services</span>
-          </button>
-          <button class="chapterBtn" data-page="book">
-            <span class="chapterNum">03</span><span>Book</span>
-          </button>
-          <button class="chapterBtn" data-page="gallery">
-            <span class="chapterNum">04</span><span>Gallery</span>
-          </button>
-          <button class="chapterBtn" data-page="order">
-            <span class="chapterNum">05</span><span>Online Order Form</span>
-          </button>
-        </aside>
-
-        <div class="pages">
-          <article class="page active" id="page-about">
-            <h2>About</h2>
-            <p>
-              Timeless & authentic visuals — captured clean, intentional, and real.
-              No gimmicks. No “algorithm bait.” Just work that feels like you.
-            </p>
-            <div class="ctaRow">
-              <a class="pill" href="mailto:capturedbykammedia@gmail.com">Email: capturedbykammedia@gmail.com</a>
-              <a class="pill" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">View IG</a>
-            </div>
-          </article>
-
-          <article class="page" id="page-services">
-            <h2>Services</h2>
-            <p>Keep it simple and high-quality. Here’s what’s public-facing right now:</p>
-            <p>
-              • Youth Sports Packages<br/>
-              • Seniors / Headshots<br/>
-              • Events<br/>
-              • Video
-            </p>
-            <div class="ctaRow">
-              <button class="pill" data-jump="book">Book a session →</button>
-              <button class="pill" data-jump="order">Online order form →</button>
-            </div>
-          </article>
-
-          <article class="page" id="page-book">
-            <h2>Book</h2>
-            <p>
-              Replace this with your booking method:
-              a simple form, email link, or a calendar link.
-            </p>
-            <div class="ctaRow">
-              <a class="pill" href="mailto:capturedbykammedia@gmail.com?subject=CBK%20Booking%20Request">Send booking request</a>
-              <button class="pill" data-jump="services">See services →</button>
-            </div>
-          </article>
-
-          <article class="page" id="page-gallery">
-            <h2>Gallery</h2>
-            <p>
-              Drop in your gallery link(s) here (Pixieset, Squarespace, Google Drive, whatever you’re using).
-              Keep it clean. No clutter.
-            </p>
-            <div class="ctaRow">
-              <a class="pill" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">Current work on IG</a>
-            </div>
-          </article>
-
-          <article class="page" id="page-order">
-            <h2>Online Order Form</h2>
-            <p>
-              This button is where your Jotform link goes.
-              Paste it in the href below and you’re live.
-            </p>
-            <div class="ctaRow">
-              <a class="pill" href="#" target="_blank" rel="noreferrer">Open Order Form</a>
-              <button class="pill" data-jump="gallery">Back to gallery →</button>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <footer class="foot">
-        <div>© <span id="year"></span> Capturedby_Kam</div>
-        <div>
-          <a href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">@CapturedBy_Kam</a>
-          <span> • </span>
-          <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
-        </div>
-      </footer>
-    </div>
+  <div class="logo" id="logo" title="Home">
+    <div class="name">Capturedby_Kam</div>
+    <div class="tagline">Every Frame, Every Project — Timeless Authenticity</div>
+    <div class="est">Est. <b>2025</b></div>
   </div>
 
+  <nav class="nav-rail" aria-label="Primary">
+    <ul>
+      <li><button class="navBtn active" data-target="1">About</button></li>
+      <li><button class="navBtn" data-target="2">Services</button></li>
+      <li><button class="navBtn" data-target="3">Book</button></li>
+      <li><button class="navBtn" data-target="4">Gallery</button></li>
+      <li><button class="navBtn" data-target="5">Online Order Form</button></li>
+    </ul>
+  </nav>
+
+  <main class="stage">
+    <section class="book" aria-label="Book">
+      <div class="spine"></div>
+
+      <!-- Page 0 (Home / blank) -->
+      <div class="page" data-index="0">
+        <div class="face front"><div class="homeBlank"></div></div>
+        <div class="face back"></div>
+      </div>
+
+      <!-- Page 1 About -->
+      <div class="page" data-index="1">
+        <div class="face front">
+          <div class="content">
+            <div class="h">About</div>
+            <div class="p">
+              (You said you’ll adjust this later.)<br/>
+              Drop your short about here — keep it tight, intentional, and real.
+            </div>
+
+            <div class="card">
+              <div class="p">
+                Email: <a href="mailto:capturedbykammedia@gmail.com">capturedbykammedia@gmail.com</a><br/>
+                IG: <a href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">@CapturedBy_Kam</a><br/>
+                YouTube: <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">Captured by Kam Media</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="face back"></div>
+      </div>
+
+      <!-- Page 2 Services (STACKED) -->
+      <div class="page" data-index="2">
+        <div class="face front">
+          <div class="content">
+            <div class="h">Services</div>
+            <div class="p">Stacked options (no spread-out grid).</div>
+
+            <div class="stack">
+              <div class="card">
+                <div class="h">Youth Sports Packages</div>
+                <div class="p">Media days, action shots, team posters, prints + digital.</div>
+              </div>
+
+              <div class="card">
+                <div class="h">Senior Photos</div>
+                <div class="p">Clean portraits, cinematic edits, print-ready delivery.</div>
+              </div>
+
+              <div class="card">
+                <div class="h">Events</div>
+                <div class="p">Parties, celebrations, community moments — documented right.</div>
+              </div>
+
+              <div class="card">
+                <div class="h">Video</div>
+                <div class="p">Highlight reels, promos, story-driven short visuals.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="face back"></div>
+      </div>
+
+      <!-- Page 3 Book -->
+      <div class="page" data-index="3">
+        <div class="face front">
+          <div class="content">
+            <div class="h">Book</div>
+            <div class="p">Click → email draft opens with the basics.</div>
+
+            <a class="pill"
+               href="mailto:capturedbykammedia@gmail.com?subject=CBK%20Booking%20Request&body=Name:%0AEmail:%0AWhat%20are%20you%20booking%3F%0APreferred%20date%2Ftime:%0ANotes:%0A">
+              Send Booking Request
+            </a>
+          </div>
+        </div>
+        <div class="face back"></div>
+      </div>
+
+      <!-- Page 4 Gallery -->
+      <div class="page" data-index="4">
+        <div class="face front">
+          <div class="content">
+            <div class="h">Gallery</div>
+            <div class="p">Put your gallery link(s) here. For now, IG is the clean default.</div>
+
+            <a class="pill" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">
+              View Gallery on IG
+            </a>
+          </div>
+        </div>
+        <div class="face back"></div>
+      </div>
+
+      <!-- Page 5 Online Order Form -->
+      <div class="page" data-index="5">
+        <div class="face front">
+          <div class="content">
+            <div class="h">Online Order Form</div>
+            <div class="p">Paste your Jotform link into ORDER_FORM_URL in the script.</div>
+
+            <a class="pill" id="orderLink" href="#" target="_blank" rel="noreferrer">
+              Open Order Form
+            </a>
+          </div>
+        </div>
+        <div class="face back"></div>
+      </div>
+
+    </section>
+  </main>
+
   <script>
-    const btns = Array.from(document.querySelectorAll(".chapterBtn"));
-    const pages = {
-      about: document.getElementById("page-about"),
-      services: document.getElementById("page-services"),
-      book: document.getElementById("page-book"),
-      gallery: document.getElementById("page-gallery"),
-      order: document.getElementById("page-order"),
-    };
+    // ==== SETTINGS ====
+    const ORDER_FORM_URL = "PASTE_YOUR_JOTFORM_LINK_HERE";
 
-    function show(pageKey){
-      Object.values(pages).forEach(p => p.classList.remove("active"));
-      pages[pageKey].classList.add("active");
+    // ==== BOOK LOGIC ====
+    const root = document.documentElement;
+    const pages = Array.from(document.querySelectorAll(".page"));
+    const navBtns = Array.from(document.querySelectorAll(".navBtn"));
+    const logo = document.getElementById("logo");
+    const orderLink = document.getElementById("orderLink");
 
-      btns.forEach(b => b.setAttribute("aria-current", "false"));
-      const activeBtn = btns.find(b => b.dataset.page === pageKey);
-      if(activeBtn) activeBtn.setAttribute("aria-current","page");
+    orderLink.href = (ORDER_FORM_URL && ORDER_FORM_URL.startsWith("http"))
+      ? ORDER_FORM_URL
+      : "#";
+
+    let currentIndex = 0; // 0 = home blank
+    let turnToken = 0;    // cancels in-flight turns
+
+    const prefersReducedMotion = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function setNavActive(targetIndex){
+      navBtns.forEach(b => b.classList.remove("active"));
+      const btn = navBtns.find(b => Number(b.dataset.target) === targetIndex);
+      if(btn) btn.classList.add("active");
     }
 
-    btns.forEach(b => b.addEventListener("click", () => show(b.dataset.page)));
+    function render(){
+      pages.forEach((page, i) => {
+        page.style.zIndex = String(100 - i);
+        page.style.transform = (i < currentIndex) ? "rotateY(-180deg)" : "rotateY(0deg)";
+      });
 
-    document.querySelectorAll("[data-jump]").forEach(el=>{
-      el.addEventListener("click", () => show(el.dataset.jump));
+      if(currentIndex === 0){
+        navBtns.forEach(b => b.classList.remove("active"));
+      }
+    }
+
+    function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+    async function turnTo(target){
+      turnToken++;
+      const myToken = turnToken;
+
+      if(prefersReducedMotion){
+        currentIndex = target;
+        render();
+        if(target !== 0) setNavActive(target);
+        return;
+      }
+
+      // If already there, no drama.
+      if(target === currentIndex) return;
+
+      const distance = Math.abs(target - currentIndex);
+      const dir = target > currentIndex ? 1 : -1;
+
+      // Bulk flip fast, last flip slower (feels like a thick book settling)
+      const FAST_DUR = "260ms";
+      const FINAL_DUR = "720ms";
+      const FAST_STEP_DELAY = 180;  // ms between page turns (tweakable)
+      const FINAL_STEP_DELAY = 520; // ms to let final page land
+
+      // If it's a multi-page travel, use fast turns.
+      if(distance >= 2) root.style.setProperty("--turnDur", FAST_DUR);
+      else root.style.setProperty("--turnDur", FINAL_DUR);
+
+      // Turn page-by-page
+      while(currentIndex !== target){
+        if(myToken !== turnToken) return; // cancelled by a newer click
+
+        const next = currentIndex + dir;
+
+        // If this next step is the FINAL step, slow it down for the last “settle”
+        if(next === target){
+          root.style.setProperty("--turnDur", FINAL_DUR);
+        }
+
+        currentIndex = next;
+        render();
+
+        // Wait: quick for bulk flips, longer for final landing
+        const isFinal = (currentIndex === target);
+        await sleep(isFinal ? FINAL_STEP_DELAY : FAST_STEP_DELAY);
+      }
+
+      if(target !== 0) setNavActive(target);
+    }
+
+    navBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = Number(btn.dataset.target);
+        turnTo(target);
+      });
     });
 
-    document.getElementById("year").textContent = new Date().getFullYear();
+    logo.addEventListener("click", () => turnTo(0));
+
+    render();
   </script>
 </body>
 </html>
