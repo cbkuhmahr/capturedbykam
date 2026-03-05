@@ -42,10 +42,19 @@
       top: 18px;
       display:flex;
       flex-direction:column;
-      gap: 3px;              /* tighter */
+      gap: 3px;
       z-index: 50;
       user-select:none;
       cursor:pointer;
+
+      /* make button look like your original div */
+      appearance: none;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      text-align: left;
+      color: inherit;
+      font: inherit;
     }
     .logo .name{
       font-size: 14px;
@@ -53,8 +62,8 @@
       letter-spacing: .35px;
     }
     .logo .tagline{
-      font-size: 10.5px;     /* smaller */
-      line-height: 1.12;     /* closer */
+      font-size: 10.5px;
+      line-height: 1.12;
       color: var(--muted);
       max-width: 360px;
     }
@@ -89,12 +98,11 @@
       color: var(--text);
       cursor:pointer;
       opacity:.92;
-      padding: 10px 8px;          /* big hit area */
+      padding: 10px 8px;
       border-radius: 10px;
       border: 1px solid transparent;
       transition: opacity .15s ease, border-color .15s ease, background .15s ease;
 
-      /* This is the “tilt your head” part */
       transform: rotate(-90deg);
       transform-origin: center;
       white-space: nowrap;
@@ -110,6 +118,15 @@
       opacity: 1;
       border-color: rgba(84,82,69,.55);
       background: rgba(255,255,255,.12);
+    }
+
+    /* Focus styles */
+    .navBtn:focus-visible,
+    .pill:focus-visible,
+    .logo:focus-visible{
+      outline: 2px solid rgba(31,81,255,.85);
+      outline-offset: 3px;
+      border-radius: 12px;
     }
 
     /* ===== Stage ===== */
@@ -183,7 +200,7 @@
       transform-origin: left center;
       border-radius: calc(var(--radius) - 2px);
       transition: transform var(--turnDur) cubic-bezier(.2,.8,.2,1);
-      z-index: 3;
+      z-index: 3; /* JS overrides this per page */
     }
 
     .face{
@@ -203,7 +220,6 @@
     /* Home is blank */
     .homeBlank{ height:100%; width:100%; }
 
-    /* Inner page content (only seen after flip) */
     .content{
       padding: 20px;
       display:flex;
@@ -244,6 +260,13 @@
     }
     .pill:hover{ background: rgba(255,255,255,.14); }
 
+    /* Disabled link style for order form placeholder */
+    .pill[aria-disabled="true"]{
+      opacity: .55;
+      cursor: not-allowed;
+      text-decoration: none;
+    }
+
     @media (prefers-reduced-motion: reduce){
       .page{ transition:none; }
       .navBtn{ transition:none; }
@@ -262,19 +285,19 @@
 </head>
 
 <body>
-  <div class="logo" id="logo" title="Home">
+  <button class="logo" id="logo" title="Home" aria-label="Go to Home">
     <div class="name">Capturedby_Kam</div>
     <div class="tagline">Every Frame, Every Project —<br/>Timeless Authenticity</div>
     <div class="est">Est. <b>2025</b></div>
-  </div>
+  </button>
 
-  <div class="nav-rail" aria-label="Primary">
+  <nav class="nav-rail" aria-label="Primary">
     <button class="navBtn" data-target="1">About</button>
     <button class="navBtn" data-target="2">Services</button>
     <button class="navBtn" data-target="3">Book</button>
     <button class="navBtn" data-target="4">Gallery</button>
     <button class="navBtn" data-target="5">Online Order Form</button>
-  </div>
+  </nav>
 
   <main class="stage">
     <section class="book" aria-label="Book">
@@ -381,30 +404,56 @@
     const logo = document.getElementById("logo");
     const orderLink = document.getElementById("orderLink");
 
-    orderLink.href = (ORDER_FORM_URL && ORDER_FORM_URL.startsWith("http")) ? ORDER_FORM_URL : "#";
+    const prefersReducedMotion = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const totalPages = pages.length; // includes home (0)
+
+    function clampIndex(n){
+      const x = Number(n);
+      if (!Number.isFinite(x)) return 0;
+      return Math.max(0, Math.min(totalPages - 1, x));
+    }
+
+    function setOrderLink(){
+      const ok = !!ORDER_FORM_URL && /^https?:\/\//i.test(ORDER_FORM_URL);
+      orderLink.href = ok ? ORDER_FORM_URL : "#";
+      orderLink.setAttribute("aria-disabled", ok ? "false" : "true");
+      if(!ok){
+        orderLink.addEventListener("click", (e) => {
+          e.preventDefault();
+        }, { once:false });
+      }
+    }
+    setOrderLink();
 
     let currentIndex = 0;  // 0 = blank home
     let turnToken = 0;
 
-    const prefersReducedMotion = window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     function render(){
+      // ✅ FIX: correct stacking so turned pages go BEHIND the current one
       pages.forEach((page, i) => {
-        page.style.zIndex = String(100 - i);
-        page.style.transform = (i < currentIndex) ? "rotateY(-180deg)" : "rotateY(0deg)";
+        const turned = i < currentIndex;
+        page.style.transform = turned ? "rotateY(-180deg)" : "rotateY(0deg)";
+
+        // Turned pages should be behind; unturned pages keep natural stack.
+        // - turned: low z (0..)
+        // - unturned: high z (total..)
+        page.style.zIndex = String(turned ? i : (totalPages - i));
       });
 
-      navBtns.forEach(b => b.classList.remove("active"));
-      if(currentIndex !== 0){
-        const btn = navBtns.find(b => Number(b.dataset.target) === currentIndex);
-        if(btn) btn.classList.add("active");
-      }
+      navBtns.forEach(b => {
+        const isActive = Number(b.dataset.target) === currentIndex;
+        b.classList.toggle("active", isActive);
+        b.setAttribute("aria-current", isActive ? "page" : "false");
+      });
     }
 
     function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
     async function turnTo(target){
+      target = clampIndex(target);
+
       turnToken++;
       const myToken = turnToken;
 
@@ -419,24 +468,26 @@
       const distance = Math.abs(target - currentIndex);
       const dir = target > currentIndex ? 1 : -1;
 
-      const FAST_DUR = "260ms";
-      const FINAL_DUR = "720ms";
-      const FAST_STEP_DELAY = 180;
-      const FINAL_STEP_DELAY = 520;
+      const FAST_MS = 260;
+      const FINAL_MS = 720;
 
-      root.style.setProperty("--turnDur", (distance >= 2) ? FAST_DUR : FINAL_DUR);
+      // Keep CSS transition + JS pacing in sync-ish
+      const fastDelay = 180;
+      const finalDelay = 520;
+
+      root.style.setProperty("--turnDur", (distance >= 2) ? `${FAST_MS}ms` : `${FINAL_MS}ms`);
 
       while(currentIndex !== target){
         if(myToken !== turnToken) return;
 
         const next = currentIndex + dir;
-        if(next === target) root.style.setProperty("--turnDur", FINAL_DUR);
+        const isFinalStep = next === target;
 
+        root.style.setProperty("--turnDur", isFinalStep ? `${FINAL_MS}ms` : `${FAST_MS}ms`);
         currentIndex = next;
         render();
 
-        const isFinal = (currentIndex === target);
-        await sleep(isFinal ? FINAL_STEP_DELAY : FAST_STEP_DELAY);
+        await sleep(isFinalStep ? finalDelay : fastDelay);
       }
     }
 
@@ -445,6 +496,17 @@
     });
 
     logo.addEventListener("click", () => turnTo(0));
+
+    // Optional keyboard support: ←/→ flip, Esc/Home go home
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" || e.key === "Home") {
+        turnTo(0);
+      } else if (e.key === "ArrowRight") {
+        turnTo(currentIndex + 1);
+      } else if (e.key === "ArrowLeft") {
+        turnTo(currentIndex - 1);
+      }
+    });
 
     render();
   </script>
