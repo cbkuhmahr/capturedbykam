@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Capturedby_Kam</title>
 
-  <!-- Premium-feel font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -24,21 +23,20 @@
       --paperBackBottom: #ece9e1;
 
       --radius: 14px;
-
       --sidebarW: 190px;
-      --footerH: 58px;
+      --footerH: 64px;
 
-      /* ✅ Desktop square sizing: based on width + height (NO vmin) */
+      /* Desktop square sizing (no vmin traps) */
       --bookSize: min(
         760px,
         calc(100vw - (var(--sidebarW) + 110px)),
         calc(100vh - 220px)
       );
 
-      /* slower, more authentic */
-      --turnDur: 2000ms;
+      /* Slower, more authentic */
+      --turnDur: 2100ms;
 
-      /* safe area helpers */
+      /* iOS safe areas */
       --safeTop: env(safe-area-inset-top, 0px);
       --safeRight: env(safe-area-inset-right, 0px);
       --safeBottom: env(safe-area-inset-bottom, 0px);
@@ -60,7 +58,7 @@
     a{ color:inherit; text-decoration:none; }
     a:hover{ text-decoration:underline; }
 
-    /* ===== Left rail ===== */
+    /* ===== Left rail (desktop) ===== */
     .left-rail{
       position: fixed;
       left: calc(22px + var(--safeLeft));
@@ -94,7 +92,6 @@
       line-height: 1.25;
       color: var(--muted);
       margin-top: 4px;
-      letter-spacing: .02em;
     }
     .logo .est{
       margin-top: 10px;
@@ -108,6 +105,7 @@
       color: #1f51ff;
     }
 
+    /* Desktop nav */
     .left-nav{
       display:flex;
       flex-direction:column;
@@ -115,6 +113,7 @@
       padding-top: 10px;
       border-top: 1px solid rgba(47,46,41,.16);
     }
+
     .navBtn{
       appearance:none;
       border: 1px solid transparent;
@@ -129,6 +128,7 @@
       cursor:pointer;
       text-transform: uppercase;
       transition: background .15s ease, border-color .15s ease, color .15s ease;
+      white-space: nowrap;
     }
     .navBtn:hover{
       color: var(--text);
@@ -170,7 +170,7 @@
       text-decoration:none;
     }
 
-    /* Focus styles */
+    /* Focus */
     .navBtn:focus-visible,
     .pill:focus-visible,
     .logo:focus-visible,
@@ -203,7 +203,6 @@
       position: relative;
       perspective: 1700px;
     }
-
     .book::before{
       content:"";
       position:absolute;
@@ -213,7 +212,6 @@
       background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.10));
       box-shadow: 0 18px 45px var(--shadow);
     }
-
     .spine{
       position:absolute;
       top: 10px;
@@ -226,7 +224,6 @@
       pointer-events:none;
       z-index: 2;
     }
-
     .edge{
       position:absolute;
       top: 12px;
@@ -247,7 +244,6 @@
       pointer-events:none;
       z-index: 1;
     }
-
     .page{
       position:absolute;
       inset: 10px;
@@ -257,7 +253,6 @@
       transition: transform var(--turnDur) cubic-bezier(.16,.86,.16,1);
       z-index: 3;
     }
-
     .face{
       position:absolute;
       inset:0;
@@ -269,7 +264,6 @@
         inset 0 0 0 1px rgba(255,255,255,.35),
         0 10px 22px rgba(0,0,0,.10);
     }
-
     .front{ background: linear-gradient(180deg, var(--paperTop), var(--paperBottom)); }
     .back{
       transform: rotateY(180deg);
@@ -295,7 +289,6 @@
       color: var(--muted);
       max-width: 78ch;
     }
-
     .stack{ display:flex; flex-direction:column; gap: 12px; }
 
     .card{
@@ -307,20 +300,17 @@
       flex-direction:column;
       gap: 10px;
     }
-
     .cardTop{
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
       gap: 12px;
     }
-
     .cardTitle{
       font-size: 12px;
       font-weight: 600;
       letter-spacing: .08em;
       text-transform: uppercase;
-      color: var(--text);
     }
     .cardBody{
       font-size: 12px;
@@ -339,21 +329,13 @@
       font-size: 11px;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: var(--text);
       cursor:pointer;
       width: fit-content;
     }
-    .pill:hover{
-      background: rgba(0,0,0,.05);
-      text-decoration:none;
-    }
-    .pill--small{
-      padding: 8px 12px;
-      font-size: 10.5px;
-      letter-spacing: .12em;
-    }
+    .pill:hover{ background: rgba(0,0,0,.05); text-decoration:none; }
+    .pill--small{ padding: 8px 12px; font-size: 10.5px; letter-spacing: .12em; }
 
-    /* ===== Cover page ===== */
+    /* ===== Cover ===== */
     .cover{
       height:100%;
       display:flex;
@@ -361,7 +343,6 @@
       justify-content:space-between;
       padding: 34px;
     }
-
     .lockup{
       display:flex;
       flex-direction:column;
@@ -389,20 +370,15 @@
       letter-spacing: .16em;
       text-transform: uppercase;
     }
-    .lockupEst b{
-      color: #1f51ff;
-      font-weight: 700;
-    }
+    .lockupEst b{ color: #1f51ff; font-weight: 700; }
 
     .coverMid{
       display:flex;
       flex-direction:column;
-      gap: 14px;
       align-items:flex-start;
       justify-content:center;
       flex:1;
     }
-
     .coverBottom{
       display:flex;
       align-items:center;
@@ -425,20 +401,13 @@
       width: 100%;
       max-width: 520px;
     }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap: 8px;
-    }
-
+    .field{ display:flex; flex-direction:column; gap: 8px; }
     .label{
       font-size: 10.5px;
       letter-spacing: .16em;
       text-transform: uppercase;
       color: var(--muted);
     }
-
     .control{
       width: 100%;
       border: 1px solid rgba(47,46,41,.18);
@@ -450,27 +419,23 @@
       outline: none;
       transition: border-color .15s ease, background .15s ease;
     }
-
     .control:hover{ background: rgba(255,255,255,.48); }
     .control:focus{
       border-color: rgba(31,81,255,.55);
       background: rgba(255,255,255,.55);
     }
-
     .row{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
-
     .fineprint{
       font-size: 11px;
       line-height: 1.6;
       color: var(--muted);
-      letter-spacing: .02em;
     }
 
-    /* ===== Footer ===== */
+    /* ===== Footer icons ===== */
     .footer{
       position: fixed;
       left: 0;
@@ -479,11 +444,9 @@
       height: calc(var(--footerH) + var(--safeBottom));
       padding-bottom: var(--safeBottom);
       z-index: 80;
-
       display:flex;
       align-items:center;
       justify-content:center;
-
       background: rgba(183,182,172,.88);
       backdrop-filter: blur(8px);
       border-top: 1px solid rgba(47,46,41,.16);
@@ -494,63 +457,116 @@
       align-items:center;
       justify-content:space-between;
       gap: 18px;
-      font-size: 11px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--muted);
     }
-    .footer-links{
+
+    .iconRow{
       display:flex;
-      flex-wrap:wrap;
-      gap: 12px;
       align-items:center;
+      gap: 14px;
     }
-    .footer a{
-      padding: 6px 8px;
+
+    .iconLink{
+      width: 38px;
+      height: 38px;
+      display:grid;
+      place-items:center;
       border-radius: 999px;
-      border: 1px solid transparent;
-      transition: background .15s ease, border-color .15s ease, color .15s ease;
+      border: 1px solid rgba(47,46,41,.14);
+      box-shadow: 0 8px 18px rgba(0,0,0,.10);
+      transition: transform .15s ease, filter .15s ease;
     }
-    .footer a:hover{
-      color: var(--text);
-      border-color: var(--line);
-      background: rgba(255,255,255,.10);
-      text-decoration:none;
+    .iconLink:hover{ transform: translateY(-1px); filter: brightness(1.02); text-decoration:none; }
+    .iconLink svg{ width: 18px; height: 18px; display:block; }
+
+    .iconLink--contact{ background: rgba(255,255,255,.40); }
+    .iconLink--ig{
+      background: radial-gradient(circle at 30% 110%, #feda75 0%, #fa7e1e 30%, #d62976 60%, #962fbf 80%, #4f5bd5 100%);
+      border-color: rgba(0,0,0,.08);
     }
-    .footer-right{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      white-space: nowrap;
+    .iconLink--yt{ background: #ff0000; border-color: rgba(0,0,0,.10); }
+
+    .sr-only{
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
     }
 
     @media (prefers-reduced-motion: reduce){
       .page{ transition:none; }
-      .navBtn, .pill, .top-social a, .footer a{ transition:none; }
+      .navBtn, .pill, .top-social a, .iconLink{ transition:none; }
     }
 
-    @media (max-width: 900px){
-      :root{ --sidebarW: 165px; }
-      .stage{ padding-left: calc(var(--sidebarW) + 36px + var(--safeLeft)); }
-    }
-
-    /* ✅ MOBILE FIXES (THIS IS THE IMPORTANT PART) */
+    /* ===== Mobile Layout + SNAP + FADE HINT ===== */
     @media (max-width: 760px){
       :root{
         --sidebarW: 0px;
-
-        /* ✅ clamp keeps it big & premium on phones */
-        --bookSize: clamp(320px, 92vw, 520px);
+        --bookSize: clamp(330px, 92vw, 520px);
       }
 
-      /* stack header naturally */
       .left-rail{
         position: static;
         width: auto;
-        padding: calc(14px + var(--safeTop)) calc(14px + var(--safeRight)) 0 calc(14px + var(--safeLeft));
+        padding:
+          calc(14px + var(--safeTop))
+          calc(14px + var(--safeRight))
+          0
+          calc(14px + var(--safeLeft));
+        gap: 12px;
       }
 
-      /* keep socials top-right but inside safe area */
+      /* ✅ Horizontal nav bar under the header */
+      .left-nav{
+        position: relative; /* needed for fades */
+        flex-direction: row;
+        gap: 10px;
+        padding: 12px 0 10px;
+        border-top: 1px solid rgba(47,46,41,.16);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+
+        /* ✅ Scroll snap */
+        scroll-snap-type: x proximity;
+        scroll-padding-left: 10px;
+        scroll-padding-right: 10px;
+      }
+      .left-nav::-webkit-scrollbar{ display:none; }
+
+      /* ✅ Fade hints */
+      .left-nav::before,
+      .left-nav::after{
+        content:"";
+        position:absolute;
+        top: 0;
+        bottom: 0;
+        width: 28px;
+        pointer-events:none;
+        z-index: 2;
+        opacity: 1;
+        transition: opacity .18s ease;
+      }
+      .left-nav::before{
+        left: 0;
+        background: linear-gradient(to right, rgba(183,182,172,1), rgba(183,182,172,0));
+      }
+      .left-nav::after{
+        right: 0;
+        background: linear-gradient(to left, rgba(183,182,172,1), rgba(183,182,172,0));
+      }
+      .left-nav.at-start::before{ opacity: 0; }
+      .left-nav.at-end::after{ opacity: 0; }
+
+      .navBtn{
+        flex: 0 0 auto;
+        text-align:center;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.10);
+
+        /* ✅ snap target */
+        scroll-snap-align: start;
+      }
+      .navBtn.active{ background: rgba(255,255,255,.18); }
+
       .top-social{
         top: calc(10px + var(--safeTop));
         right: calc(10px + var(--safeRight));
@@ -559,22 +575,18 @@
       }
       .top-social a{ padding: 8px 8px; }
 
-      /* push the book right under the menu (no dead space) */
+      /* ✅ bring book higher */
       .stage{
         padding:
-          10px
+          8px
           calc(14px + var(--safeRight))
           calc(var(--footerH) + 16px + var(--safeBottom))
           calc(14px + var(--safeLeft));
         align-items:flex-start;
-        justify-content:flex-start;
+        justify-content:center;
       }
+      .book{ margin: 10px auto 0; }
 
-      .book{
-        margin: 14px auto 0;
-      }
-
-      /* scale the page padding + cover so it fits the square */
       .content{ padding: 18px; }
       .cover{ padding: 20px; }
       .lockup{ margin-top: 4px; gap: 8px; }
@@ -584,13 +596,10 @@
 
       .row{ grid-template-columns: 1fr; }
 
-      /* footer tighter on mobile */
       .footer-inner{
         width: calc(100vw - 28px);
-        font-size: 10.5px;
-        gap: 12px;
+        justify-content:center;
       }
-      .footer-right{ display:none; } /* looks cleaner on mobile */
     }
   </style>
 </head>
@@ -621,7 +630,7 @@
       <div class="edge"></div>
       <div class="spine"></div>
 
-      <!-- Page 0 (COVER) -->
+      <!-- Page 0 -->
       <div class="page" data-index="0">
         <div class="face front">
           <div class="cover">
@@ -645,21 +654,22 @@
         <div class="face back"></div>
       </div>
 
-      <!-- Page 1 About -->
+      <!-- Page 1 -->
       <div class="page" data-index="1">
         <div class="face front">
           <div class="content">
             <div class="h">About</div>
             <div class="p">
-              Write this in your voice. Keep it confident. Keep it simple.
-              Tell them what you shoot, what you care about, and what it feels like to work with you.
+              Write this in your voice. Keep it confident.
+              Keep it simple. Tell them what you shoot, what you care about,
+              and what it feels like to work with you.
             </div>
           </div>
         </div>
         <div class="face back"></div>
       </div>
 
-      <!-- Page 2 Services -->
+      <!-- Page 2 -->
       <div class="page" data-index="2">
         <div class="face front">
           <div class="content">
@@ -711,7 +721,7 @@
         <div class="face back"></div>
       </div>
 
-      <!-- Page 3 Book (FORM) -->
+      <!-- Page 3 -->
       <div class="page" data-index="3">
         <div class="face front">
           <div class="content">
@@ -759,7 +769,7 @@
         <div class="face back"></div>
       </div>
 
-      <!-- Page 4 Gallery -->
+      <!-- Page 4 -->
       <div class="page" data-index="4">
         <div class="face front">
           <div class="content">
@@ -777,16 +787,27 @@
 
   <footer class="footer" aria-label="Footer">
     <div class="footer-inner">
-      <div class="footer-links">
-        <a href="mailto:kam@capturedbykam.com">Contact</a>
-        <a id="igFooter" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">Instagram</a>
-        <a id="ytFooter" href="https://www.youtube.com/@YOUR_HANDLE" target="_blank" rel="noreferrer">YouTube</a>
-      </div>
+      <div class="iconRow">
+        <a class="iconLink iconLink--contact" id="contactFooter" href="mailto:kam@capturedbykam.com" aria-label="Contact">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#2f2e29" d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"/>
+          </svg>
+          <span class="sr-only">Contact</span>
+        </a>
 
-      <div class="footer-right">
-        <span>Capturedby_Kam</span>
-        <span aria-hidden="true">•</span>
-        <span>Est. 2025</span>
+        <a class="iconLink iconLink--ig" id="igFooter" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#fff" d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4Zm-4.5 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-2.2a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/>
+          </svg>
+          <span class="sr-only">Instagram</span>
+        </a>
+
+        <a class="iconLink iconLink--yt" id="ytFooter" href="https://www.youtube.com/@YOUR_HANDLE" target="_blank" rel="noreferrer" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#fff" d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.8 4.6 12 4.6 12 4.6s-5.8 0-7.5.5A3 3 0 0 0 2.4 7.2 31.3 31.3 0 0 0 2 12a31.3 31.3 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.7.5 7.5.5 7.5.5s5.8 0 7.5-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 22 12a31.3 31.3 0 0 0-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"/>
+          </svg>
+          <span class="sr-only">YouTube</span>
+        </a>
       </div>
     </div>
   </footer>
@@ -798,10 +819,12 @@
       youtube: "https://www.youtube.com/@YOUR_HANDLE"
     };
 
+    // socials
     document.getElementById("igTop").href = BRAND.instagram;
     document.getElementById("ytTop").href = BRAND.youtube;
     document.getElementById("igFooter").href = BRAND.instagram;
     document.getElementById("ytFooter").href = BRAND.youtube;
+    document.getElementById("contactFooter").href = `mailto:${BRAND.email}`;
 
     const pages = Array.from(document.querySelectorAll(".page"));
     const navBtns = Array.from(document.querySelectorAll(".navBtn"));
@@ -814,6 +837,39 @@
     const dateInput = document.getElementById("dateInput");
     const timeInput = document.getElementById("timeInput");
     const notesInput = document.getElementById("notesInput");
+
+    // mobile nav snap fades
+    const mobileNav = document.querySelector(".left-nav");
+
+    function updateNavFades(){
+      if(!mobileNav) return;
+
+      // Only matters when it can actually scroll
+      const maxScroll = Math.max(0, mobileNav.scrollWidth - mobileNav.clientWidth);
+      const x = mobileNav.scrollLeft;
+
+      mobileNav.classList.toggle("at-start", x <= 2);
+      mobileNav.classList.toggle("at-end", x >= maxScroll - 2);
+
+      // If it can't scroll at all, hide both fades
+      if(maxScroll <= 2){
+        mobileNav.classList.add("at-start", "at-end");
+      }
+    }
+
+    // Throttle with rAF for smoothness
+    let navRAF = 0;
+    function requestNavUpdate(){
+      if(navRAF) return;
+      navRAF = requestAnimationFrame(() => {
+        navRAF = 0;
+        updateNavFades();
+      });
+    }
+
+    mobileNav?.addEventListener("scroll", requestNavUpdate, { passive:true });
+    window.addEventListener("resize", requestNavUpdate);
+    window.addEventListener("orientationchange", requestNavUpdate);
 
     (function setMinDate(){
       const d = new Date();
@@ -849,6 +905,8 @@
         b.classList.toggle("active", isActive);
         b.setAttribute("aria-current", isActive ? "page" : "false");
       });
+
+      requestNavUpdate();
     }
 
     function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
@@ -869,11 +927,11 @@
       const distance = Math.abs(target - currentIndex);
       const dir = target > currentIndex ? 1 : -1;
 
-      const FAST_MS = 1500;
-      const FINAL_MS = 2200;
-
-      const fastDelay = 900;
-      const finalDelay = 1400;
+      // Slow & premium pacing
+      const FAST_MS = 1600;
+      const FINAL_MS = 2400;
+      const fastDelay = 950;
+      const finalDelay = 1500;
 
       document.documentElement.style.setProperty(
         "--turnDur",
@@ -941,6 +999,7 @@
       if (e.key === "ArrowLeft") turnTo(currentIndex - 1);
     });
 
+    // initial
     render();
   </script>
 </body>
