@@ -606,23 +606,23 @@
 
 <body>
   <aside class="left-rail" aria-label="Site navigation">
-    <button class="logo" id="logo" title="Home" aria-label="Go to Home">
+    <button class="logo" id="logo" type="button" title="Home" aria-label="Go to Home">
       <div class="name">Capturedby_Kam</div>
       <div class="tagline">Every Frame, Every Project —<br/>Timeless Authenticity</div>
       <div class="est">Est. <b>2025</b></div>
     </button>
 
     <nav class="left-nav" aria-label="Primary">
-      <button class="navBtn" data-target="1">About</button>
-      <button class="navBtn" data-target="2">Services</button>
-      <button class="navBtn" data-target="3">Book</button>
-      <button class="navBtn" data-target="4">Gallery</button>
+      <button class="navBtn" type="button" data-target="1">About</button>
+      <button class="navBtn" type="button" data-target="2">Services</button>
+      <button class="navBtn" type="button" data-target="3">Book</button>
+      <button class="navBtn" type="button" data-target="4">Gallery</button>
     </nav>
   </aside>
 
   <div class="top-social" aria-label="Social links">
-    <a id="igTop" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">Instagram</a>
-    <a id="ytTop" href="https://www.youtube.com/@YOUR_HANDLE" target="_blank" rel="noreferrer">YouTube</a>
+    <a id="igTop" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a id="ytTop" href="https://www.youtube.com/@YOUR_HANDLE" target="_blank" rel="noopener noreferrer">YouTube</a>
   </div>
 
   <main class="stage">
@@ -679,7 +679,7 @@
               <div class="card">
                 <div class="cardTop">
                   <div class="cardTitle">Youth Sports Packages</div>
-                  <button class="pill pill--small serviceCta" data-service="Youth Sports Packages" type="button">
+                  <button class="pill pill--small serviceCta" type="button" data-service="Youth Sports Packages">
                     More details / Book this
                   </button>
                 </div>
@@ -689,7 +689,7 @@
               <div class="card">
                 <div class="cardTop">
                   <div class="cardTitle">Senior Photos</div>
-                  <button class="pill pill--small serviceCta" data-service="Senior Photos" type="button">
+                  <button class="pill pill--small serviceCta" type="button" data-service="Senior Photos">
                     More details / Book this
                   </button>
                 </div>
@@ -699,7 +699,7 @@
               <div class="card">
                 <div class="cardTop">
                   <div class="cardTitle">Events</div>
-                  <button class="pill pill--small serviceCta" data-service="Events" type="button">
+                  <button class="pill pill--small serviceCta" type="button" data-service="Events">
                     More details / Book this
                   </button>
                 </div>
@@ -709,7 +709,7 @@
               <div class="card">
                 <div class="cardTop">
                   <div class="cardTitle">Video</div>
-                  <button class="pill pill--small serviceCta" data-service="Video" type="button">
+                  <button class="pill pill--small serviceCta" type="button" data-service="Video">
                     More details / Book this
                   </button>
                 </div>
@@ -728,7 +728,7 @@
             <div class="h">Book</div>
             <div class="p">Luxury experience. Simple steps. Tell me what you need.</div>
 
-            <form class="form" id="bookingForm" autocomplete="on">
+            <form class="form" id="bookingForm" autocomplete="on" novalidate>
               <div class="field">
                 <div class="label">Hi, my name is</div>
                 <input class="control" id="nameInput" name="name" type="text" placeholder="Your name" required />
@@ -775,7 +775,7 @@
           <div class="content">
             <div class="h">Gallery</div>
             <div class="p">IG works for now. We can build a full gallery later.</div>
-            <a class="pill" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer">
+            <a class="pill" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noopener noreferrer">
               View Instagram
             </a>
           </div>
@@ -795,14 +795,14 @@
           <span class="sr-only">Contact</span>
         </a>
 
-        <a class="iconLink iconLink--ig" id="igFooter" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noreferrer" aria-label="Instagram">
+        <a class="iconLink iconLink--ig" id="igFooter" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#fff" d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4Zm-4.5 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-2.2a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/>
           </svg>
           <span class="sr-only">Instagram</span>
         </a>
 
-        <a class="iconLink iconLink--yt" id="ytFooter" href="https://www.youtube.com/@YOUR_HANDLE" target="_blank" rel="noreferrer" aria-label="YouTube">
+        <a class="iconLink iconLink--yt" id="ytFooter" href="https://www.youtube.com/@YOUR_HANDLE" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#fff" d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.8 4.6 12 4.6 12 4.6s-5.8 0-7.5.5A3 3 0 0 0 2.4 7.2 31.3 31.3 0 0 0 2 12a31.3 31.3 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.7.5 7.5.5 7.5.5s5.8 0 7.5-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 22 12a31.3 31.3 0 0 0-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"/>
           </svg>
@@ -813,194 +813,226 @@
   </footer>
 
   <script>
-    const BRAND = {
-      email: "kam@capturedbykam.com",
-      instagram: "https://www.instagram.com/CapturedBy_Kam/",
-      youtube: "https://www.youtube.com/@YOUR_HANDLE"
-    };
+    (() => {
+      "use strict";
 
-    // socials
-    document.getElementById("igTop").href = BRAND.instagram;
-    document.getElementById("ytTop").href = BRAND.youtube;
-    document.getElementById("igFooter").href = BRAND.instagram;
-    document.getElementById("ytFooter").href = BRAND.youtube;
-    document.getElementById("contactFooter").href = `mailto:${BRAND.email}`;
+      const BRAND = {
+        email: "kam@capturedbykam.com",
+        instagram: "https://www.instagram.com/CapturedBy_Kam/",
+        youtube: "https://www.youtube.com/@YOUR_HANDLE"
+      };
 
-    const pages = Array.from(document.querySelectorAll(".page"));
-    const navBtns = Array.from(document.querySelectorAll(".navBtn"));
-    const logo = document.getElementById("logo");
-    const enterBtn = document.getElementById("enterBtn");
+      const $ = (sel, root = document) => root.querySelector(sel);
+      const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-    const form = document.getElementById("bookingForm");
-    const nameInput = document.getElementById("nameInput");
-    const serviceSelect = document.getElementById("serviceSelect");
-    const dateInput = document.getElementById("dateInput");
-    const timeInput = document.getElementById("timeInput");
-    const notesInput = document.getElementById("notesInput");
+      const setHref = (id, href) => {
+        const el = document.getElementById(id);
+        if (el && typeof href === "string") el.href = href;
+      };
 
-    // mobile nav snap fades
-    const mobileNav = document.querySelector(".left-nav");
+      // socials
+      setHref("igTop", BRAND.instagram);
+      setHref("ytTop", BRAND.youtube);
+      setHref("igFooter", BRAND.instagram);
+      setHref("ytFooter", BRAND.youtube);
+      setHref("contactFooter", `mailto:${BRAND.email}`);
 
-    function updateNavFades(){
-      if(!mobileNav) return;
+      const pages = $$(".page");
+      const navBtns = $$(".navBtn");
+      const mobileNav = $(".left-nav");
 
-      // Only matters when it can actually scroll
-      const maxScroll = Math.max(0, mobileNav.scrollWidth - mobileNav.clientWidth);
-      const x = mobileNav.scrollLeft;
+      const logo = $("#logo");
+      const enterBtn = $("#enterBtn");
 
-      mobileNav.classList.toggle("at-start", x <= 2);
-      mobileNav.classList.toggle("at-end", x >= maxScroll - 2);
+      const form = $("#bookingForm");
+      const nameInput = $("#nameInput");
+      const serviceSelect = $("#serviceSelect");
+      const dateInput = $("#dateInput");
+      const timeInput = $("#timeInput");
+      const notesInput = $("#notesInput");
 
-      // If it can't scroll at all, hide both fades
-      if(maxScroll <= 2){
-        mobileNav.classList.add("at-start", "at-end");
+      const prefersReducedMotion =
+        window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+
+      const totalPages = pages.length;
+
+      const clampIndex = (n) => {
+        const x = Number(n);
+        if (!Number.isFinite(x)) return 0;
+        return Math.max(0, Math.min(totalPages - 1, x));
+      };
+
+      const pad2 = (n) => String(n).padStart(2, "0");
+      const todayLocalISO = () => {
+        const d = new Date();
+        return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+      };
+
+      // Min date for booking
+      if (dateInput) dateInput.min = todayLocalISO();
+
+      // Mobile nav snap fades
+      let navRAF = 0;
+
+      function updateNavFades() {
+        if (!mobileNav) return;
+
+        const maxScroll = Math.max(0, mobileNav.scrollWidth - mobileNav.clientWidth);
+        const x = mobileNav.scrollLeft;
+
+        mobileNav.classList.toggle("at-start", x <= 2);
+        mobileNav.classList.toggle("at-end", x >= maxScroll - 2);
+
+        // If it can't scroll at all, hide both fades
+        if (maxScroll <= 2) mobileNav.classList.add("at-start", "at-end");
       }
-    }
 
-    // Throttle with rAF for smoothness
-    let navRAF = 0;
-    function requestNavUpdate(){
-      if(navRAF) return;
-      navRAF = requestAnimationFrame(() => {
-        navRAF = 0;
-        updateNavFades();
+      function requestNavUpdate() {
+        if (navRAF) return;
+        navRAF = requestAnimationFrame(() => {
+          navRAF = 0;
+          updateNavFades();
+        });
+      }
+
+      mobileNav?.addEventListener("scroll", requestNavUpdate, { passive: true });
+      window.addEventListener("resize", requestNavUpdate);
+      window.addEventListener("orientationchange", requestNavUpdate);
+
+      let currentIndex = 0;
+      let turnToken = 0;
+
+      function render() {
+        pages.forEach((page, i) => {
+          const turned = i < currentIndex;
+          page.style.transform = turned ? "rotateY(-180deg)" : "rotateY(0deg)";
+          page.style.zIndex = String(turned ? i : (totalPages - i));
+        });
+
+        navBtns.forEach((b) => {
+          const isActive = Number(b.dataset.target) === currentIndex;
+          b.classList.toggle("active", isActive);
+          if (isActive) b.setAttribute("aria-current", "page");
+          else b.removeAttribute("aria-current");
+        });
+
+        requestNavUpdate();
+      }
+
+      function sleep(ms) {
+        return new Promise((r) => setTimeout(r, ms));
+      }
+
+      async function turnTo(target) {
+        target = clampIndex(target);
+        if (target === currentIndex) return;
+
+        turnToken += 1;
+        const myToken = turnToken;
+
+        if (prefersReducedMotion) {
+          currentIndex = target;
+          render();
+          return;
+        }
+
+        const distance = Math.abs(target - currentIndex);
+        const dir = target > currentIndex ? 1 : -1;
+
+        // Slow & premium pacing (same as your original)
+        const FAST_MS = 1600;
+        const FINAL_MS = 2400;
+        const fastDelay = 950;
+        const finalDelay = 1500;
+
+        document.documentElement.style.setProperty(
+          "--turnDur",
+          (distance >= 2) ? `${FAST_MS}ms` : `${FINAL_MS}ms`
+        );
+
+        while (currentIndex !== target) {
+          if (myToken !== turnToken) return;
+
+          const next = currentIndex + dir;
+          const isFinalStep = next === target;
+
+          document.documentElement.style.setProperty(
+            "--turnDur",
+            isFinalStep ? `${FINAL_MS}ms` : `${FAST_MS}ms`
+          );
+
+          currentIndex = next;
+          render();
+
+          await sleep(isFinalStep ? finalDelay : fastDelay);
+        }
+      }
+
+      function goToBookWithService(serviceName) {
+        turnTo(3).then(() => {
+          if (serviceSelect) serviceSelect.value = serviceName;
+          setTimeout(() => nameInput?.focus(), prefersReducedMotion ? 0 : 250);
+        });
+      }
+
+      // Nav clicks (delegated)
+      mobileNav?.addEventListener("click", (e) => {
+        const btn = e.target.closest(".navBtn");
+        if (!btn) return;
+        turnTo(Number(btn.dataset.target));
       });
-    }
 
-    mobileNav?.addEventListener("scroll", requestNavUpdate, { passive:true });
-    window.addEventListener("resize", requestNavUpdate);
-    window.addEventListener("orientationchange", requestNavUpdate);
+      logo?.addEventListener("click", () => turnTo(0));
+      enterBtn?.addEventListener("click", () => turnTo(1));
 
-    (function setMinDate(){
-      const d = new Date();
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth()+1).padStart(2,"0");
-      const dd = String(d.getDate()).padStart(2,"0");
-      dateInput.min = `${yyyy}-${mm}-${dd}`;
+      // Service CTA clicks (delegated)
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".serviceCta");
+        if (!btn) return;
+        goToBookWithService(btn.dataset.service || "");
+      });
+
+      form?.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Let the browser show required-field UI if invalid
+        if (form && typeof form.reportValidity === "function" && !form.reportValidity()) return;
+
+        const name = nameInput?.value.trim() || "";
+        const service = serviceSelect?.value.trim() || "";
+        const date = dateInput?.value || "";
+        const time = timeInput?.value || "";
+        const notes = notesInput?.value.trim() || "";
+
+        const subject = `CBK Booking Request — ${service || "Service"}`;
+        const bodyLines = [
+          "Hi Kam,",
+          "",
+          `My name is: ${name}`,
+          `I am interested in: ${service}`,
+          `When: ${date}`,
+          `What time: ${time}`,
+          notes ? `Notes: ${notes}` : null,
+          "",
+          "Sent from capturedby_kam site"
+        ].filter(Boolean);
+
+        const mailto =
+          `mailto:${BRAND.email}` +
+          `?subject=${encodeURIComponent(subject)}` +
+          `&body=${encodeURIComponent(bodyLines.join("\n"))}`;
+
+        window.location.href = mailto;
+      });
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" || e.key === "Home") turnTo(0);
+        if (e.key === "ArrowRight") turnTo(currentIndex + 1);
+        if (e.key === "ArrowLeft") turnTo(currentIndex - 1);
+      });
+
+      render();
     })();
-
-    const prefersReducedMotion = window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const totalPages = pages.length;
-
-    function clampIndex(n){
-      const x = Number(n);
-      if (!Number.isFinite(x)) return 0;
-      return Math.max(0, Math.min(totalPages - 1, x));
-    }
-
-    let currentIndex = 0;
-    let turnToken = 0;
-
-    function render(){
-      pages.forEach((page, i) => {
-        const turned = i < currentIndex;
-        page.style.transform = turned ? "rotateY(-180deg)" : "rotateY(0deg)";
-        page.style.zIndex = String(turned ? i : (totalPages - i));
-      });
-
-      navBtns.forEach(b => {
-        const isActive = Number(b.dataset.target) === currentIndex;
-        b.classList.toggle("active", isActive);
-        b.setAttribute("aria-current", isActive ? "page" : "false");
-      });
-
-      requestNavUpdate();
-    }
-
-    function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
-
-    async function turnTo(target){
-      target = clampIndex(target);
-
-      turnToken++;
-      const myToken = turnToken;
-
-      if (prefersReducedMotion){
-        currentIndex = target;
-        render();
-        return;
-      }
-      if (target === currentIndex) return;
-
-      const distance = Math.abs(target - currentIndex);
-      const dir = target > currentIndex ? 1 : -1;
-
-      // Slow & premium pacing
-      const FAST_MS = 1600;
-      const FINAL_MS = 2400;
-      const fastDelay = 950;
-      const finalDelay = 1500;
-
-      document.documentElement.style.setProperty(
-        "--turnDur",
-        (distance >= 2) ? `${FAST_MS}ms` : `${FINAL_MS}ms`
-      );
-
-      while(currentIndex !== target){
-        if(myToken !== turnToken) return;
-
-        const next = currentIndex + dir;
-        const isFinalStep = next === target;
-
-        document.documentElement.style.setProperty("--turnDur", isFinalStep ? `${FINAL_MS}ms` : `${FAST_MS}ms`);
-        currentIndex = next;
-        render();
-
-        await sleep(isFinalStep ? finalDelay : fastDelay);
-      }
-    }
-
-    function goToBookWithService(serviceName){
-      turnTo(3).then(() => {
-        serviceSelect.value = serviceName;
-        setTimeout(() => nameInput.focus(), prefersReducedMotion ? 0 : 250);
-      });
-    }
-
-    navBtns.forEach(btn => btn.addEventListener("click", () => turnTo(Number(btn.dataset.target))));
-    logo.addEventListener("click", () => turnTo(0));
-    enterBtn?.addEventListener("click", () => turnTo(1));
-
-    document.querySelectorAll(".serviceCta").forEach(btn => {
-      btn.addEventListener("click", () => goToBookWithService(btn.dataset.service));
-    });
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const name = nameInput.value.trim();
-      const service = serviceSelect.value.trim();
-      const date = dateInput.value;
-      const time = timeInput.value;
-      const notes = notesInput.value.trim();
-
-      const subject = `CBK Booking Request — ${service || "Service"}`;
-      const bodyLines = [
-        `Hi Kam,`,
-        ``,
-        `My name is: ${name}`,
-        `I am interested in: ${service}`,
-        `When: ${date}`,
-        `What time: ${time}`,
-        notes ? `Notes: ${notes}` : null,
-        ``,
-        `Sent from capturedby_kam site`
-      ].filter(Boolean);
-
-      const mailto = `mailto:${encodeURIComponent(BRAND.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
-      window.location.href = mailto;
-    });
-
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" || e.key === "Home") turnTo(0);
-      if (e.key === "ArrowRight") turnTo(currentIndex + 1);
-      if (e.key === "ArrowLeft") turnTo(currentIndex - 1);
-    });
-
-    // initial
-    render();
   </script>
 </body>
 </html>
