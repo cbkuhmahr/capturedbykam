@@ -1,10 +1,13 @@
 const BRAND = {
   email: "kam@capturedbykam.com",
   instagram: "https://www.instagram.com/CapturedBy_Kam/",
-  youtube: "https://www.youtube.com/@YOUR_HANDLE" // <- change this
+  youtube: "https://www.youtube.com/@YOUR_HANDLE" // <- change
 };
 
 const root = document.documentElement;
+
+const headerEl = document.getElementById("siteHeader");
+const footerEl = document.getElementById("siteFooter");
 
 const nav = document.querySelector(".left-nav");
 const navBtns = Array.from(document.querySelectorAll(".navBtn"));
@@ -23,6 +26,8 @@ contactFooter.href = `mailto:${BRAND.email}`;
 igFooter.href = BRAND.instagram;
 ytFooter.href = BRAND.youtube;
 
+const bookEl = document.getElementById("book");
+
 const flipPrevBtn = document.querySelector(".flipPrev");
 const flipNextBtn = document.querySelector(".flipNext");
 
@@ -31,15 +36,32 @@ let pages = Array.from(document.querySelectorAll(".page"));
 const prefersReducedMotion = window.matchMedia &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-let currentIndex = 0;
-let turnToken = 0;
-
-function clampIndex(n){
-  const x = Number(n);
-  if (!Number.isFinite(x)) return 0;
-  return Math.max(0, Math.min(pages.length - 1, x));
+function isMobile(){
+  return window.matchMedia && window.matchMedia("(max-width: 760px)").matches;
 }
 
+/* ===== Layout: set dynamic book max height on mobile ===== */
+function updateBookMaxH(){
+  if(!isMobile()) {
+    root.style.removeProperty("--bookMaxHpx");
+    return;
+  }
+
+  const headerH = headerEl ? headerEl.getBoundingClientRect().height : 0;
+  const footerH = footerEl ? footerEl.getBoundingClientRect().height : 0;
+
+  // Small breathing room
+  const padding = 28;
+
+  // Available height = viewport - header - footer - padding
+  const maxH = Math.max(320, window.innerHeight - headerH - footerH - padding);
+  root.style.setProperty("--bookMaxHpx", `${maxH}px`);
+}
+
+window.addEventListener("resize", updateBookMaxH);
+window.addEventListener("orientationchange", updateBookMaxH);
+
+/* ===== Mobile nav fades ===== */
 function updateNavFades(){
   if(!nav) return;
   const maxScroll = Math.max(0, nav.scrollWidth - nav.clientWidth);
@@ -47,7 +69,6 @@ function updateNavFades(){
 
   nav.classList.toggle("at-start", x <= 2);
   nav.classList.toggle("at-end", x >= maxScroll - 2);
-
   if(maxScroll <= 2) nav.classList.add("at-start", "at-end");
 }
 
@@ -61,8 +82,16 @@ function requestNavUpdate(){
 }
 
 nav?.addEventListener("scroll", requestNavUpdate, { passive:true });
-window.addEventListener("resize", requestNavUpdate);
-window.addEventListener("orientationchange", requestNavUpdate);
+
+/* ===== Page turning ===== */
+let currentIndex = 0;
+let turnToken = 0;
+
+function clampIndex(n){
+  const x = Number(n);
+  if (!Number.isFinite(x)) return 0;
+  return Math.max(0, Math.min(pages.length - 1, x));
+}
 
 function render(){
   const total = pages.length;
@@ -79,7 +108,6 @@ function render(){
     b.setAttribute("aria-current", isActive ? "page" : "false");
   });
 
-  // flip controls (disable at ends)
   flipPrevBtn.disabled = currentIndex <= 0;
   flipNextBtn.disabled = currentIndex >= total - 1;
   flipPrevBtn.style.opacity = flipPrevBtn.disabled ? "0.35" : "1";
@@ -106,10 +134,11 @@ async function turnTo(target){
   const distance = Math.abs(target - currentIndex);
   const dir = target > currentIndex ? 1 : -1;
 
+  // Premium pacing
   const FAST_MS = 1700;
   const FINAL_MS = 2600;
-  const fastDelay = 950;
-  const finalDelay = 1550;
+  const fastDelay = 900;
+  const finalDelay = 1500;
 
   root.style.setProperty("--turnDur", (distance >= 2) ? `${FAST_MS}ms` : `${FINAL_MS}ms`);
 
@@ -129,6 +158,51 @@ async function turnTo(target){
 
 function nextPage(){ turnTo(currentIndex + 1); }
 function prevPage(){ turnTo(currentIndex - 1); }
+
+/* ===== Tap-to-flip zones (without touching menus) ===== */
+function shouldIgnoreTap(target){
+  return !!target.closest("a,button,input,select,textarea,label");
+}
+
+bookEl?.addEventListener("click", (e) => {
+  if(!bookEl) return;
+  if(shouldIgnoreTap(e.target)) return;
+
+  const rect = bookEl.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+
+  // Tap right/left edge zones (15% each)
+  if (x > rect.width * 0.85) nextPage();
+  else if (x < rect.width * 0.15) prevPage();
+});
+
+/* ===== Swipe to flip ===== */
+let touchStartX = 0;
+let touchStartY = 0;
+let tracking = false;
+
+bookEl?.addEventListener("touchstart", (e) => {
+  if(e.touches.length !== 1) return;
+  if(shouldIgnoreTap(e.target)) return;
+  tracking = true;
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive:true });
+
+bookEl?.addEventListener("touchend", (e) => {
+  if(!tracking) return;
+  tracking = false;
+  if(e.changedTouches.length !== 1) return;
+
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+
+  // horizontal intent
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+    if (dx < 0) nextPage();
+    else prevPage();
+  }
+}, { passive:true });
 
 /* ===== Booking form ===== */
 const form = document.getElementById("bookingForm");
@@ -184,27 +258,22 @@ form?.addEventListener("submit", (e) => {
   window.location.href = mailto;
 });
 
-/* ===== Gallery: build book pages from /images folder ===== */
+/* ===== Gallery ===== */
 const galleryStatus = document.getElementById("galleryStatus");
-const galleryCoverPage = document.getElementById("galleryCoverPage");
-const bookEl = document.querySelector(".book");
+const bookContainer = document.querySelector(".book");
 
 function buildCandidates(i){
-  const pad2 = String(i).padStart(2,"0");   // 01..99
-  const pad3 = String(i).padStart(3,"0");  // 001..999
-
-  // Your folder shows: images/images.01.JPG, images/images.010.JPG, etc.
+  const pad2 = String(i).padStart(2,"0");
+  const pad3 = String(i).padStart(3,"0");
   return [
     `images/images.${pad2}.JPG`,
     `images/images.${pad3}.JPG`,
     `images/images.${pad2}.jpg`,
     `images/images.${pad3}.jpg`,
-    `images/images.${i}.JPG`,
-    `images/images.${i}.jpg`,
   ];
 }
 
-function probeImage(url, timeoutMs = 1200){
+function probeImage(url, timeoutMs = 900){
   return new Promise((resolve) => {
     const img = new Image();
     let done = false;
@@ -228,20 +297,34 @@ function probeImage(url, timeoutMs = 1200){
       resolve(false);
     };
 
-    img.src = url + `?v=${Date.now()}`; // avoid caching during testing
+    // no cache bust in production (better performance)
+    img.src = url;
   });
+}
+
+async function loadManifest(){
+  try{
+    const res = await fetch("images/manifest.json", { cache: "no-store" });
+    if(!res.ok) return null;
+    const data = await res.json();
+    if(!Array.isArray(data)) return null;
+
+    // allow either ["images.01.JPG"] or ["images/images.01.JPG"]
+    return data.map(x => (x.startsWith("images/") ? x : `images/${x}`));
+  }catch{
+    return null;
+  }
 }
 
 async function discoverImages(){
   const found = [];
-  const max = 60;
-
+  const max = 70;
   let missesAfterFound = 0;
 
   for(let i=1;i<=max;i++){
     const urls = buildCandidates(i);
-
     let okUrl = null;
+
     for(const u of urls){
       // eslint-disable-next-line no-await-in-loop
       const ok = await probeImage(u);
@@ -256,7 +339,6 @@ async function discoverImages(){
       if(missesAfterFound >= 10) break;
     }
   }
-
   return found;
 }
 
@@ -270,7 +352,6 @@ function createGalleryPage(index, url, label){
       <div class="pageBody">
         <div class="h">GALLERY</div>
         <div class="p subtle">${label}</div>
-
         <div class="photoWrap">
           <img class="photo" src="${url}" alt="${label}" loading="lazy" />
         </div>
@@ -282,60 +363,43 @@ function createGalleryPage(index, url, label){
   return page;
 }
 
-function injectGalleryStyles(){
-  // minimal add-on styles (keeps CSS clean without needing a 4th file)
-  const css = `
-    .photoWrap{
-      margin-top: 14px;
-      border: 1px solid rgba(47,46,41,.14);
-      background: rgba(0,0,0,.02);
-      padding: 10px;
-    }
-    .photo{
-      width: 100%;
-      height: auto;
-      display:block;
-      object-fit: cover;
-    }
-  `;
-  const style = document.createElement("style");
-  style.textContent = css;
-  document.head.appendChild(style);
+function preload(urls, startIdx){
+  const next1 = urls[startIdx + 1];
+  const next2 = urls[startIdx + 2];
+  [next1, next2].filter(Boolean).forEach(u => {
+    const img = new Image();
+    img.src = u;
+  });
 }
 
 async function buildGallery(){
-  if(!galleryStatus || !bookEl) return;
+  if(!galleryStatus || !bookContainer) return;
 
-  injectGalleryStyles();
-
-  const urls = await discoverImages();
+  let urls = await loadManifest();
+  if(!urls) urls = await discoverImages();
 
   if(!urls.length){
-    galleryStatus.textContent = "No images found. Add files to /images as images.01.JPG, images.02.JPG, etc.";
+    galleryStatus.textContent = "No images found. Add files in /images or add images/manifest.json.";
     return;
   }
 
-  galleryStatus.textContent = `${urls.length} images loaded. Flip to view.`;
+  galleryStatus.textContent = `${urls.length} images loaded. Swipe or flip to view.`;
 
-  // Insert pages after gallery cover (index 4)
   const startIndex = 5;
   let idx = startIndex;
 
   urls.forEach((url, i) => {
     const label = `Photo ${i+1} of ${urls.length}`;
     const page = createGalleryPage(idx, url, label);
-    bookEl.appendChild(page);
+    bookContainer.appendChild(page);
     idx++;
   });
 
-  // refresh pages list AFTER injection
   pages = Array.from(document.querySelectorAll(".page"));
-
-  // Ensure Gallery nav goes to the gallery cover
-  const galleryBtn = navBtns.find(b => b.textContent.trim() === "GALLERY");
-  if(galleryBtn) galleryBtn.dataset.target = "4";
-
   render();
+
+  // preload a couple images for smoothness
+  preload(urls, 0);
 }
 
 /* ===== Events ===== */
@@ -346,13 +410,12 @@ enterBtn?.addEventListener("click", () => turnTo(1));
 flipPrevBtn.addEventListener("click", prevPage);
 flipNextBtn.addEventListener("click", nextPage);
 
-// Keyboard support
 window.addEventListener("keydown", (e) => {
   if (e.key === "Escape" || e.key === "Home") turnTo(0);
   if (e.key === "ArrowRight") nextPage();
   if (e.key === "ArrowLeft") prevPage();
 });
 
-// Initial
+updateBookMaxH();
 render();
 buildGallery();
