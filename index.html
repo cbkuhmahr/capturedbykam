@@ -1,3 +1,4 @@
+<!-- File: index.html -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -15,7 +16,7 @@
 
 <body>
   <aside class="left-rail" id="siteHeader" aria-label="Site navigation">
-    <button class="logo" id="logo" title="Home" aria-label="Go to Home">
+    <button class="logo" id="logo" title="Home" aria-label="Go to Home" type="button">
       <div class="brandName">CAPTUREDBY_KAM</div>
       <div class="brandLines">
         <div>Every Frame, Every Project —</div>
@@ -25,10 +26,10 @@
     </button>
 
     <nav class="left-nav" aria-label="Primary">
-      <button class="navBtn" data-target="1">ABOUT</button>
-      <button class="navBtn" data-target="2">SERVICES</button>
-      <button class="navBtn" data-target="3">BOOK</button>
-      <button class="navBtn" data-target="4">GALLERY</button>
+      <button class="navBtn" data-target="1" type="button">ABOUT</button>
+      <button class="navBtn" data-target="2" type="button">SERVICES</button>
+      <button class="navBtn" data-target="3" type="button">BOOK</button>
+      <button class="navBtn" data-target="4" type="button">GALLERY</button>
     </nav>
   </aside>
 
@@ -76,7 +77,9 @@
           <div class="pageBody">
             <div class="h">ABOUT</div>
             <div class="p">
-              Husband. Father. Midwest-based visual storyteller behind Capturedby_Kam. Tech-driven, photography-obsessed, I shoot with intention—clean and real. From youth sports and senior photos to headshots, events, and cinematic video—every frame, every project—timeless visuals. Timeless Authenticity.
+              Husband. Father. Midwest-based visual storyteller behind Capturedby_Kam. Tech-driven, photography-obsessed,
+              I shoot with intention—clean and real. From youth sports and senior photos to headshots, events, and
+              cinematic video—every frame, every project—timeless visuals. Timeless Authenticity.
             </div>
           </div>
         </div>
@@ -189,7 +192,7 @@
         <div class="face front">
           <div class="pageBody">
             <div class="h">GALLERY</div>
-            <div class="p" id="galleryStatus">Loading gallery…</div>
+            <div class="p" id="galleryStatus" aria-live="polite">Loading gallery…</div>
             <div class="p subtle">Swipe or use the curl to flip through photos.</div>
           </div>
         </div>
