@@ -5,624 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Capturedby_Kam</title>
 
+  <!-- Brand + UI fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --bg:#B7B6AC;
-      --text:#2f2e29;
-      --muted: rgba(47,46,41,.70);
-      --line: rgba(47,46,41,.18);
-      --shadow: rgba(0,0,0,.12);
-
-      --paperTop: #fbfaf6;
-      --paperBottom: #f1efe8;
-      --paperBackTop: #f7f6f0;
-      --paperBackBottom: #ece9e1;
-
-      --radius: 14px;
-      --sidebarW: 190px;
-      --footerH: 64px;
-
-      /* Desktop square sizing (no vmin traps) */
-      --bookSize: min(
-        760px,
-        calc(100vw - (var(--sidebarW) + 110px)),
-        calc(100vh - 220px)
-      );
-
-      /* Slower, more authentic */
-      --turnDur: 2100ms;
-
-      /* iOS safe areas */
-      --safeTop: env(safe-area-inset-top, 0px);
-      --safeRight: env(safe-area-inset-right, 0px);
-      --safeBottom: env(safe-area-inset-bottom, 0px);
-      --safeLeft: env(safe-area-inset-left, 0px);
-    }
-
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--text);
-      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      letter-spacing: .01em;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    a{ color:inherit; text-decoration:none; }
-    a:hover{ text-decoration:underline; }
-
-    /* ===== Left rail (desktop) ===== */
-    .left-rail{
-      position: fixed;
-      left: calc(22px + var(--safeLeft));
-      top: calc(18px + var(--safeTop));
-      width: var(--sidebarW);
-      z-index: 60;
-      display:flex;
-      flex-direction:column;
-      gap: 14px;
-      user-select:none;
-    }
-
-    .logo{
-      appearance:none;
-      border:0;
-      background:transparent;
-      padding:0;
-      text-align:left;
-      cursor:pointer;
-      color:inherit;
-      font: inherit;
-    }
-    .logo .name{
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    .logo .tagline{
-      font-size: 10.5px;
-      line-height: 1.25;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-    .logo .est{
-      margin-top: 10px;
-      font-size: 10.5px;
-      color: var(--muted);
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-    .logo .est b{
-      font-weight: 700;
-      color: #1f51ff;
-    }
-
-    /* Desktop nav */
-    .left-nav{
-      display:flex;
-      flex-direction:column;
-      gap: 6px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(47,46,41,.16);
-    }
-
-    .navBtn{
-      appearance:none;
-      border: 1px solid transparent;
-      background: transparent;
-      color: var(--muted);
-      font: inherit;
-      font-size: 11px;
-      letter-spacing: .12em;
-      padding: 10px 10px;
-      border-radius: 10px;
-      text-align:left;
-      cursor:pointer;
-      text-transform: uppercase;
-      transition: background .15s ease, border-color .15s ease, color .15s ease;
-      white-space: nowrap;
-    }
-    .navBtn:hover{
-      color: var(--text);
-      border-color: var(--line);
-      background: rgba(255,255,255,.10);
-      text-decoration:none;
-    }
-    .navBtn.active{
-      color: var(--text);
-      border-color: rgba(47,46,41,.42);
-      background: rgba(255,255,255,.16);
-      font-weight: 600;
-    }
-
-    /* ===== Top-right socials ===== */
-    .top-social{
-      position: fixed;
-      top: calc(18px + var(--safeTop));
-      right: calc(22px + var(--safeRight));
-      z-index: 70;
-      display:flex;
-      gap: 12px;
-      align-items:center;
-      font-size: 11px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .top-social a{
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      transition: background .15s ease, border-color .15s ease, color .15s ease;
-    }
-    .top-social a:hover{
-      color: var(--text);
-      border-color: var(--line);
-      background: rgba(255,255,255,.10);
-      text-decoration:none;
-    }
-
-    /* Focus */
-    .navBtn:focus-visible,
-    .pill:focus-visible,
-    .logo:focus-visible,
-    .top-social a:focus-visible,
-    .footer a:focus-visible,
-    input:focus-visible,
-    select:focus-visible{
-      outline: 2px solid rgba(31,81,255,.85);
-      outline-offset: 3px;
-      border-radius: 12px;
-    }
-
-    /* ===== Stage ===== */
-    .stage{
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:
-        calc(90px + var(--safeTop))
-        calc(22px + var(--safeRight))
-        calc(var(--footerH) + 22px + var(--safeBottom))
-        calc(var(--sidebarW) + 50px + var(--safeLeft));
-    }
-
-    /* ===== Book ===== */
-    .book{
-      width: var(--bookSize);
-      height: var(--bookSize);
-      position: relative;
-      perspective: 1700px;
-    }
-    .book::before{
-      content:"";
-      position:absolute;
-      inset: 0;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.10));
-      box-shadow: 0 18px 45px var(--shadow);
-    }
-    .spine{
-      position:absolute;
-      top: 10px;
-      bottom: 10px;
-      left: 50%;
-      width: 2px;
-      transform: translateX(-1px);
-      background: rgba(47,46,41,.12);
-      border-radius: 999px;
-      pointer-events:none;
-      z-index: 2;
-    }
-    .edge{
-      position:absolute;
-      top: 12px;
-      bottom: 12px;
-      right: 12px;
-      width: 26px;
-      border-left: 1px solid rgba(47,46,41,.16);
-      border-radius: 0 12px 12px 0;
-      background:
-        repeating-linear-gradient(
-          to bottom,
-          rgba(47,46,41,.12) 0px,
-          rgba(47,46,41,.12) 2px,
-          rgba(47,46,41,.06) 2px,
-          rgba(47,46,41,.06) 5px
-        );
-      opacity: .55;
-      pointer-events:none;
-      z-index: 1;
-    }
-    .page{
-      position:absolute;
-      inset: 10px;
-      transform-style: preserve-3d;
-      transform-origin: left center;
-      border-radius: calc(var(--radius) - 2px);
-      transition: transform var(--turnDur) cubic-bezier(.16,.86,.16,1);
-      z-index: 3;
-    }
-    .face{
-      position:absolute;
-      inset:0;
-      border-radius: calc(var(--radius) - 2px);
-      backface-visibility: hidden;
-      overflow:hidden;
-      border: 1px solid rgba(47,46,41,.20);
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.35),
-        0 10px 22px rgba(0,0,0,.10);
-    }
-    .front{ background: linear-gradient(180deg, var(--paperTop), var(--paperBottom)); }
-    .back{
-      transform: rotateY(180deg);
-      background: linear-gradient(180deg, var(--paperBackTop), var(--paperBackBottom));
-    }
-
-    /* ===== Page content ===== */
-    .content{
-      padding: 26px;
-      display:flex;
-      flex-direction:column;
-      gap: 14px;
-    }
-    .h{
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing:.16em;
-      text-transform: uppercase;
-    }
-    .p{
-      font-size: 12px;
-      line-height: 1.7;
-      color: var(--muted);
-      max-width: 78ch;
-    }
-    .stack{ display:flex; flex-direction:column; gap: 12px; }
-
-    .card{
-      border: 1px solid rgba(47,46,41,.18);
-      border-radius: 12px;
-      background: rgba(0,0,0,.02);
-      padding: 14px;
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    .cardTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 12px;
-    }
-    .cardTitle{
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    .cardBody{
-      font-size: 12px;
-      line-height: 1.65;
-      color: var(--muted);
-    }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      border: 1px solid rgba(47,46,41,.22);
-      border-radius: 999px;
-      padding: 10px 14px;
-      background: rgba(0,0,0,.03);
-      font-size: 11px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      cursor:pointer;
-      width: fit-content;
-    }
-    .pill:hover{ background: rgba(0,0,0,.05); text-decoration:none; }
-    .pill--small{ padding: 8px 12px; font-size: 10.5px; letter-spacing: .12em; }
-
-    /* ===== Cover ===== */
-    .cover{
-      height:100%;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      padding: 34px;
-    }
-    .lockup{
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .lockupName{
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: .10em;
-      text-transform: uppercase;
-      line-height: 1.1;
-    }
-    .lockupLine{
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: .06em;
-      line-height: 1.45;
-      text-transform: uppercase;
-    }
-    .lockupEst{
-      margin-top: 8px;
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-    .lockupEst b{ color: #1f51ff; font-weight: 700; }
-
-    .coverMid{
-      display:flex;
-      flex-direction:column;
-      align-items:flex-start;
-      justify-content:center;
-      flex:1;
-    }
-    .coverBottom{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(47,46,41,.14);
-      color: var(--muted);
-      font-size: 10.5px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-
-    /* ===== Booking form ===== */
-    .form{
-      display:flex;
-      flex-direction:column;
-      gap: 14px;
-      margin-top: 6px;
-      width: 100%;
-      max-width: 520px;
-    }
-    .field{ display:flex; flex-direction:column; gap: 8px; }
-    .label{
-      font-size: 10.5px;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .control{
-      width: 100%;
-      border: 1px solid rgba(47,46,41,.18);
-      background: rgba(255,255,255,.35);
-      border-radius: 12px;
-      padding: 12px 12px;
-      font-size: 13px;
-      color: var(--text);
-      outline: none;
-      transition: border-color .15s ease, background .15s ease;
-    }
-    .control:hover{ background: rgba(255,255,255,.48); }
-    .control:focus{
-      border-color: rgba(31,81,255,.55);
-      background: rgba(255,255,255,.55);
-    }
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .fineprint{
-      font-size: 11px;
-      line-height: 1.6;
-      color: var(--muted);
-    }
-
-    /* ===== Footer icons ===== */
-    .footer{
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: calc(var(--footerH) + var(--safeBottom));
-      padding-bottom: var(--safeBottom);
-      z-index: 80;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: rgba(183,182,172,.88);
-      backdrop-filter: blur(8px);
-      border-top: 1px solid rgba(47,46,41,.16);
-    }
-    .footer-inner{
-      width: min(1200px, calc(100vw - 44px));
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 18px;
-    }
-
-    .iconRow{
-      display:flex;
-      align-items:center;
-      gap: 14px;
-    }
-
-    .iconLink{
-      width: 38px;
-      height: 38px;
-      display:grid;
-      place-items:center;
-      border-radius: 999px;
-      border: 1px solid rgba(47,46,41,.14);
-      box-shadow: 0 8px 18px rgba(0,0,0,.10);
-      transition: transform .15s ease, filter .15s ease;
-    }
-    .iconLink:hover{ transform: translateY(-1px); filter: brightness(1.02); text-decoration:none; }
-    .iconLink svg{ width: 18px; height: 18px; display:block; }
-
-    .iconLink--contact{ background: rgba(255,255,255,.40); }
-    .iconLink--ig{
-      background: radial-gradient(circle at 30% 110%, #feda75 0%, #fa7e1e 30%, #d62976 60%, #962fbf 80%, #4f5bd5 100%);
-      border-color: rgba(0,0,0,.08);
-    }
-    .iconLink--yt{ background: #ff0000; border-color: rgba(0,0,0,.10); }
-
-    .sr-only{
-      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
-      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .page{ transition:none; }
-      .navBtn, .pill, .top-social a, .iconLink{ transition:none; }
-    }
-
-    /* ===== Mobile Layout + SNAP + FADE HINT ===== */
-    @media (max-width: 760px){
-      :root{
-        --sidebarW: 0px;
-        --bookSize: clamp(330px, 92vw, 520px);
-      }
-
-      .left-rail{
-        position: static;
-        width: auto;
-        padding:
-          calc(14px + var(--safeTop))
-          calc(14px + var(--safeRight))
-          0
-          calc(14px + var(--safeLeft));
-        gap: 12px;
-      }
-
-      /* ✅ Horizontal nav bar under the header */
-      .left-nav{
-        position: relative; /* needed for fades */
-        flex-direction: row;
-        gap: 10px;
-        padding: 12px 0 10px;
-        border-top: 1px solid rgba(47,46,41,.16);
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-
-        /* ✅ Scroll snap */
-        scroll-snap-type: x proximity;
-        scroll-padding-left: 10px;
-        scroll-padding-right: 10px;
-      }
-      .left-nav::-webkit-scrollbar{ display:none; }
-
-      /* ✅ Fade hints */
-      .left-nav::before,
-      .left-nav::after{
-        content:"";
-        position:absolute;
-        top: 0;
-        bottom: 0;
-        width: 28px;
-        pointer-events:none;
-        z-index: 2;
-        opacity: 1;
-        transition: opacity .18s ease;
-      }
-      .left-nav::before{
-        left: 0;
-        background: linear-gradient(to right, rgba(183,182,172,1), rgba(183,182,172,0));
-      }
-      .left-nav::after{
-        right: 0;
-        background: linear-gradient(to left, rgba(183,182,172,1), rgba(183,182,172,0));
-      }
-      .left-nav.at-start::before{ opacity: 0; }
-      .left-nav.at-end::after{ opacity: 0; }
-
-      .navBtn{
-        flex: 0 0 auto;
-        text-align:center;
-        padding: 10px 14px;
-        border-radius: 999px;
-        background: rgba(255,255,255,.10);
-
-        /* ✅ snap target */
-        scroll-snap-align: start;
-      }
-      .navBtn.active{ background: rgba(255,255,255,.18); }
-
-      .top-social{
-        top: calc(10px + var(--safeTop));
-        right: calc(10px + var(--safeRight));
-        gap: 8px;
-        font-size: 10.5px;
-      }
-      .top-social a{ padding: 8px 8px; }
-
-      /* ✅ bring book higher */
-      .stage{
-        padding:
-          8px
-          calc(14px + var(--safeRight))
-          calc(var(--footerH) + 16px + var(--safeBottom))
-          calc(14px + var(--safeLeft));
-        align-items:flex-start;
-        justify-content:center;
-      }
-      .book{ margin: 10px auto 0; }
-
-      .content{ padding: 18px; }
-      .cover{ padding: 20px; }
-      .lockup{ margin-top: 4px; gap: 8px; }
-      .lockupName{ font-size: 15px; }
-      .lockupLine{ font-size: 11px; line-height: 1.35; }
-      .lockupEst{ font-size: 10.5px; }
-
-      .row{ grid-template-columns: 1fr; }
-
-      .footer-inner{
-        width: calc(100vw - 28px);
-        justify-content:center;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
 </head>
 
 <body>
   <aside class="left-rail" aria-label="Site navigation">
-    <button class="logo" id="logo" type="button" title="Home" aria-label="Go to Home">
-      <div class="name">Capturedby_Kam</div>
-      <div class="tagline">Every Frame, Every Project —<br/>Timeless Authenticity</div>
-      <div class="est">Est. <b>2025</b></div>
+    <!-- ✅ Home button lockup styled to match your image -->
+    <button class="logo" id="logo" title="Home" aria-label="Go to Home">
+      <div class="brandName">CAPTUREDBY_KAM</div>
+      <div class="brandLines">
+        <div>Every Frame, Every Project —</div>
+        <div>Timeless Authenticity</div>
+      </div>
+      <div class="brandEst">Est. <b>2025</b></div>
     </button>
 
     <nav class="left-nav" aria-label="Primary">
-      <button class="navBtn" type="button" data-target="1">About</button>
-      <button class="navBtn" type="button" data-target="2">Services</button>
-      <button class="navBtn" type="button" data-target="3">Book</button>
-      <button class="navBtn" type="button" data-target="4">Gallery</button>
+      <button class="navBtn" data-target="1">ABOUT</button>
+      <button class="navBtn" data-target="2">SERVICES</button>
+      <button class="navBtn" data-target="3">BOOK</button>
+      <button class="navBtn" data-target="4">GALLERY</button>
     </nav>
   </aside>
 
   <div class="top-social" aria-label="Social links">
-    <a id="igTop" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noopener noreferrer">Instagram</a>
-    <a id="ytTop" href="https://www.youtube.com/@YOUR_HANDLE" target="_blank" rel="noopener noreferrer">YouTube</a>
+    <a id="igTop" href="#" target="_blank" rel="noreferrer">INSTAGRAM</a>
+    <a id="ytTop" href="#" target="_blank" rel="noreferrer">YOUTUBE</a>
   </div>
 
   <main class="stage">
@@ -630,57 +44,66 @@
       <div class="edge"></div>
       <div class="spine"></div>
 
-      <!-- Page 0 -->
+      <!-- ✅ Page curl controls -->
+      <div class="flipControls" aria-label="Page turn controls">
+        <button class="flipBtn flipPrev" type="button" aria-label="Previous page">
+          <span aria-hidden="true">‹</span>
+        </button>
+
+        <button class="flipBtn flipNext curlBtn" type="button" aria-label="Next page">
+          <span class="curlArrows" aria-hidden="true">›</span>
+        </button>
+      </div>
+
+      <!-- Page 0: Cover -->
       <div class="page" data-index="0">
         <div class="face front">
           <div class="cover">
-            <div class="lockup">
-              <div class="lockupName">Capturedby_Kam</div>
-              <div class="lockupLine">Every frame, Every Project</div>
-              <div class="lockupLine">Timeless Authenticity</div>
-              <div class="lockupEst">Est. <b>2025</b></div>
+            <div class="coverLockup">
+              <div class="brandName">CAPTUREDBY_KAM</div>
+              <div class="brandLines">
+                <div>Every Frame, Every Project —</div>
+                <div>Timeless Authenticity</div>
+              </div>
+              <div class="brandEst">Est. <b>2025</b></div>
             </div>
 
-            <div class="coverMid">
-              <button class="pill" id="enterBtn" type="button">Enter</button>
+            <div class="coverCTA">
+              <button class="btn" id="enterBtn" type="button">ENTER</button>
             </div>
 
-            <div class="coverBottom">
-              <div>Use the menu to explore</div>
-              <div>© 2025</div>
-            </div>
+            <!-- ✅ Removed “Use the menu to explore / 2025” text -->
+            <div class="coverRule" aria-hidden="true"></div>
           </div>
         </div>
         <div class="face back"></div>
       </div>
 
-      <!-- Page 1 -->
+      <!-- Page 1: About -->
       <div class="page" data-index="1">
         <div class="face front">
-          <div class="content">
-            <div class="h">About</div>
+          <div class="pageBody">
+            <div class="h">ABOUT</div>
             <div class="p">
-              Write this in your voice. Keep it confident.
-              Keep it simple. Tell them what you shoot, what you care about,
-              and what it feels like to work with you.
+              Husband. Father. Midwest-based visual storyteller behind Capturedby_Kam. Tech-driven, photography-obsessed, I shoot with intention—clean and real. From youth sports and senior photos to headshots, events, and cinematic video—every frame, every project—timeless visuals. Timeless Authenticity.
             </div>
           </div>
         </div>
         <div class="face back"></div>
       </div>
 
-      <!-- Page 2 -->
+      <!-- Page 2: Services (scrollable) -->
       <div class="page" data-index="2">
         <div class="face front">
-          <div class="content">
-            <div class="h">Services</div>
+          <div class="pageBody">
+            <div class="h">SERVICES</div>
 
             <div class="stack">
               <div class="card">
                 <div class="cardTop">
-                  <div class="cardTitle">Youth Sports Packages</div>
-                  <button class="pill pill--small serviceCta" type="button" data-service="Youth Sports Packages">
-                    More details / Book this
+                  <div class="cardTitle">YOUTH SPORTS PACKAGES</div>
+                  <button class="btnSmall serviceCta" data-service="Youth Sports Packages" type="button">
+                    MORE DETAILS / BOOK
                   </button>
                 </div>
                 <div class="cardBody">Media days, action shots, team posters, prints + digital.</div>
@@ -688,9 +111,9 @@
 
               <div class="card">
                 <div class="cardTop">
-                  <div class="cardTitle">Senior Photos</div>
-                  <button class="pill pill--small serviceCta" type="button" data-service="Senior Photos">
-                    More details / Book this
+                  <div class="cardTitle">SENIOR PHOTOS</div>
+                  <button class="btnSmall serviceCta" data-service="Senior Photos" type="button">
+                    MORE DETAILS / BOOK
                   </button>
                 </div>
                 <div class="cardBody">Clean portraits, cinematic edits, print-ready delivery.</div>
@@ -698,9 +121,19 @@
 
               <div class="card">
                 <div class="cardTop">
-                  <div class="cardTitle">Events</div>
-                  <button class="pill pill--small serviceCta" type="button" data-service="Events">
-                    More details / Book this
+                  <div class="cardTitle">HEADSHOTS</div>
+                  <button class="btnSmall serviceCta" data-service="Headshots" type="button">
+                    MORE DETAILS / BOOK
+                  </button>
+                </div>
+                <div class="cardBody">Modern, sharp headshots for athletes, professionals, and creatives.</div>
+              </div>
+
+              <div class="card">
+                <div class="cardTop">
+                  <div class="cardTitle">EVENTS</div>
+                  <button class="btnSmall serviceCta" data-service="Events" type="button">
+                    MORE DETAILS / BOOK
                   </button>
                 </div>
                 <div class="cardBody">Parties, celebrations, community moments — documented right.</div>
@@ -708,9 +141,9 @@
 
               <div class="card">
                 <div class="cardTop">
-                  <div class="cardTitle">Video</div>
-                  <button class="pill pill--small serviceCta" type="button" data-service="Video">
-                    More details / Book this
+                  <div class="cardTitle">CINEMATIC VIDEO</div>
+                  <button class="btnSmall serviceCta" data-service="Cinematic Video" type="button">
+                    MORE DETAILS / BOOK
                   </button>
                 </div>
                 <div class="cardBody">Highlight reels, promos, story-driven short visuals.</div>
@@ -721,47 +154,48 @@
         <div class="face back"></div>
       </div>
 
-      <!-- Page 3 -->
+      <!-- Page 3: Book -->
       <div class="page" data-index="3">
         <div class="face front">
-          <div class="content">
-            <div class="h">Book</div>
+          <div class="pageBody">
+            <div class="h">BOOK</div>
             <div class="p">Luxury experience. Simple steps. Tell me what you need.</div>
 
-            <form class="form" id="bookingForm" autocomplete="on" novalidate>
+            <form class="form" id="bookingForm" autocomplete="on">
               <div class="field">
-                <div class="label">Hi, my name is</div>
+                <div class="label">HI, MY NAME IS</div>
                 <input class="control" id="nameInput" name="name" type="text" placeholder="Your name" required />
               </div>
 
               <div class="field">
-                <div class="label">I am interested in</div>
+                <div class="label">I AM INTERESTED IN</div>
                 <select class="control" id="serviceSelect" name="service" required>
                   <option value="" selected disabled>Select a service</option>
                   <option>Youth Sports Packages</option>
                   <option>Senior Photos</option>
+                  <option>Headshots</option>
                   <option>Events</option>
-                  <option>Video</option>
+                  <option>Cinematic Video</option>
                 </select>
               </div>
 
               <div class="row">
                 <div class="field">
-                  <div class="label">When?</div>
+                  <div class="label">WHEN?</div>
                   <input class="control" id="dateInput" name="date" type="date" required />
                 </div>
                 <div class="field">
-                  <div class="label">What time?</div>
+                  <div class="label">WHAT TIME?</div>
                   <input class="control" id="timeInput" name="time" type="time" required />
                 </div>
               </div>
 
               <div class="field">
-                <div class="label">Anything else?</div>
-                <input class="control" id="notesInput" name="notes" type="text" placeholder="Optional notes (location, team name, etc.)" />
+                <div class="label">ANYTHING ELSE?</div>
+                <input class="control" id="notesInput" name="notes" type="text" placeholder="Optional notes (location, team, etc.)" />
               </div>
 
-              <button class="pill" type="submit">Send Request</button>
+              <button class="btn" type="submit">SEND REQUEST</button>
               <div class="fineprint">You’ll receive a response within 24–48 hours.</div>
             </form>
           </div>
@@ -769,270 +203,30 @@
         <div class="face back"></div>
       </div>
 
-      <!-- Page 4 -->
-      <div class="page" data-index="4">
+      <!-- Page 4: Gallery cover (images pages will be injected after this) -->
+      <div class="page" data-index="4" id="galleryCoverPage">
         <div class="face front">
-          <div class="content">
-            <div class="h">Gallery</div>
-            <div class="p">IG works for now. We can build a full gallery later.</div>
-            <a class="pill" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noopener noreferrer">
-              View Instagram
-            </a>
+          <div class="pageBody">
+            <div class="h">GALLERY</div>
+            <div class="p" id="galleryStatus">Loading gallery…</div>
+            <div class="p subtle">Use the page curl (bottom-right) to flip through photos.</div>
           </div>
         </div>
         <div class="face back"></div>
       </div>
+
     </section>
   </main>
 
+  <!-- ✅ Footer as word links (not icons) -->
   <footer class="footer" aria-label="Footer">
     <div class="footer-inner">
-      <div class="iconRow">
-        <a class="iconLink iconLink--contact" id="contactFooter" href="mailto:kam@capturedbykam.com" aria-label="Contact">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="#2f2e29" d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"/>
-          </svg>
-          <span class="sr-only">Contact</span>
-        </a>
-
-        <a class="iconLink iconLink--ig" id="igFooter" href="https://www.instagram.com/CapturedBy_Kam/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="#fff" d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4Zm-4.5 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-2.2a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/>
-          </svg>
-          <span class="sr-only">Instagram</span>
-        </a>
-
-        <a class="iconLink iconLink--yt" id="ytFooter" href="https://www.youtube.com/@YOUR_HANDLE" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="#fff" d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.8 4.6 12 4.6 12 4.6s-5.8 0-7.5.5A3 3 0 0 0 2.4 7.2 31.3 31.3 0 0 0 2 12a31.3 31.3 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.7.5 7.5.5 7.5.5s5.8 0 7.5-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 22 12a31.3 31.3 0 0 0-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"/>
-          </svg>
-          <span class="sr-only">YouTube</span>
-        </a>
+      <div class="footer-links">
+        <a id="contactFooter" href="#">CONTACT</a>
+        <a id="igFooter" href="#" target="_blank" rel="noreferrer">INSTAGRAM</a>
+        <a id="ytFooter" href="#" target="_blank" rel="noreferrer">YOUTUBE</a>
       </div>
     </div>
   </footer>
-
-  <script>
-    (() => {
-      "use strict";
-
-      const BRAND = {
-        email: "kam@capturedbykam.com",
-        instagram: "https://www.instagram.com/CapturedBy_Kam/",
-        youtube: "https://www.youtube.com/@YOUR_HANDLE"
-      };
-
-      const $ = (sel, root = document) => root.querySelector(sel);
-      const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-
-      const setHref = (id, href) => {
-        const el = document.getElementById(id);
-        if (el && typeof href === "string") el.href = href;
-      };
-
-      // socials
-      setHref("igTop", BRAND.instagram);
-      setHref("ytTop", BRAND.youtube);
-      setHref("igFooter", BRAND.instagram);
-      setHref("ytFooter", BRAND.youtube);
-      setHref("contactFooter", `mailto:${BRAND.email}`);
-
-      const pages = $$(".page");
-      const navBtns = $$(".navBtn");
-      const mobileNav = $(".left-nav");
-
-      const logo = $("#logo");
-      const enterBtn = $("#enterBtn");
-
-      const form = $("#bookingForm");
-      const nameInput = $("#nameInput");
-      const serviceSelect = $("#serviceSelect");
-      const dateInput = $("#dateInput");
-      const timeInput = $("#timeInput");
-      const notesInput = $("#notesInput");
-
-      const prefersReducedMotion =
-        window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
-
-      const totalPages = pages.length;
-
-      const clampIndex = (n) => {
-        const x = Number(n);
-        if (!Number.isFinite(x)) return 0;
-        return Math.max(0, Math.min(totalPages - 1, x));
-      };
-
-      const pad2 = (n) => String(n).padStart(2, "0");
-      const todayLocalISO = () => {
-        const d = new Date();
-        return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
-      };
-
-      // Min date for booking
-      if (dateInput) dateInput.min = todayLocalISO();
-
-      // Mobile nav snap fades
-      let navRAF = 0;
-
-      function updateNavFades() {
-        if (!mobileNav) return;
-
-        const maxScroll = Math.max(0, mobileNav.scrollWidth - mobileNav.clientWidth);
-        const x = mobileNav.scrollLeft;
-
-        mobileNav.classList.toggle("at-start", x <= 2);
-        mobileNav.classList.toggle("at-end", x >= maxScroll - 2);
-
-        // If it can't scroll at all, hide both fades
-        if (maxScroll <= 2) mobileNav.classList.add("at-start", "at-end");
-      }
-
-      function requestNavUpdate() {
-        if (navRAF) return;
-        navRAF = requestAnimationFrame(() => {
-          navRAF = 0;
-          updateNavFades();
-        });
-      }
-
-      mobileNav?.addEventListener("scroll", requestNavUpdate, { passive: true });
-      window.addEventListener("resize", requestNavUpdate);
-      window.addEventListener("orientationchange", requestNavUpdate);
-
-      let currentIndex = 0;
-      let turnToken = 0;
-
-      function render() {
-        pages.forEach((page, i) => {
-          const turned = i < currentIndex;
-          page.style.transform = turned ? "rotateY(-180deg)" : "rotateY(0deg)";
-          page.style.zIndex = String(turned ? i : (totalPages - i));
-        });
-
-        navBtns.forEach((b) => {
-          const isActive = Number(b.dataset.target) === currentIndex;
-          b.classList.toggle("active", isActive);
-          if (isActive) b.setAttribute("aria-current", "page");
-          else b.removeAttribute("aria-current");
-        });
-
-        requestNavUpdate();
-      }
-
-      function sleep(ms) {
-        return new Promise((r) => setTimeout(r, ms));
-      }
-
-      async function turnTo(target) {
-        target = clampIndex(target);
-        if (target === currentIndex) return;
-
-        turnToken += 1;
-        const myToken = turnToken;
-
-        if (prefersReducedMotion) {
-          currentIndex = target;
-          render();
-          return;
-        }
-
-        const distance = Math.abs(target - currentIndex);
-        const dir = target > currentIndex ? 1 : -1;
-
-        // Slow & premium pacing (same as your original)
-        const FAST_MS = 1600;
-        const FINAL_MS = 2400;
-        const fastDelay = 950;
-        const finalDelay = 1500;
-
-        document.documentElement.style.setProperty(
-          "--turnDur",
-          (distance >= 2) ? `${FAST_MS}ms` : `${FINAL_MS}ms`
-        );
-
-        while (currentIndex !== target) {
-          if (myToken !== turnToken) return;
-
-          const next = currentIndex + dir;
-          const isFinalStep = next === target;
-
-          document.documentElement.style.setProperty(
-            "--turnDur",
-            isFinalStep ? `${FINAL_MS}ms` : `${FAST_MS}ms`
-          );
-
-          currentIndex = next;
-          render();
-
-          await sleep(isFinalStep ? finalDelay : fastDelay);
-        }
-      }
-
-      function goToBookWithService(serviceName) {
-        turnTo(3).then(() => {
-          if (serviceSelect) serviceSelect.value = serviceName;
-          setTimeout(() => nameInput?.focus(), prefersReducedMotion ? 0 : 250);
-        });
-      }
-
-      // Nav clicks (delegated)
-      mobileNav?.addEventListener("click", (e) => {
-        const btn = e.target.closest(".navBtn");
-        if (!btn) return;
-        turnTo(Number(btn.dataset.target));
-      });
-
-      logo?.addEventListener("click", () => turnTo(0));
-      enterBtn?.addEventListener("click", () => turnTo(1));
-
-      // Service CTA clicks (delegated)
-      document.addEventListener("click", (e) => {
-        const btn = e.target.closest(".serviceCta");
-        if (!btn) return;
-        goToBookWithService(btn.dataset.service || "");
-      });
-
-      form?.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        // Let the browser show required-field UI if invalid
-        if (form && typeof form.reportValidity === "function" && !form.reportValidity()) return;
-
-        const name = nameInput?.value.trim() || "";
-        const service = serviceSelect?.value.trim() || "";
-        const date = dateInput?.value || "";
-        const time = timeInput?.value || "";
-        const notes = notesInput?.value.trim() || "";
-
-        const subject = `CBK Booking Request — ${service || "Service"}`;
-        const bodyLines = [
-          "Hi Kam,",
-          "",
-          `My name is: ${name}`,
-          `I am interested in: ${service}`,
-          `When: ${date}`,
-          `What time: ${time}`,
-          notes ? `Notes: ${notes}` : null,
-          "",
-          "Sent from capturedby_kam site"
-        ].filter(Boolean);
-
-        const mailto =
-          `mailto:${BRAND.email}` +
-          `?subject=${encodeURIComponent(subject)}` +
-          `&body=${encodeURIComponent(bodyLines.join("\n"))}`;
-
-        window.location.href = mailto;
-      });
-
-      window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" || e.key === "Home") turnTo(0);
-        if (e.key === "ArrowRight") turnTo(currentIndex + 1);
-        if (e.key === "ArrowLeft") turnTo(currentIndex - 1);
-      });
-
-      render();
-    })();
-  </script>
 </body>
 </html>
