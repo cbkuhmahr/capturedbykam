@@ -14,9 +14,10 @@
   --sidebarW: 210px;
   --footerH: 56px;
 
+  /* Desktop book proportions */
   --bookW: min(980px, calc(100vw - (var(--sidebarW) + 110px)));
   --bookMaxH: var(--bookMaxHpx, min(680px, calc(100vh - 220px)));
-  --bookAspect: 0.70;
+  --bookAspect: 0.70; /* wide book on desktop */
   --bookH: min(calc(var(--bookW) * var(--bookAspect)), var(--bookMaxH));
 
   --turnDur: 2400ms;
@@ -30,7 +31,7 @@
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
 
-/* ✅ LOCK BODY SCROLL (fixes header cropping / weird mobile spacing) */
+/* lock body scroll */
 body{
   margin:0;
   background:var(--bg);
@@ -57,6 +58,7 @@ a:hover{ text-decoration:underline; }
   user-select:none;
 }
 
+/* header lockup font */
 .logo{
   appearance:none;
   border:0;
@@ -78,15 +80,16 @@ a:hover{ text-decoration:underline; }
 .brandLines{
   margin-top: 6px;
   font-size: clamp(16px, 2.1vw, 22px);
-  line-height: 1.1;
+  line-height: 1.12;
 }
 .brandEst{
   margin-top: 8px;
   font-size: clamp(16px, 2.1vw, 22px);
-  line-height: 1.1;
+  line-height: 1.12;
 }
 .brandEst b{ color:#1f51ff; font-weight: 700; }
 
+/* menu */
 .left-nav{
   display:flex;
   flex-direction:column;
@@ -103,7 +106,7 @@ a:hover{ text-decoration:underline; }
   font-size: 11px;
   letter-spacing: .16em;
   padding: 12px 12px;
-  border-radius: 0;
+  border-radius: 0; /* square */
   text-align:left;
   cursor:pointer;
   text-transform: uppercase;
@@ -142,15 +145,15 @@ a:hover{ text-decoration:underline; }
   display:flex;
   align-items:center;
   justify-content:center;
-  overflow: hidden;
+  overflow:hidden;
   padding:
     calc(90px + var(--safeTop))
     calc(22px + var(--safeRight))
-    calc(var(--footerH) + 22px + var(--safeBottom))
+    calc(var(--footerH) + 18px + var(--safeBottom))
     calc(var(--sidebarW) + 50px + var(--safeLeft));
 }
 
-/* ===== Book ===== */
+/* BOOK */
 .book{
   width: var(--bookW);
   height: var(--bookH);
@@ -201,6 +204,7 @@ a:hover{ text-decoration:underline; }
   z-index: 1;
 }
 
+/* pages */
 .page{
   position:absolute;
   inset: 10px;
@@ -226,34 +230,35 @@ a:hover{ text-decoration:underline; }
   background: linear-gradient(180deg, var(--paperBackTop), var(--paperBackBottom));
 }
 
-/* ✅ Flex column fixes gallery “blank box” + nicer layout */
+/* ✅ better mobile vibe inside the book */
 .pageBody{
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
+  display:flex;
+  flex-direction:column;
+  overflow:auto;
   -webkit-overflow-scrolling: touch;
-  padding: 26px;
+  padding: 24px;
   padding-bottom: 118px; /* curl reserve */
 }
 
 .h{
+  font-family: "Courier Prime","Courier New",ui-monospace,monospace;
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing:.18em;
+  font-weight: 700;
+  letter-spacing:.20em;
   text-transform: uppercase;
 }
 .p{
   margin-top: 10px;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.75;
   color: var(--muted);
   max-width: 78ch;
 }
 .p.subtle{ opacity: .85; }
 
+/* services */
 .stack{ margin-top: 14px; display:flex; flex-direction:column; gap: 12px; }
-
 .card{
   border: 1px solid rgba(47,46,41,.18);
   border-radius: 10px;
@@ -270,13 +275,14 @@ a:hover{ text-decoration:underline; }
   gap: 10px;
 }
 .cardTitle{
+  font-family: "Courier Prime","Courier New",ui-monospace,monospace;
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .10em;
+  font-weight: 700;
+  letter-spacing: .12em;
   text-transform: uppercase;
 }
 .cardBody{
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.65;
   color: var(--muted);
 }
@@ -284,7 +290,7 @@ a:hover{ text-decoration:underline; }
 .btn,.btnSmall{
   appearance:none;
   border: 1px solid rgba(47,46,41,.22);
-  background: rgba(255,255,255,.14);
+  background: rgba(255,255,255,.12);
   color: var(--text);
   cursor:pointer;
   letter-spacing: .16em;
@@ -294,9 +300,10 @@ a:hover{ text-decoration:underline; }
 .btn{ padding: 12px 14px; font-size: 11px; }
 .btnSmall{ padding: 10px 12px; font-size: 10px; }
 
+/* cover */
 .cover{
   height:100%;
-  padding: 28px;
+  padding: 26px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
@@ -305,7 +312,7 @@ a:hover{ text-decoration:underline; }
 .coverCTA{ display:flex; align-items:flex-end; justify-content:flex-start; }
 .coverRule{ height: 1px; background: rgba(47,46,41,.14); margin-top: 18px; }
 
-/* ✅ Controls are smaller + less intrusive */
+/* curl controls */
 .flipControls{
   position:absolute;
   right: 12px;
@@ -354,12 +361,12 @@ a:hover{ text-decoration:underline; }
 }
 .curlArrows{ position: relative; z-index: 2; opacity: .85; }
 
-/* Booking form */
+/* booking form */
 .form{ margin-top: 10px; display:flex; flex-direction:column; gap: 14px; max-width: 540px; }
 .field{ display:flex; flex-direction:column; gap: 8px; }
 .label{
   font-size: 10.5px;
-  letter-spacing: .16em;
+  letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -369,21 +376,21 @@ a:hover{ text-decoration:underline; }
   background: rgba(255,255,255,.35);
   border-radius: 10px;
   padding: 12px 12px;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text);
   outline: none;
 }
 .row{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .fineprint{ font-size: 11px; line-height: 1.6; color: var(--muted); }
 
-/* ✅ Gallery photo area now fills remaining space */
+/* gallery */
 .photoWrap{
   margin-top: 14px;
   border: 1px solid rgba(47,46,41,.14);
   background: rgba(0,0,0,.02);
   padding: 12px;
   flex: 1;
-  min-height: 220px;
+  min-height: 240px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -395,11 +402,10 @@ a:hover{ text-decoration:underline; }
   display:block;
 }
 
+/* footer */
 .footer{
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 0; right: 0; bottom: 0;
   height: calc(var(--footerH) + var(--safeBottom));
   padding-bottom: var(--safeBottom);
   z-index: 80;
@@ -434,24 +440,37 @@ a:hover{ text-decoration:underline; }
   text-decoration:none;
 }
 
-/* Mobile */
+/* ✅ MOBILE: use yellow space to stretch book + slim it */
 @media (max-width: 760px){
   :root{
     --sidebarW: 0px;
-    --bookW: min(94vw, 680px);
-    --bookAspect: 0.92; /* taller book on phone */
-    --bookH: min(calc(var(--bookW) * var(--bookAspect)), var(--bookMaxH));
+
+    /* Height fills available space; width derived => slimmer “real book” */
+    --bookH: var(--bookMaxH);
+    --bookW: min(88vw, calc(var(--bookH) * 0.76));
   }
 
   .left-rail{
     position: static;
     width: auto;
     padding:
-      calc(14px + var(--safeTop))
+      calc(12px + var(--safeTop))
       calc(14px + var(--safeRight))
       0
       calc(14px + var(--safeLeft));
     gap: 10px;
+  }
+
+  /* tighten header typography so it feels intentional */
+  .brandName{ font-size: 20px; letter-spacing:.05em; }
+  .brandLines{ font-size: 18px; line-height: 1.08; }
+  .brandEst{ font-size: 18px; }
+
+  .top-social{
+    top: calc(10px + var(--safeTop));
+    right: calc(10px + var(--safeRight));
+    font-size: 10px;
+    gap: 12px;
   }
 
   .left-nav{
@@ -476,26 +495,20 @@ a:hover{ text-decoration:underline; }
     padding: 12px 12px;
     font-size: 10.5px;
     letter-spacing: .14em;
-    min-width: 96px;
-  }
-
-  .top-social{
-    top: calc(10px + var(--safeTop));
-    right: calc(10px + var(--safeRight));
-    gap: 10px;
-    font-size: 10.5px;
+    min-width: 92px;
   }
 
   .stage{
     padding:
       8px
       calc(14px + var(--safeRight))
-      calc(var(--footerH) + 16px + var(--safeBottom))
+      calc(var(--footerH) + 10px + var(--safeBottom))
       calc(14px + var(--safeLeft));
     align-items:flex-start;
     justify-content:center;
   }
 
-  .pageBody{ padding: 18px; padding-bottom: 126px; }
+  .pageBody{ padding: 18px; padding-bottom: 132px; }
   .row{ grid-template-columns: 1fr; }
+  .p{ font-size: 13px; }
 }
