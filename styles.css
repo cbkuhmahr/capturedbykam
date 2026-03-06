@@ -14,15 +14,14 @@
   --sidebarW: 210px;
   --footerH: 56px;
 
-  /* ✅ Real book proportions */
+  /* Real book proportions */
   --bookW: min(980px, calc(100vw - (var(--sidebarW) + 110px)));
-  --bookMaxH: min(680px, calc(100vh - 220px));
-  --bookH: min(calc(var(--bookW) * 0.67), var(--bookMaxH));
+  --bookMaxH: var(--bookMaxHpx, min(680px, calc(100vh - 220px)));
+  --bookAspect: 0.70;                 /* desktop: wide book */
+  --bookH: min(calc(var(--bookW) * var(--bookAspect)), var(--bookMaxH));
 
-  /* Slow page turn */
   --turnDur: 2400ms;
 
-  /* iOS safe areas */
   --safeTop: env(safe-area-inset-top, 0px);
   --safeRight: env(safe-area-inset-right, 0px);
   --safeBottom: env(safe-area-inset-bottom, 0px);
@@ -57,7 +56,6 @@ a:hover{ text-decoration:underline; }
   user-select:none;
 }
 
-/* ✅ Home button look (matches your screenshot style) */
 .logo{
   appearance:none;
   border:0;
@@ -67,8 +65,9 @@ a:hover{ text-decoration:underline; }
   cursor:pointer;
   color:inherit;
   font: inherit;
-  font-family: "Courier Prime", "Courier New", ui-monospace, monospace;
+  font-family: "Courier Prime","Courier New",ui-monospace,monospace;
 }
+
 .brandName{
   font-weight: 700;
   text-transform: uppercase;
@@ -80,19 +79,14 @@ a:hover{ text-decoration:underline; }
   margin-top: 6px;
   font-size: clamp(16px, 2.1vw, 22px);
   line-height: 1.1;
-  letter-spacing: .02em;
 }
 .brandEst{
   margin-top: 8px;
   font-size: clamp(16px, 2.1vw, 22px);
   line-height: 1.1;
 }
-.brandEst b{
-  color:#1f51ff;
-  font-weight: 700;
-}
+.brandEst b{ color:#1f51ff; font-weight: 700; }
 
-/* ✅ Square (not pill) menu buttons */
 .left-nav{
   display:flex;
   flex-direction:column;
@@ -100,6 +94,7 @@ a:hover{ text-decoration:underline; }
   padding-top: 12px;
   border-top: 1px solid rgba(47,46,41,.16);
 }
+
 .navBtn{
   appearance:none;
   border: 1px solid rgba(47,46,41,.16);
@@ -109,7 +104,7 @@ a:hover{ text-decoration:underline; }
   font-size: 11px;
   letter-spacing: .16em;
   padding: 12px 12px;
-  border-radius: 0; /* ✅ square */
+  border-radius: 0; /* square */
   text-align:left;
   cursor:pointer;
   text-transform: uppercase;
@@ -167,6 +162,7 @@ a:hover{ text-decoration:underline; }
   height: var(--bookH);
   position: relative;
   perspective: 1700px;
+  contain: layout paint;
 }
 
 .book::before{
@@ -179,7 +175,21 @@ a:hover{ text-decoration:underline; }
   box-shadow: 0 18px 45px var(--shadow);
 }
 
-/* spine + edge */
+/* Subtle mask to hide “ghost edge” peeks on the left */
+.book::after{
+  content:"";
+  position:absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 18px;
+  border-radius: var(--radius) 0 0 var(--radius);
+  background: linear-gradient(to right, var(--paperTop), rgba(255,255,255,0));
+  pointer-events:none;
+  z-index: 18;
+  opacity: .9;
+}
+
 .spine{
   position:absolute;
   top: 10px;
@@ -213,7 +223,6 @@ a:hover{ text-decoration:underline; }
   z-index: 1;
 }
 
-/* pages */
 .page{
   position:absolute;
   inset: 10px;
@@ -222,6 +231,7 @@ a:hover{ text-decoration:underline; }
   border-radius: calc(var(--radius) - 2px);
   transition: transform var(--turnDur) cubic-bezier(.16,.86,.16,1);
   z-index: 3;
+  will-change: transform;
 }
 .face{
   position:absolute;
@@ -240,16 +250,15 @@ a:hover{ text-decoration:underline; }
   background: linear-gradient(180deg, var(--paperBackTop), var(--paperBackBottom));
 }
 
-/* ✅ Scrollable page interior (Services will show ALL items) */
+/* Page interior is scrollable */
 .pageBody{
   height: 100%;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   padding: 26px;
-  padding-bottom: 90px; /* make room for curl button */
+  padding-bottom: 108px; /* space for curl controls */
 }
 
-/* typography */
 .h{
   font-size: 11px;
   font-weight: 600;
@@ -263,10 +272,10 @@ a:hover{ text-decoration:underline; }
   color: var(--muted);
   max-width: 78ch;
 }
-.p.subtle{ opacity: .8; }
+.p.subtle{ opacity: .85; }
 
-/* cards */
 .stack{ margin-top: 14px; display:flex; flex-direction:column; gap: 12px; }
+
 .card{
   border: 1px solid rgba(47,46,41,.18);
   border-radius: 10px;
@@ -294,8 +303,7 @@ a:hover{ text-decoration:underline; }
   color: var(--muted);
 }
 
-/* buttons (square + premium) */
-.btn, .btnSmall{
+.btn,.btnSmall{
   appearance:none;
   border: 1px solid rgba(47,46,41,.22);
   background: rgba(255,255,255,.14);
@@ -303,21 +311,12 @@ a:hover{ text-decoration:underline; }
   cursor:pointer;
   letter-spacing: .16em;
   text-transform: uppercase;
-  border-radius: 0; /* ✅ square */
+  border-radius: 0;
 }
-.btn{
-  padding: 12px 14px;
-  font-size: 11px;
-}
-.btnSmall{
-  padding: 10px 12px;
-  font-size: 10px;
-}
-.btn:hover, .btnSmall:hover{
-  background: rgba(255,255,255,.18);
-}
+.btn{ padding: 12px 14px; font-size: 11px; }
+.btnSmall{ padding: 10px 12px; font-size: 10px; }
+.btn:hover,.btnSmall:hover{ background: rgba(255,255,255,.18); }
 
-/* Cover layout */
 .cover{
   height:100%;
   padding: 28px;
@@ -325,76 +324,107 @@ a:hover{ text-decoration:underline; }
   flex-direction:column;
   justify-content:space-between;
 }
-.coverLockup{
-  font-family: "Courier Prime", "Courier New", ui-monospace, monospace;
-}
+.coverLockup{ font-family: "Courier Prime","Courier New",ui-monospace,monospace; }
 .coverCTA{ display:flex; align-items:flex-end; justify-content:flex-start; }
-.coverRule{
-  height: 1px;
-  background: rgba(47,46,41,.14);
-  margin-top: 18px;
-}
+.coverRule{ height: 1px; background: rgba(47,46,41,.14); margin-top: 18px; }
 
-/* ===== Curl + arrows controls ===== */
+/* Cleaner curl controls */
 .flipControls{
   position:absolute;
-  right: 14px;
-  bottom: 14px;
-  z-index: 25;
+  right: 12px;
+  bottom: 12px;
+  z-index: 24;
   display:flex;
   gap: 10px;
-  pointer-events:none; /* container doesn't block scroll */
+  pointer-events:none;
+  opacity: .70;
+  transition: opacity .15s ease;
 }
+.book:hover .flipControls{ opacity: .95; }
+
 .flipBtn{
   pointer-events:auto;
-  width: 44px;
-  height: 44px;
-  border: 1px solid rgba(47,46,41,.18);
-  background: rgba(255,255,255,.14);
-  color: rgba(47,46,41,.75);
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(47,46,41,.12);
+  background: rgba(255,255,255,.10);
+  color: rgba(47,46,41,.72);
   cursor:pointer;
   display:grid;
   place-items:center;
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1;
-  border-radius: 0; /* square */
+  border-radius: 0;
 }
-.flipBtn:hover{
-  background: rgba(255,255,255,.18);
-}
+.flipBtn:hover{ background: rgba(255,255,255,.16); }
 
-/* Curl look for NEXT */
 .curlBtn{
   position: relative;
   overflow:hidden;
-  background: rgba(255,255,255,.10);
 }
 .curlBtn::before{
   content:"";
   position:absolute;
   inset:0;
   background: linear-gradient(135deg, rgba(255,255,255,.55), rgba(0,0,0,.08));
-  clip-path: polygon(40% 100%, 100% 60%, 100% 100%);
-  opacity: .9;
+  clip-path: polygon(42% 100%, 100% 58%, 100% 100%);
+  opacity: .85;
 }
 .curlBtn::after{
   content:"";
   position:absolute;
   right: 0;
   bottom: 0;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   background: rgba(0,0,0,.06);
   clip-path: polygon(0 100%, 100% 0, 100% 100%);
 }
-.curlArrows{
-  position: relative;
-  z-index: 2;
-  font-size: 22px;
-  opacity: .75;
+.curlArrows{ position: relative; z-index: 2; opacity: .85; }
+
+/* Booking form */
+.form{ margin-top: 10px; display:flex; flex-direction:column; gap: 14px; max-width: 540px; }
+.field{ display:flex; flex-direction:column; gap: 8px; }
+.label{
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.control{
+  width: 100%;
+  border: 1px solid rgba(47,46,41,.18);
+  background: rgba(255,255,255,.35);
+  border-radius: 10px;
+  padding: 12px 12px;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+}
+.row{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fineprint{ font-size: 11px; line-height: 1.6; color: var(--muted); }
+
+/* Gallery photo layout (won't be covered by curl controls) */
+.photoWrap{
+  margin-top: 14px;
+  border: 1px solid rgba(47,46,41,.14);
+  background: rgba(0,0,0,.02);
+  padding: 12px;
+  padding-bottom: 72px; /* reserve curl area */
+  height: calc(100% - 92px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.photo{
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display:block;
 }
 
-/* Footer (word links like top) */
+/* Footer word links */
 .footer{
   position: fixed;
   left: 0;
@@ -434,7 +464,6 @@ a:hover{ text-decoration:underline; }
   text-decoration:none;
 }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   .page{ transition:none; }
 }
@@ -443,10 +472,13 @@ a:hover{ text-decoration:underline; }
 @media (max-width: 760px){
   :root{
     --sidebarW: 0px;
+    --bookW: min(94vw, 680px);
 
-    --bookW: min(94vw, 620px);
-    --bookMaxH: calc(100vh - 250px);
-    --bookH: min(calc(var(--bookW) * 0.78), var(--bookMaxH));
+    /* make book taller on mobile so it feels “real” and fills space */
+    --bookAspect: 0.86;
+
+    /* max height will be set by JS via --bookMaxHpx */
+    --bookH: min(calc(var(--bookW) * var(--bookAspect)), var(--bookMaxH));
   }
 
   .left-rail{
@@ -460,7 +492,7 @@ a:hover{ text-decoration:underline; }
     gap: 10px;
   }
 
-  /* Horizontal menu under lockup (square tabs) */
+  /* horizontal menu under lockup */
   .left-nav{
     position: relative;
     flex-direction: row;
@@ -476,7 +508,6 @@ a:hover{ text-decoration:underline; }
   }
   .left-nav::-webkit-scrollbar{ display:none; }
 
-  /* fade hint */
   .left-nav::before,
   .left-nav::after{
     content:"";
@@ -502,8 +533,12 @@ a:hover{ text-decoration:underline; }
 
   .navBtn{
     flex: 0 0 auto;
-    text-align:center;
     scroll-snap-align: start;
+    text-align:center;
+    padding: 12px 12px;
+    font-size: 10.5px;
+    letter-spacing: .14em;
+    min-width: 96px;
   }
 
   .top-social{
@@ -523,6 +558,13 @@ a:hover{ text-decoration:underline; }
     justify-content:center;
   }
 
-  .pageBody{ padding: 18px; padding-bottom: 94px; }
+  /* slightly softer shadows on mobile for “real” feel */
+  .book::before{ box-shadow: 0 14px 38px rgba(0,0,0,.14); }
+  .face{ box-shadow: inset 0 0 0 1px rgba(255,255,255,.35), 0 8px 18px rgba(0,0,0,.10); }
+
+  .pageBody{ padding: 18px; padding-bottom: 120px; }
   .cover{ padding: 18px; }
+  .row{ grid-template-columns: 1fr; }
+
+  .flipBtn{ width: 34px; height: 34px; }
 }
