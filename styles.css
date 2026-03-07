@@ -735,7 +735,7 @@ a:hover{
   min-height:18px;
 }
 
-/* Mobile */
+/* Mobile panel mode */
 @media (max-width: 760px){
   :root{
     --sidebarW: 0px;
@@ -830,26 +830,60 @@ a:hover{
   .book{
     width:100%;
     max-width:520px;
-    aspect-ratio:.76 / 1;
     height:auto;
+    aspect-ratio:auto;
     margin:0 auto;
+    perspective:none;
+    contain:none;
   }
 
-  .book::before{
-    box-shadow:0 10px 28px rgba(0,0,0,.08);
+  .book::before,
+  .spine,
+  .edge,
+  .flipControls{
+    display:none;
   }
 
   .page{
-    inset:8px;
+    position:relative;
+    inset:auto;
+    transform:none !important;
+    transition:none !important;
+    transform-style:flat;
+    z-index:auto !important;
+    display:none;
+    margin:0;
+  }
+
+  .page.is-mobile-active{
+    display:block;
+  }
+
+  .face{
+    position:relative;
+    inset:auto;
+    backface-visibility:visible;
+    border-radius:18px;
+    overflow:visible;
+  }
+
+  .back{
+    display:none;
+  }
+
+  .pageBody,
+  .cover{
+    height:auto;
+    overflow:visible;
+    padding:20px;
   }
 
   .pageBody{
-    padding:18px;
-    padding-bottom:74px;
+    padding-bottom:20px;
   }
 
   .cover{
-    padding:20px;
+    min-height:420px;
   }
 
   .coverLockup{
@@ -857,10 +891,11 @@ a:hover{
   }
 
   .coverCTA{
-    flex:1;
+    flex:0 0 auto;
     display:flex;
     align-items:center;
     justify-content:center;
+    margin:36px 0;
   }
 
   .lockup--cover .lockupBrand{
@@ -911,19 +946,6 @@ a:hover{
 
   .row{
     grid-template-columns:1fr;
-  }
-
-  .flipControls{
-    right:8px;
-    bottom:8px;
-    gap:6px;
-    opacity:.48;
-  }
-
-  .flipBtn{
-    width:28px;
-    height:28px;
-    font-size:18px;
   }
 
   .footer{
