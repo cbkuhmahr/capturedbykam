@@ -1,230 +1,76 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Capturedby_Kam</title>
+CAPTUREDBY_KAM
+Every Frame, Every Project —
+Timeless Authenticity
+Est. 2025
+HOME ABOUT SERVICES BOOK GALLERY
+INSTAGRAM YOUTUBE EMAIL
+INSTAGRAM YOUTUBE
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="styles.css" />
-  <script src="script.js" defer></script>
-</head>
-
-<body>
-  <aside class="left-rail" id="siteHeader" aria-label="Site navigation">
-    <button class="homeBtn" id="logo" title="Home" aria-label="Go to Home" type="button">
-      <div class="lockup lockup--header" aria-label="Capturedby_Kam brand lockup">
-        <div class="lockupBrand">CAPTUREDBY_KAM</div>
-        <div class="lockupLine">Every Frame, Every Project —</div>
-        <div class="lockupLine">Timeless Authenticity</div>
-        <div class="lockupEst"><span class="lockupEstLabel">Est.</span> <span class="lockupYear">2025</span></div>
-      </div>
-    </button>
-
-    <nav class="left-nav" aria-label="Primary">
-      <button class="navBtn" data-target="1" type="button">ABOUT</button>
-      <button class="navBtn" data-target="2" type="button">SERVICES</button>
-      <button class="navBtn" data-target="3" type="button">BOOK</button>
-      <button class="navBtn" data-target="4" type="button">GALLERY</button>
-    </nav>
-  </aside>
-
-  <div class="top-social" aria-label="Social links">
-    <a id="igTop" href="#" target="_blank" rel="noreferrer">INSTAGRAM</a>
-  </div>
-
-  <main class="stage">
-    <section class="book" id="book" aria-label="Book">
-      <div class="edge"></div>
-      <div class="spine"></div>
-
-      <div class="flipControls" aria-label="Page turn controls">
-        <button class="flipBtn flipPrev" type="button" aria-label="Previous page"><span aria-hidden="true">‹</span></button>
-        <button class="flipBtn flipNext curlBtn" type="button" aria-label="Next page"><span class="curlArrows" aria-hidden="true">›</span></button>
-      </div>
-
-      <div class="page" data-index="0">
-        <div class="face front">
-          <div class="cover">
-            <div class="coverLockup">
-              <div class="lockup lockup--cover">
-                <div class="lockupBrand">CAPTUREDBY_KAM</div>
-                <div class="lockupLine">Every Frame, Every Project —</div>
-                <div class="lockupLine">Timeless Authenticity</div>
-                <div class="lockupEst"><span class="lockupEstLabel">Est.</span> <span class="lockupYear">2025</span></div>
-              </div>
-            </div>
-
-            <div class="coverCTA">
-              <button class="btn" id="enterBtn" type="button">ENTER</button>
-            </div>
-
-            <div class="coverRule" aria-hidden="true"></div>
-          </div>
-        </div>
-        <div class="face back"></div>
-      </div>
-
-      <div class="page" data-index="1">
-        <div class="face front">
-          <div class="pageBody">
-            <div class="h">ABOUT</div>
-            <div class="p">
-              Husband. Father. Midwest-based visual storyteller behind Capturedby_Kam. Tech-driven, photography-obsessed,
-              I shoot with intention—clean and real. From youth sports and senior photos to headshots, events, and
-              cinematic video—every frame, every project—timeless visuals. Timeless Authenticity.
-            </div>
-          </div>
-        </div>
-        <div class="face back"></div>
-      </div>
-
-      <div class="page" data-index="2">
-        <div class="face front">
-          <div class="pageBody">
-            <div class="h">SERVICES</div>
-
-            <div class="stack">
-              <div class="card">
-                <div class="cardTop">
-                  <div class="cardTitle">YOUTH SPORTS PACKAGES</div>
-                  <button class="btnSmall serviceCta" data-service="Youth Sports Packages" type="button">MORE DETAILS / BOOK</button>
-                </div>
-                <div class="cardBody">Media days, action shots, team posters, prints + digital.</div>
-              </div>
-
-              <div class="card">
-                <div class="cardTop">
-                  <div class="cardTitle">SENIOR PHOTOS</div>
-                  <button class="btnSmall serviceCta" data-service="Senior Photos" type="button">MORE DETAILS / BOOK</button>
-                </div>
-                <div class="cardBody">Clean portraits, cinematic edits, print-ready delivery.</div>
-              </div>
-
-              <div class="card">
-                <div class="cardTop">
-                  <div class="cardTitle">HEADSHOTS</div>
-                  <button class="btnSmall serviceCta" data-service="Headshots" type="button">MORE DETAILS / BOOK</button>
-                </div>
-                <div class="cardBody">Modern, sharp headshots for athletes, professionals, and creatives.</div>
-              </div>
-
-              <div class="card">
-                <div class="cardTop">
-                  <div class="cardTitle">EVENTS</div>
-                  <button class="btnSmall serviceCta" data-service="Events" type="button">MORE DETAILS / BOOK</button>
-                </div>
-                <div class="cardBody">Parties, celebrations, community moments — documented right.</div>
-              </div>
-
-              <div class="card">
-                <div class="cardTop">
-                  <div class="cardTitle">CINEMATIC VIDEO</div>
-                  <button class="btnSmall serviceCta" data-service="Cinematic Video" type="button">MORE DETAILS / BOOK</button>
-                </div>
-                <div class="cardBody">Highlight reels, promos, story-driven short visuals.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="face back"></div>
-      </div>
-
-      <div class="page" data-index="3">
-        <div class="face front">
-          <div class="pageBody">
-            <div class="h">BOOK</div>
-            <div class="p">Share some basics below.Together we will handle the details.</div>
-
-            <form class="form" id="bookingForm" autocomplete="on">
-              <div class="field">
-                <div class="label">HI, MY NAME IS</div>
-                <input class="control" id="nameInput" name="name" type="text" placeholder="Your name" required />
-              </div>
-
-              <div class="field">
-                <div class="label">I AM INTERESTED IN</div>
-                <select class="control" id="serviceSelect" name="service" required>
-                  <option value="" selected disabled>Select a service</option>
-                  <option>Youth Sports Packages</option>
-                  <option>Senior Photos</option>
-                  <option>Headshots</option>
-                  <option>Events</option>
-                  <option>Videography</option>
-                </select>
-              </div>
-
-              <div class="row">
-                <div class="field">
-                  <div class="label">WHEN?</div>
-                  <input class="control" id="dateInput" name="date" type="date" required />
-                </div>
-                <div class="field">
-                  <div class="label">WHAT TIME?</div>
-                  <input class="control" id="timeInput" name="time" type="time" required />
-                </div>
-              </div>
-
-              <div class="field">
-                <div class="label">ANYTHING ELSE?</div>
-                <input class="control" id="notesInput" name="notes" type="text" placeholder="Optional notes (location, team, etc.)" />
-              </div>
-
-              <button class="btn" id="bookingSubmitBtn" type="submit">SEND REQUEST</button>
-              <div class="fineprint">This site will prepare your request. You can email it or copy it.</div>
-            </form>
-          </div>
-        </div>
-        <div class="face back"></div>
-      </div>
-
-      <div class="page" data-index="4" id="galleryCoverPage">
-        <div class="face front">
-          <div class="pageBody">
-            <div class="h">GALLERY</div>
-            <div class="p" id="galleryStatus" aria-live="polite">Loading gallery…</div>
-            <div class="p subtle">Swipe or use the curl to flip through photos.</div>
-          </div>
-        </div>
-        <div class="face back"></div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer" id="siteFooter" aria-label="Footer">
-    <div class="footer-inner">
-      <div class="footer-links">
-        <a id="contactFooter" href="#">CONTACT</a>
-        <a id="igFooter" href="#" target="_blank" rel="noreferrer">INSTAGRAM</a>
-      </div>
-    </div>
-  </footer>
-
-  <div class="modal" id="bookingModal" hidden>
-    <div class="modalBackdrop" data-close="1"></div>
-    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
-      <div class="modalHead">
-        <div class="modalTitle" id="bookingModalTitle">REQUEST READY</div>
-        <button class="iconBtn" type="button" data-close="1" aria-label="Close">✕</button>
-      </div>
-
-      <div class="modalBody">
-        <div class="modalNote">
-          If email doesn’t open on their phone, they can <b>copy</b> the request and send it to you.
-        </div>
-        <textarea class="modalTextarea" id="bookingText" readonly></textarea>
-      </div>
-
-      <div class="modalActions">
-        <a class="btn" id="openEmailBtn" href="#">OPEN EMAIL</a>
-        <button class="btn" id="copyRequestBtn" type="button">COPY REQUEST</button>
-      </div>
-
-      <div class="modalFine" id="copyStatus" aria-live="polite"></div>
-    </div>
-  </div>
-</body>
-</html>
+Captured by Kam
+Timeless visuals. Real presence. No fake sauce.
+Photography and video for people, brands, athletes, families, and moments that actually mean something. Built to feel honest now and still matter years from now.
+ENTER SITE BOOK A SESSION
+BASED IN Toledo / Northwest Ohio
+FOCUS Sports, Portraits, Events, Video
+￼
+Artist portrait / brand presence
+￼
+Behind the lens
+01 / ABOUT
+Captured by Kam is built on truth, style, and memory.
+￼
+￼
+Husband. Father. Midwest-based visual storyteller. I shoot with intention, not noise. The goal is simple: make work that feels clean, grounded, and personal.
+That means youth sports with energy, senior photos with edge, headshots that feel like a real person, events that hold onto the emotion, and video that feels cinematic without turning into corny fake-movie nonsense.
+Captured by Kam is for people who want more than “content.” They want images that hold up. Legacy over likes.
+APPROACHTimeless over trendy
+STYLEClean, honest, cinematic
+AVAILABLE FORPortraits, sports, events, video
+02 / SERVICES
+Strong work. Clear offers. No mystery menu.
+YOUTH SPORTS
+BOOK
+Media day coverage, athlete portraits, team photos, action coverage, posters, and print-ready deliverables.
+SENIOR PHOTOS
+BOOK
+Confident portraits with clean styling, strong locations, and edits that feel polished without looking fake.
+HEADSHOTS
+BOOK
+Modern headshots for athletes, professionals, creatives, brands, and anybody tired of stale LinkedIn energy.
+EVENTS
+BOOK
+Community events, celebrations, parties, school functions, and moments you want documented the right way.
+CINEMATIC VIDEO
+BOOK
+Promos, highlight reels, recap films, brand visuals, and short-form storytelling with real shape and motion.
+WHAT YOU CAN EXPECT
+	•	Fast communication
+	•	Clear session direction
+	•	Premium-looking edits
+	•	Delivery built for both sharing and keepsake value
+03 / BOOK
+Send the request. We’ll lock in the rest.
+This version is wired for direct form delivery, not the goofy “open your email app and pray” method.
+NAME PHONE / NUMBER EMAIL SERVICE
+                    Select a service
+                    Youth Sports Packages
+                    Senior Photos
+                    Headshots
+                    Events
+                    Cinematic Video
+                   PREFERRED DATE PREFERRED TIME
+PROJECT DETAILS
+SEND REQUEST
+You will get the request at kam@capturedbykam.com.
+04 / GALLERY
+Actual work. Actual range.
+￼
+Artist portrait / brand presence
+A personal frame that brings warmth, color, and personality into the brand.
+‹ ›
+￼ ￼ ￼ ￼ ￼ ￼ ￼ ￼ ￼ ￼ ￼
+‹
+01/05
+›
+© 2026 Captured by Kam. All rights reserved.
+kam@capturedbykam.com Instagram YouTube
