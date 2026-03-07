@@ -3,7 +3,7 @@
 const BRAND = {
   email: "kam@capturedbykam.com",
   instagram: "https://www.instagram.com/CapturedBy_Kam/",
-  youtube: "https://www.youtube.com/@YOUR_HANDLE",
+  youtube: "https://youtube.com/@capturedbykammedia?si=0P3nlk_bJZnphvIE",
 };
 
 const GALLERY_IMAGES = [];
