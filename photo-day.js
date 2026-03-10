@@ -1,14 +1,18 @@
 (() => {
   "use strict";
 
+  const form = document.getElementById("pdForm");
   const emailInput = document.getElementById("pdEmailInput");
   const replyToField = document.getElementById("pdReplyToField");
   const orderDate = document.getElementById("pdOrderDate");
   const totalDisplay = document.getElementById("pdTotalDisplay");
   const totalDueField = document.getElementById("pdTotalDueField");
+  const nextField = document.getElementById("pdNextField");
+  const paymentCodeField = document.getElementById("pdPaymentCodeField");
 
   const packageInputs = Array.from(document.querySelectorAll('input[name="Package"]'));
   const extraInputs = Array.from(document.querySelectorAll('input[name="A la Carte"]'));
+  const paymentInputs = Array.from(document.querySelectorAll('input[name="Payment Method"]'));
 
   function formatMoney(value) {
     return `$${value.toFixed(2)}`;
@@ -30,8 +34,18 @@
     });
 
     const formatted = formatMoney(total);
+
     if (totalDisplay) totalDisplay.value = formatted;
     if (totalDueField) totalDueField.value = formatted;
+  }
+
+  function generatePaymentCode() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const randomDigits = String(Math.floor(1000 + Math.random() * 9000));
+    return `CBK-${year}${month}${day}-${randomDigits}`;
   }
 
   if (emailInput && replyToField) {
@@ -50,6 +64,28 @@
 
   [...packageInputs, ...extraInputs].forEach((input) => {
     input.addEventListener("change", updateTotal);
+  });
+
+  form?.addEventListener("submit", () => {
+    const selectedPayment = paymentInputs.find((input) => input.checked)?.value || "";
+    const paymentCode = generatePaymentCode();
+    const formattedTotal = totalDisplay?.value || "$0.00";
+
+    if (paymentCodeField) {
+      paymentCodeField.value = paymentCode;
+    }
+
+    if (nextField) {
+      const currentUrl = new URL(window.location.href);
+      const basePath = currentUrl.pathname.replace(/[^/]+$/, "");
+      const nextUrl = new URL(`${window.location.origin}${basePath}payment-instructions.html`);
+
+      nextUrl.searchParams.set("method", selectedPayment);
+      nextUrl.searchParams.set("total", formattedTotal);
+      nextUrl.searchParams.set("code", paymentCode);
+
+      nextField.value = nextUrl.toString();
+    }
   });
 
   updateTotal();
