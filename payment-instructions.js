@@ -14,10 +14,10 @@
   const total = params.get("total") || "$0.00";
   const code = params.get("code") || "—";
 
-  const PAYPAL_ME_LINK = "https://paypal.me/YOURPAYPALME";
-  const CASH_APP_LINK = "https://cash.app/$YOURCASHTAG";
-  const VENMO_LINK = "https://account.venmo.com/u/YOURVENMO";
-  const APPLE_PAY_TO = "YOUR_APPLE_CASH_PHONE_OR_EMAIL";
+  const PAYPAL_ME_LINK = "https://paypal.me/kam@capturedbykam.com";
+  const CASH_APP_LINK = "https://cash.app/$CapturedbyKam";
+  const VENMO_LINK = "https://account.venmo.com/u/@CapturedbyKam";
+  const APPLE_PAY_TO = "4194500315";
 
   function getNumericTotal(value) {
     const cleaned = String(value).replace(/[^0-9.]/g, "");
