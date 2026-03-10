@@ -37,19 +37,19 @@
     case "PayPal":
       actionLink.href = `${PAYPAL_ME_LINK}/${getNumericTotal(total)}`;
       actionLink.textContent = "Open PayPal";
-      instructionEl.textContent = `Send ${total} and enter ${code} in the note / reason for payment.`;
+      instructionEl.textContent = `Send ${total} paypal.me/kam@capturedbykam.com  to and enter ${code} in the note / reason for payment.`;
       break;
 
     case "Cash App":
       actionLink.href = CASH_APP_LINK;
       actionLink.textContent = "Open Cash App";
-      instructionEl.textContent = `Send ${total} and enter ${code} in the note / reason for payment.`;
+      instructionEl.textContent = `Send ${total} to $CapturedbyKam and enter ${code} in the note / reason for payment.`;
       break;
 
     case "Venmo":
       actionLink.href = VENMO_LINK;
       actionLink.textContent = "Open Venmo";
-      instructionEl.textContent = `Send ${total} and enter ${code} in the note / reason for payment.`;
+      instructionEl.textContent = `Send ${total} to @CapturedbyKam and enter ${code} in the note / reason for payment.`;
       break;
 
     case "Apple Pay":
