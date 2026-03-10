@@ -13,6 +13,7 @@
     <div class="pdWrap">
       <form
         class="pdForm"
+        id="pdForm"
         action="https://formsubmit.co/kam@capturedbykam.com"
         method="POST"
         autocomplete="on"
@@ -21,7 +22,9 @@
         <input type="hidden" name="_captcha" value="false" />
         <input type="hidden" name="_template" value="table" />
         <input type="hidden" name="_replyto" id="pdReplyToField" value="" />
+        <input type="hidden" name="_next" id="pdNextField" value="" />
         <input type="hidden" name="Total Due" id="pdTotalDueField" value="$0.00" />
+        <input type="hidden" name="Payment Code" id="pdPaymentCodeField" value="" />
 
         <header class="pdHeader">
           <h1>CAPTUREDBY_KAM</h1>
@@ -129,6 +132,39 @@
                 <li>(1) Button</li>
                 <li>(1) Magnet</li>
               </ul>
+            </article>
+          </div>
+
+          <div class="pdPaymentBlock">
+            <article class="pdCard pdPaymentCard">
+              <h4>Payment Method</h4>
+
+              <div class="pdPaymentOptions">
+                <label class="pdPaymentOption">
+                  <input type="radio" name="Payment Method" value="Cash" required />
+                  <span>Cash</span>
+                </label>
+
+                <label class="pdPaymentOption">
+                  <input type="radio" name="Payment Method" value="Cash App" required />
+                  <span>Cash App</span>
+                </label>
+
+                <label class="pdPaymentOption">
+                  <input type="radio" name="Payment Method" value="Apple Pay" required />
+                  <span>Apple Pay</span>
+                </label>
+
+                <label class="pdPaymentOption">
+                  <input type="radio" name="Payment Method" value="Venmo" required />
+                  <span>Venmo</span>
+                </label>
+
+                <label class="pdPaymentOption">
+                  <input type="radio" name="Payment Method" value="PayPal" required />
+                  <span>PayPal</span>
+                </label>
+              </div>
             </article>
           </div>
 
