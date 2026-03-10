@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Captured by Kam — Payment Instructions</title>
+  <meta name="description" content="Captured by Kam payment instructions" />
+  <link rel="stylesheet" href="payment-instructions.css" />
+  <script defer src="payment-instructions.js"></script>
+</head>
+<body>
+  <main class="piPage">
+    <div class="piWrap">
+      <section class="piCard">
+        <header class="piHeader">
+          <h1>CAPTUREDBY_KAM</h1>
+          <h2>PAYMENT INSTRUCTIONS</h2>
+        </header>
+
+        <div class="piRow">
+          <span>PAYMENT METHOD</span>
+          <strong id="piMethod">—</strong>
+        </div>
+
+        <div class="piRow">
+          <span>TOTAL DUE</span>
+          <strong id="piTotal">—</strong>
+        </div>
+
+        <div class="piRow">
+          <span>PAYMENT CODE</span>
+          <strong id="piCode">—</strong>
+        </div>
+
+        <p class="piNote">Use your payment code in the note / reason for payment.</p>
+
+        <a class="piAction" id="piActionLink" href="#" target="_blank" rel="noreferrer">Open Payment App</a>
+
+        <p class="piInstruction" id="piInstruction"></p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
