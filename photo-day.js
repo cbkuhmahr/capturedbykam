@@ -1,3 +1,4 @@
+// photo-day.js
 (() => {
   "use strict";
 
@@ -22,15 +23,11 @@
     let total = 0;
 
     packageInputs.forEach((input) => {
-      if (input.checked) {
-        total += Number(input.dataset.price || 0);
-      }
+      if (input.checked) total += Number(input.dataset.price || 0);
     });
 
     extraInputs.forEach((input) => {
-      if (input.checked) {
-        total += Number(input.dataset.price || 0);
-      }
+      if (input.checked) total += Number(input.dataset.price || 0);
     });
 
     const formatted = formatMoney(total);
@@ -76,14 +73,10 @@
     }
 
     if (nextField) {
-      const currentUrl = new URL(window.location.href);
-      const basePath = currentUrl.pathname.replace(/[^/]+$/, "");
-      const nextUrl = new URL(`${window.location.origin}${basePath}payment-instructions.html`);
-
+      const nextUrl = new URL("payment-instructions.html", window.location.href);
       nextUrl.searchParams.set("method", selectedPayment);
       nextUrl.searchParams.set("total", formattedTotal);
       nextUrl.searchParams.set("code", paymentCode);
-
       nextField.value = nextUrl.toString();
     }
   });
