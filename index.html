@@ -11,23 +11,29 @@
 </head>
 
 <body>
+  <noscript>
+    <div style="padding:12px 16px;font-family:system-ui;background:#fff3cd;border-bottom:1px solid #f0e1a6;">
+      JavaScript is disabled or blocked. The site will display in scroll mode.
+    </div>
+  </noscript>
+
   <aside class="left-rail" aria-label="Site navigation">
-    <button class="homeBtn" id="logo" type="button" aria-label="Go to home page">
+    <a class="homeBtn" id="logo" href="#home" aria-label="Go to home page">
       <div class="lockup" aria-label="Captured by Kam brand lockup">
         <div class="lockupBrand">CAPTUREDBY_KAM</div>
         <div class="lockupLine">Every Frame, Every Project —</div>
         <div class="lockupLine">Timeless Authenticity</div>
         <div class="lockupEst">Est. 2025</div>
       </div>
-    </button>
+    </a>
 
     <nav class="left-nav" aria-label="Primary">
-      <button class="navBtn is-active" data-page="home" type="button">HOME</button>
-      <button class="navBtn" data-page="about" type="button">ABOUT</button>
-      <button class="navBtn" data-page="services" type="button">SERVICES</button>
-      <button class="navBtn" data-page="book" type="button">BOOK</button>
-      <button class="navBtn" data-page="gallery" type="button">GALLERY</button>
-      <button class="navBtn" data-page="media-day" type="button">MEDIA DAY SIGN UP</button>
+      <a class="navBtn is-active" href="#home" data-page="home">HOME</a>
+      <a class="navBtn" href="#about" data-page="about">ABOUT</a>
+      <a class="navBtn" href="#services" data-page="services">SERVICES</a>
+      <a class="navBtn" href="#book" data-page="book">BOOK</a>
+      <a class="navBtn" href="#gallery" data-page="gallery">GALLERY</a>
+      <a class="navBtn" href="#media-day" data-page="media-day">MEDIA DAY SIGN UP</a>
     </nav>
 
     <div class="rail-meta">
@@ -48,7 +54,7 @@
 
       <div class="pageViewport" id="pageViewport">
         <!-- HOME -->
-        <article class="pagePanel is-active" data-page="home" aria-label="Home" aria-hidden="false">
+        <article id="home" class="pagePanel is-active" data-page="home" aria-label="Home" aria-hidden="false">
           <div class="coverGrid">
             <div class="coverCopy">
               <div class="heroEyebrow">Captured by Kam</div>
@@ -59,7 +65,7 @@
 
               <div class="heroButtons">
                 <button class="btn" id="enterBtn" type="button">ENTER SITE</button>
-                <button class="btn btnGhost" data-page="book" type="button">CONTACT</button>
+                <a class="btn btnGhost" href="#book" data-page="book">CONTACT</a>
               </div>
 
               <div class="coverFacts">
@@ -89,7 +95,7 @@
         </article>
 
         <!-- ABOUT -->
-        <article class="pagePanel" data-page="about" aria-label="About" aria-hidden="true">
+        <article id="about" class="pagePanel" data-page="about" aria-label="About" aria-hidden="true">
           <div class="pageInner">
             <div class="pageHeader">
               <div class="kicker">01 / ABOUT</div>
@@ -122,7 +128,7 @@
         </article>
 
         <!-- SERVICES -->
-        <article class="pagePanel" data-page="services" aria-label="Services" aria-hidden="true">
+        <article id="services" class="pagePanel" data-page="services" aria-label="Services" aria-hidden="true">
           <div class="pageInner">
             <div class="pageHeader">
               <div class="kicker">02 / SERVICES</div>
@@ -184,7 +190,7 @@
         </article>
 
         <!-- BOOK -->
-        <article class="pagePanel" data-page="book" aria-label="Book" aria-hidden="true">
+        <article id="book" class="pagePanel" data-page="book" aria-label="Book" aria-hidden="true">
           <div class="pageInner">
             <div class="pageHeader">
               <div class="kicker">03 / BOOK</div>
@@ -250,7 +256,7 @@
         </article>
 
         <!-- GALLERY -->
-        <article class="pagePanel" data-page="gallery" aria-label="Gallery" aria-hidden="true">
+        <article id="gallery" class="pagePanel" data-page="gallery" aria-label="Gallery" aria-hidden="true">
           <div class="pageInner pageInnerGallery">
             <div class="pageHeader">
               <div class="kicker">04 / GALLERY</div>
@@ -281,7 +287,7 @@
         </article>
 
         <!-- MEDIA DAY -->
-        <article class="pagePanel" data-page="media-day" aria-label="Media Day Sign Up" aria-hidden="true">
+        <article id="media-day" class="pagePanel" data-page="media-day" aria-label="Media Day Sign Up" aria-hidden="true">
           <div class="pageInner">
             <div class="pageHeader">
               <div class="kicker">05 / MEDIA DAY</div>
@@ -328,7 +334,7 @@
 
               <label class="field fieldFull">
                 <span class="label">NOTES</span>
-                <textarea class="control textarea" name="notes" placeholder="Location, time window, deliverables (team photo, individual portraits, banners, etc)."></textarea>
+                <textarea class="control textarea" name="notes" placeholder="Location, time window, deliverables, etc."></textarea>
               </label>
 
               <div class="formActions">
