@@ -1,6 +1,9 @@
 (() => {
   "use strict";
 
+  // If this file loads, enable JS styling mode.
+  document.documentElement.classList.add("js");
+
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
@@ -13,8 +16,6 @@
   const pageNext = $("#pageNext");
 
   const enterBtn = $("#enterBtn");
-  const logoBtn = $("#logo");
-  const pageViewport = $("#pageViewport");
 
   const serviceCtaButtons = $$(".serviceCta");
   const serviceSelect = $("#serviceSelect");
@@ -28,6 +29,7 @@
   const galleryNext = $("#galleryNext");
   const thumbGrid = $("#thumbGrid");
   const galleryFrame = $("#galleryFrame");
+  const pageViewport = $("#pageViewport");
 
   const PAGE_IDS = pagePanels
     .map((p) => String(p.dataset.page || "").trim())
@@ -37,56 +39,50 @@
 
   if (pageTotal) pageTotal.textContent = String(PAGE_IDS.length).padStart(2, "0");
 
-  function clamp(n, min, max) {
-    return Math.max(min, Math.min(n, max));
-  }
+  const clamp = (n, min, max) => Math.max(min, Math.min(n, max));
 
-  function pageIdToIndex(pageId) {
+  const pageIdToIndex = (pageId) => {
     const idx = PAGE_IDS.indexOf(pageId);
     return idx >= 0 ? idx : 0;
-  }
+  };
 
-  function indexToPageId(index) {
-    return PAGE_IDS[clamp(index, 0, PAGE_IDS.length - 1)];
-  }
+  const indexToPageId = (index) => PAGE_IDS[clamp(index, 0, PAGE_IDS.length - 1)];
 
-  function setActiveNav(pageId) {
+  const setActiveNav = (pageId) => {
     navButtons.forEach((btn) => btn.classList.toggle("is-active", btn.dataset.page === pageId));
-  }
+  };
 
-  function setActivePanel(pageId) {
+  const setActivePanel = (pageId) => {
     pagePanels.forEach((panel) => {
       const isActive = panel.dataset.page === pageId;
       panel.classList.toggle("is-active", isActive);
       panel.setAttribute("aria-hidden", isActive ? "false" : "true");
     });
-  }
+  };
 
-  function setPageCounter(index) {
+  const setPageCounter = (index) => {
     if (!pageCurrent) return;
     pageCurrent.textContent = String(index + 1).padStart(2, "0");
-  }
+  };
 
-  function updateHash(pageId) {
+  const updateHash = (pageId, mode = "push") => {
     const next = `#${pageId}`;
-    if (location.hash !== next) history.replaceState(null, "", next);
-  }
+    if (location.hash === next) return;
+    if (mode === "replace") history.replaceState(null, "", next);
+    else history.pushState(null, "", next);
+  };
 
-  function showPageById(pageId, { updateUrl = true } = {}) {
+  const showPageById = (pageId, { updateUrl = true, urlMode = "push" } = {}) => {
     currentPageIndex = pageIdToIndex(pageId);
-
     setActivePanel(pageId);
     setActiveNav(pageId);
     setPageCounter(currentPageIndex);
+    if (updateUrl) updateHash(pageId, urlMode);
+  };
 
-    if (updateUrl) updateHash(pageId);
-  }
+  const showPageByIndex = (index, opts) => showPageById(indexToPageId(index), opts);
 
-  function showPageByIndex(index, opts) {
-    showPageById(indexToPageId(index), opts);
-  }
-
-  function svgPlaceholderDataUrl(label) {
+  const svgPlaceholderDataUrl = (label) => {
     const safe = String(label ?? "Image").slice(0, 40);
     const svg = `
       <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800">
@@ -104,11 +100,10 @@
         </text>
       </svg>
     `.trim();
-
     return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-  }
+  };
 
-  function wireImageFallback(img, label) {
+  const wireImageFallback = (img, label) => {
     if (!img) return;
     img.addEventListener(
       "error",
@@ -117,9 +112,9 @@
       },
       { once: true }
     );
-  }
+  };
 
-  // Matches your /images folder screenshot naming.
+  // Update if your folder changes
   const IMAGE_FILES = [
     "images.01.JPG",
     "images.02.JPG",
@@ -144,9 +139,8 @@
 
   let currentGalleryIndex = 0;
 
-  function buildThumbs() {
+  const buildThumbs = () => {
     if (!thumbGrid) return;
-
     thumbGrid.innerHTML = "";
     const frag = document.createDocumentFragment();
 
@@ -170,19 +164,19 @@
     });
 
     thumbGrid.appendChild(frag);
-  }
+  };
 
-  function setActiveThumb(index) {
+  const setActiveThumb = (index) => {
     if (!thumbGrid) return;
     $$(".thumb", thumbGrid).forEach((t, i) => t.classList.toggle("is-active", i === index));
-  }
+  };
 
-  function preloadImage(src) {
+  const preloadImage = (src) => {
     const img = new Image();
     img.src = src;
-  }
+  };
 
-  function showGalleryItem(index) {
+  const showGalleryItem = (index) => {
     if (!galleryMainImage || !galleryTitle || !galleryCaption) return;
 
     currentGalleryIndex = (index + galleryItems.length) % galleryItems.length;
@@ -195,32 +189,35 @@
 
     wireImageFallback(galleryMainImage, item.title);
     setActiveThumb(currentGalleryIndex);
-
     preloadImage(galleryItems[(currentGalleryIndex + 1) % galleryItems.length].src);
-  }
+  };
 
-  // Nav buttons
+  // NAV: prevent default anchor jump; we control the page swap.
   navButtons.forEach((btn) => {
-    btn.addEventListener("click", () => showPageById(btn.dataset.page || "home"));
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      showPageById(btn.dataset.page || "home", { urlMode: "push" });
+    });
   });
 
-  // Any element with data-page (e.g. CONTACT button)
+  // CONTACT anchor or any element with data-page
   $$("[data-page]:not(.navBtn)").forEach((el) => {
-    el.addEventListener("click", () => showPageById(el.dataset.page || "home"));
+    el.addEventListener("click", (e) => {
+      if (el.tagName === "A") e.preventDefault();
+      showPageById(el.dataset.page || "home", { urlMode: "push" });
+    });
   });
 
-  pagePrev?.addEventListener("click", () => showPageByIndex(currentPageIndex - 1));
-  pageNext?.addEventListener("click", () => showPageByIndex(currentPageIndex + 1));
+  pagePrev?.addEventListener("click", () => showPageByIndex(currentPageIndex - 1, { urlMode: "push" }));
+  pageNext?.addEventListener("click", () => showPageByIndex(currentPageIndex + 1, { urlMode: "push" }));
 
-  enterBtn?.addEventListener("click", () => showPageById("about"));
-  logoBtn?.addEventListener("click", () => showPageById("home"));
+  enterBtn?.addEventListener("click", () => showPageById("about", { urlMode: "push" }));
 
-  // Booking helpers
   serviceCtaButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       const service = btn.dataset.service || "";
       if (serviceSelect) serviceSelect.value = service;
-      showPageById("book");
+      showPageById("book", { urlMode: "push" });
     });
   });
 
@@ -230,7 +227,6 @@
     });
   }
 
-  // Gallery controls
   galleryPrev?.addEventListener("click", () => showGalleryItem(currentGalleryIndex - 1));
   galleryNext?.addEventListener("click", () => showGalleryItem(currentGalleryIndex + 1));
 
@@ -238,54 +234,44 @@
   let touchStartX = 0;
   let touchStartTarget = null;
 
-  pageViewport?.addEventListener(
-    "touchstart",
-    (event) => {
-      touchStartX = event.changedTouches[0].clientX;
-      touchStartTarget = event.target;
-    },
-    { passive: true }
-  );
+  pageViewport?.addEventListener("touchstart", (event) => {
+    touchStartX = event.changedTouches[0].clientX;
+    touchStartTarget = event.target;
+  }, { passive: true });
 
-  pageViewport?.addEventListener(
-    "touchend",
-    (event) => {
-      const touchEndX = event.changedTouches[0].clientX;
-      const distance = touchEndX - touchStartX;
-      if (Math.abs(distance) < 40) return;
+  pageViewport?.addEventListener("touchend", (event) => {
+    const touchEndX = event.changedTouches[0].clientX;
+    const distance = touchEndX - touchStartX;
+    if (Math.abs(distance) < 40) return;
 
-      const pageId = indexToPageId(currentPageIndex);
-      const startedInGallery =
-        pageId === "gallery" &&
-        (galleryFrame?.contains(touchStartTarget) || thumbGrid?.contains(touchStartTarget));
+    const pageId = indexToPageId(currentPageIndex);
+    const startedInGallery =
+      pageId === "gallery" &&
+      (galleryFrame?.contains(touchStartTarget) || thumbGrid?.contains(touchStartTarget));
 
-      if (startedInGallery) {
-        if (distance < 0) showGalleryItem(currentGalleryIndex + 1);
-        if (distance > 0) showGalleryItem(currentGalleryIndex - 1);
-        return;
-      }
+    if (startedInGallery) {
+      if (distance < 0) showGalleryItem(currentGalleryIndex + 1);
+      if (distance > 0) showGalleryItem(currentGalleryIndex - 1);
+      return;
+    }
 
-      if (distance < 0) showPageByIndex(currentPageIndex + 1);
-      if (distance > 0) showPageByIndex(currentPageIndex - 1);
-    },
-    { passive: true }
-  );
+    if (distance < 0) showPageByIndex(currentPageIndex + 1, { urlMode: "push" });
+    if (distance > 0) showPageByIndex(currentPageIndex - 1, { urlMode: "push" });
+  }, { passive: true });
 
-  // Keyboard
   window.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowRight") showPageByIndex(currentPageIndex + 1);
-    if (event.key === "ArrowLeft") showPageByIndex(currentPageIndex - 1);
+    if (event.key === "ArrowRight") showPageByIndex(currentPageIndex + 1, { urlMode: "push" });
+    if (event.key === "ArrowLeft") showPageByIndex(currentPageIndex - 1, { urlMode: "push" });
 
     const pageId = indexToPageId(currentPageIndex);
     if (pageId === "gallery" && event.key === "ArrowUp") showGalleryItem(currentGalleryIndex - 1);
     if (pageId === "gallery" && event.key === "ArrowDown") showGalleryItem(currentGalleryIndex + 1);
   });
 
-  // Hash routing
-  function initialPageFromHash() {
+  const initialPageFromHash = () => {
     const hash = (location.hash || "").replace("#", "").trim();
     return PAGE_IDS.includes(hash) ? hash : "home";
-  }
+  };
 
   window.addEventListener("hashchange", () => {
     showPageById(initialPageFromHash(), { updateUrl: false });
@@ -294,5 +280,5 @@
   // Boot
   buildThumbs();
   showGalleryItem(0);
-  showPageById(initialPageFromHash(), { updateUrl: true });
+  showPageById(initialPageFromHash(), { updateUrl: true, urlMode: "replace" });
 })();
