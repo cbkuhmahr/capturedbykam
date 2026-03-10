@@ -1,256 +1,220 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Captured by Kam</title>
-  <meta name="description" content="Capturedby_Kam — Every Frame, Every Project — Timeless Authenticity." />
+  <meta
+    name="description"
+    content="Capturedby_Kam — Every Frame, Every Project — Timeless Authenticity."
+  />
   <link rel="icon" href="images/favicon.ico" />
   <link rel="stylesheet" href="styles.css" />
   <script defer src="script.js"></script>
 </head>
-
 <body>
   <header class="siteHeader" role="banner">
-    <div class="container headerInner">
-      <a class="brand" href="#home" aria-label="Captured by Kam — Home">
-        <div class="brandName">CAPTUREDBY_KAM</div>
-        <div class="brandTag">Every Frame, Every Project — Timeless Authenticity</div>
+    <div class="shell headerInner">
+      <a class="brand" href="#home" aria-label="Capturedby_Kam home">
+        <span class="brandName">Capturedby_Kam</span>
+        <span class="brandTag">Est. 2025</span>
       </a>
 
-      <button class="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav">
-        ☰
-      </button>
-
       <nav class="siteNav" id="siteNav" aria-label="Primary navigation">
-        <a class="navLink" href="#home">Home</a>
-        <a class="navLink" href="#about">About</a>
+        <a class="navLink" href="#gallery">Work</a>
         <a class="navLink" href="#services">Services</a>
-        <a class="navLink" href="#gallery">Gallery</a>
-        <a class="navLink" href="#contact">Contact / Book</a>
-        <a class="navLink" href="#picture-day">Picture Day</a>
+        <a class="navLink" href="#about">About</a>
+        <a class="navLink navLinkWide" href="#picture-day">Clients / Photo Day Sign Up</a>
       </nav>
+
+      <button class="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="siteNav">
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </header>
 
-  <main class="siteMain" id="home">
-    <!-- HERO -->
-    <section class="section hero" aria-label="Home">
-      <div class="container heroGrid">
-        <div class="heroCopy">
-          <div class="kicker">Captured by Kam</div>
-          <h1 class="heroTitle">Clean. Real. Intentional.</h1>
-          <p class="heroLead">
-            Media Day / Team Photos, Portraits, Events, and Video — built for athletes, families, and brands
-            that want it done right.
+  <main class="siteMain">
+    <section class="homeHero" id="home" aria-label="Home">
+      <div class="shell heroLayout">
+        <div class="heroMain">
+          <div class="heroAsterisk" aria-hidden="true">
+            <svg viewBox="0 0 120 120" role="presentation">
+              <line x1="60" y1="8" x2="60" y2="112"></line>
+              <line x1="8" y1="60" x2="112" y2="60"></line>
+              <line x1="24" y1="24" x2="96" y2="96"></line>
+              <line x1="96" y1="24" x2="24" y2="96"></line>
+            </svg>
+          </div>
+
+          <h1 class="heroTitle">
+            <span>EVERY FRAME,</span>
+            <span>EVERY PROJECT</span>
+            <span>TIMELESS</span>
+            <span>AUTHENTICITY</span>
+          </h1>
+        </div>
+
+        <div class="heroIntro">
+          <p>
+            Capturedby_Kam is a photography and media studio helping athletes,
+            families, brands, and teams preserve real moments with timeless authenticity.
           </p>
 
-          <div class="heroButtons">
-            <a class="btn" href="#gallery">View Work</a>
-            <a class="btn btnGhost" href="#contact">Book</a>
-          </div>
+          <div class="heroArrow" aria-hidden="true">↓</div>
 
-          <div class="facts">
-            <div class="fact">
-              <div class="factLabel">BASED IN</div>
-              <div class="factValue">Northwest Ohio</div>
-            </div>
-            <div class="fact">
-              <div class="factLabel">FOCUS</div>
-              <div class="factValue">Media Day • Team Photos • Portraits • Events • Video</div>
-            </div>
-          </div>
+          <a class="heroLink" href="#services">Here's how we can help</a>
         </div>
 
-        <div class="heroMedia" aria-label="Featured photos">
-          <figure class="mediaCard">
-            <img src="images/images.01.JPG" alt="Featured photo 1" loading="eager" decoding="async" />
-          </figure>
-          <figure class="mediaCard mediaCardSmall">
-            <img src="images/images.02.JPG" alt="Featured photo 2" loading="lazy" decoding="async" />
-          </figure>
-        </div>
+        <figure class="heroTeaser">
+          <img src="images/images.01.JPG" alt="Captured by Kam featured work" loading="eager" decoding="async" />
+        </figure>
+
+        <div class="heroScroll">(SCROLL)</div>
       </div>
     </section>
 
-    <!-- ABOUT -->
-    <section class="section" id="about" aria-label="About">
-      <div class="container">
-        <div class="sectionHeader">
-          <div class="kicker">About</div>
-          <h2 class="sectionTitle">Every project. Captured with intention.</h2>
-          <p class="sectionLead">
-            Husband. Father. Midwest-based visual storyteller behind Capturedby_Kam.
-            Clean frames, honest color, real moments.
-          </p>
+    <section class="section sectionAlt" id="about" aria-label="About">
+      <div class="shell">
+        <div class="sectionHead">
+          <p class="sectionKicker">About</p>
+          <h2 class="sectionTitle">Captured with intention.</h2>
         </div>
 
         <div class="aboutGrid">
-          <div class="aboutMedia">
-            <figure class="mediaCard">
-              <img src="images/images.03.JPG" alt="About photo 1" loading="lazy" decoding="async" />
-            </figure>
-            <figure class="mediaCard mediaCardSmall">
-              <img src="images/images.05.JPG" alt="About photo 2" loading="lazy" decoding="async" />
-            </figure>
-          </div>
-
-          <div class="card">
-            <div class="rows">
-              <div class="row">
-                <span class="rowLabel">APPROACH</span>
-                <b>Rely on the moment, not the edits</b>
-              </div>
-              <div class="row">
-                <span class="rowLabel">STYLE</span>
-                <b>Clean, honest, natural</b>
-              </div>
-              <div class="row">
-                <span class="rowLabel">AVAILABLE FOR</span>
-                <b>Portraits, sports, events, video</b>
-              </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <p class="muted">
-              From youth sports and senior photos to headshots, events, and special event video —
-              every frame, every project — timeless authenticity.
+          <div class="aboutCopy">
+            <p>
+              Husband. Father. Midwest-based visual storyteller behind Capturedby_Kam.
+              Clean frames, honest color, real moments.
+            </p>
+            <p>
+              Youth sports. Portraits. Events. Teams. Brand content. Video.
             </p>
           </div>
+
+          <div class="aboutImageStack">
+            <img src="images/images.03.JPG" alt="Captured by Kam portrait sample" loading="lazy" decoding="async" />
+            <img src="images/images.05.JPG" alt="Captured by Kam detail sample" loading="lazy" decoding="async" />
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- SERVICES -->
     <section class="section" id="services" aria-label="Services">
-      <div class="container">
-        <div class="sectionHeader">
-          <div class="kicker">Services</div>
-          <h2 class="sectionTitle">Clear offers. No mystery menu.</h2>
-          <p class="sectionLead">Tap a service to jump to booking with it selected.</p>
+      <div class="shell">
+        <div class="sectionHead">
+          <p class="sectionKicker">Services</p>
+          <h2 class="sectionTitle">What I shoot.</h2>
         </div>
 
-        <div class="grid">
-          <article class="service">
+        <div class="serviceGrid">
+          <article class="serviceCard">
             <div class="serviceTop">
-              <h3>YOUTH SPORTS</h3>
-              <button class="pill js-book" type="button" data-service="Youth Sports Packages">BOOK</button>
+              <h3>Youth Sports</h3>
+              <button class="serviceButton js-book" type="button" data-service="Youth Sports Packages">Book</button>
             </div>
-            <p class="muted">Media Day / Team Photos, athlete portraits, action coverage, posters, and print-ready deliverables.</p>
+            <p>Media Day / Team Photos, athlete portraits, action coverage, posters, and print-ready deliverables.</p>
           </article>
 
-          <article class="service">
+          <article class="serviceCard">
             <div class="serviceTop">
-              <h3>SENIOR PHOTOS</h3>
-              <button class="pill js-book" type="button" data-service="Senior Photos">BOOK</button>
+              <h3>Senior Photos</h3>
+              <button class="serviceButton js-book" type="button" data-service="Senior Photos">Book</button>
             </div>
-            <p class="muted">Confident portraits with clean styling and edits that feel polished without looking fake.</p>
+            <p>Confident portraits with clean styling and edits that feel polished without looking fake.</p>
           </article>
 
-          <article class="service">
+          <article class="serviceCard">
             <div class="serviceTop">
-              <h3>HEADSHOTS</h3>
-              <button class="pill js-book" type="button" data-service="Headshots">BOOK</button>
+              <h3>Headshots</h3>
+              <button class="serviceButton js-book" type="button" data-service="Headshots">Book</button>
             </div>
-            <p class="muted">Modern headshots for athletes, professionals, creatives, and brands.</p>
+            <p>Modern headshots for athletes, professionals, creatives, and brands.</p>
           </article>
 
-          <article class="service">
+          <article class="serviceCard">
             <div class="serviceTop">
-              <h3>EVENTS</h3>
-              <button class="pill js-book" type="button" data-service="Events">BOOK</button>
+              <h3>Events</h3>
+              <button class="serviceButton js-book" type="button" data-service="Events">Book</button>
             </div>
-            <p class="muted">Community events, celebrations, parties, school functions — documented the right way.</p>
+            <p>Community events, celebrations, school functions, and special moments documented the right way.</p>
           </article>
 
-          <article class="service">
+          <article class="serviceCard">
             <div class="serviceTop">
-              <h3>CINEMATIC VIDEO</h3>
-              <button class="pill js-book" type="button" data-service="Cinematic Video">BOOK</button>
+              <h3>Cinematic Video</h3>
+              <button class="serviceButton js-book" type="button" data-service="Cinematic Video">Book</button>
             </div>
-            <p class="muted">Promos, highlight reels, recap films, brand visuals, and short-form storytelling with motion.</p>
+            <p>Promos, highlight reels, recap films, brand visuals, and short-form storytelling with motion.</p>
           </article>
 
-          <article class="service serviceAccent">
+          <article class="serviceCard serviceCardAccent">
             <div class="serviceTop">
-              <h3>WHAT TO EXPECT</h3>
+              <h3>What To Expect</h3>
             </div>
-            <ul class="list">
-              <li>Fast communication</li>
-              <li>Clear session direction</li>
-              <li>Premium-looking edits</li>
-              <li>Delivery built for sharing + keepsake value</li>
-            </ul>
+            <p>Fast communication. Clear direction. Premium-looking edits. Delivery built for sharing and keepsake value.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- GALLERY -->
-    <section class="section" id="gallery" aria-label="Gallery">
-      <div class="container">
-        <div class="sectionHeader">
-          <div class="kicker">Gallery</div>
-          <h2 class="sectionTitle">Work samples</h2>
-          <p class="sectionLead">Tap any image to view. (Opens in a lightbox if JS is available.)</p>
+    <section class="section sectionAlt" id="gallery" aria-label="Gallery">
+      <div class="shell">
+        <div class="sectionHead">
+          <p class="sectionKicker">Work</p>
+          <h2 class="sectionTitle">Gallery</h2>
         </div>
 
-        <div class="galleryGrid" id="galleryGrid">
-          <!-- Works without JS: anchors open full image -->
-          <a class="galleryItem" href="images/images.01.JPG" target="_blank" rel="noreferrer" data-index="0">
+        <div class="galleryGrid">
+          <a class="galleryItem" href="images/images.01.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.01.JPG" alt="Gallery image 01" loading="lazy" decoding="async" />
           </a>
-          <a class="galleryItem" href="images/images.02.JPG" target="_blank" rel="noreferrer" data-index="1">
+          <a class="galleryItem" href="images/images.02.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.02.JPG" alt="Gallery image 02" loading="lazy" decoding="async" />
           </a>
-          <a class="galleryItem" href="images/images.03.JPG" target="_blank" rel="noreferrer" data-index="2">
+          <a class="galleryItem" href="images/images.03.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.03.JPG" alt="Gallery image 03" loading="lazy" decoding="async" />
           </a>
-          <a class="galleryItem" href="images/images.05.JPG" target="_blank" rel="noreferrer" data-index="3">
+          <a class="galleryItem" href="images/images.05.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.05.JPG" alt="Gallery image 05" loading="lazy" decoding="async" />
           </a>
-          <a class="galleryItem" href="images/images.06.JPG" target="_blank" rel="noreferrer" data-index="4">
+          <a class="galleryItem" href="images/images.06.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.06.JPG" alt="Gallery image 06" loading="lazy" decoding="async" />
           </a>
-          <a class="galleryItem" href="images/images.07.JPG" target="_blank" rel="noreferrer" data-index="5">
+          <a class="galleryItem" href="images/images.07.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.07.JPG" alt="Gallery image 07" loading="lazy" decoding="async" />
           </a>
-          <a class="galleryItem" href="images/images.08.JPG" target="_blank" rel="noreferrer" data-index="6">
+          <a class="galleryItem" href="images/images.08.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.08.JPG" alt="Gallery image 08" loading="lazy" decoding="async" />
           </a>
-          <a class="galleryItem" href="images/images.09.JPG" target="_blank" rel="noreferrer" data-index="7">
+          <a class="galleryItem" href="images/images.09.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.09.JPG" alt="Gallery image 09" loading="lazy" decoding="async" />
           </a>
-          <a class="galleryItem" href="images/images.010.JPG" target="_blank" rel="noreferrer" data-index="8">
+          <a class="galleryItem" href="images/images.010.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.010.JPG" alt="Gallery image 10" loading="lazy" decoding="async" />
           </a>
-          <a class="galleryItem" href="images/images.011.JPG" target="_blank" rel="noreferrer" data-index="9">
+          <a class="galleryItem" href="images/images.011.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.011.JPG" alt="Gallery image 11" loading="lazy" decoding="async" />
           </a>
-          <a class="galleryItem" href="images/images.012.JPG" target="_blank" rel="noreferrer" data-index="10">
+          <a class="galleryItem" href="images/images.012.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.012.JPG" alt="Gallery image 12" loading="lazy" decoding="async" />
           </a>
-          <a class="galleryItem" href="images/images.013.JPG" target="_blank" rel="noreferrer" data-index="11">
+          <a class="galleryItem" href="images/images.013.JPG" target="_blank" rel="noreferrer">
             <img src="images/images.013.JPG" alt="Gallery image 13" loading="lazy" decoding="async" />
-          </a>
-          <a class="galleryItem" href="images/images.014.JPG" target="_blank" rel="noreferrer" data-index="12">
-            <img src="images/images.014.JPG" alt="Gallery image 14" loading="lazy" decoding="async" />
           </a>
         </div>
       </div>
     </section>
 
-    <!-- CONTACT / BOOK -->
-    <section class="section" id="contact" aria-label="Contact and booking form">
-      <div class="container">
-        <div class="sectionHeader">
-          <div class="kicker">Contact / Book</div>
-          <h2 class="sectionTitle">Send details. I’ll reply fast.</h2>
-          <p class="sectionLead">Pricing + availability depends on the ask — this gets it moving.</p>
+    <section class="section" id="contact" aria-label="Contact and booking">
+      <div class="shell">
+        <div class="sectionHead">
+          <p class="sectionKicker">Contact / Book</p>
+          <h2 class="sectionTitle">Send details.</h2>
         </div>
 
-        <form class="form card" action="https://formsubmit.co/kam@capturedbykam.com" method="POST" autocomplete="on">
+        <form class="bookingForm" action="https://formsubmit.co/kam@capturedbykam.com" method="POST" autocomplete="on">
           <input type="hidden" name="_subject" value="New CBK Booking Request" />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
@@ -258,22 +222,22 @@
 
           <div class="formGrid">
             <label class="field">
-              <span class="label">NAME</span>
+              <span>Name</span>
               <input class="control" name="name" type="text" placeholder="Your full name" required />
             </label>
 
             <label class="field">
-              <span class="label">PHONE</span>
+              <span>Phone</span>
               <input class="control" name="phone" type="tel" placeholder="Best number to reach you" required />
             </label>
 
             <label class="field">
-              <span class="label">EMAIL</span>
+              <span>Email</span>
               <input class="control" id="emailInput" name="email" type="email" placeholder="you@example.com" required />
             </label>
 
             <label class="field">
-              <span class="label">SERVICE</span>
+              <span>Service</span>
               <select class="control" id="serviceSelect" name="service" required>
                 <option value="" selected disabled>Select a service</option>
                 <option value="Youth Sports Packages">Youth Sports Packages</option>
@@ -285,53 +249,46 @@
             </label>
 
             <label class="field">
-              <span class="label">PREFERRED DATE</span>
+              <span>Preferred Date</span>
               <input class="control" name="date" type="date" required />
             </label>
 
             <label class="field">
-              <span class="label">PREFERRED TIME</span>
+              <span>Preferred Time</span>
               <input class="control" name="time" type="time" required />
             </label>
           </div>
 
           <label class="field fieldFull">
-            <span class="label">PROJECT DETAILS</span>
+            <span>Project Details</span>
             <textarea class="control textarea" name="details" placeholder="Location, athlete name, team, vibe, event details, deadline, anything important."></textarea>
           </label>
 
           <div class="formActions">
-            <button class="btn" type="submit">SEND REQUEST</button>
-            <p class="fineprint">No spam. Just a reply with next steps.</p>
+            <button class="submitButton" type="submit">Send Request</button>
           </div>
         </form>
       </div>
     </section>
 
-    <!-- PICTURE DAY -->
-    <section class="section" id="picture-day" aria-label="Picture Day sign up placeholder">
-      <div class="container">
-        <div class="sectionHeader">
-          <div class="kicker">Picture Day</div>
-          <h2 class="sectionTitle">Picture Day Sign Up</h2>
-          <p class="sectionLead">Placeholder for Version 1. This will become a dedicated signup flow.</p>
+    <section class="section sectionAlt" id="picture-day" aria-label="Clients and picture day sign up">
+      <div class="shell">
+        <div class="sectionHead">
+          <p class="sectionKicker">Clients / Photo Day Sign Up</p>
+          <h2 class="sectionTitle">Photo Day Sign Up</h2>
         </div>
 
-        <div class="card">
-          <p class="muted">
-            Coming soon. For now, use the booking form above and put “PICTURE DAY” in the details.
-          </p>
-          <a class="btn btnGhost" href="#contact">Go to Booking Form</a>
+        <div class="pictureDayCard">
+          <p>Use the booking form and put “PHOTO DAY” in the project details.</p>
+          <a class="inlineLink" href="#contact">Go to booking form</a>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="siteFooter" aria-label="Footer">
-    <div class="container footerInner">
-      <div class="footerLeft">
-        <div class="footerText">© <span id="year"></span> Captured by Kam. All rights reserved.</div>
-      </div>
+    <div class="shell footerInner">
+      <div>© <span id="year"></span> Captured by Kam. All rights reserved.</div>
       <div class="footerLinks">
         <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
         <a href="https://www.instagram.com/CapturedBy_Kam" target="_blank" rel="noreferrer">Instagram</a>
@@ -339,17 +296,5 @@
       </div>
     </div>
   </footer>
-
-  <!-- Lightbox (JS enhances; hidden by default) -->
-  <div class="lightbox" id="lightbox" aria-hidden="true">
-    <div class="lightboxBackdrop" data-close="1"></div>
-    <div class="lightboxDialog" role="dialog" aria-modal="true" aria-label="Image viewer">
-      <button class="lightboxClose" type="button" aria-label="Close" data-close="1">×</button>
-      <button class="lightboxNav lightboxPrev" type="button" aria-label="Previous">‹</button>
-      <img class="lightboxImg" id="lightboxImg" alt="" />
-      <button class="lightboxNav lightboxNext" type="button" aria-label="Next">›</button>
-      <div class="lightboxMeta" id="lightboxMeta"></div>
-    </div>
-  </div>
 </body>
 </html>
