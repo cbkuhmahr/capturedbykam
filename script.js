@@ -6,6 +6,7 @@
   const navToggle = document.querySelector(".navToggle");
   const nav = document.getElementById("siteNav");
   const yearEl = document.getElementById("year");
+  const contactSection = document.getElementById("contact");
   const emailInput = document.getElementById("emailInput");
   const replyToField = document.getElementById("replyToField");
   const serviceSelect = document.getElementById("serviceSelect");
@@ -23,10 +24,15 @@
     }
   }
 
-  navToggle?.addEventListener("click", () => {
-    const isOpen = body.classList.contains("nav-open");
-    setMenu(!isOpen);
-  });
+navToggle?.addEventListener("click", () => {
+  if (window.innerWidth > 920) {
+    contactSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+
+  const isOpen = body.classList.contains("nav-open");
+  setMenu(!isOpen);
+});
 
   navLinks.forEach((link) => {
     link.addEventListener("click", () => setMenu(false));
