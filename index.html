@@ -4,653 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Captured by Kam</title>
-  <meta name="description" content=Capturedby_Kam- Every Frame, Every Project—Timeless Authenticity./>
+  <meta name="description" content="Capturedby_Kam — Every Frame, Every Project — Timeless Authenticity." />
   <link rel="icon" href="images/favicon.ico" />
-  <style>
-    :root {
-      --bg: #b7b6ac;
-      --bg-deep: #a6a59a;
-      --paper: #f7f3eb;
-      --paper-2: #eee8dc;
-      --ink: #25211b;
-      --muted: rgba(37, 33, 27, 0.72);
-      --line: rgba(37, 33, 27, 0.12);
-      --accent: #c96e2f;
-      --accent-soft: rgba(201, 110, 47, 0.12);
-      --shadow: 0 24px 60px rgba(20, 16, 11, 0.16);
-      --radius: 28px;
-      --sidebar: 228px;
-      --mono: "SFMono-Regular", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; }
-    body {
-      background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.33), transparent 34%),
-        linear-gradient(180deg, #c7c6bd 0%, var(--bg) 55%, var(--bg-deep) 100%);
-      color: var(--ink);
-      font-family: var(--sans);
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-
-    img { display: block; max-width: 100%; }
-    a { color: inherit; text-decoration: none; }
-    button, input, select, textarea { font: inherit; }
-    button { cursor: pointer; }
-
-    .left-rail {
-      position: fixed;
-      inset: 0 auto 0 0;
-      width: var(--sidebar);
-      padding: 28px 22px 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 18px;
-      z-index: 30;
-    }
-
-    .homeBtn {
-      border: 0;
-      padding: 0;
-      background: none;
-      text-align: left;
-      color: inherit;
-    }
-
-    .lockup, .left-nav, .rail-meta { display: grid; }
-    .lockup { gap: 4px; }
-
-    .lockupBrand,
-    .lockupLine,
-    .lockupEst,
-    .navBtn,
-    .rail-meta a,
-    .top-social a,
-    .kicker,
-    .factLabel,
-    .label,
-    .fineprint,
-    .galleryTitle,
-    .galleryCaption,
-    .footerText,
-    .footerLinks a,
-    .pageCount,
-    .thumbHint,
-    .heroEyebrow {
-      font-family: var(--mono);
-      letter-spacing: .02em;
-    }
-
-    .lockupBrand { font-size: 1rem; font-weight: 700; }
-    .lockupLine, .lockupEst { font-size: .82rem; color: var(--muted); }
-
-    .left-nav { gap: 10px; }
-
-    .navBtn {
-      border: 0;
-      background: none;
-      width: 100%;
-      text-align: left;
-      padding: 10px 0;
-      color: var(--muted);
-      font-size: .88rem;
-      position: relative;
-    }
-
-    .navBtn::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 0;
-      height: 2px;
-      background: var(--accent);
-      transition: width .22s ease;
-    }
-
-    .navBtn:hover, .navBtn.is-active { color: var(--ink); }
-    .navBtn:hover::after, .navBtn.is-active::after { width: 44px; }
-
-    .rail-meta { gap: 10px; }
-    .rail-meta a, .top-social a, .footerLinks a {
-      color: var(--muted);
-      font-size: .82rem;
-    }
-    .rail-meta a:hover, .top-social a:hover, .footerLinks a:hover { color: var(--ink); }
-
-    .top-social {
-      position: fixed;
-      top: 24px;
-      right: 34px;
-      display: flex;
-      gap: 16px;
-      z-index: 20;
-    }
-
-    .stage {
-      min-height: 100vh;
-      padding: 40px 32px 34px calc(var(--sidebar) + 34px);
-    }
-
-    .bookShell {
-      position: relative;
-      min-height: calc(100vh - 74px);
-      max-width: 1320px;
-    }
-
-    .bookDepth,
-    .pageViewport,
-    .pageViewport::before,
-    .pageViewport::after {
-      border-radius: var(--radius);
-    }
-
-    .bookDepth {
-      position: absolute;
-      inset: 18px 12px -12px 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0.18));
-      filter: blur(.2px);
-    }
-
-    .pageViewport {
-      position: relative;
-      min-height: calc(100vh - 118px);
-      overflow: hidden;
-      background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
-      border: 1px solid rgba(255,255,255,0.42);
-      box-shadow: var(--shadow);
-    }
-
-    .pageViewport::before,
-    .pageViewport::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .pageViewport::before {
-      background: linear-gradient(90deg, rgba(32,29,24,0.07), transparent 9%, transparent 91%, rgba(32,29,24,0.04));
-    }
-
-    .pageViewport::after { box-shadow: inset 0 1px 0 rgba(255,255,255,0.55); }
-
-    .pagePanel {
-      position: absolute;
-      inset: 0;
-      padding: clamp(20px, 3vw, 34px);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateX(46px) scale(.985);
-      transition: opacity .32s ease, transform .32s ease, visibility .32s ease;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .pagePanel.is-active {
-      opacity: 1;
-      visibility: visible;
-      transform: translateX(0) scale(1);
-      z-index: 2;
-    }
-
-    .pageInner {
-      height: 100%;
-      overflow: auto;
-      padding-right: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .pageInner::-webkit-scrollbar { width: 10px; }
-    .pageInner::-webkit-scrollbar-thumb {
-      background: rgba(32,29,24,0.14);
-      border-radius: 999px;
-    }
-
-    .coverGrid {
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 28px;
-      height: 100%;
-      min-height: 0;
-      align-items: stretch;
-    }
-
-    .coverCopy,
-    .coverVisuals,
-    .heroCard,
-    .photoBlock,
-    .galleryFrame,
-    .serviceCard,
-    .footer,
-    .flipBtn,
-    .thumb,
-    .control,
-    .btn {
-      border-radius: 24px;
-    }
-
-    .coverCopy {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: clamp(22px, 4vw, 44px);
-      background: rgba(255,255,255,0.46);
-      border: 1px solid rgba(255,255,255,0.55);
-    }
-
-    .heroEyebrow, .kicker {
-      color: var(--muted);
-      font-size: .82rem;
-      text-transform: uppercase;
-    }
-
-    .coverCopy h1,
-    .pageHeader h2 {
-      margin: 8px 0 0;
-      font-size: clamp(2rem, 4vw, 4rem);
-      line-height: .95;
-      letter-spacing: -.04em;
-    }
-
-    .coverCopy p,
-    .pageLead,
-    .aboutCopy p,
-    .serviceCard p,
-    .galleryCaption,
-    .pageText {
-      font-size: clamp(1rem, 1.5vw, 1.08rem);
-      line-height: 1.65;
-      color: var(--muted);
-      margin: 0;
-    }
-
-    .heroButtons,
-    .coverFacts,
-    .galleryMeta,
-    .galleryControls,
-    .pageControls,
-    .footerInner,
-    .footerLinks,
-    .serviceTop,
-    .formActions {
-      display: flex;
-      align-items: center;
-    }
-
-    .heroButtons { gap: 12px; margin-top: 26px; flex-wrap: wrap; }
-
-    .btn,
-    .btnGhost,
-    .flipBtn,
-    .navBtn,
-    .thumb,
-    .serviceCta {
-      transition: transform .2s ease, background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
-    }
-
-    .btn {
-      border: 1px solid rgba(37,33,27,0.14);
-      background: var(--ink);
-      color: #fff;
-      padding: 14px 18px;
-      font-weight: 600;
-      box-shadow: 0 12px 24px rgba(37,33,27,.12);
-    }
-
-    .btn:hover,
-    .flipBtn:hover,
-    .thumb:hover,
-    .serviceCta:hover {
-      transform: translateY(-1px);
-    }
-
-    .btnGhost {
-      background: transparent;
-      color: var(--ink);
-      border: 1px solid rgba(37,33,27,0.14);
-      box-shadow: none;
-    }
-
-    .coverFacts {
-      margin-top: 26px;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .coverFacts > div {
-      min-width: 200px;
-      padding: 14px 16px;
-      background: rgba(255,255,255,0.34);
-      border: 1px solid rgba(37,33,27,0.08);
-      border-radius: 18px;
-      display: grid;
-      gap: 5px;
-    }
-
-    .factLabel { font-size: .72rem; color: var(--muted); }
-    .factValue { font-size: .95rem; font-weight: 600; }
-
-    .coverVisuals {
-      display: grid;
-      grid-template-columns: 1fr .7fr;
-      gap: 18px;
-      align-items: end;
-      min-height: 0;
-    }
-
-    .heroCard, .photoBlock, .galleryFrame {
-      overflow: hidden;
-      background: rgba(255,255,255,0.5);
-      border: 1px solid rgba(255,255,255,0.55);
-      box-shadow: 0 18px 42px rgba(20,16,11,0.12);
-    }
-
-    .heroCard img, .photoBlock img, .galleryFrame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .heroCardMain { min-height: 100%; }
-    .heroCardFloat { min-height: 62%; align-self: center; }
-
-    .heroCard figcaption {
-      padding: 11px 14px;
-      font-family: var(--mono);
-      font-size: .74rem;
-      color: var(--muted);
-      background: rgba(247,243,235,0.92);
-      border-top: 1px solid rgba(37,33,27,0.08);
-    }
-
-    .pageHeader { display: grid; gap: 10px; }
-    .pageHeader h2 { font-size: clamp(1.8rem, 3vw, 3rem); }
-
-    .aboutGrid {
-      display: grid;
-      grid-template-columns: .95fr 1.05fr;
-      gap: 24px;
-      min-height: 0;
-    }
-
-    .aboutImages {
-      display: grid;
-      grid-template-columns: 1fr .8fr;
-      gap: 14px;
-    }
-
-    .photoBlock.large { min-height: 420px; }
-    .photoBlock.small { min-height: 320px; align-self: end; }
-
-    .aboutCopy { display: grid; gap: 16px; align-content: start; }
-
-    .detailRows {
-      display: grid;
-      gap: 10px;
-      margin-top: 6px;
-    }
-
-    .detailRow {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .detailRow span {
-      font-family: var(--mono);
-      font-size: .8rem;
-      color: var(--muted);
-    }
-
-    .detailRow b { font-size: .98rem; }
-
-    .servicesGrid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .serviceCard {
-      padding: 20px;
-      border: 1px solid rgba(37,33,27,0.09);
-      background: rgba(255,255,255,0.42);
-      box-shadow: 0 12px 28px rgba(20,16,11,0.08);
-      display: grid;
-      gap: 12px;
-      min-height: 170px;
-    }
-
-    .serviceCardAccent {
-      background: linear-gradient(180deg, rgba(201,110,47,.12), rgba(255,255,255,.42));
-      border-color: rgba(201,110,47,.2);
-    }
-
-    .serviceTop { justify-content: space-between; gap: 12px; align-items: start; }
-    .serviceTop h3 { margin: 0; font-size: 1rem; letter-spacing: -.02em; }
-
-    .serviceCta, .btnSmall {
-      border: 1px solid rgba(37,33,27,0.14);
-      background: rgba(255,255,255,0.7);
-      color: var(--ink);
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-family: var(--mono);
-      font-size: .72rem;
-      white-space: nowrap;
-    }
-
-    .serviceList {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .form {
-      display: grid;
-      gap: 18px;
-      max-width: 980px;
-    }
-
-    .formGrid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .field {
-      display: grid;
-      gap: 8px;
-    }
-
-    .fieldFull { grid-column: 1 / -1; }
-
-    .label {
-      color: var(--muted);
-      font-size: .78rem;
-    }
-
-    .control {
-      width: 100%;
-      border: 1px solid rgba(37,33,27,0.12);
-      background: rgba(255,255,255,0.68);
-      color: var(--ink);
-      padding: 15px 16px;
-      outline: none;
-    }
-
-    .control:focus {
-      border-color: rgba(201,110,47,0.45);
-      box-shadow: 0 0 0 4px rgba(201,110,47,0.12);
-    }
-
-    .textarea {
-      min-height: 140px;
-      resize: vertical;
-    }
-
-    .formActions { gap: 16px; flex-wrap: wrap; }
-    .fineprint { color: var(--muted); font-size: .8rem; }
-
-    .galleryLayout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 330px;
-      gap: 18px;
-      min-height: 0;
-      height: 100%;
-    }
-
-    .galleryStage {
-      display: grid;
-      gap: 14px;
-      min-height: 0;
-    }
-
-    .galleryFrame {
-      min-height: 520px;
-      background: rgba(17,16,14,.06);
-    }
-
-    .galleryMeta {
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-      padding: 14px 4px 0;
-    }
-
-    .galleryTitle {
-      font-size: .84rem;
-      color: var(--ink);
-      margin-bottom: 8px;
-    }
-
-    .galleryCaption { max-width: 700px; font-size: .95rem; }
-
-    .galleryControls { gap: 10px; }
-
-    .flipBtn {
-      width: 50px;
-      height: 50px;
-      border: 1px solid rgba(37,33,27,0.12);
-      background: rgba(255,255,255,0.62);
-      color: var(--ink);
-      font-size: 1.5rem;
-      box-shadow: 0 12px 24px rgba(20,16,11,0.08);
-    }
-
-    .thumbGrid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      align-content: start;
-      max-height: 100%;
-      overflow: auto;
-      padding-right: 4px;
-    }
-
-    .thumb {
-      border: 1px solid rgba(37,33,27,0.1);
-      padding: 0;
-      overflow: hidden;
-      background: rgba(255,255,255,0.65);
-      aspect-ratio: 1 / 1;
-    }
-
-    .thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .thumb.is-active {
-      border-color: rgba(201,110,47,0.58);
-      box-shadow: 0 0 0 3px rgba(201,110,47,0.12);
-    }
-
-    .pageControls {
-      justify-content: flex-end;
-      gap: 12px;
-      padding: 18px 8px 0;
-    }
-
-    .pageCount {
-      min-width: 74px;
-      text-align: center;
-      color: var(--muted);
-      font-size: .82rem;
-    }
-
-    .footer {
-      margin: 0 32px 26px calc(var(--sidebar) + 34px);
-      padding: 14px 20px;
-      border: 1px solid rgba(255,255,255,0.42);
-      background: rgba(247,243,235,0.58);
-      box-shadow: 0 16px 36px rgba(20,16,11,0.08);
-    }
-
-    .footerInner {
-      justify-content: space-between;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .footerText { color: var(--muted); font-size: .82rem; }
-    .footerLinks { gap: 14px; flex-wrap: wrap; }
-
-    @media (max-width: 1080px) {
-      .coverGrid,
-      .aboutGrid,
-      .galleryLayout { grid-template-columns: 1fr; }
-      .coverVisuals { grid-template-columns: 1fr 1fr; min-height: 360px; }
-      .galleryFrame { min-height: 420px; }
-      .thumbGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    }
-
-    @media (max-width: 860px) {
-      .left-rail {
-        position: static;
-        width: auto;
-        padding: 16px 16px 0;
-      }
-      .top-social {
-        position: static;
-        padding: 0 16px 10px;
-        justify-content: flex-start;
-      }
-      .stage {
-        padding: 0 16px 16px;
-      }
-      .bookShell { min-height: auto; }
-      .pageViewport { min-height: 0; }
-      .pagePanel {
-        position: absolute;
-        min-height: 74vh;
-      }
-      .servicesGrid,
-      .formGrid,
-      .coverVisuals,
-      .thumbGrid { grid-template-columns: 1fr; }
-      .footer { margin: 0 16px 16px; }
-    }
-
-    @media (max-width: 640px) {
-      .coverCopy h1,
-      .pageHeader h2 { font-size: clamp(1.8rem, 10vw, 2.5rem); }
-      .pageControls { justify-content: center; }
-      .galleryFrame { min-height: 320px; }
-      .flipBtn { width: 46px; height: 46px; }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
 </head>
+
 <body>
   <aside class="left-rail" aria-label="Site navigation">
     <button class="homeBtn" id="logo" type="button" aria-label="Go to home page">
@@ -663,12 +22,12 @@
     </button>
 
     <nav class="left-nav" aria-label="Primary">
-      <button class="navBtn is-active" data-target="0" type="button">HOME</button>
-      <button class="navBtn" data-target="1" type="button">ABOUT</button>
-      <button class="navBtn" data-target="2" type="button">SERVICES</button>
-      <button class="navBtn" data-target="3" type="button">BOOK</button>
-      <button class="navBtn" data-target="4" type="button">GALLERY</button>
-      <button class="navBtn" data-target="4" type="button">Media Day Sign Up </button>
+      <button class="navBtn is-active" data-page="home" type="button">HOME</button>
+      <button class="navBtn" data-page="about" type="button">ABOUT</button>
+      <button class="navBtn" data-page="services" type="button">SERVICES</button>
+      <button class="navBtn" data-page="book" type="button">BOOK</button>
+      <button class="navBtn" data-page="gallery" type="button">GALLERY</button>
+      <button class="navBtn" data-page="media-day" type="button">MEDIA DAY SIGN UP</button>
     </nav>
 
     <div class="rail-meta">
@@ -688,17 +47,19 @@
       <div class="bookDepth" aria-hidden="true"></div>
 
       <div class="pageViewport" id="pageViewport">
-        <article class="pagePanel is-active" data-page="0" aria-label="Home">
+        <!-- HOME -->
+        <article class="pagePanel is-active" data-page="home" aria-label="Home" aria-hidden="false">
           <div class="coverGrid">
             <div class="coverCopy">
               <div class="heroEyebrow">Captured by Kam</div>
-              <h1>"Capturedby_Kam- Every Frame, Every Project—Timeless Authenticity."</h1>
-          
+              <h1>Every Frame, Every Project — Timeless Authenticity.</h1>
+              <p class="pageLead">
+                Media Day / Team Photos, Portraits, Events, and Video — clean, honest work with intention.
               </p>
 
               <div class="heroButtons">
                 <button class="btn" id="enterBtn" type="button">ENTER SITE</button>
-                <button class="btn btnGhost jumpToBook" type="button">CONTACT </button>
+                <button class="btn btnGhost" data-page="book" type="button">CONTACT</button>
               </div>
 
               <div class="coverFacts">
@@ -715,42 +76,44 @@
 
             <div class="coverVisuals">
               <figure class="heroCard heroCardMain">
-                <img src="images/author.jpg" alt="Kam seated in front of colorful artwork" />
-                <figcaption>Artist portrait / brand presence</figcaption>
+                <img src="images/images.01.JPG" alt="Featured portrait" loading="eager" decoding="async" />
+                <figcaption>Brand presence</figcaption>
               </figure>
 
               <figure class="heroCard heroCardFloat">
-                <img src="images/avatar.jpg" alt="Kam holding a camera to his face" />
+                <img src="images/images.02.JPG" alt="Behind the lens" loading="lazy" decoding="async" />
                 <figcaption>Behind the lens</figcaption>
               </figure>
             </div>
           </div>
         </article>
 
-        <article class="pagePanel" data-page="1" aria-label="About">
+        <!-- ABOUT -->
+        <article class="pagePanel" data-page="about" aria-label="About" aria-hidden="true">
           <div class="pageInner">
             <div class="pageHeader">
               <div class="kicker">01 / ABOUT</div>
-              <h2>Capturedby_Kam- Every project.Captured with intention.</h2>
+              <h2>Every project. Captured with intention.</h2>
             </div>
 
             <div class="aboutGrid">
               <div class="aboutImages">
                 <figure class="photoBlock large">
-                  <img src="images/author.jpg" alt="Kam smiling in front of framed graffiti artwork" />
+                  <img src="images/images.03.JPG" alt="Lifestyle portrait" loading="lazy" decoding="async" />
                 </figure>
                 <figure class="photoBlock small">
-                  <img src="images/avatar.jpg" alt="Kam photographing with a Canon camera" />
+                  <img src="images/images.05.JPG" alt="Camera detail" loading="lazy" decoding="async" />
                 </figure>
               </div>
 
               <div class="aboutCopy">
-                <p>Husband. Father. Midwest-based visual storyteller behind Capturedby_Kam. </p>
-                <p>Tech-driven, photography-obsessed, I shoot with intention—clean and real. </p>
-                <p>From youth sports and senior photos to headshots, events, and special events video—every frame, every project—timeless authenticity.</p>
+                <p>Husband. Father. Midwest-based visual storyteller behind Capturedby_Kam.</p>
+                <p>Tech-driven, photography-obsessed. Clean, real frames — not overcooked edits.</p>
+                <p>From youth sports and senior photos to headshots, events, and video — timeless authenticity.</p>
+
                 <div class="detailRows">
                   <div class="detailRow"><span>APPROACH</span><b>Rely on the moment, not the edits</b></div>
-                  <div class="detailRow"><span>STYLE</span><b>Clean, honest, natural moment </b></div>
+                  <div class="detailRow"><span>STYLE</span><b>Clean, honest, natural</b></div>
                   <div class="detailRow"><span>AVAILABLE FOR</span><b>Portraits, sports, events, video</b></div>
                 </div>
               </div>
@@ -758,7 +121,8 @@
           </div>
         </article>
 
-        <article class="pagePanel" data-page="2" aria-label="Services">
+        <!-- SERVICES -->
+        <article class="pagePanel" data-page="services" aria-label="Services" aria-hidden="true">
           <div class="pageInner">
             <div class="pageHeader">
               <div class="kicker">02 / SERVICES</div>
@@ -771,7 +135,7 @@
                   <h3>YOUTH SPORTS</h3>
                   <button class="serviceCta" data-service="Youth Sports Packages" type="button">BOOK</button>
                 </div>
-                <p>Media Day / Team Photos, athlete portraits, team photos, action coverage, posters, and print-ready deliverables.</p>
+                <p>Media Day / Team Photos, athlete portraits, action coverage, posters, and print-ready deliverables.</p>
               </article>
 
               <article class="serviceCard">
@@ -779,7 +143,7 @@
                   <h3>SENIOR PHOTOS</h3>
                   <button class="serviceCta" data-service="Senior Photos" type="button">BOOK</button>
                 </div>
-                <p>Confident portraits with clean styling, strong locations, and edits that feel polished without looking fake.</p>
+                <p>Confident portraits with clean styling and edits that feel polished without looking fake.</p>
               </article>
 
               <article class="serviceCard">
@@ -787,7 +151,7 @@
                   <h3>HEADSHOTS</h3>
                   <button class="serviceCta" data-service="Headshots" type="button">BOOK</button>
                 </div>
-                <p>Modern headshots for athletes, professionals, creatives, brands, and anybody tired of stale LinkedIn energy.</p>
+                <p>Modern headshots for athletes, professionals, creatives, and brands.</p>
               </article>
 
               <article class="serviceCard">
@@ -795,7 +159,7 @@
                   <h3>EVENTS</h3>
                   <button class="serviceCta" data-service="Events" type="button">BOOK</button>
                 </div>
-                <p>Community events, celebrations, parties, school functions, and moments you want documented the right way.</p>
+                <p>Community events, celebrations, parties, school functions — documented the right way.</p>
               </article>
 
               <article class="serviceCard">
@@ -803,7 +167,7 @@
                   <h3>CINEMATIC VIDEO</h3>
                   <button class="serviceCta" data-service="Cinematic Video" type="button">BOOK</button>
                 </div>
-                <p>Promos, highlight reels, recap films, brand visuals, and short-form storytelling with real shape and motion.</p>
+                <p>Promos, highlight reels, recap films, and short-form storytelling with motion.</p>
               </article>
 
               <article class="serviceCard serviceCardAccent">
@@ -812,19 +176,19 @@
                   <li>Fast communication</li>
                   <li>Clear session direction</li>
                   <li>Premium-looking edits</li>
-                  <li>Delivery built for both sharing and keepsake value</li>
+                  <li>Delivery built for sharing + keepsake value</li>
                 </ul>
               </article>
             </div>
           </div>
         </article>
 
-        <article class="pagePanel" data-page="3" aria-label="Book">
+        <!-- BOOK -->
+        <article class="pagePanel" data-page="book" aria-label="Book" aria-hidden="true">
           <div class="pageInner">
             <div class="pageHeader">
               <div class="kicker">03 / BOOK</div>
               <h2>Provide a few details, I'll be in touch.</h2>
-              </p>
             </div>
 
             <form class="form" action="https://formsubmit.co/kam@capturedbykam.com" method="POST" autocomplete="on">
@@ -841,7 +205,7 @@
 
                 <label class="field">
                   <span class="label">PHONE / NUMBER</span>
-                  <input class="control" name="phone" type="text" placeholder="Best number to reach you" required />
+                  <input class="control" name="phone" type="tel" placeholder="Best number to reach you" required />
                 </label>
 
                 <label class="field">
@@ -853,11 +217,11 @@
                   <span class="label">SERVICE</span>
                   <select class="control" id="serviceSelect" name="service" required>
                     <option value="" selected disabled>Select a service</option>
-                    <option>Youth Sports Packages</option>
-                    <option>Senior Photos</option>
-                    <option>Headshots</option>
-                    <option>Events</option>
-                    <option>Cinematic Video</option>
+                    <option value="Youth Sports Packages">Youth Sports Packages</option>
+                    <option value="Senior Photos">Senior Photos</option>
+                    <option value="Headshots">Headshots</option>
+                    <option value="Events">Events</option>
+                    <option value="Cinematic Video">Cinematic Video</option>
                   </select>
                 </label>
 
@@ -874,32 +238,34 @@
 
               <label class="field fieldFull">
                 <span class="label">PROJECT DETAILS</span>
-                <textarea class="control textarea" name="details" placeholder="Tell me what you need — location, athlete name, team, vibe, event details, deadline, or anything else that matters."></textarea>
+                <textarea class="control textarea" name="details" placeholder="Location, athlete name, team, vibe, event details, deadline, etc."></textarea>
               </label>
 
               <div class="formActions">
                 <button class="btn" type="submit">SEND REQUEST</button>
+                <p class="fineprint">No spam — just a quick reply to confirm details + pricing.</p>
               </div>
             </form>
           </div>
         </article>
 
-        <article class="pagePanel" data-page="4" aria-label="Gallery">
-          <div class="pageInner">
+        <!-- GALLERY -->
+        <article class="pagePanel" data-page="gallery" aria-label="Gallery" aria-hidden="true">
+          <div class="pageInner pageInnerGallery">
             <div class="pageHeader">
               <div class="kicker">04 / GALLERY</div>
             </div>
 
             <div class="galleryLayout">
               <div class="galleryStage">
-                <div class="galleryFrame">
-                  <img id="galleryMainImage" src="images/author.jpg" alt="Featured gallery image" />
+                <div class="galleryFrame" id="galleryFrame">
+                  <img id="galleryMainImage" src="images/images.01.JPG" alt="Featured gallery image" decoding="async" />
                 </div>
 
                 <div class="galleryMeta">
                   <div>
-                    <div class="galleryTitle" id="galleryTitle">Artist portrait / brand presence</div>
-                    <div class="galleryCaption" id="galleryCaption">A personal frame that brings warmth, color, and personality into the brand.</div>
+                    <div class="galleryTitle" id="galleryTitle">Featured</div>
+                    <div class="galleryCaption" id="galleryCaption">Swipe or use arrows to browse.</div>
                   </div>
 
                   <div class="galleryControls">
@@ -909,27 +275,74 @@
                 </div>
               </div>
 
-              <div class="thumbGrid">
-                <button class="thumb is-active" type="button" data-index="0"><img src="images/author.jpg" alt="Kam portrait thumbnail" /></button>
-                <button class="thumb" type="button" data-index="1"><img src="images/avatar.jpg" alt="Photographer portrait thumbnail" /></button>
-                <button class="thumb" type="button" data-index="2"><img src="images/sphere-10.JPG" alt="Toledo Museum of Art thumbnail" /></button>
-                <button class="thumb" type="button" data-index="3"><img src="images/sphere-9.JPG" alt="Magazine detail thumbnail" /></button>
-                <button class="thumb" type="button" data-index="4"><img src="images/sphere-8.JPG" alt="Candy display thumbnail" /></button>
-                <button class="thumb" type="button" data-index="5"><img src="images/sphere-1.jpeg" alt="Produce stand thumbnail" /></button>
-                <button class="thumb" type="button" data-index="6"><img src="images/sphere-3.JPG" alt="Magazine collection thumbnail" /></button>
-                <button class="thumb" type="button" data-index="7"><img src="images/sphere-4.JPG" alt="Perfume closeup thumbnail" /></button>
-                <button class="thumb" type="button" data-index="8"><img src="images/sphere-5.JPG" alt="Colored pencils thumbnail" /></button>
-                <button class="thumb" type="button" data-index="9"><img src="images/sphere-6.JPG" alt="Ice cream closeup thumbnail" /></button>
-                <button class="thumb" type="button" data-index="10"><img src="images/sphere-7.JPG" alt="Sculpture thumbnail" /></button>
-              </div>
+              <div class="thumbGrid" id="thumbGrid" aria-label="Gallery thumbnails"></div>
             </div>
+          </div>
+        </article>
+
+        <!-- MEDIA DAY -->
+        <article class="pagePanel" data-page="media-day" aria-label="Media Day Sign Up" aria-hidden="true">
+          <div class="pageInner">
+            <div class="pageHeader">
+              <div class="kicker">05 / MEDIA DAY</div>
+              <h2>Media Day Sign Up</h2>
+              <p class="pageLead">Teams/coaches — drop the details and I’ll follow up to lock a slot.</p>
+            </div>
+
+            <form class="form" action="https://formsubmit.co/kam@capturedbykam.com" method="POST" autocomplete="on">
+              <input type="hidden" name="_subject" value="New CBK Media Day Signup" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_template" value="table" />
+
+              <div class="formGrid">
+                <label class="field">
+                  <span class="label">COACH / CONTACT NAME</span>
+                  <input class="control" name="contact_name" type="text" required />
+                </label>
+
+                <label class="field">
+                  <span class="label">CONTACT EMAIL</span>
+                  <input class="control" name="contact_email" type="email" required />
+                </label>
+
+                <label class="field">
+                  <span class="label">TEAM / ORGANIZATION</span>
+                  <input class="control" name="team" type="text" required />
+                </label>
+
+                <label class="field">
+                  <span class="label">PHONE</span>
+                  <input class="control" name="contact_phone" type="tel" required />
+                </label>
+
+                <label class="field">
+                  <span class="label">PREFERRED DATE</span>
+                  <input class="control" name="preferred_date" type="date" required />
+                </label>
+
+                <label class="field">
+                  <span class="label">EST. # ATHLETES</span>
+                  <input class="control" name="athlete_count" type="number" min="1" step="1" required />
+                </label>
+              </div>
+
+              <label class="field fieldFull">
+                <span class="label">NOTES</span>
+                <textarea class="control textarea" name="notes" placeholder="Location, time window, deliverables (team photo, individual portraits, banners, etc)."></textarea>
+              </label>
+
+              <div class="formActions">
+                <button class="btn" type="submit">SUBMIT</button>
+                <p class="fineprint">You’ll get a confirmation email once it’s received.</p>
+              </div>
+            </form>
           </div>
         </article>
       </div>
 
       <div class="pageControls" aria-label="Page controls">
         <button class="flipBtn" id="pagePrev" type="button" aria-label="Previous page">‹</button>
-        <div class="pageCount"><span id="pageCurrent">01</span> / <span id="pageTotal">05</span></div>
+        <div class="pageCount"><span id="pageCurrent">01</span> / <span id="pageTotal">06</span></div>
         <button class="flipBtn" id="pageNext" type="button" aria-label="Next page">›</button>
       </div>
     </section>
@@ -945,116 +358,5 @@
       </div>
     </div>
   </footer>
-
-  <script>
-    const pages = Array.from(document.querySelectorAll('.pagePanel'));
-    const navButtons = Array.from(document.querySelectorAll('.navBtn'));
-    const pageCurrent = document.getElementById('pageCurrent');
-    const pageTotal = document.getElementById('pageTotal');
-    const pagePrev = document.getElementById('pagePrev');
-    const pageNext = document.getElementById('pageNext');
-    const enterBtn = document.getElementById('enterBtn');
-    const logoBtn = document.getElementById('logo');
-    const jumpToBookButtons = Array.from(document.querySelectorAll('.jumpToBook'));
-    const serviceCtaButtons = Array.from(document.querySelectorAll('.serviceCta'));
-    const serviceSelect = document.getElementById('serviceSelect');
-    const emailInput = document.getElementById('emailInput');
-    const replyToField = document.getElementById('replyToField');
-    const pageViewport = document.getElementById('pageViewport');
-
-    let currentPage = 0;
-    pageTotal.textContent = String(pages.length).padStart(2, '0');
-
-    function showPage(index) {
-      currentPage = Math.max(0, Math.min(index, pages.length - 1));
-      pages.forEach((page, i) => page.classList.toggle('is-active', i === currentPage));
-      navButtons.forEach((btn) => btn.classList.toggle('is-active', Number(btn.dataset.target) === currentPage));
-      pageCurrent.textContent = String(currentPage + 1).padStart(2, '0');
-    }
-
-    navButtons.forEach((btn) => btn.addEventListener('click', () => showPage(Number(btn.dataset.target))));
-    pagePrev.addEventListener('click', () => showPage(currentPage - 1));
-    pageNext.addEventListener('click', () => showPage(currentPage + 1));
-    enterBtn.addEventListener('click', () => showPage(1));
-    logoBtn.addEventListener('click', () => showPage(0));
-    jumpToBookButtons.forEach((btn) => btn.addEventListener('click', () => showPage(3)));
-
-    serviceCtaButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        if (serviceSelect) serviceSelect.value = btn.dataset.service;
-        showPage(3);
-      });
-    });
-
-    if (emailInput && replyToField) {
-      emailInput.addEventListener('input', () => {
-        replyToField.value = emailInput.value.trim();
-      });
-    }
-
-    const galleryItems = [
-      { src: 'images/author.jpg', title: 'Artist portrait / brand presence', caption: 'A personal frame that brings warmth, color, and personality into the brand.' },
-      { src: 'images/avatar.jpg', title: 'Behind the lens', caption: 'A self-aware image that lets the audience meet the photographer, not just the business name.' },
-      { src: 'images/sphere-10.JPG', title: 'Toledo Museum of Art', caption: 'Architectural detail with soft light and local identity. Clean, simple, strong.' },
-      { src: 'images/sphere-9.JPG', title: 'Editorial detail / print culture', caption: 'A close study in texture, typography, and restraint.' },
-      { src: 'images/sphere-8.JPG', title: 'Color study / candy counter', caption: 'A playful composition with shallow depth and rich color separation.' },
-      { src: 'images/sphere-1.jpeg', title: 'Market texture / everyday life', caption: 'Proof that ordinary subjects still go hard when the framing and focus are right.' },
-      { src: 'images/sphere-3.JPG', title: 'Collection / print archive', caption: 'A strong still-life image rooted in nostalgia, culture, and personal taste.' },
-      { src: 'images/sphere-4.JPG', title: 'Beauty detail / lifestyle frame', caption: 'Luxury, color, and texture all working together without feeling overcooked.' },
-      { src: 'images/sphere-5.JPG', title: 'Family / creative process', caption: 'A softer observational frame that feels real instead of staged.' },
-      { src: 'images/sphere-6.JPG', title: 'Lifestyle close-up', caption: 'Tight focus, tactile detail, and a playful summer feel.' },
-      { src: 'images/sphere-7.JPG', title: 'Form study / sculpture', caption: 'Minimal composition with strong geometry and negative space.' }
-    ];
-
-    const galleryMainImage = document.getElementById('galleryMainImage');
-    const galleryTitle = document.getElementById('galleryTitle');
-    const galleryCaption = document.getElementById('galleryCaption');
-    const galleryPrev = document.getElementById('galleryPrev');
-    const galleryNext = document.getElementById('galleryNext');
-    const thumbs = Array.from(document.querySelectorAll('.thumb'));
-    let currentGalleryIndex = 0;
-
-    function showGalleryItem(index) {
-      currentGalleryIndex = (index + galleryItems.length) % galleryItems.length;
-      const item = galleryItems[currentGalleryIndex];
-      galleryMainImage.src = item.src;
-      galleryMainImage.alt = item.title;
-      galleryTitle.textContent = item.title;
-      galleryCaption.textContent = item.caption;
-      thumbs.forEach((thumb, i) => thumb.classList.toggle('is-active', i === currentGalleryIndex));
-    }
-
-    thumbs.forEach((thumb) => {
-      thumb.addEventListener('click', () => showGalleryItem(Number(thumb.dataset.index)));
-    });
-
-    galleryPrev.addEventListener('click', () => showGalleryItem(currentGalleryIndex - 1));
-    galleryNext.addEventListener('click', () => showGalleryItem(currentGalleryIndex + 1));
-
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    pageViewport.addEventListener('touchstart', (event) => {
-      touchStartX = event.changedTouches[0].clientX;
-    }, { passive: true });
-
-    pageViewport.addEventListener('touchend', (event) => {
-      touchEndX = event.changedTouches[0].clientX;
-      const distance = touchEndX - touchStartX;
-      if (Math.abs(distance) < 40) return;
-      if (distance < 0) showPage(currentPage + 1);
-      if (distance > 0) showPage(currentPage - 1);
-    }, { passive: true });
-
-    window.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowRight') showPage(currentPage + 1);
-      if (event.key === 'ArrowLeft') showPage(currentPage - 1);
-      if (currentPage === 4 && event.key === 'ArrowUp') showGalleryItem(currentGalleryIndex - 1);
-      if (currentPage === 4 && event.key === 'ArrowDown') showGalleryItem(currentGalleryIndex + 1);
-    });
-
-    showPage(0);
-    showGalleryItem(0);
-  </script>
 </body>
-</html>    
+</html>
