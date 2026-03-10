@@ -64,7 +64,6 @@ button {
   pointer-events: none;
   background: rgba(216, 216, 210, 0.96);
   border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(8px);
 }
 
 .headerInner {
@@ -649,5 +648,64 @@ button {
   .pictureDayCard,
   .serviceCard {
     padding: 20px;
+  }
+}
+.navLink,
+.navToggle,
+.inlineLink,
+.serviceButton,
+.submitButton,
+.galleryItem img,
+.serviceCard,
+.pictureDayCard,
+.bookingForm {
+  transition:
+    transform 220ms ease,
+    opacity 220ms ease,
+    background-color 220ms ease,
+    color 220ms ease,
+    border-color 220ms ease;
+}
+
+.navLink:hover,
+.inlineLink:hover {
+  opacity: 0.72;
+}
+
+.navToggle:hover,
+.serviceButton:hover,
+.submitButton:hover {
+  transform: translateY(-1px);
+}
+
+.serviceCard:hover,
+.pictureDayCard:hover,
+.bookingForm:hover {
+  transform: translateY(-2px);
+}
+
+.galleryItem {
+  overflow: hidden;
+}
+
+.galleryItem:hover img {
+  transform: scale(1.02);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .navLink,
+  .navToggle,
+  .inlineLink,
+  .serviceButton,
+  .submitButton,
+  .galleryItem img,
+  .serviceCard,
+  .pictureDayCard,
+  .bookingForm {
+    transition: none !important;
   }
 }
