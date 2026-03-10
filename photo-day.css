@@ -54,3 +54,59 @@
     grid-template-columns: 1fr;
   }
 }
+.pdPaymentBlock {
+  margin-top: 16px;
+}
+
+.pdPaymentCard {
+  min-height: auto;
+}
+
+.pdPaymentOptions {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.pdPaymentOption {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.pdPaymentOption input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pdPaymentOption span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  border: 2px solid var(--pd-line);
+  background: transparent;
+  color: var(--pd-ink);
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.pdPaymentOption input:checked + span {
+  background: var(--pd-ink);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .pdPaymentOptions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .pdPaymentOptions {
+    grid-template-columns: 1fr;
+  }
+}
