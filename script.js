@@ -6,7 +6,7 @@
   const navToggle = document.querySelector(".navToggle");
   const nav = document.getElementById("siteNav");
   const yearEl = document.getElementById("year");
-  const contactSection = document.getElementById("contact");
+  const gallerySection = document.getElementById("gallery");
   const emailInput = document.getElementById("emailInput");
   const replyToField = document.getElementById("replyToField");
   const serviceSelect = document.getElementById("serviceSelect");
@@ -26,7 +26,7 @@
 
 navToggle?.addEventListener("click", () => {
   if (window.innerWidth > 920) {
-    contactSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+    gallerySection?.scrollIntoView({ behavior: "smooth", block: "start" });
     return;
   }
 
