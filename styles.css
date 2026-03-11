@@ -60,7 +60,7 @@ button {
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 20;
-  padding-top: 18px;
+  padding-top: 10px;
   pointer-events: none;
   background: rgba(216, 216, 210, 0.96);
   border-bottom: 1px solid var(--line);
@@ -117,8 +117,8 @@ button {
 }
 
 .navLinkWide {
-  white-space: normal;
-  max-width: 200px;
+  white-space: nowrap;
+  max-width: none;
   text-align: center;
 }
 
@@ -145,7 +145,7 @@ button {
 }
 
 .siteMain {
-  padding-top: 138px;
+  padding-top: 112px;
 }
 
 .homeHero {
@@ -160,9 +160,9 @@ button {
   grid-template-columns: 280px 120px minmax(0, 1fr);
   grid-template-rows: auto auto auto;
   column-gap: 28px;
-  row-gap: 30px;
-  padding-top: 12px;
-  padding-bottom: 60px;
+  row-gap: 18px;
+  padding-top: 0;
+  padding-bottom: 44px;
 }
 
 .heroMain {
@@ -546,11 +546,13 @@ button {
     padding-top: 18px;
   }
 
-  .headerInner {
-    grid-template-columns: 1fr 74px;
-    align-items: center;
-  }
-
+ .headerInner {
+  grid-template-columns: 1fr 74px;
+  align-items: center;
+}
+.headerSocials {
+  display: none;
+}
   .siteNav {
     position: absolute;
     top: 84px;
@@ -574,9 +576,9 @@ button {
     text-align: left;
   }
 
-  .siteMain {
-    padding-top: 96px;
-  }
+ .siteMain {
+  padding-top: 90px;
+}
 
   .heroLayout,
   .heroMain {
