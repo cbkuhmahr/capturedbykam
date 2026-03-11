@@ -102,9 +102,14 @@ button {
   padding-top: 0;
   flex-wrap: nowrap;
 }
-
+.headerSocials {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+}
 .navLink {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.04em;
