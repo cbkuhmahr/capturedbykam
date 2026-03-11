@@ -65,12 +65,11 @@ button {
   background: rgba(216, 216, 210, 0.96);
   border-bottom: 1px solid var(--line);
 }
-
 .headerInner {
   display: grid;
-  grid-template-columns: 220px 1fr 128px;
+  grid-template-columns: 220px minmax(0, 1fr) 128px;
   align-items: start;
-  gap: 24px;
+  gap: 18px;
   pointer-events: auto;
   padding-bottom: 18px;
 }
@@ -99,8 +98,9 @@ button {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 44px;
+  gap: 28px;
   padding-top: 4px;
+  flex-wrap: wrap;
 }
 
 .navLink {
