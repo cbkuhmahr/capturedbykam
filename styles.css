@@ -65,13 +65,13 @@ button {
   background: rgba(216, 216, 210, 0.96);
   border-bottom: 1px solid var(--line);
 }
-.headerInner {
+..headerInner {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr) 128px;
-  align-items: start;
-  gap: 18px;
+  grid-template-columns: 220px minmax(0, 1fr) auto 128px;
+  align-items: center;
+  gap: 20px;
   pointer-events: auto;
-  padding-bottom: 18px;
+  padding-bottom: 14px;
 }
 
 .brand {
@@ -97,10 +97,10 @@ button {
 .siteNav {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  gap: 28px;
-  padding-top: 4px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  padding-top: 0;
+  flex-wrap: nowrap;
 }
 
 .navLink {
