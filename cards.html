@@ -1,48 +1,67 @@
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Greeting Cards | Captured by Kam</title>
-  <meta name="description" content="Original CBK greeting cards. Coming soon." />
+  <meta name="description" content="Greeting cards by Captured by Kam. Coming soon." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shop.css" />
 </head>
-<body class="cbk-page-shell">
-  <header class="cbk-topbar">
-    <div class="cbk-topbar__inner">
-      <a href="index.html" class="cbk-brand">
-        <span class="cbk-brand__title">Captured by Kam</span>
-        <span class="cbk-brand__tag">Every frame, every project — timeless authenticity.</span>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand-block" href="index.html">
+        <span class="brand-block__name">Captured by Kam</span>
+        <span class="brand-block__tag">Every frame, every project — timeless authenticity.</span>
       </a>
-      <nav class="cbk-nav" aria-label="Main navigation">
+      <nav class="top-nav" aria-label="Main navigation">
         <a href="index.html">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#gallery">Gallery</a>
+        <a href="index.html#book">Book</a>
         <a href="shop.html" class="is-active">Shop</a>
       </nav>
     </div>
   </header>
 
-  <main class="cbk-product-page">
-    <p class="cbk-eyebrow">Paper Goods</p>
+  <main class="product-page section-shell">
+    <p class="section-label">Paper Goods</p>
     <h1>Greeting Cards</h1>
-    <div class="cbk-badge">Coming Soon</div>
-    <p class="cbk-lead">A growing line of original cards built with custom art and a cleaner, more intentional look than generic store-bought paper goods.</p>
+    <p class="page-intro">
+      A growing line of original cards built with custom art and a cleaner, more intentional feel than generic store-bought paper goods.
+    </p>
 
-    <div class="cbk-info-panel">
-      <h2>Planned opening set</h2>
-      <ul>
+    <div class="status-pill status-pill--inline">Coming Soon</div>
+
+    <section class="content-panel">
+      <h2>Opening card types</h2>
+      <ul class="clean-list">
         <li>Birthday cards</li>
         <li>Thank you cards</li>
         <li>I’m sorry cards</li>
       </ul>
-    </div>
+    </section>
 
-    <a class="cbk-back-link" href="shop.html">← Back to Shop</a>
+    <section class="content-panel muted-panel">
+      <h2>Direction</h2>
+      <p>
+        These will be original CBK paper goods, not generic templates. The art direction should feel clean, thoughtful, and real.
+      </p>
+    </section>
+
+    <a class="back-link" href="shop.html">← Back to Shop</a>
   </main>
 
-  <footer class="cbk-footer">
-    <p>© 2026 Captured by Kam. All rights reserved.</p>
+  <footer class="site-footer">
+    <div class="section-shell site-footer__inner">
+      <p>© 2026 Captured by Kam. All rights reserved.</p>
+      <div class="site-footer__links">
+        <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
+        <a href="https://www.instagram.com/CapturedBy_Kam" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+    </div>
   </footer>
 </body>
 </html>
