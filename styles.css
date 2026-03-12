@@ -719,3 +719,130 @@ button {
     transition: none !important;
   }
 }
+/* ========================================
+   CBK SHOP / COMING SOON PAGES
+======================================== */
+
+:root {
+  --cbk-bg: #0f0f10;
+  --cbk-panel: #17181b;
+  --cbk-panel-2: #1f2024;
+  --cbk-line: rgba(255,255,255,0.10);
+  --cbk-text: #f2efe8;
+  --cbk-muted: rgba(242,239,232,0.72);
+  --cbk-accent: #d57a2a;
+  --cbk-accent-soft: rgba(213,122,42,0.16);
+  --cbk-max: 1180px;
+  --cbk-radius: 18px;
+  --cbk-shadow: 0 16px 40px rgba(0,0,0,0.30);
+}
+
+body.cbk-page-shell {
+  margin: 0;
+  background: linear-gradient(180deg, #0b0b0c 0%, #121316 100%);
+  color: var(--cbk-text);
+  font-family: 'Inter', sans-serif;
+}
+
+.cbk-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(10,10,11,0.86);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cbk-line);
+}
+
+.cbk-topbar__inner {
+  width: min(calc(100% - 32px), var(--cbk-max));
+  margin: 0 auto;
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.cbk-brand {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--cbk-text);
+  text-decoration: none;
+}
+
+  font-family: 'Courier Prime', monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.cbk-brand__tag {
+  font-size: 0.8rem
+.cbk-brand__title {;
+  color: var(--cbk-muted);
+}
+
+.cbk-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cbk-nav a {
+  text-decoration: none;
+  color: var(--cbk-muted);
+  border: 1px solid transparent;
+  padding: 10px 14px;
+  border-radius: 999px;
+  transition: 0.18s ease;
+}
+
+.cbk-nav a:hover,
+.cbk-nav a.is-active {
+  color: var(--cbk-text);
+  border-color: var(--cbk-line);
+  background: rgba(255,255,255,0.04);
+}
+
+.cbk-shop-wrap,
+.cbk-product-page {
+  width: min(calc(100% - 32px), var(--cbk-max));
+  margin: 0 auto;
+  padding: 48px 0 72px;
+}
+
+.cbk-hero,
+.cbk-info-panel,
+.cbk-scent-card,
+.cbk-tile {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid var(--cbk-line);
+  border-radius: var(--cbk-radius);
+  box-shadow: var(--cbk-shadow);
+}
+
+.cbk-hero {
+  padding: 34px;
+  margin-bottom: 24px;
+}
+
+.cbk-eyebrow {
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--cbk-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.cbk-hero h1,
+.cbk-product-page h1 {
+  margin: 0 0 14px;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+.cbk-lead {
+}
