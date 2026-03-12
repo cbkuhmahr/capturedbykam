@@ -6,48 +6,62 @@
   <meta name="description" content="CBK candles. Coming soon." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shop.css" />
 </head>
-<body class="cbk-page-shell">
-  <header class="cbk-topbar">
-    <div class="cbk-topbar__inner">
-      <a href="index.html" class="cbk-brand">
-        <span class="cbk-brand__title">Captured by Kam</span>
-        <span class="cbk-brand__tag">Every frame, every project — timeless authenticity.</span>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand-block" href="index.html">
+        <span class="brand-block__name">Captured by Kam</span>
+        <span class="brand-block__tag">Every frame, every project — timeless authenticity.</span>
       </a>
-      <nav class="cbk-nav" aria-label="Main navigation">
+      <nav class="top-nav" aria-label="Main navigation">
         <a href="index.html">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#gallery">Gallery</a>
+        <a href="index.html#book">Book</a>
         <a href="shop.html" class="is-active">Shop</a>
       </nav>
     </div>
   </header>
 
-  <main class="cbk-product-page">
-    <p class="cbk-eyebrow">Objects</p>
+  <main class="product-page section-shell">
+    <p class="section-label">Objects</p>
     <h1>Candles</h1>
-    <div class="cbk-badge">Coming Soon</div>
-    <p class="cbk-lead">The first CBK candle pair is built directly from the brand language: one grounded, one deeper, both intended to feel clean, mature, and memorable.</p>
+    <p class="page-intro">
+      The first CBK candle pair is built directly from the brand language — grounded, clean, memorable, and clearly part of the world you are building.
+    </p>
 
-    <div class="cbk-scent-grid">
-      <article class="cbk-scent-card">
-        <p class="cbk-scent-card__label">CBK Candle No. 01</p>
+    <div class="status-pill status-pill--inline">Coming Soon</div>
+
+    <section class="product-grid-two">
+      <article class="content-panel scent-panel">
+        <span class="mini-label">CBK Candle No. 01</span>
         <h2>Presence</h2>
-        <p>Saffron, tobacco, and warm spice.</p>
+        <p>Saffron, tobacco, warm spice.</p>
       </article>
 
-      <article class="cbk-scent-card">
-        <p class="cbk-scent-card__label">CBK Candle No. 02</p>
+      <article class="content-panel scent-panel">
+        <span class="mini-label">CBK Candle No. 02</span>
         <h2>Legacy</h2>
-        <p>Dark rose, labdanum, and amber resin.</p>
+        <p>Dark rose, labdanum, amber resin.</p>
       </article>
-    </div>
+    </section>
 
-    <a class="cbk-back-link" href="shop.html">← Back to Shop</a>
+    <a class="back-link" href="shop.html">← Back to Shop</a>
   </main>
 
-  <footer class="cbk-footer">
-    <p>© 2026 Captured by Kam. All rights reserved.</p>
+  <footer class="site-footer">
+    <div class="section-shell site-footer__inner">
+      <p>© 2026 Captured by Kam. All rights reserved.</p>
+      <div class="site-footer__links">
+        <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
+        <a href="https://www.instagram.com/CapturedBy_Kam" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+    </div>
   </footer>
 </body>
 </html>
