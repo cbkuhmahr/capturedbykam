@@ -1,133 +1,130 @@
-(() => {
-  "use strict";
+<script>
+  const mediaDayForm = document.getElementById('mediaDayForm');
+  const packageInputs = Array.from(document.querySelectorAll('input[name="package_choice"]'));
+  const packageCards = Array.from(document.querySelectorAll('.package-card'));
+  const formStatus = document.getElementById('formStatus');
+  const detailsSubmitBtn = document.getElementById('detailsSubmitBtn');
+  const referenceNumberField = document.getElementById('referenceNumber');
+  const selectedPackageField = document.getElementById('selectedPackageField');
 
-  const STORAGE_KEY = "cbk-photo-day-selection";
+  let detailsSent = false;
+  let currentReference = '';
 
-  const form = document.getElementById("pdForm");
-  const statusMessage = document.getElementById("pdStatusMessage");
-  const emailInput = document.getElementById("pdEmailInput");
-  const replyToField = document.getElementById("pdReplyToField");
-  const orderDate = document.getElementById("pdOrderDate");
-  const nextField = document.getElementById("pdNextField");
-  const paymentCodeField = document.getElementById("pdPaymentCodeField");
-
-  const packageInputs = Array.from(document.querySelectorAll('input[name="Package"]'));
-  const packageCards = Array.from(document.querySelectorAll(".pdPackageCard"));
-
-  function generatePaymentCode() {
+  function makeReferenceNumber() {
     const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    const randomDigits = String(Math.floor(1000 + Math.random() * 9000));
-    return `CBK-${year}${month}${day}-${randomDigits}`;
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const h = String(now.getHours()).padStart(2, '0');
+    const min = String(now.getMinutes()).padStart(2, '0');
+    const random = Math.floor(100 + Math.random() * 900);
+    return `CBK-${y}${m}${d}-${h}${min}-${random}`;
   }
 
-  function getSelectedPackage() {
-    return packageInputs.find((input) => input.checked) || null;
+  function getSelectedPackageInput() {
+    return document.querySelector('input[name="package_choice"]:checked');
   }
 
-  function saveSelection() {
-    const selectedPackage = getSelectedPackage();
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        packageValue: selectedPackage?.value || ""
-      })
-    );
-  }
-
-  function restoreSelection() {
-    const raw = localStorage.getItem(STORAGE_KEY);
-
-    if (!raw) {
-      return;
-    }
-
-    try {
-      const parsed = JSON.parse(raw);
-
-      packageInputs.forEach((input) => {
-        input.checked = input.value === parsed.packageValue;
-      });
-    } catch (error) {
-      console.error("Could not restore saved package selection.", error);
-    }
-  }
-
-  function syncSelectedState() {
-    const selectedValue = getSelectedPackage()?.value || "";
+  function refreshPackageUI() {
+    const selected = getSelectedPackageInput();
+    const selectedKey = selected ? selected.dataset.packageKey : '';
 
     packageCards.forEach((card) => {
-      const cardInput = card.querySelector('input[name="Package"]');
-      card.classList.toggle("isSelected", cardInput?.value === selectedValue);
+      const cardKey = card.dataset.packageKey;
+      const payzone = card.querySelector('.package-payzone');
+      const refEl = card.querySelector('.pay-ref');
+
+      card.classList.toggle('is-selected', cardKey === selectedKey);
+
+      if (!detailsSent) {
+        card.classList.remove('is-dim');
+        if (payzone) payzone.hidden = true;
+        if (refEl) refEl.textContent = '';
+        return;
+      }
+
+      const isMatch = cardKey === selectedKey;
+      card.classList.toggle('is-dim', !isMatch);
+      if (payzone) payzone.hidden = !isMatch;
+      if (refEl) refEl.textContent = isMatch ? `Reference: ${currentReference}` : '';
     });
-  }
-
-  function setReturnUrl() {
-    if (!nextField) {
-      return;
-    }
-
-    const selectedPackage = getSelectedPackage();
-    const nextUrl = new URL(window.location.href);
-
-    nextUrl.search = "";
-    nextUrl.hash = "";
-
-    nextUrl.searchParams.set("submitted", "1");
-
-    if (selectedPackage?.dataset.payTarget) {
-      nextUrl.hash = selectedPackage.dataset.payTarget;
-    }
-
-    nextField.value = nextUrl.toString();
-  }
-
-  function showSubmittedMessageIfNeeded() {
-    const params = new URLSearchParams(window.location.search);
-
-    if (params.get("submitted") === "1" && statusMessage) {
-      statusMessage.hidden = false;
-    }
-  }
-
-  if (emailInput && replyToField) {
-    emailInput.addEventListener("input", () => {
-      replyToField.value = emailInput.value.trim();
-    });
-  }
-
-  if (orderDate && !orderDate.value) {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    orderDate.value = `${year}-${month}-${day}`;
   }
 
   packageInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      saveSelection();
-      syncSelectedState();
-    });
+    input.addEventListener('change', refreshPackageUI);
   });
 
-  form?.addEventListener("submit", () => {
-    if (paymentCodeField) {
-      paymentCodeField.value = generatePaymentCode();
+  refreshPackageUI();
+
+  mediaDayForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    if (!mediaDayForm.reportValidity()) return;
+
+    const selected = getSelectedPackageInput();
+    if (!selected) {
+      alert('Please choose a package before continuing.');
+      return;
     }
 
-    if (replyToField && emailInput) {
-      replyToField.value = emailInput.value.trim();
-    }
+    currentReference = makeReferenceNumber();
+    referenceNumberField.value = currentReference;
+    selectedPackageField.value = selected.value;
 
-    saveSelection();
-    setReturnUrl();
+    detailsSubmitBtn.disabled = true;
+    detailsSubmitBtn.textContent = 'Sending Details...';
+
+    const formData = new FormData(mediaDayForm);
+
+    try {
+      const response = await fetch(mediaDayForm.action, {
+        method: mediaDayForm.method || 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Form submit failed');
+      }
+
+      detailsSent = true;
+      window.CBK_SIGNUP_REF = currentReference;
+      window.CBK_SELECTED_PACKAGE = {
+        key: selected.dataset.packageKey,
+        name: selected.dataset.packageName,
+        price: selected.dataset.packagePrice
+      };
+
+      packageInputs.forEach((input) => {
+        input.disabled = true;
+      });
+
+      formStatus.hidden = false;
+      formStatus.innerHTML = `
+        <strong>Details sent.</strong><br>
+        Reference Number: ${currentReference}<br>
+        Selected Package: ${selected.dataset.packageName}<br>
+        Complete payment below to finish registration.
+      `;
+
+      detailsSubmitBtn.textContent = 'Details Sent — Complete Payment Below';
+      refreshPackageUI();
+
+      const chosenCard = document.querySelector(`.package-card[data-package-key="${selected.dataset.packageKey}"]`);
+      if (chosenCard) {
+        chosenCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } catch (error) {
+      detailsSubmitBtn.disabled = false;
+      detailsSubmitBtn.textContent = 'Send Details & Continue to Payment';
+
+      formStatus.hidden = false;
+      formStatus.innerHTML = `
+        <strong>Something failed.</strong><br>
+        Your player details were not confirmed as sent. Please try again.
+      `;
+    }
   });
-
-  restoreSelection();
-  syncSelectedState();
-  showSubmittedMessageIfNeeded();
-})();
+</script>
