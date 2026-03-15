@@ -6,16 +6,14 @@
   <title>Captured by Kam — Photo Day Sign Up</title>
   <meta name="description" content="Captured by Kam Media Day / Team Photos Sign Up" />
   <link rel="stylesheet" href="photo-day.css" />
-  <script
-    src="https://www.paypal.com/sdk/js?client-id=BAA_WkQ3RFsOD-TFE6lhyMEI8dxgLM1vhYCJ-1Lg8S73CQmESQTnqWLkrDXGqqfpx3LCWBRQZT4WJuNzfI&components=hosted-buttons&enable-funding=venmo&currency=USD">
-  </script>
+  <script src="https://www.paypal.com/sdk/js?client-id=BAA_WkQ3RFsOD-TFE6lhyMEI8dxgLM1vhYCJ-1Lg8S73CQmESQTnqWLkrDXGqqfpx3LCWBRQZT4WJuNzfI&components=hosted-buttons&enable-funding=venmo&currency=USD"></script>
   <script defer src="photo-day.js"></script>
 </head>
 <body>
   <main class="pdPage">
     <div class="pdWrap">
       <div class="pdStatus" id="pdStatusMessage" hidden>
-        Order details sent. Now complete payment with the PayPal button under your selected package.
+        Player details sent. Now complete payment with the PayPal button under your selected package.
       </div>
 
       <form
@@ -30,11 +28,10 @@
         <input type="hidden" name="_template" value="table" />
         <input type="hidden" name="_replyto" id="pdReplyToField" value="" />
         <input type="hidden" name="_next" id="pdNextField" value="" />
-        <input type="hidden" name="Total Due" id="pdTotalDueField" value="$0.00" />
         <input type="hidden" name="Payment Code" id="pdPaymentCodeField" value="" />
 
         <header class="pdHeader">
-          <h1>CAPTUREDBY_KAM</h1>
+          <h1>CAPTURED BY KAM</h1>
           <h2>MEDIA DAY / TEAM PHOTOS SIGN UP</h2>
         </header>
 
@@ -85,9 +82,9 @@
         </section>
 
         <section class="pdSection" id="pdPackagesSection">
-          <h3>PHOTO PACKAGE SELECTION</h3>
+          <h3>PACKAGE SELECTION</h3>
           <p class="pdSectionNote">
-            Step 1: submit the order details below. Step 2: use the PayPal button under the package you selected.
+            Step 1: send player details. Step 2: pay with the PayPal button under the package you selected.
           </p>
 
           <div class="pdPackageGrid">
@@ -98,13 +95,12 @@
                     type="radio"
                     name="Package"
                     value="Rookie - $25.00"
-                    data-price="25"
                     data-storage-key="rookie"
                     data-pay-target="pay-rookie"
                     required
                   />
                   <span class="pdChoiceBox"></span>
-                  <span class="pdChoiceText">Rookie:</span>
+                  <span class="pdChoiceText">Rookie</span>
                 </label>
                 <div class="pdPrice">$25.00</div>
               </div>
@@ -133,19 +129,18 @@
                     type="radio"
                     name="Package"
                     value="All Star - $40.00"
-                    data-price="40"
                     data-storage-key="all-star"
                     data-pay-target="pay-all-star"
                   />
                   <span class="pdChoiceBox"></span>
-                  <span class="pdChoiceText">All Star:</span>
+                  <span class="pdChoiceText">All Star</span>
                 </label>
                 <div class="pdPrice">$40.00</div>
               </div>
 
               <ul class="pdList">
                 <li>(1) Digital Download</li>
-                <li>(2) 5x7&quot; (Individuals)</li>
+                <li>(2) 5 x 7 Individuals</li>
                 <li>(8) Wallet Sheets</li>
                 <li>(1) 5 x 7 Team Photo</li>
               </ul>
@@ -168,7 +163,6 @@
                     type="radio"
                     name="Package"
                     value="MVP - $69.00"
-                    data-price="69"
                     data-storage-key="mvp"
                     data-pay-target="pay-mvp"
                   />
@@ -178,9 +172,9 @@
                 <div class="pdPrice">$69.00</div>
               </div>
 
-              <p class="pdStrong">*Everything in All Star, Plus:</p>
+              <p class="pdStrong">Everything in All Star, plus:</p>
               <ul class="pdList">
-                <li>(1) 8×10 individual (poster)</li>
+                <li>(1) 8 x 10 Individual Poster</li>
                 <li>(1) Button</li>
                 <li>(1) Magnet</li>
               </ul>
@@ -196,81 +190,25 @@
               </div>
             </article>
           </div>
+        </section>
 
-          <div class="pdExtrasGrid">
-            <article class="pdCard">
-              <h4>A la Carte Items</h4>
-
-              <div class="pdExtraRow">
-                <label class="pdExtra">
-                  <input type="checkbox" name="A la Carte" value="Digital Download - $10" data-price="10" />
-                  <span>(1) Digital Download - $10</span>
-                </label>
-                <div class="pdExtraPaySlot" id="pd-extra-digital"></div>
-              </div>
-
-              <div class="pdExtraRow">
-                <label class="pdExtra">
-                  <input type="checkbox" name="A la Carte" value="Wallet Sheet (4) - $10" data-price="10" />
-                  <span>(1) Wallet Sheet (4) - $10</span>
-                </label>
-                <div class="pdExtraPaySlot" id="pd-extra-wallet-4"></div>
-              </div>
-
-              <div class="pdExtraRow">
-                <label class="pdExtra">
-                  <input type="checkbox" name="A la Carte" value="Wallet Sheet (8) - $12" data-price="12" />
-                  <span>(1) Wallet Sheet (8) - $12</span>
-                </label>
-                <div class="pdExtraPaySlot" id="pd-extra-wallet-8"></div>
-              </div>
-
-              <div class="pdExtraRow">
-                <label class="pdExtra">
-                  <input type="checkbox" name="A la Carte" value="5 x 7 Team Photo - $8" data-price="8" />
-                  <span>(1) 5 x 7 Team Photo - $8</span>
-                </label>
-                <div class="pdExtraPaySlot" id="pd-extra-team-photo"></div>
-              </div>
-            </article>
-
-            <article class="pdCard">
-              <h4>A la Carte Items</h4>
-
-              <div class="pdExtraRow">
-                <label class="pdExtra">
-                  <input type="checkbox" name="A la Carte" value='8 x 10&quot; Poster - $20' data-price="20" />
-                  <span>8 x 10&quot; Poster - $20</span>
-                </label>
-                <div class="pdExtraPaySlot" id="pd-extra-poster"></div>
-              </div>
-
-              <div class="pdExtraRow">
-                <label class="pdExtra">
-                  <input type="checkbox" name="A la Carte" value="Photo Magnet - $5" data-price="5" />
-                  <span>Photo Magnet - $5</span>
-                </label>
-                <div class="pdExtraPaySlot" id="pd-extra-magnet"></div>
-              </div>
-            </article>
-
-            <article class="pdCard pdTotalCard">
+        <section class="pdSection pdActionSection">
+          <div class="pdActionCard">
+            <div>
               <p class="pdStepLabel">Step 1 of 2</p>
-
-              <div class="pdTotalRow">
-                <span>TOTAL DUE</span>
-                <input id="pdTotalDisplay" type="text" value="$0.00" readonly />
-              </div>
-
-              <button class="pdSubmit" type="submit">Send Order Details</button>
-
-              <p class="pdFormHelp">
-                Your order details will be emailed to Kam first. Then use the PayPal button under your selected package.
+              <h4>Send Player Details</h4>
+              <p class="pdActionText">
+                This sends the player information to Kam first. After the page returns here, complete payment with the PayPal button under your selected package.
               </p>
-            </article>
+            </div>
+
+            <button class="pdSubmit" type="submit">Send Player Details</button>
           </div>
         </section>
       </form>
+
+      <!-- A la carte add-ons intentionally removed for now.
+           When you are ready to sell them online, add each item back with its own PayPal button. -->
     </div>
   </main>
 </body>
