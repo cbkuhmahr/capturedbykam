@@ -1,8 +1,8 @@
-/* photo-day.css */
 :root {
   --pd-bg: #f3f3f3;
   --pd-ink: #4d4d4d;
   --pd-line: #2f2f2f;
+  --pd-white: #ffffff;
 }
 
 * {
@@ -41,6 +41,17 @@ input {
   width: 100%;
 }
 
+.pdStatus {
+  margin: 0 0 16px;
+  border: 2px solid var(--pd-line);
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--pd-ink);
+  padding: 14px 16px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
 .pdHeader {
   text-align: center;
   margin-bottom: 8px;
@@ -73,6 +84,15 @@ input {
   text-align: center;
   font-size: clamp(1.7rem, 3vw, 2.3rem);
   margin-bottom: 12px;
+}
+
+.pdSectionNote {
+  max-width: 760px;
+  margin: 0 auto 12px;
+  text-align: center;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .pdFields {
@@ -130,7 +150,12 @@ input {
 }
 
 .pdPackageCard {
-  min-height: 168px;
+  min-height: 100%;
+  scroll-margin-top: 24px;
+}
+
+.pdPackageCard:target {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
 }
 
 .pdCardTop {
@@ -202,12 +227,18 @@ input {
   line-height: 1.3;
 }
 
-.pdPaymentBlock {
-  margin-top: 16px;
+.pdPayWrap {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 2px solid rgba(47, 47, 47, 0.2);
 }
 
-.pdPaymentCard {
-  min-height: auto;
+.pdPayTitle {
+  margin: 0 0 10px;
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .pdCard h4 {
@@ -217,43 +248,8 @@ input {
   line-height: 1;
 }
 
-.pdPaymentOptions {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.pdPaymentOption {
-  position: relative;
+.pdExtraRow {
   display: block;
-  cursor: pointer;
-}
-
-.pdPaymentOption input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.pdPaymentOption span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 52px;
-  padding: 8px 10px;
-  border: 2px solid var(--pd-line);
-  background: transparent;
-  color: var(--pd-ink);
-  font-size: 1rem;
-  font-weight: 900;
-  line-height: 1;
-  text-transform: uppercase;
-  text-align: center;
-}
-
-.pdPaymentOption input:checked + span {
-  background: var(--pd-ink);
-  color: #fff;
 }
 
 .pdExtra {
@@ -274,11 +270,27 @@ input {
   flex: 0 0 18px;
 }
 
+.pdExtraPaySlot {
+  margin: 0 0 14px 28px;
+}
+
+.pdExtraPaySlot:empty {
+  display: none;
+}
+
 .pdTotalCard {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 18px;
+  gap: 16px;
+}
+
+.pdStepLabel {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .pdTotalRow {
@@ -308,43 +320,83 @@ input {
 }
 
 .pdSubmit {
-  height: 48px;
+  min-height: 52px;
   border: 2px solid var(--pd-line);
   background: var(--pd-ink);
-  color: #fff;
+  color: var(--pd-white);
   text-transform: uppercase;
   font-weight: 900;
   letter-spacing: -0.03em;
   cursor: pointer;
 }
 
-.pdSubmit:hover {
-  opacity: 0.94;
+.pdFormHelp {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  font-weight: 700;
 }
 
 .srOnly {
   position: absolute;
   width: 1px;
   height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
-  clip-path: inset(50%);
+  clip: rect(0, 0, 0, 0);
   white-space: nowrap;
+  border: 0;
 }
 
 @media (max-width: 900px) {
-  .pdFields,
   .pdPackageGrid,
   .pdExtrasGrid {
     grid-template-columns: 1fr;
   }
-
-  .pdPaymentOptions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
-@media (max-width: 560px) {
-  .pdPaymentOptions {
+@media (max-width: 720px) {
+  .pdPage {
+    padding: 14px 14px 28px;
+  }
+
+  .pdFields {
     grid-template-columns: 1fr;
+  }
+
+  .pdField input {
+    height: 54px;
+  }
+
+  .pdCard {
+    padding: 12px 10px;
+  }
+
+  .pdCardTop {
+    gap: 10px;
+  }
+
+  .pdChoiceBox {
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
+  }
+
+  .pdList {
+    padding-left: 24px;
+    font-size: 0.98rem;
+  }
+
+  .pdExtra {
+    font-size: 0.98rem;
+  }
+
+  .pdTotalRow {
+    align-items: flex-end;
+  }
+
+  .pdTotalRow input {
+    width: 120px;
   }
 }
