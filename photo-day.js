@@ -8,17 +8,11 @@
   const emailInput = document.getElementById("pdEmailInput");
   const replyToField = document.getElementById("pdReplyToField");
   const orderDate = document.getElementById("pdOrderDate");
-  const totalDisplay = document.getElementById("pdTotalDisplay");
-  const totalDueField = document.getElementById("pdTotalDueField");
   const nextField = document.getElementById("pdNextField");
   const paymentCodeField = document.getElementById("pdPaymentCodeField");
 
   const packageInputs = Array.from(document.querySelectorAll('input[name="Package"]'));
-  const extraInputs = Array.from(document.querySelectorAll('input[name="A la Carte"]'));
-
-  function formatMoney(value) {
-    return `$${value.toFixed(2)}`;
-  }
+  const packageCards = Array.from(document.querySelectorAll(".pdPackageCard"));
 
   function generatePaymentCode() {
     const now = new Date();
@@ -33,16 +27,18 @@
     return packageInputs.find((input) => input.checked) || null;
   }
 
-  function saveSelections() {
-    const payload = {
-      packageValue: getSelectedPackage()?.value || "",
-      extras: extraInputs.filter((input) => input.checked).map((input) => input.value)
-    };
+  function saveSelection() {
+    const selectedPackage = getSelectedPackage();
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        packageValue: selectedPackage?.value || ""
+      })
+    );
   }
 
-  function restoreSelections() {
+  function restoreSelection() {
     const raw = localStorage.getItem(STORAGE_KEY);
 
     if (!raw) {
@@ -55,39 +51,18 @@
       packageInputs.forEach((input) => {
         input.checked = input.value === parsed.packageValue;
       });
-
-      extraInputs.forEach((input) => {
-        input.checked = Array.isArray(parsed.extras) && parsed.extras.includes(input.value);
-      });
     } catch (error) {
-      console.error("Could not restore saved photo day selections.", error);
+      console.error("Could not restore saved package selection.", error);
     }
   }
 
-  function updateTotal() {
-    let total = 0;
+  function syncSelectedState() {
+    const selectedValue = getSelectedPackage()?.value || "";
 
-    packageInputs.forEach((input) => {
-      if (input.checked) {
-        total += Number(input.dataset.price || 0);
-      }
+    packageCards.forEach((card) => {
+      const cardInput = card.querySelector('input[name="Package"]');
+      card.classList.toggle("isSelected", cardInput?.value === selectedValue);
     });
-
-    extraInputs.forEach((input) => {
-      if (input.checked) {
-        total += Number(input.dataset.price || 0);
-      }
-    });
-
-    const formatted = formatMoney(total);
-
-    if (totalDisplay) {
-      totalDisplay.value = formatted;
-    }
-
-    if (totalDueField) {
-      totalDueField.value = formatted;
-    }
   }
 
   function setReturnUrl() {
@@ -95,12 +70,17 @@
       return;
     }
 
-    const nextUrl = new URL(window.location.href);
     const selectedPackage = getSelectedPackage();
+    const nextUrl = new URL(window.location.href);
 
     nextUrl.search = "";
-    nextUrl.hash = selectedPackage?.dataset.payTarget || "";
+    nextUrl.hash = "";
+
     nextUrl.searchParams.set("submitted", "1");
+
+    if (selectedPackage?.dataset.payTarget) {
+      nextUrl.hash = selectedPackage.dataset.payTarget;
+    }
 
     nextField.value = nextUrl.toString();
   }
@@ -127,29 +107,27 @@
     orderDate.value = `${year}-${month}-${day}`;
   }
 
-  [...packageInputs, ...extraInputs].forEach((input) => {
+  packageInputs.forEach((input) => {
     input.addEventListener("change", () => {
-      updateTotal();
-      saveSelections();
+      saveSelection();
+      syncSelectedState();
     });
   });
 
   form?.addEventListener("submit", () => {
-    const paymentCode = generatePaymentCode();
-
     if (paymentCodeField) {
-      paymentCodeField.value = paymentCode;
+      paymentCodeField.value = generatePaymentCode();
     }
 
     if (replyToField && emailInput) {
       replyToField.value = emailInput.value.trim();
     }
 
-    saveSelections();
+    saveSelection();
     setReturnUrl();
   });
 
-  restoreSelections();
-  updateTotal();
+  restoreSelection();
+  syncSelectedState();
   showSubmittedMessageIfNeeded();
 })();
