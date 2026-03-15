@@ -6,11 +6,18 @@
   <title>Captured by Kam — Photo Day Sign Up</title>
   <meta name="description" content="Captured by Kam Media Day / Team Photos Sign Up" />
   <link rel="stylesheet" href="photo-day.css" />
+  <script
+    src="https://www.paypal.com/sdk/js?client-id=BAA_WkQ3RFsOD-TFE6lhyMEI8dxgLM1vhYCJ-1Lg8S73CQmESQTnqWLkrDXGqqfpx3LCWBRQZT4WJuNzfI&components=hosted-buttons&enable-funding=venmo&currency=USD">
+  </script>
   <script defer src="photo-day.js"></script>
 </head>
 <body>
   <main class="pdPage">
     <div class="pdWrap">
+      <div class="pdStatus" id="pdStatusMessage" hidden>
+        Order details sent. Now complete payment with the PayPal button under your selected package.
+      </div>
+
       <form
         class="pdForm"
         id="pdForm"
@@ -77,14 +84,25 @@
           </div>
         </section>
 
-        <section class="pdSection">
+        <section class="pdSection" id="pdPackagesSection">
           <h3>PHOTO PACKAGE SELECTION</h3>
+          <p class="pdSectionNote">
+            Step 1: submit the order details below. Step 2: use the PayPal button under the package you selected.
+          </p>
 
           <div class="pdPackageGrid">
-            <article class="pdCard pdPackageCard">
+            <article class="pdCard pdPackageCard" id="pay-rookie">
               <div class="pdCardTop">
                 <label class="pdChoice">
-                  <input type="radio" name="Package" value="Rookie - $25.00" data-price="25" required />
+                  <input
+                    type="radio"
+                    name="Package"
+                    value="Rookie - $25.00"
+                    data-price="25"
+                    data-storage-key="rookie"
+                    data-pay-target="pay-rookie"
+                    required
+                  />
                   <span class="pdChoiceBox"></span>
                   <span class="pdChoiceText">Rookie:</span>
                 </label>
@@ -92,16 +110,33 @@
               </div>
 
               <ul class="pdList">
-                <li>(1)Digital Download</li>
+                <li>(1) Digital Download</li>
                 <li>(1) Wallet Sheet (4)</li>
                 <li>(1) 5 x 7 Team Photo</li>
               </ul>
+
+              <div class="pdPayWrap">
+                <p class="pdPayTitle">Package Payment</p>
+                <div id="paypal-container-NUSD2T9G32H6E"></div>
+                <script>
+                  paypal.HostedButtons({
+                    hostedButtonId: "NUSD2T9G32H6E"
+                  }).render("#paypal-container-NUSD2T9G32H6E");
+                </script>
+              </div>
             </article>
 
-            <article class="pdCard pdPackageCard">
+            <article class="pdCard pdPackageCard" id="pay-all-star">
               <div class="pdCardTop">
                 <label class="pdChoice">
-                  <input type="radio" name="Package" value="All Star - $40.00" data-price="40" />
+                  <input
+                    type="radio"
+                    name="Package"
+                    value="All Star - $40.00"
+                    data-price="40"
+                    data-storage-key="all-star"
+                    data-pay-target="pay-all-star"
+                  />
                   <span class="pdChoiceBox"></span>
                   <span class="pdChoiceText">All Star:</span>
                 </label>
@@ -110,113 +145,130 @@
 
               <ul class="pdList">
                 <li>(1) Digital Download</li>
-                <li>(2) 5x7" (Individuals)</li>
+                <li>(2) 5x7&quot; (Individuals)</li>
                 <li>(8) Wallet Sheets</li>
                 <li>(1) 5 x 7 Team Photo</li>
               </ul>
+
+              <div class="pdPayWrap">
+                <p class="pdPayTitle">Package Payment</p>
+                <div id="paypal-container-SLHNF33CATTQ6"></div>
+                <script>
+                  paypal.HostedButtons({
+                    hostedButtonId: "SLHNF33CATTQ6"
+                  }).render("#paypal-container-SLHNF33CATTQ6");
+                </script>
+              </div>
             </article>
 
-            <article class="pdCard pdPackageCard">
+            <article class="pdCard pdPackageCard" id="pay-mvp">
               <div class="pdCardTop">
                 <label class="pdChoice">
-                  <input type="radio" name="Package" value="MVP - $69.00" data-price="69" />
+                  <input
+                    type="radio"
+                    name="Package"
+                    value="MVP - $69.00"
+                    data-price="69"
+                    data-storage-key="mvp"
+                    data-pay-target="pay-mvp"
+                  />
                   <span class="pdChoiceBox"></span>
                   <span class="pdChoiceText">MVP</span>
                 </label>
                 <div class="pdPrice">$69.00</div>
               </div>
 
-              <p class="pdStrong">*Everything in All Star, Plus :</p>
+              <p class="pdStrong">*Everything in All Star, Plus:</p>
               <ul class="pdList">
-                <li>(1)8×10 individual (poster)</li>
+                <li>(1) 8×10 individual (poster)</li>
                 <li>(1) Button</li>
                 <li>(1) Magnet</li>
               </ul>
+
+              <div class="pdPayWrap">
+                <p class="pdPayTitle">Package Payment</p>
+                <div id="paypal-container-AS63S2UBAE376"></div>
+                <script>
+                  paypal.HostedButtons({
+                    hostedButtonId: "AS63S2UBAE376"
+                  }).render("#paypal-container-AS63S2UBAE376");
+                </script>
+              </div>
             </article>
           </div>
 
-         <div class="pdExtrasGrid">
+          <div class="pdExtrasGrid">
             <article class="pdCard">
               <h4>A la Carte Items</h4>
 
-              <label class="pdExtra">
-                <input type="checkbox" name="A la Carte" value="Digital Download - $10" data-price="10" />
-                <span>(1)Digital Download - $10</span>
-              </label>
+              <div class="pdExtraRow">
+                <label class="pdExtra">
+                  <input type="checkbox" name="A la Carte" value="Digital Download - $10" data-price="10" />
+                  <span>(1) Digital Download - $10</span>
+                </label>
+                <div class="pdExtraPaySlot" id="pd-extra-digital"></div>
+              </div>
 
-              <label class="pdExtra">
-                <input type="checkbox" name="A la Carte" value="Wallet Sheet (4) - $10" data-price="10" />
-                <span>(1) Wallet Sheet (4) - $10</span>
-              </label>
+              <div class="pdExtraRow">
+                <label class="pdExtra">
+                  <input type="checkbox" name="A la Carte" value="Wallet Sheet (4) - $10" data-price="10" />
+                  <span>(1) Wallet Sheet (4) - $10</span>
+                </label>
+                <div class="pdExtraPaySlot" id="pd-extra-wallet-4"></div>
+              </div>
 
-              <label class="pdExtra">
-                <input type="checkbox" name="A la Carte" value="Wallet Sheet (8) - $12" data-price="12" />
-                <span>(1) Wallet Sheet (8) - $12</span>
-              </label>
+              <div class="pdExtraRow">
+                <label class="pdExtra">
+                  <input type="checkbox" name="A la Carte" value="Wallet Sheet (8) - $12" data-price="12" />
+                  <span>(1) Wallet Sheet (8) - $12</span>
+                </label>
+                <div class="pdExtraPaySlot" id="pd-extra-wallet-8"></div>
+              </div>
 
-              <label class="pdExtra">
-                <input type="checkbox" name="A la Carte" value="5 x 7 Team Photo - $8" data-price="8" />
-                <span>(1) 5 x 7 Team Photo- $8</span>
-              </label>
+              <div class="pdExtraRow">
+                <label class="pdExtra">
+                  <input type="checkbox" name="A la Carte" value="5 x 7 Team Photo - $8" data-price="8" />
+                  <span>(1) 5 x 7 Team Photo - $8</span>
+                </label>
+                <div class="pdExtraPaySlot" id="pd-extra-team-photo"></div>
+              </div>
             </article>
 
             <article class="pdCard">
               <h4>A la Carte Items</h4>
 
-              <label class="pdExtra">
-                <input type="checkbox" name="A la Carte" value='8 x 10" Poster - $20' data-price="20" />
-                <span>8 x 10" Poster- $20</span>
-              </label>
+              <div class="pdExtraRow">
+                <label class="pdExtra">
+                  <input type="checkbox" name="A la Carte" value='8 x 10&quot; Poster - $20' data-price="20" />
+                  <span>8 x 10&quot; Poster - $20</span>
+                </label>
+                <div class="pdExtraPaySlot" id="pd-extra-poster"></div>
+              </div>
 
-              <label class="pdExtra">
-                <input type="checkbox" name="A la Carte" value="Photo Magnet - $5" data-price="5" />
-                <span>Photo Magnet- $5</span>
-              </label>
+              <div class="pdExtraRow">
+                <label class="pdExtra">
+                  <input type="checkbox" name="A la Carte" value="Photo Magnet - $5" data-price="5" />
+                  <span>Photo Magnet - $5</span>
+                </label>
+                <div class="pdExtraPaySlot" id="pd-extra-magnet"></div>
+              </div>
             </article>
 
             <article class="pdCard pdTotalCard">
+              <p class="pdStepLabel">Step 1 of 2</p>
+
               <div class="pdTotalRow">
                 <span>TOTAL DUE</span>
                 <input id="pdTotalDisplay" type="text" value="$0.00" readonly />
               </div>
 
-              <button class="pdSubmit" type="submit">Submit Sign Up</button>
+              <button class="pdSubmit" type="submit">Send Order Details</button>
+
+              <p class="pdFormHelp">
+                Your order details will be emailed to Kam first. Then use the PayPal button under your selected package.
+              </p>
             </article>
           </div>
-
-<div class="pdPaymentBlock">
-            <article class="pdCard pdPaymentCard">
-              <h4>Payment Method</h4>
-
-              <div class="pdPaymentOptions">
-                <label class="pdPaymentOption">
-                  <input type="radio" name="Payment Method" value="Cash" required />
-                  <span>Cash</span>
-                </label>
-
-                <label class="pdPaymentOption">
-                  <input type="radio" name="Payment Method" value="Cash App" required />
-                  <span>Cash App</span>
-                </label>
-
-                <label class="pdPaymentOption">
-                  <input type="radio" name="Payment Method" value="Apple Pay" required />
-                  <span>Apple Pay</span>
-                </label>
-
-                <label class="pdPaymentOption">
-                  <input type="radio" name="Payment Method" value="Venmo" required />
-                  <span>Venmo</span>
-                </label>
-
-                <label class="pdPaymentOption">
-                  <input type="radio" name="Payment Method" value="PayPal" required />
-                  <span>PayPal</span>
-                </label>
-              </div>
-            </article>
-          </div>
-          
         </section>
       </form>
     </div>
