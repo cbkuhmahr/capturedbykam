@@ -1,345 +1,299 @@
-:root {
-  --pd-bg: #f3f3f3;
-  --pd-ink: #4d4d4d;
-  --pd-line: #2f2f2f;
-  --pd-white: #ffffff;
+.media-day-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+  color: #111;
 }
 
-* {
-  box-sizing: border-box;
+.media-day-header {
+  text-align: center;
+  margin-bottom: 28px;
 }
 
-html,
-body {
+.media-day-kicker {
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #d8741f;
+}
+
+.media-day-header h1 {
   margin: 0;
-  min-height: 100%;
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
-body {
-  background: var(--pd-bg);
-  color: var(--pd-ink);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: geometricPrecision;
+.media-day-subtext {
+  max-width: 720px;
+  margin: 14px auto 0;
+  color: #5c5c5c;
+  font-size: 1rem;
 }
 
-button,
-input {
+.form-block {
+  background: #ffffff;
+  border: 2px solid #141414;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.form-block h2 {
+  margin: 0 0 18px;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.section-head p {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.player-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 2px solid #1a1a1a;
+  border-radius: 0;
+  background: #fff;
+  color: #111;
   font: inherit;
 }
 
-.pdPage {
-  padding: 20px 16px 48px;
-}
-
-.pdWrap {
-  max-width: 1140px;
-  margin: 0 auto;
-}
-
-.pdForm {
-  width: 100%;
-}
-
-.pdStatus {
-  margin: 0 0 18px;
-  border: 2px solid var(--pd-line);
-  background: rgba(0, 0, 0, 0.04);
-  color: var(--pd-ink);
-  padding: 14px 16px;
-  font-size: 1rem;
-  font-weight: 800;
-  line-height: 1.35;
-}
-
-.pdHeader {
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-.pdHeader h1,
-.pdHeader h2,
-.pdSection h3 {
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: -0.05em;
-  line-height: 0.95;
-  font-weight: 900;
-}
-
-.pdHeader h1 {
-  font-size: clamp(2.5rem, 5vw, 4.2rem);
-}
-
-.pdHeader h2 {
-  font-size: clamp(1.85rem, 4vw, 3.1rem);
-  margin-top: 8px;
-}
-
-.pdSection {
-  margin-top: 18px;
-}
-
-.pdSection h3 {
-  text-align: center;
-  font-size: clamp(1.65rem, 3vw, 2.15rem);
-  margin-bottom: 12px;
-}
-
-.pdSectionNote {
-  max-width: 760px;
-  margin: 0 auto 14px;
-  text-align: center;
-  font-size: 0.98rem;
-  line-height: 1.4;
-  font-weight: 700;
-}
-
-.pdFields {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px 16px;
-}
-
-.pdField {
-  display: block;
-}
-
-.pdField input {
-  width: 100%;
-  height: 58px;
-  border: 2px solid var(--pd-line);
-  background: transparent;
-  color: var(--pd-ink);
-  padding: 0 14px;
-  font-size: 1rem;
-  border-radius: 0;
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
   outline: none;
+  border-color: #d8741f;
+  box-shadow: 0 0 0 3px rgba(216, 116, 31, 0.14);
 }
 
-.pdField input::placeholder {
-  color: var(--pd-ink);
-  opacity: 1;
-}
-
-.pdField input:focus {
-  background: rgba(0, 0, 0, 0.02);
-}
-
-.pdPackageGrid {
+.package-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 12px;
-}
-
-.pdCard {
-  border: 2px solid var(--pd-line);
-  background: transparent;
-  padding: 14px;
-}
-
-.pdPackageCard {
-  min-height: 100%;
-  scroll-margin-top: 22px;
-  transition: box-shadow 0.2s ease, background 0.2s ease;
-}
-
-.pdPackageCard.isSelected,
-.pdPackageCard:target {
-  background: rgba(0, 0, 0, 0.025);
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
-}
-
-.pdCardTop {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.pdChoice {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  font-weight: 900;
-  font-size: 1rem;
-  position: relative;
-}
-
-.pdChoice input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.pdChoiceBox {
-  width: 28px;
-  height: 28px;
-  border: 2px solid var(--pd-line);
-  display: inline-block;
-  flex: 0 0 28px;
-  position: relative;
-}
-
-.pdChoice input:checked + .pdChoiceBox::after {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  background: var(--pd-ink);
-}
-
-.pdChoiceText {
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.pdPrice {
-  font-size: 1rem;
-  font-weight: 900;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.pdList {
-  margin: 10px 0 0;
-  padding: 0 0 0 24px;
-  font-size: 1rem;
-  line-height: 1.45;
-}
-
-.pdList li + li {
-  margin-top: 2px;
-}
-
-.pdStrong {
-  margin: 10px 0 0;
-  font-size: 0.98rem;
-  font-weight: 900;
-  line-height: 1.35;
-}
-
-.pdPayWrap {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 2px solid rgba(47, 47, 47, 0.18);
-}
-
-.pdPayTitle {
-  margin: 0 0 10px;
-  font-size: 0.88rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.pdActionSection {
-  margin-top: 18px;
-}
-
-.pdActionCard {
-  border: 2px solid var(--pd-line);
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: 18px;
 }
 
-.pdStepLabel {
-  margin: 0 0 6px;
-  font-size: 0.88rem;
-  font-weight: 900;
+.package-card {
+  border: 2px solid #161616;
+  background: #fff;
+  padding: 18px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+}
+
+.package-card:hover {
+  transform: translateY(-2px);
+}
+
+.package-card.is-selected {
+  border-color: #d8741f;
+  box-shadow: 0 0 0 3px rgba(216, 116, 31, 0.14);
+}
+
+.package-card.is-dim {
+  opacity: 0.38;
+}
+
+.package-top {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: start;
+  margin-bottom: 14px;
+}
+
+.package-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.package-select input {
+  width: 18px;
+  height: 18px;
+  accent-color: #d8741f;
+}
+
+.package-title-wrap h3 {
+  margin: 0;
+  font-size: 1.35rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 
-.pdActionCard h4 {
-  margin: 0 0 8px;
-  font-size: 1.15rem;
-  font-weight: 900;
-  line-height: 1;
+.package-title-wrap p {
+  margin: 4px 0 0;
+  color: #666;
+  font-size: 0.92rem;
 }
 
-.pdActionText {
+.package-price {
+  font-size: 1.2rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.package-list {
   margin: 0;
-  max-width: 700px;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  color: #202020;
+}
+
+.package-payzone {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #d8d8d8;
+}
+
+.payzone-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.payzone-head strong {
   font-size: 0.98rem;
-  line-height: 1.45;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pay-ref {
+  font-size: 0.88rem;
+  color: #d8741f;
   font-weight: 700;
 }
 
-.pdSubmit {
-  min-width: 240px;
+.payment-buttons {
+  display: grid;
+  gap: 10px;
+}
+
+.submit-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.form-status {
+  width: 100%;
+  border: 2px solid #141414;
+  background: #fff;
+  padding: 16px 18px;
+  font-weight: 600;
+}
+
+.form-status strong {
+  color: #d8741f;
+}
+
+.details-submit-btn {
+  min-width: 280px;
   min-height: 54px;
-  padding: 0 16px;
-  border: 2px solid var(--pd-line);
-  background: var(--pd-ink);
-  color: var(--pd-white);
-  text-transform: uppercase;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  cursor: pointer;
-}
-
-.pdSubmit:hover {
-  opacity: 0.92;
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
   border: 0;
+  background: #111;
+  color: #fff;
+  padding: 14px 24px;
+  font: inherit;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.details-submit-btn:hover {
+  background: #d8741f;
+  transform: translateY(-1px);
+}
+
+.details-submit-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+  transform: none;
 }
 
 @media (max-width: 980px) {
-  .pdPackageGrid {
+  .package-grid {
     grid-template-columns: 1fr;
   }
 
-  .pdActionCard {
+  .section-head {
     flex-direction: column;
-    align-items: stretch;
-  }
-
-  .pdSubmit {
-    width: 100%;
-    min-width: 0;
+    align-items: flex-start;
   }
 }
 
 @media (max-width: 720px) {
-  .pdPage {
-    padding: 14px 14px 28px;
+  .media-day-page {
+    padding: 28px 14px 52px;
   }
 
-  .pdFields {
+  .player-grid {
     grid-template-columns: 1fr;
   }
 
-  .pdField input {
-    height: 54px;
+  .form-block {
+    padding: 18px;
   }
 
-  .pdCard,
-  .pdActionCard {
-    padding: 12px;
+  .package-top {
+    grid-template-columns: 1fr;
   }
 
-  .pdList {
-    padding-left: 22px;
-    font-size: 0.98rem;
+  .package-price {
+    margin-top: -4px;
   }
 
-  .pdActionText {
-    font-size: 0.95rem;
+  .submit-wrap {
+    align-items: stretch;
+  }
+
+  .details-submit-btn {
+    width: 100%;
+    min-width: 0;
   }
 }
