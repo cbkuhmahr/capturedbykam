@@ -29,11 +29,11 @@ input {
 }
 
 .pdPage {
-  padding: 16px 16px 40px;
+  padding: 20px 16px 48px;
 }
 
 .pdWrap {
-  max-width: 1040px;
+  max-width: 1140px;
   margin: 0 auto;
 }
 
@@ -42,13 +42,13 @@ input {
 }
 
 .pdStatus {
-  margin: 0 0 16px;
+  margin: 0 0 18px;
   border: 2px solid var(--pd-line);
   background: rgba(0, 0, 0, 0.04);
   color: var(--pd-ink);
   padding: 14px 16px;
-  font-size: 0.98rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 800;
   line-height: 1.35;
 }
 
@@ -68,31 +68,31 @@ input {
 }
 
 .pdHeader h1 {
-  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
 }
 
 .pdHeader h2 {
-  font-size: clamp(2rem, 4vw, 3.35rem);
-  margin-top: 6px;
+  font-size: clamp(1.85rem, 4vw, 3.1rem);
+  margin-top: 8px;
 }
 
 .pdSection {
-  margin-top: 14px;
+  margin-top: 18px;
 }
 
 .pdSection h3 {
   text-align: center;
-  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  font-size: clamp(1.65rem, 3vw, 2.15rem);
   margin-bottom: 12px;
 }
 
 .pdSectionNote {
   max-width: 760px;
-  margin: 0 auto 12px;
+  margin: 0 auto 14px;
   text-align: center;
   font-size: 0.98rem;
-  font-weight: 700;
   line-height: 1.4;
+  font-weight: 700;
 }
 
 .pdFields {
@@ -126,36 +126,29 @@ input {
   background: rgba(0, 0, 0, 0.02);
 }
 
-.pdPackageGrid,
-.pdExtrasGrid {
+.pdPackageGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
-}
-
-.pdPackageGrid {
   margin-top: 12px;
-}
-
-.pdExtrasGrid {
-  margin-top: 16px;
-  align-items: stretch;
 }
 
 .pdCard {
   border: 2px solid var(--pd-line);
-  padding: 12px;
   background: transparent;
-  min-height: 160px;
+  padding: 14px;
 }
 
 .pdPackageCard {
   min-height: 100%;
-  scroll-margin-top: 24px;
+  scroll-margin-top: 22px;
+  transition: box-shadow 0.2s ease, background 0.2s ease;
 }
 
+.pdPackageCard.isSelected,
 .pdPackageCard:target {
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.025);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
 }
 
 .pdCardTop {
@@ -163,13 +156,13 @@ input {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .pdChoice {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   cursor: pointer;
   font-weight: 900;
   font-size: 1rem;
@@ -199,7 +192,7 @@ input {
 }
 
 .pdChoiceText {
-  font-size: 0.95rem;
+  font-size: 1rem;
   line-height: 1;
 }
 
@@ -207,30 +200,31 @@ input {
   font-size: 1rem;
   font-weight: 900;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .pdList {
-  margin: 8px 0 0;
-  padding: 0 0 0 30px;
+  margin: 10px 0 0;
+  padding: 0 0 0 24px;
   font-size: 1rem;
   line-height: 1.45;
 }
 
-.pdList li {
-  margin: 0;
+.pdList li + li {
+  margin-top: 2px;
 }
 
 .pdStrong {
-  margin: 6px 0 0;
-  font-size: 0.95rem;
+  margin: 10px 0 0;
+  font-size: 0.98rem;
   font-weight: 900;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 .pdPayWrap {
   margin-top: 14px;
   padding-top: 12px;
-  border-top: 2px solid rgba(47, 47, 47, 0.2);
+  border-top: 2px solid rgba(47, 47, 47, 0.18);
 }
 
 .pdPayTitle {
@@ -238,103 +232,60 @@ input {
   font-size: 0.88rem;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
 }
 
-.pdCard h4 {
-  margin: 0 0 10px;
-  font-size: 1rem;
-  font-weight: 900;
-  line-height: 1;
+.pdActionSection {
+  margin-top: 18px;
 }
 
-.pdExtraRow {
-  display: block;
-}
-
-.pdExtra {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 10px;
-  font-size: 1rem;
-  line-height: 1.35;
-  cursor: pointer;
-}
-
-.pdExtra input {
-  width: 18px;
-  height: 18px;
-  margin-top: 2px;
-  accent-color: #4d4d4d;
-  flex: 0 0 18px;
-}
-
-.pdExtraPaySlot {
-  margin: 0 0 14px 28px;
-}
-
-.pdExtraPaySlot:empty {
-  display: none;
-}
-
-.pdTotalCard {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 16px;
-}
-
-.pdStepLabel {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.pdTotalRow {
+.pdActionCard {
+  border: 2px solid var(--pd-line);
+  padding: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 18px;
 }
 
-.pdTotalRow span {
-  font-size: 1rem;
+.pdStepLabel {
+  margin: 0 0 6px;
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pdActionCard h4 {
+  margin: 0 0 8px;
+  font-size: 1.15rem;
   font-weight: 900;
   line-height: 1;
 }
 
-.pdTotalRow input {
-  width: 132px;
-  border: 0;
-  border-bottom: 2px solid var(--pd-line);
-  background: transparent;
-  color: var(--pd-ink);
-  text-align: center;
-  font-size: 1rem;
+.pdActionText {
+  margin: 0;
+  max-width: 700px;
+  font-size: 0.98rem;
+  line-height: 1.45;
   font-weight: 700;
-  padding: 6px 4px;
-  outline: none;
 }
 
 .pdSubmit {
-  min-height: 52px;
+  min-width: 240px;
+  min-height: 54px;
+  padding: 0 16px;
   border: 2px solid var(--pd-line);
   background: var(--pd-ink);
   color: var(--pd-white);
   text-transform: uppercase;
   font-weight: 900;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   cursor: pointer;
 }
 
-.pdFormHelp {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  font-weight: 700;
+.pdSubmit:hover {
+  opacity: 0.92;
 }
 
 .srOnly {
@@ -349,10 +300,19 @@ input {
   border: 0;
 }
 
-@media (max-width: 900px) {
-  .pdPackageGrid,
-  .pdExtrasGrid {
+@media (max-width: 980px) {
+  .pdPackageGrid {
     grid-template-columns: 1fr;
+  }
+
+  .pdActionCard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pdSubmit {
+    width: 100%;
+    min-width: 0;
   }
 }
 
@@ -369,34 +329,17 @@ input {
     height: 54px;
   }
 
-  .pdCard {
-    padding: 12px 10px;
-  }
-
-  .pdCardTop {
-    gap: 10px;
-  }
-
-  .pdChoiceBox {
-    width: 24px;
-    height: 24px;
-    flex-basis: 24px;
+  .pdCard,
+  .pdActionCard {
+    padding: 12px;
   }
 
   .pdList {
-    padding-left: 24px;
+    padding-left: 22px;
     font-size: 0.98rem;
   }
 
-  .pdExtra {
-    font-size: 0.98rem;
-  }
-
-  .pdTotalRow {
-    align-items: flex-end;
-  }
-
-  .pdTotalRow input {
-    width: 120px;
+  .pdActionText {
+    font-size: 0.95rem;
   }
 }
