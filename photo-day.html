@@ -1,214 +1,250 @@
-<section class="media-day-page">
-  <div class="media-day-header">
-    <p class="media-day-kicker">Captured by Kam</p>
-    <h1>Media Day / Team Photos Sign Up</h1>
-    <p class="media-day-subtext">
-      Fill out player details, choose one package, then complete payment.
-    </p>
-  </div>
-
-  <form id="mediaDayForm" action="YOUR-CURRENT-WORKING-FORM-ACTION" method="POST">
-    <!-- KEEP your current hidden fields here if you already use FormSubmit -->
-    <!-- Example:
-    <input type="hidden" name="_subject" value="New Media Day Signup">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_template" value="table">
-    -->
-
-    <input type="hidden" name="Reference Number" id="referenceNumber">
-    <input type="hidden" name="Selected Package" id="selectedPackageField">
-
-    <section class="form-block">
-      <h2>Player Information</h2>
-
-      <div class="player-grid">
-        <div class="field">
-          <label for="guardianName">Parent / Guardian Name</label>
-          <input id="guardianName" name="Parent/Guardian Name" type="text" required>
-        </div>
-
-        <div class="field">
-          <label for="phoneNumber">Phone Number</label>
-          <input id="phoneNumber" name="Phone Number" type="tel" required>
-        </div>
-
-        <div class="field">
-          <label for="emailAddress">Email</label>
-          <input id="emailAddress" name="Email" type="email" required>
-        </div>
-
-        <div class="field">
-          <label for="coachName">Coach's Name</label>
-          <input id="coachName" name="Coach's Name" type="text">
-        </div>
-
-        <div class="field">
-          <label for="teamName">Team Name</label>
-          <input id="teamName" name="Team Name" type="text" required>
-        </div>
-
-        <div class="field">
-          <label for="playerName">Player Name</label>
-          <input id="playerName" name="Player Name" type="text" required>
-        </div>
-
-        <div class="field">
-          <label for="eventDate">Event Date</label>
-          <input id="eventDate" name="Event Date" type="date" required>
-        </div>
-
-        <div class="field">
-          <label for="notes">Notes</label>
-          <input id="notes" name="Notes" type="text">
-        </div>
-      </div>
-    </section>
-
-    <section class="form-block">
-      <div class="section-head">
-        <h2>Choose a Package</h2>
-        <p>Select one package. After details are sent, only that payment option will stay active.</p>
-      </div>
-
-      <div class="package-grid">
-        <article class="package-card" data-package-key="rookie">
-          <div class="package-top">
-            <label class="package-select">
-              <input
-                type="radio"
-                name="package_choice"
-                value="Rookie - $25"
-                data-package-key="rookie"
-                data-package-name="Rookie"
-                data-package-price="25.00"
-                required
-              >
-              <span>Select</span>
-            </label>
-
-            <div class="package-title-wrap">
-              <h3>Rookie</h3>
-              <p>Clean starter package</p>
-            </div>
-
-            <div class="package-price">$25</div>
-          </div>
-
-          <ul class="package-list">
-            <li>1 digital download</li>
-            <li>1 wallet sheet (4)</li>
-            <li>1 team photo 5×7</li>
-          </ul>
-
-          <div class="package-payzone" hidden>
-            <div class="payzone-head">
-              <strong>Complete Rookie Payment</strong>
-              <span class="pay-ref"></span>
-            </div>
-
-            <!-- KEEP ONLY YOUR PAYMENT BUTTONS BELOW -->
-            <div class="payment-buttons">
-              <div id="paypal-rookie-button"></div>
-            </div>
-          </div>
-        </article>
-
-        <article class="package-card" data-package-key="allstar">
-          <div class="package-top">
-            <label class="package-select">
-              <input
-                type="radio"
-                name="package_choice"
-                value="All Star - $40"
-                data-package-key="allstar"
-                data-package-name="All Star"
-                data-package-price="40.00"
-                required
-              >
-              <span>Select</span>
-            </label>
-
-            <div class="package-title-wrap">
-              <h3>All Star</h3>
-              <p>Most balanced package</p>
-            </div>
-
-            <div class="package-price">$40</div>
-          </div>
-
-          <ul class="package-list">
-            <li>1 digital download</li>
-            <li>2 individual 5×7 prints</li>
-            <li>2 wallet sheets (8)</li>
-            <li>1 team photo 5×7</li>
-          </ul>
-
-          <div class="package-payzone" hidden>
-            <div class="payzone-head">
-              <strong>Complete All Star Payment</strong>
-              <span class="pay-ref"></span>
-            </div>
-
-            <!-- KEEP ONLY YOUR PAYMENT BUTTONS BELOW -->
-            <div class="payment-buttons">
-              <div id="paypal-allstar-button"></div>
-            </div>
-          </div>
-        </article>
-
-        <article class="package-card" data-package-key="mvp">
-          <div class="package-top">
-            <label class="package-select">
-              <input
-                type="radio"
-                name="package_choice"
-                value="MVP - $69"
-                data-package-key="mvp"
-                data-package-name="MVP"
-                data-package-price="69.00"
-                required
-              >
-              <span>Select</span>
-            </label>
-
-            <div class="package-title-wrap">
-              <h3>MVP</h3>
-              <p>Best-value feature package</p>
-            </div>
-
-            <div class="package-price">$69</div>
-          </div>
-
-          <ul class="package-list">
-            <li>1 digital download</li>
-            <li>2 individual 5×7 prints</li>
-            <li>2 wallet sheets (8)</li>
-            <li>1 team photo 5×7</li>
-            <li>1 individual poster 8×10</li>
-            <li>1 button</li>
-            <li>1 magnet</li>
-          </ul>
-
-          <div class="package-payzone" hidden>
-            <div class="payzone-head">
-              <strong>Complete MVP Payment</strong>
-              <span class="pay-ref"></span>
-            </div>
-
-            <!-- KEEP ONLY YOUR PAYMENT BUTTONS BELOW -->
-            <div class="payment-buttons">
-              <div id="paypal-mvp-button"></div>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <div class="submit-wrap">
-      <div id="formStatus" class="form-status" hidden></div>
-      <button type="submit" id="detailsSubmitBtn" class="details-submit-btn">
-        Send Details & Continue to Payment
-      </button>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Captured by Kam | Photo Day Sign Up</title>
+  <meta name="description" content="Captured by Kam media day and team photo sign up." />
+  <link rel="stylesheet" href="photo-day.css" />
+  <script defer src="photo-day.js"></script>
+</head>
+<body>
+  <header class="pd-topbar">
+    <div class="pd-shell pd-topbar-inner">
+      <a class="pd-brand" href="index.html">Captured by Kam</a>
+      <nav class="pd-nav" aria-label="Page links">
+        <a href="index.html">Home</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
     </div>
-  </form>
-</section>
+  </header>
+
+  <main class="pd-page">
+    <section class="pd-hero pd-shell">
+      <p class="pd-kicker">Sports Coverage / Media Day</p>
+      <h1>Team Photos Sign Up</h1>
+      <p class="pd-intro">
+        Fill out the player details, choose one package, then submit once to send your information.
+        After the form goes through, the selected PayPal payment button unlocks automatically.
+      </p>
+    </section>
+
+    <section class="pd-shell">
+      <form
+        id="mediaDayForm"
+        class="pd-form"
+        action="https://formsubmit.co/kam@capturedbykam.com"
+        method="POST"
+        novalidate
+      >
+        <input type="hidden" name="_subject" value="New CBK Photo Day Signup" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_replyto" id="replyToField" value="" />
+        <input type="hidden" name="_url" id="formUrlField" value="" />
+        <input type="hidden" name="Reference Number" id="referenceNumber" value="" />
+        <input type="hidden" name="Selected Package" id="selectedPackageField" value="" />
+
+        <div class="pd-section">
+          <div class="pd-section-head">
+            <div>
+              <p class="pd-section-label">Step 1</p>
+              <h2>Player Information</h2>
+            </div>
+            <p class="pd-section-note">All starred fields are required.</p>
+          </div>
+
+          <div class="pd-grid pd-grid-form">
+            <label class="pd-field">
+              <span>Parent / Guardian Name *</span>
+              <input id="guardianName" name="Parent/Guardian Name" type="text" required />
+            </label>
+
+            <label class="pd-field">
+              <span>Phone Number *</span>
+              <input id="phoneNumber" name="Phone Number" type="tel" inputmode="tel" required />
+            </label>
+
+            <label class="pd-field">
+              <span>Email *</span>
+              <input id="emailAddress" name="Email" type="email" inputmode="email" required />
+            </label>
+
+            <label class="pd-field">
+              <span>Coach's Name</span>
+              <input id="coachName" name="Coach's Name" type="text" />
+            </label>
+
+            <label class="pd-field">
+              <span>Team Name *</span>
+              <input id="teamName" name="Team Name" type="text" required />
+            </label>
+
+            <label class="pd-field">
+              <span>Player Name *</span>
+              <input id="playerName" name="Player Name" type="text" required />
+            </label>
+
+            <label class="pd-field">
+              <span>Event Date *</span>
+              <input id="eventDate" name="Event Date" type="date" required />
+            </label>
+
+            <label class="pd-field pd-field-wide">
+              <span>Notes</span>
+              <input id="notes" name="Notes" type="text" placeholder="Anything you want me to know before photo day" />
+            </label>
+          </div>
+        </div>
+
+        <div class="pd-section">
+          <div class="pd-section-head">
+            <div>
+              <p class="pd-section-label">Step 2</p>
+              <h2>Select One Package</h2>
+            </div>
+            <p class="pd-section-note">After submit, only the selected package payment button stays active.</p>
+          </div>
+
+          <div class="pd-grid pd-grid-packages">
+            <article class="pd-package" data-package-key="rookie">
+              <label class="pd-package-select">
+                <input
+                  type="radio"
+                  name="package_choice"
+                  value="Rookie - $25"
+                  data-package-key="rookie"
+                  data-package-name="Rookie"
+                  data-package-price="25.00"
+                  required
+                />
+                <span>Select package</span>
+              </label>
+
+              <div class="pd-package-head">
+                <div>
+                  <h3>Rookie</h3>
+                  <p>Simple, clean starter package</p>
+                </div>
+                <div class="pd-package-price">$25</div>
+              </div>
+
+              <ul class="pd-package-list">
+                <li>1 digital download</li>
+                <li>1 wallet sheet (4)</li>
+                <li>1 team photo 5×7</li>
+              </ul>
+
+              <div class="pd-payzone" hidden>
+                <div class="pd-payzone-copy">
+                  <strong>Reference:</strong>
+                  <span class="pd-ref-text"></span>
+                </div>
+                <a class="pd-paypal-button" data-pay-key="rookie" href="#" target="_blank" rel="noreferrer noopener">Continue to PayPal</a>
+              </div>
+            </article>
+
+            <article class="pd-package" data-package-key="allstar">
+              <label class="pd-package-select">
+                <input
+                  type="radio"
+                  name="package_choice"
+                  value="All Star - $40"
+                  data-package-key="allstar"
+                  data-package-name="All Star"
+                  data-package-price="40.00"
+                  required
+                />
+                <span>Select package</span>
+              </label>
+
+              <div class="pd-package-head">
+                <div>
+                  <h3>All Star</h3>
+                  <p>Most balanced package</p>
+                </div>
+                <div class="pd-package-price">$40</div>
+              </div>
+
+              <ul class="pd-package-list">
+                <li>1 digital download</li>
+                <li>2 individual 5×7 prints</li>
+                <li>2 wallet sheets (8)</li>
+                <li>1 team photo 5×7</li>
+              </ul>
+
+              <div class="pd-payzone" hidden>
+                <div class="pd-payzone-copy">
+                  <strong>Reference:</strong>
+                  <span class="pd-ref-text"></span>
+                </div>
+                <a class="pd-paypal-button" data-pay-key="allstar" href="#" target="_blank" rel="noreferrer noopener">Continue to PayPal</a>
+              </div>
+            </article>
+
+            <article class="pd-package pd-package-featured" data-package-key="mvp">
+              <label class="pd-package-select">
+                <input
+                  type="radio"
+                  name="package_choice"
+                  value="MVP - $69"
+                  data-package-key="mvp"
+                  data-package-name="MVP"
+                  data-package-price="69.00"
+                  required
+                />
+                <span>Select package</span>
+              </label>
+
+              <div class="pd-package-head">
+                <div>
+                  <h3>MVP</h3>
+                  <p>Best-value feature package</p>
+                </div>
+                <div class="pd-package-price">$69</div>
+              </div>
+
+              <ul class="pd-package-list">
+                <li>1 digital download</li>
+                <li>2 individual 5×7 prints</li>
+                <li>2 wallet sheets (8)</li>
+                <li>1 team photo 5×7</li>
+                <li>1 individual poster 8×10</li>
+                <li>1 button</li>
+                <li>1 magnet</li>
+              </ul>
+
+              <div class="pd-payzone" hidden>
+                <div class="pd-payzone-copy">
+                  <strong>Reference:</strong>
+                  <span class="pd-ref-text"></span>
+                </div>
+                <a class="pd-paypal-button" data-pay-key="mvp" href="#" target="_blank" rel="noreferrer noopener">Continue to PayPal</a>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div id="formStatus" class="pd-status" hidden></div>
+
+        <div class="pd-submit-row">
+          <p class="pd-submit-note">Submit once. If PayPal does not open automatically, use the button inside your selected package.</p>
+          <button type="submit" id="detailsSubmitBtn" class="pd-submit-button">Send Details + Continue to PayPal</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="pd-footer">
+    <div class="pd-shell pd-footer-inner">
+      <p>© 2026 Captured by Kam. All rights reserved.</p>
+      <div class="pd-footer-links">
+        <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
+        <a href="https://www.instagram.com/CapturedBy_Kam" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://www.youtube.com/@capturedbykammedia" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
