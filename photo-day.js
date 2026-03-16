@@ -2,9 +2,9 @@
   "use strict";
 
   const PAYPAL_LINKS = {
-    rookie: "PASTE_YOUR_ROOKIE_PAYPAL_LINK_HERE",
-    allstar: "PASTE_YOUR_ALLSTAR_PAYPAL_LINK_HERE",
-    mvp: "PASTE_YOUR_MVP_PAYPAL_LINK_HERE"
+    rookie: "https://www.paypal.com/ncp/payment/AS63S2UBAE376",
+    allstar: "https://www.paypal.com/ncp/payment/SLHNF33CATTQ6",
+    mvp: "https://www.paypal.com/ncp/payment/AS63S2UBAE376"
   };
 
   const form = document.getElementById("mediaDayForm");
