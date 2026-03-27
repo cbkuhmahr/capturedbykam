@@ -1,5 +1,29 @@
+<!doctype html>
 <html lang="en">
-        <a href="index.html#book">Book</a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Captured by Kam — Shop</title>
+  <meta
+    name="description"
+    content="Captured by Kam shop preview for postcards, prints, puzzles, and future product drops."
+  />
+  <link rel="stylesheet" href="shop.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="section-shell site-header__inner">
+      <a class="brand-block" href="index.html">
+        <span class="brand-block__name">Capturedby_Kam</span>
+        <span class="brand-block__tag">Every Frame, Every Project — Timeless Authenticity</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="index.html#contact">Book</a>
+        <a href="photo-day.html">Photo Day</a>
+        <a href="index.html#gallery">Work</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#about">About</a>
         <a href="shop.html" class="is-active">Shop</a>
       </nav>
     </div>
@@ -8,10 +32,10 @@
   <main>
     <section class="hero hero--shop">
       <div class="hero__inner section-shell">
-        <p class="section-label">CBK SHOP</p>
-        <h1>Objects, paper goods, and photo products built from the CBK world.</h1>
+        <p class="section-label">CBK Shop</p>
+        <h1>Coming soon is fine. Wasting the traffic is not.</h1>
         <p class="hero-copy">
-          The shop is on the way. Cards, postcards, prints, puzzles, and candles are being built to feel like an extension of the brand — not random merch with a logo slapped on it.
+          Postcards, art cards, prints, and puzzles are absolutely part of the plan. Until the shop goes live, this page should collect interest instead of just sitting here looking pretty.
         </p>
         <div class="hero-actions">
           <span class="status-pill">Coming Soon</span>
@@ -22,48 +46,89 @@
 
     <section class="section-shell category-section">
       <div class="section-heading">
-        <p class="section-label">Starting Lineup</p>
-        <h2>Built to look real now, ready to go live later.</h2>
+        <p class="section-label">Planned Product Direction</p>
+        <h2>Start with what fits the brand first.</h2>
         <p>
-          Each section below has its own page, but everything stays clearly marked as <strong>Coming Soon</strong> until you are ready to launch.
+          These are the first product lanes that make sense for Captured by Kam without forcing fake polish or random merch.
         </p>
       </div>
 
       <div class="category-grid">
-        <a class="category-card" href="cards.html">
+        <article class="category-card">
           <span class="category-card__eyebrow">Paper Goods</span>
-          <h3>Greeting Cards</h3>
-          <p>Original birthday, thank you, and I’m sorry cards built from custom art.</p>
+          <h3>Postcards / Art Cards</h3>
+          <p>Small-format visual pieces built from signature images, Toledo texture, sports culture, and strong frame work.</p>
           <span class="category-card__meta">Coming Soon</span>
-        </a>
+        </article>
 
-        <a class="category-card" href="postcards.html">
-          <span class="category-card__eyebrow">Paper Goods</span>
-          <h3>Postcards</h3>
-          <p>Small-format visual pieces based on Toledo, sports culture, and signature CBK imagery.</p>
-          <span class="category-card__meta">Coming Soon</span>
-        </a>
-
-        <a class="category-card" href="prints.html">
+        <article class="category-card">
           <span class="category-card__eyebrow">Print Shop</span>
           <h3>Prints</h3>
-          <p>Images meant to live beyond the screen — clean, honest, and worth keeping.</p>
+          <p>Selected frames meant to live off-screen — clean, honest, and good enough to actually hang up.</p>
           <span class="category-card__meta">Coming Soon</span>
-        </a>
+        </article>
 
-        <a class="category-card" href="puzzles.html">
+        <article class="category-card">
           <span class="category-card__eyebrow">Objects</span>
           <h3>Puzzles</h3>
-          <p>Selected CBK images turned into physical pieces worth sitting with and building.</p>
+          <p>Chosen images turned into physical pieces that feel like part of the visual world, not random filler.</p>
           <span class="category-card__meta">Coming Soon</span>
-        </a>
+        </article>
+      </div>
+    </section>
 
-        <a class="category-card" href="candles.html">
-          <span class="category-card__eyebrow">Objects</span>
-          <h3>Candles</h3>
-          <p>The first candle pair is rooted in your brand language: Presence and Legacy.</p>
-          <span class="category-card__meta">Coming Soon</span>
-        </a>
+    <section class="section-shell signup-section">
+      <div class="section-heading">
+        <p class="section-label">Get the first drop</p>
+        <h2>Be first when the shop opens.</h2>
+        <p>
+          This turns the placeholder into something useful right now. People can raise a hand, tell you what they want first, and give you a better read on what should launch ahead of the rest.
+        </p>
+      </div>
+
+      <div class="signup-layout">
+        <form class="notify-form" action="https://formsubmit.co/kam@capturedbykam.com" method="POST">
+          <input type="hidden" name="_subject" value="CBK Shop Interest" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" placeholder="Your name" required />
+          </label>
+
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" placeholder="you@example.com" required />
+          </label>
+
+          <label>
+            <span>What do you want first?</span>
+            <select name="first_product" required>
+              <option value="" selected disabled>Select one</option>
+              <option value="Postcards / Art Cards">Postcards / Art Cards</option>
+              <option value="Prints">Prints</option>
+              <option value="Puzzles">Puzzles</option>
+            </select>
+          </label>
+
+          <label>
+            <span>What kind of drop interests you most?</span>
+            <input type="text" name="interest_notes" placeholder="Sports, Toledo, family moments, portraits, vintage look, etc." />
+          </label>
+
+          <button type="submit">Notify Me</button>
+        </form>
+
+        <aside class="interest-panel">
+          <h3>What this page does now</h3>
+          <ul>
+            <li>Collects launch emails instead of wasting attention</li>
+            <li>Shows which product should come first</li>
+            <li>Keeps the shop honest while it is still being built</li>
+            <li>Gives you a list to message when the first drop goes live</li>
+          </ul>
+        </aside>
       </div>
     </section>
   </main>
