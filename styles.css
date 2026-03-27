@@ -1,10 +1,16 @@
-/* styles.css */
 :root {
   --bg: #d8d8d2;
   --bg-alt: #efefe9;
+  --bg-dark: #0f0f10;
+  --panel: rgba(255, 255, 255, 0.54);
   --ink: #050505;
-  --line: rgba(5, 5, 5, 0.18);
+  --muted: rgba(5, 5, 5, 0.74);
+  --line: rgba(5, 5, 5, 0.14);
   --line-strong: rgba(5, 5, 5, 0.8);
+  --accent: #d8893d;
+  --accent-soft: rgba(216, 137, 61, 0.16);
+  --white: #fff;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -30,6 +36,10 @@ body {
   overflow-x: hidden;
 }
 
+body.nav-open {
+  overflow: hidden;
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -52,152 +62,135 @@ button {
 }
 
 .shell {
-  width: min(1720px, calc(100% - 64px));
+  width: min(1440px, calc(100% - 48px));
   margin: 0 auto;
 }
 
 .siteHeader {
   position: fixed;
   inset: 0 0 auto 0;
-  z-index: 20;
-  padding-top: 10px;
-  pointer-events: none;
-  background: rgba(216, 216, 210, 0.96);
+  z-index: 40;
+  background: rgba(216, 216, 210, 0.95);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
 }
+
 .headerInner {
+  min-height: 82px;
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr) auto 116px;
-  align-items: center;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr) auto 112px;
   gap: 18px;
-  pointer-events: auto;
-  padding-bottom: 14px;
+  align-items: center;
 }
 
 .brand {
-  display: inline-grid;
-  gap: 2px;
-  align-self: start;
-  justify-self: start;
+  display: grid;
+  gap: 4px;
 }
 
-.brandName,
+.brandName {
+  font-size: 1.16rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
 .brandTag {
-  font-size: 1.18rem;
+  font-size: 0.84rem;
+  line-height: 1.2;
   font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.04em;
+  color: var(--muted);
+  letter-spacing: -0.03em;
 }
 
-.brandTag {
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.siteNav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 18px;
-  padding-top: 0;
-  flex-wrap: nowrap;
-}
+.siteNav,
 .headerSocials {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 14px;
+  gap: 16px;
 }
+
+.siteNav {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.headerSocials {
+  justify-content: flex-end;
+}
+
 .navLink {
-  font-size: 0.92rem;
-  font-weight: 700;
+  font-size: 0.94rem;
+  font-weight: 800;
   line-height: 1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
   white-space: nowrap;
 }
 
-.navLinkWide {
-  white-space: nowrap;
-  max-width: none;
-  text-align: center;
+.navLinkShop {
+  color: var(--accent);
 }
 
 .navToggle {
   justify-self: end;
-  width: 86px;
+  width: 92px;
   height: 48px;
-  border: 0;
+  border: 1px solid var(--ink);
   background: var(--ink);
-  color: #fff;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  font-weight: 700;
+  color: var(--white);
+  font-size: 0.92rem;
+  font-weight: 800;
   line-height: 1;
   letter-spacing: -0.03em;
   text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.navToggle:hover {
-  opacity: 0.92;
 }
 
 .siteMain {
-  padding-top: 112px;
+  padding-top: 82px;
 }
 
 .homeHero {
-  min-height: 100svh;
-  display: flex;
-  align-items: flex-start;
+  padding: 32px 0 24px;
 }
 
 .heroLayout {
-  width: 100%;
   display: grid;
-  grid-template-columns: 280px 120px minmax(0, 1fr);
-  grid-template-rows: auto auto auto;
-  column-gap: 28px;
-  row-gap: 18px;
-  padding-top: 0;
-  padding-bottom: 44px;
+  grid-template-columns: minmax(0, 540px) minmax(0, 1fr);
+  gap: 28px;
+  align-items: end;
+  min-height: calc(100svh - 140px);
 }
 
-.heroMain {
-  grid-column: 1 / -1;
+.heroCopyWrap {
   display: grid;
-  grid-template-columns: 280px 120px minmax(0, 1fr);
-  align-items: start;
+  gap: 20px;
+  align-self: center;
 }
 
-.heroAsterisk {
-  grid-column: 2;
-  width: 112px;
-  padding-top: 84px;
+.heroEyebrow,
+.sectionKicker,
+.serviceLabel,
+.galleryTag {
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
-.heroAsterisk svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.heroAsterisk line {
-  stroke: var(--ink);
-  stroke-width: 5;
-  stroke-linecap: square;
+.heroEyebrow,
+.galleryTag,
+.serviceLabel {
+  color: var(--accent);
 }
 
 .heroTitle {
-  grid-column: 3;
   margin: 0;
-  font-size: clamp(4.5rem, 10.3vw, 11.7rem);
-  line-height: 0.82;
+  font-size: clamp(3.4rem, 7.8vw, 8.4rem);
+  line-height: 0.9;
   font-weight: 900;
-  letter-spacing: -0.09em;
+  letter-spacing: -0.08em;
   text-transform: uppercase;
 }
 
@@ -205,44 +198,57 @@ button {
   display: block;
 }
 
-.heroIntro {
-  grid-column: 1;
-  align-self: start;
-  padding-top: 6px;
-}
-
-.heroIntro p {
+.heroBody {
+  max-width: 34ch;
   margin: 0;
-  font-size: 1rem;
-  line-height: 1.28;
-  font-weight: 400;
-  letter-spacing: -0.035em;
+  font-size: 1.08rem;
+  line-height: 1.42;
+  letter-spacing: -0.03em;
 }
 
-.heroArrow {
-  margin-top: 46px;
-  font-size: 10rem;
-  line-height: 0.75;
-  font-weight: 400;
+.heroActions,
+.pictureDayActions,
+.contactLinks {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.heroLink {
-  display: inline-block;
-  margin-top: 52px;
-  font-size: 1rem;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  border-bottom: 1px solid var(--ink);
-  padding-bottom: 10px;
+.button,
+.serviceButton,
+.submitButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 18px;
+  border: 1px solid var(--ink);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.buttonPrimary,
+.serviceButton,
+.submitButton {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.buttonGhost {
+  background: transparent;
+  color: var(--ink);
 }
 
 .heroTeaser {
-  grid-column: 2 / 4;
-  margin: 18px 0 0;
-  width: min(800px, 100%);
-  justify-self: center;
-  aspect-ratio: 1.45 / 0.72;
+  margin: 0;
+  width: 100%;
+  min-height: 520px;
   overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
 }
 
 .heroTeaser img {
@@ -251,19 +257,49 @@ button {
   object-fit: cover;
 }
 
-.heroScroll {
-  grid-column: 3;
-  justify-self: end;
-  align-self: end;
+.trustStrip {
+  padding: 0 0 34px;
+}
+
+.trustGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.trustItem,
+.serviceCard,
+.galleryCard,
+.bookingForm,
+.pictureDayCard,
+.contactIntro,
+.pricingNote {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.trustItem {
+  padding: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.trustItem strong {
   font-size: 1rem;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  margin-top: -86px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.trustItem span {
+  font-size: 0.95rem;
+  line-height: 1.36;
+  color: var(--muted);
 }
 
 .section {
-  padding: 90px 0;
-  scroll-margin-top: 130px;
+  padding: 88px 0;
+  scroll-margin-top: 120px;
 }
 
 .sectionAlt {
@@ -271,51 +307,47 @@ button {
 }
 
 .sectionHead {
-  margin-bottom: 34px;
-}
-
-.sectionKicker {
-  margin: 0 0 10px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: -0.04em;
+  margin-bottom: 30px;
 }
 
 .sectionTitle {
   margin: 0;
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  line-height: 0.92;
+  max-width: 12ch;
+  font-size: clamp(2.6rem, 5.2vw, 5.4rem);
+  line-height: 0.95;
   font-weight: 900;
-  letter-spacing: -0.08em;
+  letter-spacing: -0.07em;
   text-transform: uppercase;
 }
 
 .aboutGrid {
   display: grid;
-  grid-template-columns: minmax(280px, 460px) minmax(0, 1fr);
+  grid-template-columns: minmax(280px, 480px) minmax(0, 1fr);
   gap: 28px;
   align-items: start;
 }
 
 .aboutCopy {
   display: grid;
-  gap: 22px;
-  font-size: 1.1rem;
-  line-height: 1.35;
-  letter-spacing: -0.04em;
+  gap: 18px;
 }
 
-.aboutCopy p {
+.aboutCopy p,
+.serviceCard p,
+.galleryMeta p,
+.contactIntro p,
+.pictureDayCard p,
+.pricingNote p {
   margin: 0;
+  font-size: 1.03rem;
+  line-height: 1.46;
+  letter-spacing: -0.03em;
 }
 
 .aboutImageStack {
   display: grid;
-  grid-template-columns: 1fr 0.85fr;
+  grid-template-columns: 1fr 0.88fr;
   gap: 18px;
-  align-items: start;
 }
 
 .aboutImageStack img {
@@ -332,82 +364,101 @@ button {
 }
 
 .serviceCard {
-  min-height: 220px;
-  border: 1px solid var(--line);
-  background: transparent;
   padding: 22px;
   display: grid;
   align-content: start;
-  gap: 16px;
+  gap: 18px;
 }
 
 .serviceCardAccent {
-  background: rgba(5, 5, 5, 0.03);
+  background: linear-gradient(180deg, rgba(216, 137, 61, 0.14), rgba(255, 255, 255, 0.5));
+}
+
+.serviceCardNote {
+  background: rgba(5, 5, 5, 0.04);
 }
 
 .serviceTop {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
   align-items: start;
+  gap: 12px;
 }
 
-.serviceTop h3 {
-  margin: 0;
-  font-size: 1.4rem;
+.serviceTop h3,
+.galleryMeta h3 {
+  margin: 8px 0 0;
+  font-size: 1.45rem;
   line-height: 1;
   font-weight: 900;
   letter-spacing: -0.05em;
   text-transform: uppercase;
 }
 
-.serviceCard p {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.35;
-  letter-spacing: -0.035em;
+.pricingNote {
+  margin-top: 18px;
+  padding: 18px 22px;
 }
 
-.serviceButton,
-.submitButton {
-  appearance: none;
-  border: 1px solid var(--ink);
-  background: var(--ink);
-  color: #fff;
-  padding: 10px 16px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
-}
-
-.galleryGrid {
+.galleryGridFeatured {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
 }
 
-.galleryItem {
-  border: 1px solid var(--line);
+.galleryCard {
   overflow: hidden;
-  background: #ddd;
+  display: grid;
 }
 
-.galleryItem img {
+.galleryCard img {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
-  transition: transform 0.2s ease;
 }
 
-.galleryItem:hover img {
-  transform: scale(1.02);
+.galleryMeta {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.contactLayout {
+  display: grid;
+  grid-template-columns: minmax(280px, 430px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.contactIntro,
+.bookingForm,
+.pictureDayCard {
+  padding: 28px;
+}
+
+.contactIntro {
+  display: grid;
+  gap: 18px;
+}
+
+.contactIntro .sectionHead {
+  margin-bottom: 0;
+}
+
+.contactPoints {
+  display: grid;
+  gap: 10px;
+}
+
+.contactLinks a {
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 5px;
+  font-weight: 700;
 }
 
 .bookingForm {
-  border: 1px solid var(--line);
-  padding: 28px;
-  background: transparent;
+  display: grid;
+  gap: 18px;
 }
 
 .formGrid {
@@ -422,15 +473,15 @@ button {
 }
 
 .field span {
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 800;
   line-height: 1;
   text-transform: uppercase;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
 }
 
 .fieldFull {
-  margin-top: 18px;
+  grid-column: 1 / -1;
 }
 
 .control {
@@ -438,7 +489,7 @@ button {
   min-height: 56px;
   padding: 14px 16px;
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--white);
   color: var(--ink);
   outline: none;
   border-radius: 0;
@@ -454,33 +505,21 @@ button {
 }
 
 .formActions {
-  margin-top: 22px;
+  display: flex;
+  justify-content: flex-start;
 }
 
-.pictureDayCard {
-  border: 1px solid var(--line);
-  padding: 28px;
-  background: transparent;
+.pictureDayCardWide {
   display: grid;
-  gap: 18px;
-  max-width: 720px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
 }
 
-.pictureDayCard p {
-  margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.35;
-  letter-spacing: -0.035em;
-}
-
-.inlineLink {
-  display: inline-block;
-  width: fit-content;
-  border-bottom: 1px solid var(--ink);
-  padding-bottom: 8px;
-  font-size: 1rem;
-  line-height: 1;
-  letter-spacing: -0.04em;
+.pictureDayPoints {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
 }
 
 .siteFooter {
@@ -491,50 +530,85 @@ button {
 .footerInner {
   display: flex;
   justify-content: space-between;
-  gap: 18px;
+  gap: 16px;
   align-items: center;
   flex-wrap: wrap;
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.94rem;
+  font-weight: 800;
   line-height: 1.2;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
 }
 
 .footerLinks {
   display: flex;
-  gap: 18px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
-@media (max-width: 1280px) {
+.navLink,
+.navToggle,
+.button,
+.serviceButton,
+.submitButton,
+.galleryCard img,
+.serviceCard,
+.galleryCard,
+.bookingForm,
+.pictureDayCard,
+.contactIntro,
+.trustItem {
+  transition:
+    transform 220ms ease,
+    opacity 220ms ease,
+    background-color 220ms ease,
+    color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.navLink:hover,
+.contactLinks a:hover,
+.footerLinks a:hover {
+  opacity: 0.72;
+}
+
+.navToggle:hover,
+.button:hover,
+.serviceButton:hover,
+.submitButton:hover {
+  transform: translateY(-1px);
+}
+
+.serviceCard:hover,
+.galleryCard:hover,
+.bookingForm:hover,
+.pictureDayCard:hover,
+.contactIntro:hover,
+.trustItem:hover {
+  transform: translateY(-2px);
+}
+
+.galleryCard:hover img {
+  transform: scale(1.02);
+}
+
+@media (max-width: 1240px) {
   .headerInner {
-    grid-template-columns: 220px 1fr 98px;
+    grid-template-columns: minmax(220px, 320px) minmax(0, 1fr) 98px;
   }
 
-  .siteNav {
-    gap: 26px;
+  .headerSocials {
+    display: none;
   }
 
-  .heroLayout,
-  .heroMain {
-    grid-template-columns: 220px 92px minmax(0, 1fr);
+  .heroLayout {
+    grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
   }
 
-  .heroAsterisk {
-    width: 86px;
-    padding-top: 70px;
-  }
-
-  .heroTitle {
-    font-size: clamp(4rem, 9.2vw, 9rem);
-  }
-
-  .serviceGrid {
+  .serviceGrid,
+  .galleryGridFeatured,
+  .trustGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .galleryGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -543,163 +617,105 @@ button {
     width: min(100%, calc(100% - 32px));
   }
 
-  .siteHeader {
-    padding-top: 18px;
+  .headerInner {
+    min-height: 76px;
+    grid-template-columns: 1fr 96px;
   }
 
-.headerInner {
-  grid-template-columns: 1fr 74px;
-  align-items: center;
-}
-
-.headerSocials {
-  display: none;
-}
-
-.siteNav {
-  position: absolute;
-  top: 84px;
-  left: 16px;
-  right: 16px;
-  display: none;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  padding: 18px;
-}
+  .siteNav {
+    position: absolute;
+    top: 76px;
+    left: 16px;
+    right: 16px;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px;
+    background: rgba(216, 216, 210, 0.98);
+    border: 1px solid var(--line);
+  }
 
   body.nav-open .siteNav {
     display: flex;
   }
 
-  .navLinkWide {
-    max-width: none;
-    text-align: left;
+  .siteMain {
+    padding-top: 76px;
   }
 
- .siteMain {
-  padding-top: 90px;
-}
+  .homeHero {
+    padding-top: 18px;
+  }
 
   .heroLayout,
-  .heroMain {
-    grid-template-columns: 1fr;
-  }
-
-  .heroMain {
-    gap: 18px;
-  }
-
-  .heroAsterisk {
-    grid-column: auto;
-    width: 78px;
-    padding-top: 0;
-  }
-
-  .heroTitle {
-    grid-column: auto;
-    font-size: clamp(3.2rem, 14vw, 6.3rem);
-    line-height: 0.86;
-  }
-
-  .heroIntro,
-  .heroTeaser,
-  .heroScroll {
-    grid-column: auto;
-  }
-
-  .heroArrow {
-    font-size: 7rem;
-    margin-top: 24px;
-  }
-
-  .heroLink {
-    margin-top: 30px;
-  }
-
-  .heroTeaser {
-    width: 100%;
-    margin-top: 8px;
-  }
-
-  .heroScroll {
-    justify-self: start;
-    margin-top: 0;
-  }
-
   .aboutGrid,
-  .serviceGrid,
+  .contactLayout,
+  .pictureDayCardWide,
   .formGrid {
     grid-template-columns: 1fr;
   }
 
-  .aboutImageStack {
-    grid-template-columns: 1fr 1fr;
+  .heroLayout {
+    min-height: auto;
   }
 
-  .galleryGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .heroCopyWrap {
+    order: 2;
   }
-}
 
-@media (max-width: 560px) {
-  .galleryGrid,
-  .aboutImageStack {
+  .heroTeaser {
+    min-height: 360px;
+    order: 1;
+  }
+
+  .heroBody,
+  .sectionTitle {
+    max-width: none;
+  }
+
+  .trustGrid,
+  .serviceGrid,
+  .galleryGridFeatured {
     grid-template-columns: 1fr;
   }
 
-  .section {
-    padding: 72px 0;
-  }
-
+  .contactIntro,
   .bookingForm,
-  .pictureDayCard,
-  .serviceCard {
-    padding: 20px;
+  .pictureDayCard {
+    padding: 22px;
   }
 }
-.navLink,
-.navToggle,
-.inlineLink,
-.serviceButton,
-.submitButton,
-.galleryItem img,
-.serviceCard,
-.pictureDayCard,
-.bookingForm {
-  transition:
-    transform 220ms ease,
-    opacity 220ms ease,
-    background-color 220ms ease,
-    color 220ms ease,
-    border-color 220ms ease;
-}
 
-.navLink:hover,
-.inlineLink:hover {
-  opacity: 0.72;
-}
+@media (max-width: 640px) {
+  .heroTitle {
+    font-size: clamp(2.8rem, 15vw, 4.8rem);
+    line-height: 0.92;
+  }
 
-.navToggle:hover,
-.serviceButton:hover,
-.submitButton:hover {
-  transform: translateY(-1px);
-}
+  .button,
+  .serviceButton,
+  .submitButton {
+    width: 100%;
+  }
 
-.serviceCard:hover,
-.pictureDayCard:hover,
-.bookingForm:hover {
-  transform: translateY(-2px);
-}
+  .serviceTop,
+  .heroActions,
+  .pictureDayActions,
+  .contactLinks,
+  .footerInner,
+  .footerLinks {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-.galleryItem {
-  overflow: hidden;
-}
+  .serviceTop {
+    gap: 18px;
+  }
 
-.galleryItem:hover img {
-  transform: scale(1.02);
+  .aboutImageStack {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -709,140 +725,16 @@ button {
 
   .navLink,
   .navToggle,
-  .inlineLink,
+  .button,
   .serviceButton,
   .submitButton,
-  .galleryItem img,
+  .galleryCard img,
   .serviceCard,
+  .galleryCard,
+  .bookingForm,
   .pictureDayCard,
-  .bookingForm {
+  .contactIntro,
+  .trustItem {
     transition: none !important;
   }
-}
-/* ========================================
-   CBK SHOP / COMING SOON PAGES
-======================================== */
-
-:root {
-  --cbk-bg: #0f0f10;
-  --cbk-panel: #17181b;
-  --cbk-panel-2: #1f2024;
-  --cbk-line: rgba(255,255,255,0.10);
-  --cbk-text: #f2efe8;
-  --cbk-muted: rgba(242,239,232,0.72);
-  --cbk-accent: #d57a2a;
-  --cbk-accent-soft: rgba(213,122,42,0.16);
-  --cbk-max: 1180px;
-  --cbk-radius: 18px;
-  --cbk-shadow: 0 16px 40px rgba(0,0,0,0.30);
-}
-
-body.cbk-page-shell {
-  margin: 0;
-  background: linear-gradient(180deg, #0b0b0c 0%, #121316 100%);
-  color: var(--cbk-text);
-  font-family: 'Inter', sans-serif;
-}
-
-.cbk-topbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(10,10,11,0.86);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--cbk-line);
-}
-
-.cbk-topbar__inner {
-  width: min(calc(100% - 32px), var(--cbk-max));
-  margin: 0 auto;
-  min-height: 78px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.cbk-brand {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 4px;
-  color: var(--cbk-text);
-  text-decoration: none;
-}
-
-  font-family: 'Courier Prime', monospace;
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-}
-
-.cbk-brand__tag {
-  font-size: 0.8rem
-.cbk-brand__title {;
-  color: var(--cbk-muted);
-}
-
-.cbk-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.cbk-nav a {
-  text-decoration: none;
-  color: var(--cbk-muted);
-  border: 1px solid transparent;
-  padding: 10px 14px;
-  border-radius: 999px;
-  transition: 0.18s ease;
-}
-
-.cbk-nav a:hover,
-.cbk-nav a.is-active {
-  color: var(--cbk-text);
-  border-color: var(--cbk-line);
-  background: rgba(255,255,255,0.04);
-}
-
-.cbk-shop-wrap,
-.cbk-product-page {
-  width: min(calc(100% - 32px), var(--cbk-max));
-  margin: 0 auto;
-  padding: 48px 0 72px;
-}
-
-.cbk-hero,
-.cbk-info-panel,
-.cbk-scent-card,
-.cbk-tile {
-  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.02) 100%);
-  border: 1px solid var(--cbk-line);
-  border-radius: var(--cbk-radius);
-  box-shadow: var(--cbk-shadow);
-}
-
-.cbk-hero {
-  padding: 34px;
-  margin-bottom: 24px;
-}
-
-.cbk-eyebrow {
-  margin: 0 0 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--cbk-accent);
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.cbk-hero h1,
-.cbk-product-page h1 {
-  margin: 0 0 14px;
-  font-size: clamp(2rem, 4vw, 3.6rem);
-  line-height: 0.98;
-  letter-spacing: -0.03em;
-}
-
-.cbk-lead {
 }
