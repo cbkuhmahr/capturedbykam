@@ -1,4 +1,3 @@
-// script.js
 (() => {
   "use strict";
 
@@ -6,7 +5,6 @@
   const navToggle = document.querySelector(".navToggle");
   const nav = document.getElementById("siteNav");
   const yearEl = document.getElementById("year");
-  const gallerySection = document.getElementById("gallery");
   const emailInput = document.getElementById("emailInput");
   const replyToField = document.getElementById("replyToField");
   const serviceSelect = document.getElementById("serviceSelect");
@@ -24,15 +22,10 @@
     }
   }
 
-navToggle?.addEventListener("click", () => {
-  if (window.innerWidth > 920) {
-    gallerySection?.scrollIntoView({ behavior: "smooth", block: "start" });
-    return;
-  }
-
-  const isOpen = body.classList.contains("nav-open");
-  setMenu(!isOpen);
-});
+  navToggle?.addEventListener("click", () => {
+    const isOpen = body.classList.contains("nav-open");
+    setMenu(!isOpen);
+  });
 
   navLinks.forEach((link) => {
     link.addEventListener("click", () => setMenu(false));
@@ -58,6 +51,27 @@ navToggle?.addEventListener("click", () => {
 
   window.addEventListener("resize", () => {
     if (window.innerWidth > 920) {
+      setMenu(false);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setMenu(false);
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!body.classList.contains("nav-open") || !nav || !navToggle) {
+      return;
+    }
+
+    const target = event.target;
+    if (!(target instanceof Node)) {
+      return;
+    }
+
+    if (!nav.contains(target) && !navToggle.contains(target)) {
       setMenu(false);
     }
   });
