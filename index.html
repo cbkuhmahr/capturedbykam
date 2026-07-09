@@ -4,310 +4,323 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Capturedby_Kam | Photo + Video</title>
-  <meta name="description" content="Capturedby_Kam creates photo and video work for athletes, families, teams, brands, and visual projects in Northwest Ohio." />
+  <title>Captured by Kam | Gallery</title>
+  <meta name="description" content="Captured by Kam photo and video work. Instagram gallery, booking, PhotoDay, shop, and contact information." />
 
   <link rel="stylesheet" href="nqs.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@mirrorapp/iframe-bridge@latest/dist/index.umd.js"></script>
+
+  <style>
+    body.cbk-simple-body {
+      margin: 0;
+      background: #050505;
+      color: #f2eee5;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+    }
+
+    .cbk-simple-body a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .menu-state {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .simple-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(5, 5, 5, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(242, 238, 229, 0.14);
+    }
+
+    .simple-nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .simple-brand {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.05rem, 3vw, 1.35rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .menu-button,
+    .close-button {
+      border: 1px solid rgba(242, 238, 229, 0.22);
+      background: transparent;
+      color: #f2eee5;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .menu-button {
+      width: 46px;
+      height: 46px;
+      font-size: 1.45rem;
+    }
+
+    .menu-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(5, 5, 5, 0.97);
+      transform: translateX(100%);
+      transition: transform 0.24s ease;
+      display: grid;
+      place-items: center;
+      padding: 26px;
+    }
+
+    .menu-state:checked ~ .menu-panel {
+      transform: translateX(0);
+    }
+
+    .close-button {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      width: 48px;
+      height: 48px;
+      font-size: 1.7rem;
+    }
+
+    .menu-list {
+      display: grid;
+      gap: 24px;
+      text-align: center;
+    }
+
+    .menu-list a {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.7rem, 10vw, 6.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.055em;
+      text-transform: uppercase;
+    }
+
+    .menu-list a:hover {
+      color: #b79a5b;
+    }
+
+    .simple-main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 44px 22px 80px;
+    }
+
+    .gallery-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .gallery-head h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.8rem, 9vw, 7rem);
+      line-height: 0.92;
+      letter-spacing: -0.065em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .gallery-head p {
+      color: #b8b0a1;
+      max-width: 360px;
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+    }
+
+    .instagram-shell {
+      border: 1px solid rgba(242, 238, 229, 0.14);
+      background: rgba(255, 255, 255, 0.03);
+      min-height: 520px;
+      overflow: hidden;
+    }
+
+    .instagram-shell iframe {
+      display: block;
+      width: 100%;
+      border: none;
+      overflow: hidden;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .quick-actions a {
+      border: 1px solid rgba(242, 238, 229, 0.16);
+      min-height: 54px;
+      display: grid;
+      place-items: center;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.72rem;
+    }
+
+    .quick-actions a:hover {
+      border-color: #b79a5b;
+    }
+
+    .about-simple {
+      margin-top: 72px;
+      border-top: 1px solid rgba(242, 238, 229, 0.14);
+      padding-top: 32px;
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 32px;
+    }
+
+    .about-simple h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1;
+      margin: 0;
+      letter-spacing: -0.045em;
+    }
+
+    .about-simple p {
+      color: #b8b0a1;
+      margin: 0;
+      max-width: 650px;
+    }
+
+    .simple-footer {
+      border-top: 1px solid rgba(242, 238, 229, 0.14);
+      color: #b8b0a1;
+      padding: 28px 22px;
+    }
+
+    .simple-footer-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .simple-footer a {
+      color: #f2eee5;
+    }
+
+    @media (max-width: 780px) {
+      .gallery-head,
+      .about-simple {
+        display: block;
+      }
+
+      .gallery-head p {
+        margin-top: 16px;
+      }
+
+      .quick-actions {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .simple-main {
+        padding-inline: 16px;
+      }
+
+      .simple-nav {
+        padding-inline: 16px;
+      }
+
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
-<body id="home">
-  <header class="site-header">
-    <nav class="nav">
-      <a href="index.html#home" class="brand-mark">
-        <strong>Capturedby_Kam</strong>
-        <span>Every Frame Has Weight</span>
-      </a>
+<body id="home" class="cbk-simple-body">
+  <input class="menu-state" type="checkbox" id="menu-toggle" aria-label="Open menu" />
 
-      <div class="nav-links">
-        <a href="index.html#work">Work</a>
-        <a href="index.html#photoday">Photo Day</a>
-        <a href="shop.html">Shop</a>
-        <a class="nav-cta" href="index.html#book">Book</a>
-      </div>
+  <header class="simple-header">
+    <nav class="simple-nav" aria-label="Primary navigation">
+      <a href="index.html#home" class="simple-brand">Captured by Kam</a>
+      <label class="menu-button" for="menu-toggle" aria-label="Open menu">☰</label>
     </nav>
   </header>
 
-  <main>
-    <section class="section hero">
-      <div>
-        <div class="kicker">Northwest Ohio Photo + Video</div>
+  <aside class="menu-panel" aria-label="Site menu">
+    <label class="close-button" for="menu-toggle" aria-label="Close menu">×</label>
 
-        <h1>Every frame has weight.</h1>
+    <div class="menu-list">
+      <a href="mailto:kam@capturedbykam.com?subject=Booking%20Request">Book</a>
+      <a href="#about">About</a>
+      <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
+      <a href="shop.html">Shop</a>
+    </div>
+  </aside>
 
-        <p class="lead">
-          Photo, video, and visual work for athletes, families, teams, and brands built with presence, clarity, and purpose.
-        </p>
-
-        <div class="button-row">
-          <a class="btn primary" href="#work">View Work</a>
-          <a class="btn gold" href="#book">Book a Session</a>
-          <a class="btn" href="shop.html">Enter Shop</a>
-        </div>
+  <main class="simple-main">
+    <section class="gallery-section" aria-labelledby="gallery-title">
+      <div class="gallery-head">
+        <h1 id="gallery-title">Gallery</h1>
+        <p>Instagram is the gallery. The site keeps the path simple: book, learn, view PhotoDay, or shop.</p>
       </div>
 
-      <aside class="hero-panel" aria-label="Capturedby_Kam visual brand panel">
-        <div class="panel-caption">
-          <span>CBK Standard</span>
-          <p>Clean edits. Clear direction. Strong presence. No fake polish.</p>
-        </div>
-      </aside>
-    </section>
-
-    <section class="section" id="work">
-      <div class="section-head">
-        <div>
-          <div class="kicker">Selected Work</div>
-          <h2>Built to last past the feed.</h2>
-        </div>
-
-        <p>
-          Sports, portraits, families, brands, and Photo Day work with a cleaner visual direction.
-        </p>
+      <div class="instagram-shell">
+        <iframe onload="iFrameSetup(this)" src="https://app.mirror-app.com/feed-instagram/8075e490-f023-4d0e-9574-3e80bf7bbc3f/preview" style="width:100%;border:none;overflow:hidden;" scrolling="no" title="Captured by Kam Instagram gallery"></iframe>
       </div>
 
-      <div class="work-grid">
-        <article class="work-card tall">
-          <div class="work-meta">
-            <span class="label">Sport</span>
-            <h3>Athlete Portraits</h3>
-            <p>Strong images for players, posters, profiles, and team identity.</p>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <div class="work-meta">
-            <span class="label">Family</span>
-            <h3>Real Portraits</h3>
-            <p>Personal work with polish, not stiff studio energy.</p>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <div class="work-meta">
-            <span class="label">Senior</span>
-            <h3>Senior Sessions</h3>
-            <p>Confident images that feel current without feeling fake.</p>
-          </div>
-        </article>
-
-        <article class="work-card wide">
-          <div class="work-meta">
-            <span class="label">Brand</span>
-            <h3>Headshots + Visual Identity</h3>
-            <p>Clean visuals for people who need to look serious without looking stiff.</p>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <div class="work-meta">
-            <span class="label">Photo Day</span>
-            <h3>Team Coverage</h3>
-            <p>Organized portraits, parent-friendly ordering, and sharper delivery.</p>
-          </div>
-        </article>
+      <div class="quick-actions" aria-label="Quick links">
+        <a href="mailto:kam@capturedbykam.com?subject=Booking%20Request">Book</a>
+        <a href="#about">About</a>
+        <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
+        <a href="shop.html">Shop</a>
       </div>
     </section>
 
-    <section class="standard">
-      <div class="standard-inner">
-        <div>
-          <div class="kicker">The Standard</div>
-          <h2>Firm. Clean. Intentional.</h2>
-        </div>
-
-        <div>
-          <p class="standard-copy">
-            Capturedby_Kam is built for people who want their visuals to feel real, sharp, and worth keeping.
-            Not trendy for five minutes. Not overcooked. Not empty.
-          </p>
-
-          <div class="rule-list">
-            <div class="rule">
-              <strong>Show up.</strong>
-              <span>Clear communication, organized sessions, and work that respects the moment.</span>
-            </div>
-
-            <div class="rule">
-              <strong>Be the example.</strong>
-              <span>Visuals with discipline, taste, and a point of view.</span>
-            </div>
-
-            <div class="rule">
-              <strong>Move with purpose.</strong>
-              <span>Every frame should know why it exists.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="services">
-      <div class="section-head">
-        <div>
-          <div class="kicker">What I Shoot</div>
-          <h2>Four clean lanes.</h2>
-        </div>
-
-        <p>
-          No messy service buffet. These are the main ways CBK can work with you.
-        </p>
-      </div>
-
-      <div class="lane-grid">
-        <article class="lane-card">
-          <span class="label">01</span>
-          <h3>Athletes + Teams</h3>
-          <p>Media days, portraits, posters, team coverage, and PhotoDay delivery.</p>
-        </article>
-
-        <article class="lane-card">
-          <span class="label">02</span>
-          <h3>Families + Seniors</h3>
-          <p>Portraits with polish, but still personal and real.</p>
-        </article>
-
-        <article class="lane-card">
-          <span class="label">03</span>
-          <h3>Brands + Headshots</h3>
-          <p>Professional images for work, web, social, and promotion.</p>
-        </article>
-
-        <article class="lane-card">
-          <span class="label">04</span>
-          <h3>Events + Video</h3>
-          <p>Coverage, recaps, and short-form stories with movement and presence.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="shop-preview">
-      <div class="shop-feature">
-        <div class="shop-intro">
-          <div class="kicker">From The CBK World</div>
-          <h2>The shop is not random merch.</h2>
-
-          <p>
-            Prints, apparel, paper goods, and physical pieces built from the same eye behind the camera.
-            This is where Capturedby_Kam becomes something you can hold.
-          </p>
-
-          <div class="button-row">
-            <a class="btn primary" href="shop.html">Enter The Shop</a>
-          </div>
-        </div>
-
-        <div class="shop-grid">
-          <article class="shop-card">
-            <span class="label">No Quiet Saints</span>
-            <h3>Apparel</h3>
-            <p>For the flawed but intentional. Graphic pieces under the CBK house.</p>
-          </article>
-
-          <article class="shop-card">
-            <span class="label">Prints</span>
-            <h3>Wall Pieces</h3>
-            <p>Selected frames made to live beyond the screen.</p>
-          </article>
-
-          <article class="shop-card">
-            <span class="label">Objects</span>
-            <h3>Puzzles + More</h3>
-            <p>Physical pieces pulled from the archive, not random filler.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section split" id="photoday">
-      <div class="callout">
-        <div class="kicker">Team Photo Day</div>
-        <h2>Cleaner for coaches. Easier for parents.</h2>
-
-        <p>
-          Team registration, ordering, and delivery run through the official Capturedby_Kam PhotoDay setup.
-          Less confusion. Better flow. Sharper presentation.
-        </p>
-
-        <div class="button-row">
-          <a class="btn primary" href="https://my.photoday.com/s/capturedbykam">Go To PhotoDay</a>
-          <a class="btn" href="#book">Ask About Team Photos</a>
-        </div>
-      </div>
-
-      <div class="callout">
-        <div class="kicker">Best For</div>
-
-        <div class="rule-list">
-          <div class="rule">
-            <strong>Teams</strong>
-            <span>Youth sports, schools, clubs, and organizations.</span>
-          </div>
-
-          <div class="rule">
-            <strong>Parents</strong>
-            <span>Simple ordering for prints, downloads, and packages.</span>
-          </div>
-
-          <div class="rule">
-            <strong>Coaches</strong>
-            <span>Less chasing people down. More organized delivery.</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section split" id="book">
-      <div>
-        <div class="kicker">Start The Project</div>
-        <h2>Tell me what you need.</h2>
-
-        <p class="lead">
-          Send the basics: what you need, when you need it, and where it needs to happen.
-          I’ll help shape the rest.
-        </p>
-
-        <p class="contact-note">
-          Email: <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
-        </p>
-      </div>
-
-      <form class="form" action="mailto:kam@capturedbykam.com" method="post" enctype="text/plain">
-        <input class="field" type="text" name="name" placeholder="Name" required />
-        <input class="field" type="email" name="email" placeholder="Email" required />
-        <input class="field" type="tel" name="phone" placeholder="Phone" />
-
-        <select class="field" name="project_type" required>
-          <option value="">Project Type</option>
-          <option>Team / Media Day</option>
-          <option>Senior Photos</option>
-          <option>Family Session</option>
-          <option>Headshots / Brand</option>
-          <option>Event Coverage</option>
-          <option>Video</option>
-          <option>Shop / Product Question</option>
-        </select>
-
-        <input class="field" type="text" name="date_location" placeholder="Preferred Date / Location" />
-        <textarea class="field" name="details" placeholder="Project Details"></textarea>
-
-        <button class="btn primary" type="submit">Send Request</button>
-      </form>
+    <section class="about-simple" id="about">
+      <h2>Photo + video with purpose.</h2>
+      <p>
+        Captured by Kam creates clean, intentional photo and video work for athletes, families, teams, brands, and visual projects.
+        The work should feel real, sharp, and worth keeping.
+      </p>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="footer-inner">
+  <footer class="simple-footer">
+    <div class="simple-footer-inner">
+      <div>© Captured by Kam</div>
       <div>
-        <strong>Capturedby_Kam</strong><br />
-        Every frame has weight.
-      </div>
-
-      <div>
-        <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a><br />
-        <a href="https://www.instagram.com/CapturedBy_Kam">Instagram</a> ·
-        <a href="https://www.youtube.com/@capturedbykammedia">YouTube</a>
+        <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a> ·
+        <a href="https://www.instagram.com/CapturedBy_Kam">Instagram</a>
       </div>
     </div>
   </footer>
+
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    document.querySelectorAll('.menu-panel a').forEach((link) => {
+      link.addEventListener('click', () => {
+        menuToggle.checked = false;
+      });
+    });
+  </script>
 </body>
 </html>
