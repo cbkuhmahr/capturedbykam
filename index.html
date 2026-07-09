@@ -4,513 +4,178 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Captured by Kam</title>
-  <meta name="description" content="Captured by Kam photo and video work. Booking, PhotoDay, shop, and the latest from Instagram." />
+  <meta name="description" content="Captured by Kam gallery, booking, PhotoDay, and shop." />
   <script src="https://cdn.jsdelivr.net/npm/@mirrorapp/iframe-bridge@latest/dist/index.umd.js"></script>
   <style>
-    :root {
-      --orange: #ea4d2e;
-      --olive: #525246;
-      --steel: #9da1aa;
-      --indigo: #3d3c4c;
-      --stone: #b7b6ac;
-      --cream: #f2eee6;
-      --cream2: #e8e3d7;
-      --ink: #0f0f0f;
-      --soft: rgba(15,15,15,.12);
-      --max: 1180px;
-    }
-
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
-      background: var(--cream);
-      color: var(--ink);
-      font-family: Inter, Arial, Helvetica, sans-serif;
-      line-height: 1.45;
-    }
-    a { color: inherit; text-decoration: none; }
-    svg { display: block; }
-
-    .menu-state { position: absolute; opacity: 0; pointer-events: none; }
-
-    .page {
-      width: min(100%, 1680px);
-      margin: 0 auto;
-      padding: 6px;
+      background: #f3f0ea;
+      color: #111;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
-    .hero {
-      min-height: calc(100vh - 12px);
-      border: 4px solid #000;
-      border-radius: 14px;
-      background:
-        linear-gradient(105deg, rgba(234,77,46,.20), transparent 28%),
-        linear-gradient(180deg, rgba(255,255,255,.82), rgba(232,227,215,.95));
-      position: relative;
-      overflow: hidden;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .hero::before {
-      content: "";
+    .menu-state {
       position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(115deg, transparent 0 38%, rgba(61,60,76,.18) 38.3% 38.8%, transparent 39.1%),
-        linear-gradient(125deg, transparent 0 50%, rgba(61,60,76,.13) 50.3% 50.7%, transparent 51%),
-        linear-gradient(8deg, transparent 0 56%, rgba(15,15,15,.12) 56.3% 56.9%, transparent 57.2%);
-      pointer-events: none;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 520px;
-      height: 520px;
-      right: -170px;
-      bottom: -180px;
-      border-radius: 50%;
-      border: 1px solid rgba(15,15,15,.12);
-      background: radial-gradient(circle, rgba(183,182,172,.45), transparent 66%);
+      opacity: 0;
       pointer-events: none;
     }
 
     .topbar {
-      position: relative;
-      z-index: 3;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #f3f0ea;
+      border-bottom: 1px solid rgba(0,0,0,.12);
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 18px;
-      padding: 18px;
+      align-items: center;
+      padding: 14px 18px;
     }
 
-    .brand-card {
-      width: min(430px, calc(100vw - 118px));
-      background: rgba(255,255,255,.88);
-      border: 1px solid rgba(15,15,15,.08);
-      border-radius: 0 0 10px 0;
-      box-shadow: 0 18px 36px rgba(0,0,0,.08);
-      padding: 18px 18px 16px;
-      color: var(--orange);
+    .brand {
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      font-weight: 850;
-      letter-spacing: .01em;
+      font-weight: 800;
+      color: #ea4d2e;
+      letter-spacing: .02em;
+      font-size: clamp(1rem, 3vw, 1.35rem);
     }
 
-    .brand-name { font-size: clamp(1.05rem, 2.7vw, 1.55rem); line-height: 1; margin-bottom: 8px; }
-    .brand-line, .brand-est { font-size: clamp(.98rem, 2.5vw, 1.46rem); line-height: 1.08; }
-    .brand-est .year { color: #1f22d4; }
+    .menu-button,
+    .close-button {
+      border: 1px solid rgba(0,0,0,.18);
+      background: #fff;
+      color: #111;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     .menu-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 14px 9px 9px;
-      background: rgba(255,255,255,.9);
-      border: 1px solid rgba(15,15,15,.16);
-      box-shadow: 0 18px 34px rgba(0,0,0,.10);
-      cursor: pointer;
+      min-width: 46px;
+      height: 42px;
+      padding: 0 14px;
       text-transform: uppercase;
       letter-spacing: .16em;
-      font-size: .72rem;
-    }
-    .menu-button:hover { color: var(--orange); border-color: var(--orange); }
-    .menu-button svg { width: 34px; height: 34px; }
-
-    .hero-main {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 28px;
-      align-items: end;
-      padding: 32px 42px 44px;
-    }
-
-    .headline {
-      max-width: 820px;
-    }
-
-    .kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-      color: rgba(15,15,15,.62);
-      text-transform: uppercase;
-      letter-spacing: .18em;
-      font-size: .72rem;
-      font-weight: 800;
-    }
-    .kicker::before { content: ""; width: 10px; height: 10px; background: var(--orange); }
-
-    .headline h1 {
-      margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(4.2rem, 13vw, 12.5rem);
-      line-height: .78;
-      letter-spacing: -.075em;
-      color: var(--ink);
-    }
-    .headline h1 span { color: var(--orange); }
-
-    .hero-side {
-      align-self: stretch;
-      min-height: 390px;
-      border: 1px solid rgba(15,15,15,.12);
-      background:
-        linear-gradient(180deg, rgba(61,60,76,.96), rgba(82,82,70,.92)),
-        var(--indigo);
-      color: #fff;
-      padding: 26px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 0 18px 36px rgba(0,0,0,.08);
-    }
-
-    .hero-side::before {
-      content: "";
-      position: absolute;
-      inset: 24px;
-      border: 1px solid rgba(255,255,255,.12);
-      pointer-events: none;
-    }
-
-    .hare-mark {
-      position: absolute;
-      right: -38px;
-      bottom: -24px;
-      width: 260px;
-      opacity: .13;
-    }
-
-    .hero-side h2 {
-      position: relative;
-      z-index: 1;
-      margin: 0;
-      max-width: 10ch;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(2.4rem, 5vw, 4.8rem);
-      line-height: .88;
-      letter-spacing: -.055em;
-    }
-
-    .hero-side p {
-      position: relative;
-      z-index: 1;
-      margin: 18px 0 0;
-      color: rgba(255,255,255,.74);
-      max-width: 35ch;
-    }
-
-    .action-row {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 24px;
-    }
-    .action-row a {
-      min-height: 52px;
-      border: 1px solid rgba(255,255,255,.18);
-      display: grid;
-      place-items: center;
-      text-transform: uppercase;
-      letter-spacing: .15em;
-      font-size: .68rem;
-      background: rgba(255,255,255,.05);
-    }
-    .action-row a:hover { color: var(--orange); border-color: var(--orange); }
-
-    .scroll-note {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 0 42px 28px;
-      color: rgba(15,15,15,.58);
-      text-transform: uppercase;
-      letter-spacing: .18em;
-      font-size: .68rem;
-      font-weight: 800;
+      font-size: .7rem;
     }
 
     .menu-panel {
       position: fixed;
       inset: 0;
       z-index: 20;
-      padding: 26px;
-      background: linear-gradient(180deg, rgba(61,60,76,.98), rgba(15,15,15,.99));
+      background: #111;
+      color: #f3f0ea;
       transform: translateX(100%);
-      transition: transform .25s ease;
-      overflow: auto;
-    }
-    .menu-state:checked ~ .menu-panel { transform: translateX(0); }
-
-    .menu-inner {
-      max-width: var(--max);
-      min-height: calc(100vh - 52px);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr .9fr;
-      gap: 30px;
-      align-items: center;
-      position: relative;
-    }
-
-    .menu-close {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 54px;
-      height: 54px;
+      transition: transform .2s ease;
       display: grid;
       place-items: center;
-      border: 1px solid rgba(255,255,255,.18);
-      color: #fff;
-      cursor: pointer;
-      font-size: 1.8rem;
+      padding: 24px;
     }
 
-    .menu-links { display: grid; gap: 18px; }
+    .menu-state:checked ~ .menu-panel {
+      transform: translateX(0);
+    }
+
+    .close-button {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 46px;
+      height: 46px;
+      background: transparent;
+      color: #f3f0ea;
+      border-color: rgba(255,255,255,.22);
+      font-size: 1.5rem;
+    }
+
+    .menu-links {
+      display: grid;
+      gap: 24px;
+      text-align: center;
+    }
+
     .menu-links a {
-      color: #fff;
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(3rem, 8vw, 7rem);
-      line-height: .92;
+      font-size: clamp(3rem, 12vw, 7rem);
+      line-height: .9;
       letter-spacing: -.06em;
     }
-    .menu-links a:hover { color: var(--orange); }
 
-    .menu-art {
-      min-height: 520px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      display: grid;
-      place-items: center;
+    .menu-links a:hover {
+      color: #ea4d2e;
     }
-    .menu-art svg { width: min(78%, 440px); opacity: .28; }
 
-    .content {
-      max-width: var(--max);
+    main {
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 28px 22px 80px;
-    }
-
-    .feed-card {
-      background: rgba(255,255,255,.74);
-      border: 1px solid rgba(15,15,15,.1);
-      box-shadow: 0 16px 36px rgba(0,0,0,.07);
       padding: 18px;
     }
 
-    .feed-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 16px;
+    .instagram-shell {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.12);
+      overflow: hidden;
     }
 
-    .feed-left { display: flex; align-items: center; gap: 14px; }
-    .rabbit-medallion {
-      width: 68px;
-      height: 68px;
-      border: 1px solid rgba(15,15,15,.12);
-      background: rgba(242,238,230,.92);
-      display: grid;
-      place-items: center;
-      flex: 0 0 auto;
-    }
-    .rabbit-medallion svg { width: 46px; color: var(--indigo); }
-
-    .feed-head h1 {
-      margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(2rem, 4.4vw, 3.6rem);
-      line-height: .9;
-      letter-spacing: -.055em;
-    }
-    .feed-head p { margin: 7px 0 0; color: rgba(15,15,15,.62); font-size: .95rem; }
-    .feed-tag { color: var(--orange); text-transform: uppercase; letter-spacing: .18em; font-size: .72rem; white-space: nowrap; }
-
-    .instagram-shell { border: 1px solid rgba(15,15,15,.1); background: #fff; overflow: hidden; }
-    .instagram-shell iframe { display: block; width: 100%; border: none; overflow: hidden; }
-
-    .about-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
-    .about-box { border: 1px solid rgba(15,15,15,.1); background: rgba(255,255,255,.62); padding: 22px; }
-    .about-box h2 { margin: 0 0 10px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.8rem, 3vw, 2.8rem); line-height: .95; letter-spacing: -.04em; }
-    .about-box p { margin: 0; color: rgba(15,15,15,.68); }
-
-    .site-footer { border-top: 1px solid rgba(15,15,15,.08); padding: 28px 22px; }
-    .footer-inner { max-width: var(--max); margin: 0 auto; display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; color: rgba(15,15,15,.62); }
-    .footer-inner a { color: var(--ink); }
-
-    @media (max-width: 920px) {
-      .hero { min-height: auto; }
-      .hero-main, .menu-inner, .about-row { grid-template-columns: 1fr; }
-      .hero-side { min-height: 320px; }
-      .scroll-note { padding-inline: 22px; }
-      .hero-main { padding-inline: 22px; }
-      .menu-art { min-height: 280px; order: -1; }
+    .instagram-shell iframe {
+      display: block;
+      width: 100%;
+      border: none;
+      overflow: hidden;
     }
 
-    @media (max-width: 560px) {
-      .page { padding: 4px; }
-      .hero { border-width: 3px; border-radius: 12px; }
-      .topbar { padding: 10px; }
-      .brand-card { padding: 14px; width: calc(100vw - 96px); }
-      .menu-button { padding: 8px; }
-      .menu-button span { display: none; }
-      .hero-main { padding: 24px 10px 34px; }
-      .scroll-note { padding: 0 10px 18px; display: none; }
-      .action-row { grid-template-columns: 1fr; }
-      .content { padding-inline: 10px; }
-      .feed-head { display: block; }
-      .feed-left { align-items: flex-start; margin-bottom: 12px; }
+    .about {
+      max-width: 720px;
+      margin: 32px auto 0;
+      padding: 22px 0;
+      border-top: 1px solid rgba(0,0,0,.12);
+      color: rgba(0,0,0,.7);
+      font-size: .95rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 520px) {
+      .topbar { padding: 12px; }
+      main { padding: 12px; }
+      .brand { font-size: .95rem; }
     }
   </style>
 </head>
 <body>
   <input class="menu-state" type="checkbox" id="menu-toggle" aria-label="Open menu" />
 
-  <div class="page">
-    <section class="hero" id="top" aria-label="Captured by Kam homepage hero">
-      <div class="topbar">
-        <a class="brand-card" href="#top" aria-label="Captured by Kam home">
-          <div class="brand-name">CAPTUREDBY_KAM</div>
-          <div class="brand-line">Every Frame, Every Project —</div>
-          <div class="brand-line">Timeless Authenticity</div>
-          <div class="brand-est">Est. <span class="year">2025</span></div>
-        </a>
-
-        <label class="menu-button" for="menu-toggle" aria-label="Open menu">
-          <svg viewBox="0 0 120 120" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
-            <ellipse cx="60" cy="92" rx="42" ry="12"></ellipse>
-            <path d="M34 44c0-17 10-31 22-31 7 0 13 5 15 12 2-7 8-12 15-12 12 0 22 14 22 31"></path>
-            <path d="M48 91V58c0-9 5-15 12-15h0c7 0 12 6 12 15v33"></path>
-            <path d="M60 58V34"></path>
-            <path d="M42 15c4 8 9 21 10 31"></path>
-            <path d="M78 15c-4 8-9 21-10 31"></path>
-            <ellipse cx="60" cy="92" rx="32" ry="8"></ellipse>
-          </svg>
-          <span>Menu</span>
-        </label>
-      </div>
-
-      <div class="hero-main">
-        <div class="headline">
-          <div class="kicker">Photo · Video · Visual Archive</div>
-          <h1>Captured<br><span>with</span><br>weight.</h1>
-        </div>
-
-        <aside class="hero-side">
-          <svg class="hare-mark" viewBox="0 0 240 160" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M28 100c34-34 78-42 132-21 19 8 33 6 47-6"></path>
-            <path d="M57 90c-12-26-6-46 18-61 15 18 18 38 10 60"></path>
-            <path d="M86 88c3-25 15-44 37-56 8 25 2 46-17 63"></path>
-            <path d="M29 101c24 6 45 2 61-13"></path>
-            <path d="M152 81c14 18 32 25 55 21"></path>
-          </svg>
-
-          <div>
-            <h2>Real work. Clean frame. No filler.</h2>
-            <p>CBK is the front door. Instagram shows the work. The menu moves people where they need to go.</p>
-          </div>
-
-          <nav class="action-row" aria-label="Primary actions">
-            <a href="mailto:kam@capturedbykam.com?subject=Booking%20Request">Book</a>
-            <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
-            <a href="shop.html">Shop</a>
-          </nav>
-        </aside>
-      </div>
-
-      <div class="scroll-note">
-        <span>@CapturedBy_Kam</span>
-        <span>Scroll for the grid</span>
-      </div>
-    </section>
-  </div>
+  <header class="topbar">
+    <a class="brand" href="index.html">CAPTUREDBY_KAM</a>
+    <label class="menu-button" for="menu-toggle" aria-label="Open menu">Menu</label>
+  </header>
 
   <aside class="menu-panel" aria-label="Site menu">
-    <div class="menu-inner">
-      <label class="menu-close" for="menu-toggle" aria-label="Close menu">×</label>
-      <div class="menu-links">
-        <a href="mailto:kam@capturedbykam.com?subject=Booking%20Request">Book</a>
-        <a href="#about">About</a>
-        <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
-        <a href="shop.html">Shop</a>
-      </div>
-      <div class="menu-art" aria-hidden="true">
-        <svg viewBox="0 0 260 320" fill="none" stroke="white" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M130 280c-44 0-82-32-91-76 18-2 27-15 34-27 7-12 15-24 29-24h56c14 0 22 12 29 24 7 12 16 25 34 27-9 44-47 76-91 76Z"></path>
-          <path d="M84 154V82c0-23 11-40 25-40 9 0 17 7 21 17 4-10 12-17 21-17 14 0 25 17 25 40v72"></path>
-          <path d="M97 54c8 14 13 29 13 47"></path>
-          <path d="M163 54c-8 14-13 29-13 47"></path>
-          <path d="M130 126c12 0 22 10 22 22 0 17-22 31-22 31s-22-14-22-31c0-12 10-22 22-22Z"></path>
-        </svg>
-      </div>
-    </div>
+    <label class="close-button" for="menu-toggle" aria-label="Close menu">×</label>
+    <nav class="menu-links">
+      <a href="mailto:kam@capturedbykam.com?subject=Booking%20Request">Book</a>
+      <a href="#about">About</a>
+      <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
+      <a href="shop.html">Shop</a>
+    </nav>
   </aside>
 
-  <main class="content">
-    <section class="feed-card" aria-label="Instagram feed section">
-      <div class="feed-head">
-        <div class="feed-left">
-          <div class="rabbit-medallion" aria-hidden="true">
-            <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-              <ellipse cx="60" cy="96" rx="28" ry="12"></ellipse>
-              <path d="M38 90c0-18 10-32 22-32s22 14 22 32"></path>
-              <path d="M48 59c-6-18-5-35 3-42 8 8 12 24 9 42"></path>
-              <path d="M72 59c-3-18 1-34 9-42 8 7 9 24 3 42"></path>
-              <circle cx="52" cy="80" r="2"></circle>
-              <path d="M60 84c5 0 9 2 12 5"></path>
-            </svg>
-          </div>
-          <div>
-            <h1>Latest from the frame.</h1>
-            <p>The feed stays front and center.</p>
-          </div>
-        </div>
-        <div class="feed-tag">@CAPTUREDBY_KAM</div>
-      </div>
-
-      <div class="instagram-shell">
-        <iframe onload="iFrameSetup(this)" src="https://app.mirror-app.com/feed-instagram/8075e490-f023-4d0e-9574-3e80bf7bbc3f/preview" style="width:100%;border:none;overflow:hidden;" scrolling="no" title="Captured by Kam Instagram gallery"></iframe>
-      </div>
+  <main>
+    <section class="instagram-shell" aria-label="Instagram gallery">
+      <iframe onload="iFrameSetup(this)" src="https://app.mirror-app.com/feed-instagram/8075e490-f023-4d0e-9574-3e80bf7bbc3f/preview" style="width:100%;border:none;overflow:hidden;" scrolling="no" title="Captured by Kam Instagram gallery"></iframe>
     </section>
 
-    <section class="about-row" id="about">
-      <article class="about-box">
-        <h2>About</h2>
-        <p>Captured by Kam creates intentional photo and video work for athletes, families, teams, brands, and visual projects.</p>
-      </article>
-      <article class="about-box">
-        <h2>The path</h2>
-        <p>See the work. Book the work. View PhotoDay. Shop the CBK world.</p>
-      </article>
+    <section class="about" id="about">
+      Captured by Kam creates photo and video work for athletes, families, teams, brands, and visual projects.
     </section>
   </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div>© Captured by Kam · Est. 2025</div>
-      <div>
-        <a href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a> ·
-        <a href="https://www.instagram.com/CapturedBy_Kam">Instagram</a> ·
-        <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
-      </div>
-    </div>
-  </footer>
 
   <script>
     const menuToggle = document.getElementById('menu-toggle');
