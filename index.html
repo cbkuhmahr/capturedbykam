@@ -120,31 +120,7 @@
     .simple-main {
       max-width: 1180px;
       margin: 0 auto;
-      padding: 44px 22px 80px;
-    }
-
-    .gallery-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 28px;
-    }
-
-    .gallery-head h1 {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(2.8rem, 9vw, 7rem);
-      line-height: 0.92;
-      letter-spacing: -0.065em;
-      margin: 0;
-      text-transform: uppercase;
-    }
-
-    .gallery-head p {
-      color: #b8b0a1;
-      max-width: 360px;
-      margin: 0 0 10px;
-      font-size: 0.95rem;
+      padding: 24px 22px 80px;
     }
 
     .instagram-shell {
@@ -225,13 +201,8 @@
     }
 
     @media (max-width: 780px) {
-      .gallery-head,
       .about-simple {
         display: block;
-      }
-
-      .gallery-head p {
-        margin-top: 16px;
       }
 
       .quick-actions {
@@ -277,12 +248,7 @@
   </aside>
 
   <main class="simple-main">
-    <section class="gallery-section" aria-labelledby="gallery-title">
-      <div class="gallery-head">
-        <h1 id="gallery-title">Gallery</h1>
-        <p>Instagram is the gallery. The site keeps the path simple: book, learn, view PhotoDay, or shop.</p>
-      </div>
-
+    <section class="gallery-section" aria-label="Instagram gallery">
       <div class="instagram-shell">
         <iframe onload="iFrameSetup(this)" src="https://app.mirror-app.com/feed-instagram/8075e490-f023-4d0e-9574-3e80bf7bbc3f/preview" style="width:100%;border:none;overflow:hidden;" scrolling="no" title="Captured by Kam Instagram gallery"></iframe>
       </div>
