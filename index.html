@@ -3,101 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Captured by Kam | Toledo Photography, Video & Creative Media</title>
-  <meta name="description" content="Captured by Kam is a Toledo-based photography, video, and creative media studio. Every frame, Every Project—Timeless Authenticity, Est. 2025." />
-  <meta property="og:title" content="Captured by Kam | Photography, Video & Creative Media" />
-  <meta property="og:description" content="Photography, video, creative media, booking, galleries, and visual storytelling by Captured by Kam." />
+  <title>Captured by Kam | Gallery, Booking & Visual Work</title>
+  <meta name="description" content="Captured by Kam photo, video, gallery, booking, PhotoDay, shop, and visual storytelling." />
+  <meta property="og:title" content="Captured by Kam | Gallery, Booking & Visual Work" />
+  <meta property="og:description" content="Every frame, Every Project—Timeless Authenticity, Est. 2025." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.capturedbykam.com/" />
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@mirrorapp/iframe-bridge@latest/dist/index.umd.js"></script>
 </head>
 <body>
-  <header class="site-header" id="top">
-    <a class="brand-mark" href="#top" aria-label="Captured by Kam home">
-      <span>Capturedby_Kam</span>
-      <small>Est. 2025</small>
-    </a>
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="#work">Work</a>
-      <a href="#services">Services</a>
-      <a href="#shop">Shop</a>
-      <a href="#booking">Book</a>
-    </nav>
-  </header>
+  <input class="menu-state" type="checkbox" id="menu-toggle" aria-label="Open menu" />
 
-  <main>
-    <section class="hero-section">
-      <div class="hero-copy">
-        <p class="eyebrow">Toledo photography • video • creative media</p>
-        <h1>Every frame, Every Project—Timeless Authenticity, Est. 2025.</h1>
-        <p class="hero-text">Captured by Kam creates clean, intentional visual storytelling for families, athletes, events, brands, artists, and personal milestones.</p>
-        <div class="hero-actions" aria-label="Primary actions">
-          <a class="button button-dark" href="#booking">Book a Shoot</a>
-          <a class="button button-light" href="#work">View Work</a>
-          <a class="button button-line" href="#shop">Shop CBK</a>
+  <div class="site-shell" id="top">
+    <section class="hero-card" aria-label="Captured by Kam home">
+      <div class="brand-card" aria-label="Captured by Kam brand card">
+        <div>CAPTUREDBY_KAM</div>
+        <div class="tagline">EVERY FRAME, EVERY PROJECT—</div>
+        <div class="tagline">TIMELESS AUTHENTICITY</div>
+        <div>EST. <span class="year">2025</span></div>
+      </div>
+
+      <label class="menu-button" for="menu-toggle" aria-label="Open menu">Menu</label>
+
+      <div class="hero-center">
+        <p>Photo • Video • Visual Storytelling</p>
+      </div>
+    </section>
+
+    <section class="feed-card section-tight" id="work">
+      <div class="feed-head">
+        <div class="feed-title">
+          <p class="eyebrow">Latest from the frame</p>
+          <h1>Work that feels personal, sharp, and useful.</h1>
         </div>
+        <a class="handle" href="https://www.instagram.com/CapturedBy_Kam" target="_blank" rel="noopener">@CapturedBy_Kam</a>
       </div>
-      <div class="hero-visual" aria-label="Captured by Kam visual identity">
-        <div class="hero-frame hero-frame-large"><span>CBK</span></div>
-        <div class="hero-frame hero-frame-small"><span>Media</span></div>
+
+      <div class="instagram-shell">
+        <iframe onload="iFrameSetup(this)" src="https://app.mirror-app.com/feed-instagram/8075e490-f023-4d0e-9574-3e80bf7bbc3f/preview" scrolling="no" title="Captured by Kam Instagram gallery"></iframe>
+      </div>
+
+      <div class="quick-actions" aria-label="Quick links">
+        <a href="#booking">Book</a>
+        <a href="#about">About</a>
+        <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
+        <a href="shop.html">Shop</a>
       </div>
     </section>
 
-    <section class="section section-tight" id="work">
-      <div class="section-heading">
-        <p class="eyebrow">Latest from the frame</p>
-        <h2>Work that feels personal, sharp, and useful.</h2>
-      </div>
-      <div class="work-grid" aria-label="Featured work categories">
-        <article class="work-card"><div class="image-panel image-panel-sports"></div><h3>Youth Sports</h3><p>Game-day images, athlete portraits, team coverage, and gallery delivery built for parents and players.</p></article>
-        <article class="work-card"><div class="image-panel image-panel-portrait"></div><h3>Portraits</h3><p>Clean portraits for family, personal brand, milestones, and creative identity work.</p></article>
-        <article class="work-card"><div class="image-panel image-panel-event"></div><h3>Events</h3><p>Coverage for moments that need to look legitimate after the day is over.</p></article>
-        <article class="work-card"><div class="image-panel image-panel-media"></div><h3>Creative Media</h3><p>Video, product visuals, artist projects, CBK art drops, and campaign-style content.</p></article>
-      </div>
+    <section class="about-simple" id="about">
+      <h2>Photo + video with purpose.</h2>
+      <p>
+        Captured by Kam creates clean, intentional photo and video work for athletes, families, teams, brands, and visual projects.
+        The work should feel real, sharp, and worth keeping.
+      </p>
     </section>
 
-    <section class="section split-section" id="services">
-      <div>
-        <p class="eyebrow">Services</p>
-        <h2>Simple offers. Clear next steps.</h2>
-        <p class="section-copy">CBK should make it easy for people to understand what they can book. These are the core lanes, kept clean so the site feels like a business instead of a collage.</p>
-      </div>
-      <div class="service-list">
-        <article><span>01</span><h3>Youth Sports Media</h3><p>Action photos, team galleries, player images, and parent-friendly delivery.</p></article>
-        <article><span>02</span><h3>Portrait Sessions</h3><p>Personal, family, brand, and creative portraits with a polished CBK look.</p></article>
-        <article><span>03</span><h3>Event Coverage</h3><p>Photography and video for gatherings, launches, school events, and community moments.</p></article>
-        <article><span>04</span><h3>Creative Projects</h3><p>Visual direction, art drops, product imagery, video concepts, and media packages.</p></article>
-      </div>
-    </section>
-
-    <section class="section shop-section" id="shop">
-      <div class="section-heading">
-        <p class="eyebrow">CBK Shop</p>
-        <h2>Prints, digital art, galleries, and brand projects.</h2>
-      </div>
-      <div class="shop-grid">
-        <article><h3>CBK Prints</h3><p>Art photography and selected visual drops.</p></article>
-        <article><h3>Digital Wallpapers</h3><p>Phone and desktop visuals from the CBK world.</p></article>
-        <article><h3>No Quiet Saints</h3><p>Apparel and classical visual identity under Captured by Kam.</p></article>
-        <article><h3>PhotoDay Galleries</h3><p>Private gallery delivery for teams, families, and events.</p></article>
-      </div>
-      <p class="shop-note">Shop links can be wired to Printful, Stripe, PhotoDay, or Supabase product records when those pieces are ready.</p>
-    </section>
-
-    <section class="section about-section" id="about">
-      <div class="about-card">
-        <p class="eyebrow">About</p>
-        <h2>Visual storytelling with purpose.</h2>
-        <p>Captured by Kam is built around sharp images, honest presentation, and work that feels timeless without trying too hard. Photography, video, media, and art all live here under one clean house.</p>
-      </div>
-      <div class="about-card about-card-dark">
-        <p class="eyebrow">Brand line</p>
-        <h2>Captured by Kam</h2>
-        <p>Every frame, Every Project—Timeless Authenticity, Est. 2025.</p>
-      </div>
-    </section>
-
-    <section class="section booking-section" id="booking">
+    <section class="booking-section" id="booking">
       <div class="booking-copy">
         <p class="eyebrow">Booking</p>
         <h2>Start the conversation.</h2>
@@ -113,7 +76,18 @@
         <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
       </form>
     </section>
-  </main>
+  </div>
+
+  <aside class="menu-panel" aria-label="Site menu">
+    <label class="close-button" for="menu-toggle" aria-label="Close menu">×</label>
+    <div class="menu-links">
+      <a href="#booking">Book</a>
+      <a href="#about">About</a>
+      <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
+      <a href="shop.html">Shop</a>
+      <a href="https://www.instagram.com/CapturedBy_Kam" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </aside>
 
   <footer class="site-footer">
     <p>Capturedby_Kam</p>
