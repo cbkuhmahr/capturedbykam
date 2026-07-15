@@ -1,6 +1,15 @@
 const SUPABASE_URL = "https://waiopvueoobwrnlctmua.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Up3TnUwNTBwcenufqF1bWw_vfoE0Qz0";
 
+const menuToggle = document.querySelector("#menu-toggle");
+if (menuToggle) {
+  document.querySelectorAll(".menu-panel a").forEach((link) => {
+    link.addEventListener("click", () => {
+      menuToggle.checked = false;
+    });
+  });
+}
+
 const bookingForm = document.querySelector("#bookingForm");
 const formStatus = document.querySelector("#formStatus");
 
