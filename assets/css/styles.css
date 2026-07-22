@@ -249,53 +249,63 @@ button, input, select, textarea { font: inherit; }
 .button-dark { background: var(--ink); color: var(--paper); }
 
 .site-footer {
-  padding: 28px 0 46px;
-  border-top: 1px solid var(--outer-line);
-  display: grid;
-  grid-template-columns: minmax(220px, .8fr) minmax(260px, 1fr) auto;
-  align-items: start;
-  gap: 18px;
-  color: var(--outer-muted);
+  padding: 0 0 46px;
+  color: var(--ink);
   font-size: .82rem;
+}
+.footer-card {
+  padding: clamp(22px, 4vw, 34px);
+  display: grid;
+  gap: 18px;
+  place-items: center;
+  border: 1px solid var(--outer-line);
+  background: var(--card);
+  box-shadow: 0 18px 42px rgba(0,0,0,.30);
+  text-align: center;
 }
 .footer-brand {
   display: grid;
-  gap: 6px;
+  gap: 7px;
   text-transform: uppercase;
 }
 .footer-brand strong {
-  color: var(--paper);
-  letter-spacing: .16em;
-  font-size: .78rem;
+  color: var(--ink);
+  letter-spacing: .18em;
+  font-size: clamp(.92rem, 2vw, 1.08rem);
+  line-height: 1;
 }
 .footer-brand span {
   color: var(--accent);
-  letter-spacing: .10em;
+  letter-spacing: .11em;
   line-height: 1.45;
+  font-size: .68rem;
   font-weight: 800;
 }
 .footer-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px 16px;
+  gap: 8px 12px;
   justify-content: center;
+  align-items: center;
   text-transform: uppercase;
   letter-spacing: .13em;
   font-size: .68rem;
   font-weight: 800;
+  color: var(--muted);
 }
+.footer-links span { color: rgba(17, 17, 17, 0.28); }
 .footer-links a,
-.back-top {
-  transition: opacity .18s ease, color .18s ease;
+.footer-email {
+  transition: opacity .18s ease, color .18s ease, transform .18s ease;
 }
 .footer-links a:hover,
-.back-top:hover { color: var(--accent); opacity: .9; }
-.back-top {
-  text-transform: uppercase;
-  letter-spacing: .13em;
-  font-size: .68rem;
+.footer-email:hover { color: var(--accent); opacity: .9; transform: translateY(-1px); }
+.footer-email {
+  color: var(--ink);
+  font-size: .78rem;
   font-weight: 800;
-  justify-self: end;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 780px) {
@@ -306,9 +316,8 @@ button, input, select, textarea { font: inherit; }
   .booking-copy p { margin-top: 16px; }
   .jotform-card { margin-top: 24px; min-height: 820px; }
   .jotform-card iframe { min-height: 820px; }
-  .site-footer { grid-template-columns: 1fr; }
+  .footer-card { place-items: start; text-align: left; }
   .footer-links { justify-content: flex-start; }
-  .back-top { justify-self: start; }
 }
 @media (max-width: 480px) {
   .button { width: 100%; }
