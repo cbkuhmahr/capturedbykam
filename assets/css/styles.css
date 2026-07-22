@@ -24,7 +24,7 @@ button, input, select, textarea { font: inherit; }
 
 .menu-state { position: absolute; opacity: 0; pointer-events: none; }
 .site-shell, .site-footer { width: min(100% - 28px, 1080px); margin-left: auto; margin-right: auto; }
-.site-shell { margin-top: 34px; margin-bottom: 60px; }
+.site-shell { margin-top: 14px; margin-bottom: 60px; }
 
 .hero-card,
 .feed-card,
@@ -183,6 +183,10 @@ button, input, select, textarea { font: inherit; }
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   margin-top: 14px;
+}
+.top-actions {
+  margin-top: 0;
+  margin-bottom: 12px;
 }
 .quick-actions a {
   min-height: 54px;
