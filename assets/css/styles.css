@@ -28,7 +28,6 @@ button, input, select, textarea { font: inherit; }
 
 .hero-card,
 .feed-card,
-.about-simple,
 .jotform-card,
 .booking-section {
   background: var(--card);
@@ -157,8 +156,7 @@ button, input, select, textarea { font: inherit; }
 }
 .eyebrow { margin: 0 0 10px; color: var(--accent); font-size: .72rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; }
 .feed-title h1,
-.booking-copy h2,
-.about-simple h2 {
+.booking-copy h2 {
   font-family: "Libre Baskerville", Georgia, serif;
   letter-spacing: -.055em;
 }
@@ -180,7 +178,7 @@ button, input, select, textarea { font: inherit; }
 }
 .quick-actions {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-top: 14px;
 }
@@ -201,18 +199,6 @@ button, input, select, textarea { font: inherit; }
 }
 .quick-actions a:hover { border-color: #111; }
 
-.about-simple {
-  margin-top: 14px;
-  border-radius: 4px;
-  padding: clamp(24px, 4vw, 44px);
-  display: grid;
-  grid-template-columns: minmax(260px, .7fr) minmax(320px, 1fr);
-  gap: clamp(24px, 5vw, 52px);
-}
-.about-simple h2 { margin: 0; font-size: clamp(2rem, 4vw, 3.5rem); line-height: .98; }
-.about-simple p,
-.booking-copy p { margin: 0; color: var(--muted); line-height: 1.72; }
-
 .booking-section {
   margin-top: 14px;
   border-radius: 4px;
@@ -223,6 +209,7 @@ button, input, select, textarea { font: inherit; }
   align-items: start;
 }
 .booking-copy h2 { margin: 0 0 14px; font-size: clamp(2rem, 4vw, 3.5rem); line-height: .98; }
+.booking-copy p { margin: 0; color: var(--muted); line-height: 1.72; }
 .booking-note {
   margin-top: 22px;
   padding: 16px;
@@ -263,10 +250,10 @@ button, input, select, textarea { font: inherit; }
   .site-shell { width: min(100% - 16px, 1080px); margin-top: 12px; }
   .brand-card { font-size: .72rem; width: calc(100% - 100px); }
   .hero-center p { font-size: clamp(2.2rem, 13vw, 4.8rem); }
-  .feed-head, .about-simple, .booking-section { display: block; }
+  .feed-head, .booking-section { display: block; }
   .handle { display: inline-block; margin-top: 14px; }
   .quick-actions { grid-template-columns: 1fr 1fr; }
-  .about-simple p, .booking-copy p { margin-top: 16px; }
+  .booking-copy p { margin-top: 16px; }
   .jotform-card { margin-top: 24px; min-height: 820px; }
   .jotform-card iframe { min-height: 820px; }
 }
