@@ -65,16 +65,26 @@
         <p class="eyebrow">Booking</p>
         <h2>Start the conversation.</h2>
         <p>Send the basics. CBK will follow up with availability, package direction, and next steps.</p>
+
+        <div class="booking-note">
+          <strong>CBK Booking Request</strong>
+          <span>Photo, video, PhotoDay, creative projects, reference uploads, and booking consent live inside this form.</span>
+        </div>
+
+        <a class="button button-dark booking-link" href="https://form.jotform.com/262026894704057" target="_blank" rel="noopener">Open Full Form</a>
       </div>
-      <form class="booking-form" id="bookingForm">
-        <div class="form-row"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required /></div>
-        <div class="form-row two-col"><div><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required /></div><div><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" /></div></div>
-        <div class="form-row two-col"><div><label for="shoot_type">Shoot type</label><select id="shoot_type" name="shoot_type" required><option value="">Select one</option><option>Youth Sports Media</option><option>Portrait Session</option><option>Event Coverage</option><option>Creative Project</option><option>PhotoDay / Gallery Support</option><option>Other</option></select></div><div><label for="preferred_date">Preferred date</label><input id="preferred_date" name="preferred_date" type="date" /></div></div>
-        <div class="form-row"><label for="budget">Budget / package range</label><input id="budget" name="budget" type="text" placeholder="Optional" /></div>
-        <div class="form-row"><label for="message">What do you need captured?</label><textarea id="message" name="message" rows="5" required></textarea></div>
-        <button class="button button-dark" type="submit">Send Inquiry</button>
-        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-      </form>
+
+      <div class="jotform-card" aria-label="CBK Booking Request form">
+        <iframe
+          id="JotFormIFrame-262026894704057"
+          title="CBK Booking Request"
+          src="https://form.jotform.com/262026894704057"
+          allowtransparency="true"
+          allow="geolocation; microphone; camera; fullscreen"
+          frameborder="0"
+          scrolling="yes">
+        </iframe>
+      </div>
     </section>
   </div>
 
@@ -95,7 +105,6 @@
     <a href="#top">Back to top</a>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
