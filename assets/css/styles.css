@@ -26,6 +26,29 @@ button, input, select, textarea { font: inherit; }
 .site-shell, .site-footer { width: min(100% - 28px, 1080px); margin-left: auto; margin-right: auto; }
 .site-shell { margin-top: 14px; margin-bottom: 60px; }
 
+.slogan-strip {
+  margin-bottom: 12px;
+  padding: 11px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.52);
+  color: var(--ink);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.slogan-strip strong {
+  white-space: nowrap;
+}
+.slogan-strip span {
+  color: var(--accent);
+  text-align: right;
+}
+
 .hero-card,
 .feed-card,
 .jotform-card,
@@ -46,29 +69,6 @@ button, input, select, textarea { font: inherit; }
     repeating-linear-gradient(90deg, rgba(255,255,255,.18) 0 1px, transparent 1px 46px),
     linear-gradient(135deg, #d8d0c4, #f8f3ea 42%, #a8947a);
 }
-
-.brand-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  width: min(370px, calc(100% - 120px));
-  padding: 13px 14px 12px;
-  background: rgba(255,255,255,.92);
-  border-right: 1px solid rgba(0,0,0,.08);
-  border-bottom: 1px solid rgba(0,0,0,.08);
-  border-radius: 0 0 8px 0;
-  box-shadow: 0 10px 22px rgba(0,0,0,.07);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  color: #111;
-  font-weight: 800;
-  letter-spacing: .01em;
-  line-height: 1.12;
-  font-size: clamp(.78rem, 1.75vw, .98rem);
-  text-transform: uppercase;
-}
-.brand-card .tagline { color: var(--accent); }
-.brand-card .year { color: var(--blue); }
 
 .menu-button {
   position: absolute;
@@ -96,7 +96,7 @@ button, input, select, textarea { font: inherit; }
   display: grid;
   place-items: center;
   text-align: center;
-  padding: 80px 20px 20px;
+  padding: 28px 20px 20px;
 }
 .hero-center p {
   margin: 0;
@@ -248,7 +248,8 @@ button, input, select, textarea { font: inherit; }
 
 @media (max-width: 780px) {
   .site-shell { width: min(100% - 16px, 1080px); margin-top: 12px; }
-  .brand-card { font-size: .72rem; width: calc(100% - 100px); }
+  .slogan-strip { display: grid; gap: 6px; }
+  .slogan-strip span { text-align: left; }
   .hero-center p { font-size: clamp(2.2rem, 13vw, 4.8rem); }
   .feed-head, .booking-section { display: block; }
   .handle { display: inline-block; margin-top: 14px; }
