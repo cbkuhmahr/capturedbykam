@@ -29,7 +29,7 @@ button, input, select, textarea { font: inherit; }
 .hero-card,
 .feed-card,
 .about-simple,
-.booking-form,
+.jotform-card,
 .booking-section {
   background: var(--card);
   border: 1px solid var(--line);
@@ -219,18 +219,38 @@ button, input, select, textarea { font: inherit; }
   align-items: start;
 }
 .booking-copy h2 { margin: 0 0 14px; font-size: clamp(2rem, 4vw, 3.5rem); line-height: .98; }
-.booking-form { padding: clamp(22px, 4vw, 34px); box-shadow: none; }
-.form-row { margin-bottom: 18px; }
-.form-row label { display: block; margin-bottom: 8px; font-size: .74rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
-.two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-input, select, textarea { width: 100%; border: 1px solid var(--line); background: rgba(255,255,255,.78); color: var(--ink); padding: 13px 14px; outline: none; }
-textarea { resize: vertical; }
-input:focus, select:focus, textarea:focus { border-color: var(--ink); }
+.booking-note {
+  margin-top: 22px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.48);
+  display: grid;
+  gap: 7px;
+}
+.booking-note strong {
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .72rem;
+}
+.booking-note span {
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: .92rem;
+}
+.booking-link { margin-top: 18px; }
+.jotform-card {
+  min-height: 760px;
+  box-shadow: none;
+  background: #fff;
+}
+.jotform-card iframe {
+  display: block;
+  width: 100%;
+  min-height: 760px;
+  border: none;
+}
 .button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; border: 1px solid var(--ink); padding: 0 20px; font-size: .74rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; cursor: pointer; }
 .button-dark { background: var(--ink); color: var(--paper); }
-.form-status { min-height: 24px; margin: 14px 0 0; color: var(--muted); }
-.form-status.success { color: #245c37; }
-.form-status.error { color: #8f2d1f; }
 
 .site-footer { padding: 30px 0 46px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px; color: var(--muted); font-size: .88rem; }
 .site-footer p { margin: 0; }
@@ -241,12 +261,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--ink); }
   .hero-center p { font-size: clamp(2.2rem, 13vw, 4.8rem); }
   .feed-head, .about-simple, .booking-section { display: block; }
   .handle { display: inline-block; margin-top: 14px; }
-  .quick-actions, .two-col { grid-template-columns: 1fr 1fr; }
+  .quick-actions { grid-template-columns: 1fr 1fr; }
   .about-simple p, .booking-copy p { margin-top: 16px; }
-  .booking-form { margin-top: 24px; }
+  .jotform-card { margin-top: 24px; min-height: 820px; }
+  .jotform-card iframe { min-height: 820px; }
 }
 @media (max-width: 480px) {
-  .quick-actions, .two-col { grid-template-columns: 1fr; }
+  .quick-actions { grid-template-columns: 1fr; }
   .button { width: 100%; }
   .menu-links a { font-size: clamp(2.4rem, 16vw, 4.8rem); }
+  .jotform-card { min-height: 880px; }
+  .jotform-card iframe { min-height: 880px; }
 }
