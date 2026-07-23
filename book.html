@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Book CBK | Capturedby_Kam</title>
+  <title>Book | Capturedby_Kam</title>
   <meta name="description" content="Book Capturedby_Kam for photo, video, PhotoDay, and creative project inquiries." />
-  <meta property="og:title" content="Book CBK | Capturedby_Kam" />
+  <meta property="og:title" content="Book | Capturedby_Kam" />
   <meta property="og:description" content="Submit a booking request, review CBK terms, and pay the 50% retainer after confirmation." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.capturedbykam.com/book.html" />
@@ -26,14 +26,14 @@
       <div class="feed-head">
         <div class="feed-title">
           <p class="eyebrow">Booking</p>
-          <h1>Book CBK.</h1>
+          <h1>Book.</h1>
         </div>
         <label class="button button-dark" for="menu-toggle" aria-label="Open menu">Menu</label>
       </div>
 
       <div class="booking-note retainer-note">
         <strong>Booking starts here</strong>
-        <span>Submit the request first. CBK will confirm availability, package direction, and retainer amount before the date is locked.</span>
+        <span>Submit the request first. CBK confirms availability, package direction, retainer amount, and gives you an acknowledgment code before payment.</span>
       </div>
     </section>
 
@@ -45,12 +45,12 @@
 
         <div class="booking-note retainer-note">
           <strong>50% Retainer</strong>
-          <span>A 50% retainer is required to reserve your date. Your booking is not confirmed until the deposit is paid and Capturedby_Kam confirms availability.</span>
+          <span>A 50% retainer is required to reserve your date. Your booking is not confirmed until CBK confirms availability, gives you an acknowledgment code, and the deposit is paid.</span>
         </div>
 
         <div class="booking-steps" aria-label="Booking process">
           <div><strong>01</strong><span>Request date</span></div>
-          <div><strong>02</strong><span>Confirm package</span></div>
+          <div><strong>02</strong><span>Get code</span></div>
           <div><strong>03</strong><span>Pay retainer</span></div>
         </div>
 
@@ -59,7 +59,7 @@
           <ul>
             <li>50% retainer required to reserve date.</li>
             <li>Remaining balance due before or on session date.</li>
-            <li>Date is not confirmed until deposit is paid.</li>
+            <li>Date is not confirmed until CBK confirms availability and retainer is paid.</li>
             <li>Deposits are non-refundable, but may be transferable once.</li>
             <li>Weather or emergency rescheduling is handled case by case.</li>
             <li>No raw files unless agreed separately in writing.</li>
@@ -125,17 +125,59 @@
 
         <label class="terms-check">
           <input name="terms" type="checkbox" required />
-          <span>I understand this is an inquiry. My date is not confirmed until Capturedby_Kam confirms availability and the 50% retainer is paid.</span>
+          <span>I understand this is an inquiry. My date is not confirmed until CBK confirms availability and the 50% retainer is paid.</span>
         </label>
 
-        <div class="deposit-card" aria-label="Deposit payment information">
-          <strong>Deposit payment</strong>
-          <span>After CBK confirms your date, package, and retainer amount, use the secure Stripe link below to pay the 50% retainer. Do not pay until your date and amount have been confirmed.</span>
-          <a class="button button-dark deposit-link" href="https://buy.stripe.com/dRm8wRa8B5Po5uycT96Zy00" target="_blank" rel="noopener">Pay 50% Retainer</a>
+        <button class="button button-dark booking-submit" type="submit">Submit Request</button>
+        <p class="form-status" id="booking-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="booking-section retainer-payment" id="retainer" aria-label="Retainer payment">
+      <div class="booking-copy">
+        <p class="eyebrow">Retainer</p>
+        <h2>Pay after approval.</h2>
+        <p>This section is only for clients who already received an acknowledgment code, confirmed service, and exact retainer amount from CBK.</p>
+
+        <div class="booking-note">
+          <strong>Do not pay early</strong>
+          <span>If you have not received your code and amount, submit the request form first.</span>
+        </div>
+      </div>
+
+      <form class="booking-form" id="retainer-form">
+        <div class="form-grid">
+          <label>
+            <span>Acknowledgment code</span>
+            <input name="acknowledgment_code" type="text" placeholder="Example: CBK-0719-MILES" required />
+          </label>
+
+          <label>
+            <span>Confirmed service</span>
+            <select name="confirmed_service" required>
+              <option value="">Select confirmed service</option>
+              <option>Youth Sports Media</option>
+              <option>Portrait Session</option>
+              <option>Event Coverage</option>
+              <option>Creative Project</option>
+              <option>PhotoDay / Gallery Support</option>
+              <option>Other / Custom</option>
+            </select>
+          </label>
+
+          <label class="full-span">
+            <span>Confirmed retainer amount</span>
+            <input name="retainer_amount" type="text" placeholder="Enter the exact amount CBK confirmed, ex: $150" required />
+          </label>
         </div>
 
-        <button class="button button-dark booking-submit" type="submit">Submit Booking Request</button>
-        <p class="form-status" id="booking-status" role="status" aria-live="polite"></p>
+        <label class="terms-check">
+          <input name="retainer_terms" type="checkbox" required />
+          <span>I have received my acknowledgment code, service confirmation, and exact retainer amount from CBK.</span>
+        </label>
+
+        <button class="button button-dark booking-submit" type="submit">Pay Retainer</button>
+        <p class="form-status" id="retainer-status" role="status" aria-live="polite"></p>
       </form>
     </section>
   </div>
@@ -158,6 +200,8 @@
       </div>
       <nav class="footer-links" aria-label="Footer links">
         <a href="index.html">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="#retainer">Retainer</a>
         <span aria-hidden="true">/</span>
         <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
         <span aria-hidden="true">/</span>
