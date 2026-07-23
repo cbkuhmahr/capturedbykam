@@ -1,9 +1,16 @@
 .header-menu-button {
+  position: absolute;
+  top: 18px;
+  right: 18px;
   width: auto !important;
   min-height: 34px;
   padding: 0 13px;
-  justify-self: end;
+  justify-self: auto;
   box-shadow: none;
+}
+.slogan-strip {
+  padding-right: 112px;
+  gap: 5px;
 }
 
 .mobile-work-card {
@@ -60,6 +67,14 @@
 .retainer-payment { align-items: start; }
 
 @media (max-width: 780px) {
+  .slogan-strip {
+    padding: 15px 92px 14px 14px;
+    margin-bottom: 8px;
+  }
+  .header-menu-button {
+    top: 15px;
+    right: 14px;
+  }
   .hero-card {
     height: clamp(220px, 56vw, 310px);
     min-height: 220px;
@@ -90,7 +105,7 @@
   .header-menu-button { width: auto !important; }
   .slogan-strip {
     grid-template-columns: 1fr auto;
-    align-items: center;
+    align-items: start;
   }
   .slogan-strip span { grid-column: 1 / 2; }
   .mobile-work-card .button { width: 100%; }
