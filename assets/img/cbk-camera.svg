@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Capturedby_Kam camera mark</title>
+  <desc id="desc">A simple camera icon for the Capturedby_Kam website favicon.</desc>
+  <rect width="64" height="64" rx="14" fill="#f4efe7"/>
+  <path fill="#0f0f0e" d="M18 22.5h7.1l2.2-4.5h9.4l2.2 4.5H46c3 0 5.5 2.5 5.5 5.5v15c0 3-2.5 5.5-5.5 5.5H18c-3 0-5.5-2.5-5.5-5.5V28c0-3 2.5-5.5 5.5-5.5Z"/>
+  <circle cx="32" cy="35.5" r="9.3" fill="#f4efe7"/>
+  <circle cx="32" cy="35.5" r="5.4" fill="#0f0f0e"/>
+  <circle cx="44.3" cy="29" r="2.1" fill="#f4efe7"/>
+  <rect x="20" y="17.5" width="7.8" height="4" rx="1.3" fill="#0f0f0e"/>
+</svg>
