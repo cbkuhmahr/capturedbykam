@@ -1,0 +1,11 @@
+.hero-card {
+  background:
+    linear-gradient(180deg, rgba(5,5,5,.03), rgba(5,5,5,.16)),
+    url("../img/cbk-hero-bridge.svg") center center / cover no-repeat;
+  background-color: #0f0f0e;
+}
+
+.hero-card::after {
+  border-color: rgba(244,239,231,.18);
+  box-shadow: inset 0 0 0 1px rgba(5,5,5,.12);
+}
