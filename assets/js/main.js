@@ -37,7 +37,7 @@ function buildBookingPayload(formData) {
     "Terms accepted: Yes",
     "50% retainer required: Yes",
     "Deposit status: Not paid through this form",
-    "Retainer process: CBK confirms availability, sends acknowledgment code, then client pays retainer.",
+    "Workflow: CBK confirms availability, service lane, total, retainer amount, and acknowledgment code before payment.",
     `Retainer payment link: ${CBK_RETAINER_PAYMENT_LINK}`
   ].join("\n");
 
@@ -55,7 +55,13 @@ function buildBookingPayload(formData) {
 }
 
 function buildMailto(payload) {
-  const subject = `CBK Booking Request - ${payload.name}`;
+  const codeSeed = payload.preferred_date
+    ? payload.preferred_date.replaceAll("-", "").slice(4)
+    : "MMDD";
+  const cleanName = payload.name.split(" ")[0].replace(/[^a-z0-9]/gi, "").toUpperCase() || "NAME";
+  const suggestedCode = `CBK-${codeSeed}-${cleanName}`;
+
+  const subject = `CBK Booking Request - ${payload.name} - ${payload.shoot_type}`;
   const body = [
     `Name: ${payload.name}`,
     `Email: ${payload.email}`,
@@ -64,7 +70,15 @@ function buildMailto(payload) {
     `Preferred date: ${payload.preferred_date || "Not provided"}`,
     `Budget/package: ${payload.budget || "Not provided"}`,
     "",
-    payload.message
+    payload.message,
+    "",
+    "--- CBK Follow-Up Format ---",
+    `Suggested acknowledgment code: ${suggestedCode}`,
+    "Confirmed service: ",
+    "Confirmed total: $",
+    "50% retainer due: $",
+    `Retainer link: ${CBK_RETAINER_PAYMENT_LINK}`,
+    "Booking status: Date locks after retainer is paid and CBK confirms receipt."
   ].join("\n");
 
   return `mailto:kam@capturedbykam.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
