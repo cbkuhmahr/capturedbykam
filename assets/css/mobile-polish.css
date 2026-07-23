@@ -22,6 +22,9 @@
   gap: 10px;
 }
 .mobile-work-card strong,
+.service-card span,
+.service-card strong,
+.workflow-card span,
 .accordion-card summary,
 .retainer-drawer summary {
   text-transform: uppercase;
@@ -34,6 +37,48 @@
   color: var(--muted);
   line-height: 1.55;
   font-size: .92rem;
+}
+
+.service-section,
+.workflow-section { margin-top: 10px; }
+.service-head,
+.workflow-head { align-items: end; }
+.service-grid,
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.service-card,
+.workflow-card {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.54);
+  display: grid;
+  gap: 10px;
+}
+.service-card-wide { grid-column: 1 / -1; }
+.service-card span,
+.workflow-card span { color: var(--accent); }
+.service-card h2,
+.workflow-card h2 {
+  margin: 0;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: clamp(1.35rem, 2.3vw, 1.85rem);
+  letter-spacing: -.045em;
+  line-height: 1;
+}
+.service-card p,
+.workflow-card p,
+.admin-format-body p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.service-card strong {
+  color: var(--ink);
+  margin-top: 4px;
 }
 
 .accordion-card,
@@ -66,6 +111,20 @@
   background: var(--card-soft);
 }
 .retainer-payment { align-items: start; }
+.admin-format-body { padding: 0 16px 16px; display: grid; gap: 10px; }
+.admin-format-body pre {
+  margin: 0;
+  padding: 14px;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  border: 1px solid var(--line);
+  background: var(--card-soft);
+  color: rgba(15,15,14,.78);
+  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
+  font-size: .74rem;
+  line-height: 1.55;
+}
 
 @media (max-width: 780px) {
   .slogan-strip {
@@ -84,6 +143,11 @@
   }
   .instagram-shell { display: none; }
   .mobile-work-card { display: grid; }
+  .service-grid,
+  .workflow-grid { grid-template-columns: 1fr; }
+  .service-card-wide { grid-column: auto; }
+  .service-card,
+  .workflow-card { padding: 16px; }
   .booking-section { padding: 22px; }
   .booking-preview {
     display: block;
