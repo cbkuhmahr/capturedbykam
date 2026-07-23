@@ -41,31 +41,105 @@
       </div>
     </section>
 
-    <section class="booking-section" id="booking">
+    <section class="booking-section native-booking" id="booking">
       <div class="booking-copy">
         <p class="eyebrow">Booking</p>
         <h2>Start the conversation.</h2>
         <p>For photo, video, PhotoDay, and creative project inquiries.</p>
 
-        <div class="booking-note">
-          <strong>CBK Booking Request</strong>
-          <span>Send the basics. CBK will follow up with availability, package direction, and next steps.</span>
+        <div class="booking-note retainer-note">
+          <strong>50% Retainer</strong>
+          <span>A 50% retainer is required to reserve your date. Your booking is not confirmed until the deposit is paid and Capturedby_Kam confirms availability.</span>
         </div>
 
-        <a class="button button-dark booking-link" href="https://form.jotform.com/262026894704057" target="_blank" rel="noopener">Open Full Form</a>
+        <div class="booking-steps" aria-label="Booking process">
+          <div><strong>01</strong><span>Request date</span></div>
+          <div><strong>02</strong><span>Confirm package</span></div>
+          <div><strong>03</strong><span>Pay retainer</span></div>
+        </div>
+
+        <div class="terms-card">
+          <strong>Booking Terms</strong>
+          <ul>
+            <li>50% retainer required to reserve date.</li>
+            <li>Remaining balance due before or on session date.</li>
+            <li>Date is not confirmed until deposit is paid.</li>
+            <li>Deposits are non-refundable, but may be transferable once.</li>
+            <li>Weather or emergency rescheduling is handled case by case.</li>
+            <li>No raw files unless agreed separately in writing.</li>
+          </ul>
+        </div>
       </div>
 
-      <div class="jotform-card" aria-label="CBK Booking Request form">
-        <iframe
-          id="JotFormIFrame-262026894704057"
-          title="CBK Booking Request"
-          src="https://form.jotform.com/262026894704057"
-          allowtransparency="true"
-          allow="geolocation; microphone; camera; fullscreen"
-          frameborder="0"
-          scrolling="yes">
-        </iframe>
-      </div>
+      <form class="booking-form" id="cbk-booking-form" action="mailto:kam@capturedbykam.com" method="post" enctype="text/plain">
+        <div class="form-grid">
+          <label>
+            <span>Name</span>
+            <input name="name" type="text" autocomplete="name" required />
+          </label>
+
+          <label>
+            <span>Email</span>
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+
+          <label>
+            <span>Phone</span>
+            <input name="phone" type="tel" autocomplete="tel" />
+          </label>
+
+          <label>
+            <span>Project type</span>
+            <select name="shoot_type" required>
+              <option value="">Select one</option>
+              <option>Youth Sports Media</option>
+              <option>Portrait Session</option>
+              <option>Event Coverage</option>
+              <option>Creative Project</option>
+              <option>PhotoDay / Gallery Support</option>
+              <option>Other</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Preferred date</span>
+            <input name="preferred_date" type="date" />
+          </label>
+
+          <label>
+            <span>Preferred time</span>
+            <input name="preferred_time" type="text" placeholder="Morning, afternoon, exact time..." />
+          </label>
+
+          <label class="full-span">
+            <span>Location</span>
+            <input name="location" type="text" placeholder="City, venue, school, field, or address" />
+          </label>
+
+          <label class="full-span">
+            <span>Package / estimated budget</span>
+            <input name="budget" type="text" placeholder="Package, budget range, or what you have in mind" />
+          </label>
+
+          <label class="full-span">
+            <span>What do you need captured?</span>
+            <textarea name="message" rows="6" required></textarea>
+          </label>
+        </div>
+
+        <label class="terms-check">
+          <input name="terms" type="checkbox" required />
+          <span>I understand this is an inquiry. My date is not confirmed until Capturedby_Kam confirms availability and the 50% retainer is paid.</span>
+        </label>
+
+        <div class="deposit-card" aria-label="Deposit payment information">
+          <strong>Deposit payment</strong>
+          <span>Secure Stripe checkout will be connected here once the Stripe payment keys are added. Until then, CBK will send the 50% retainer link after confirming availability and package details.</span>
+        </div>
+
+        <button class="button button-dark booking-submit" type="submit">Submit Booking Request</button>
+        <p class="form-status" id="booking-status" role="status" aria-live="polite"></p>
+      </form>
     </section>
   </div>
 
