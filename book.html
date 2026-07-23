@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Book | Capturedby_Kam</title>
+  <title>Book CBK | Capturedby_Kam</title>
   <meta name="description" content="Book Capturedby_Kam for photo, video, PhotoDay, and creative project inquiries." />
-  <meta property="og:title" content="Book | Capturedby_Kam" />
+  <meta property="og:title" content="Book CBK | Capturedby_Kam" />
   <meta property="og:description" content="Submit a booking request, review CBK terms, and pay the 50% retainer after confirmation." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.capturedbykam.com/book.html" />
   <link rel="icon" type="image/svg+xml" href="assets/img/cbk-camera.svg" />
   <link rel="shortcut icon" href="assets/img/cbk-camera.svg" />
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/mobile-polish.css" />
 </head>
 <body>
   <input class="menu-state" type="checkbox" id="menu-toggle" aria-label="Open menu" />
@@ -28,7 +29,7 @@
           <p class="eyebrow">Booking</p>
           <h1>Book.</h1>
         </div>
-        <label class="button button-dark" for="menu-toggle" aria-label="Open menu">Menu</label>
+        <label class="button button-dark header-menu-button" for="menu-toggle" aria-label="Open menu">Menu</label>
       </div>
 
       <div class="booking-note retainer-note">
@@ -54,8 +55,8 @@
           <div><strong>03</strong><span>Pay retainer</span></div>
         </div>
 
-        <div class="terms-card">
-          <strong>Booking Terms</strong>
+        <details class="terms-card accordion-card">
+          <summary>Booking Terms</summary>
           <ul>
             <li>50% retainer required to reserve date.</li>
             <li>Remaining balance due before or on session date.</li>
@@ -64,7 +65,7 @@
             <li>Weather or emergency rescheduling is handled case by case.</li>
             <li>No raw files unless agreed separately in writing.</li>
           </ul>
-        </div>
+        </details>
       </div>
 
       <form class="booking-form" id="cbk-booking-form" action="mailto:kam@capturedbykam.com" method="post" enctype="text/plain">
@@ -137,7 +138,7 @@
       <div class="booking-copy">
         <p class="eyebrow">Retainer</p>
         <h2>Pay after approval.</h2>
-        <p>This section is only for clients who already received an acknowledgment code, confirmed service, and exact retainer amount from CBK.</p>
+        <p>Only use this after CBK sends your acknowledgment code, confirmed service, and exact retainer amount.</p>
 
         <div class="booking-note">
           <strong>Do not pay early</strong>
@@ -145,40 +146,43 @@
         </div>
       </div>
 
-      <form class="booking-form" id="retainer-form">
-        <div class="form-grid">
-          <label>
-            <span>Acknowledgment code</span>
-            <input name="acknowledgment_code" type="text" placeholder="Example: CBK-0719-MILES" required />
+      <details class="retainer-drawer">
+        <summary>I have my code</summary>
+        <form class="booking-form" id="retainer-form">
+          <div class="form-grid">
+            <label>
+              <span>Acknowledgment code</span>
+              <input name="acknowledgment_code" type="text" placeholder="Example: CBK-0719-MILES" required />
+            </label>
+
+            <label>
+              <span>Confirmed service</span>
+              <select name="confirmed_service" required>
+                <option value="">Select confirmed service</option>
+                <option>Youth Sports Media</option>
+                <option>Portrait Session</option>
+                <option>Event Coverage</option>
+                <option>Creative Project</option>
+                <option>PhotoDay / Gallery Support</option>
+                <option>Other / Custom</option>
+              </select>
+            </label>
+
+            <label class="full-span">
+              <span>Confirmed retainer amount</span>
+              <input name="retainer_amount" type="text" placeholder="Enter exact amount, ex: $150" required />
+            </label>
+          </div>
+
+          <label class="terms-check">
+            <input name="retainer_terms" type="checkbox" required />
+            <span>I have received my acknowledgment code, service confirmation, and exact retainer amount from CBK.</span>
           </label>
 
-          <label>
-            <span>Confirmed service</span>
-            <select name="confirmed_service" required>
-              <option value="">Select confirmed service</option>
-              <option>Youth Sports Media</option>
-              <option>Portrait Session</option>
-              <option>Event Coverage</option>
-              <option>Creative Project</option>
-              <option>PhotoDay / Gallery Support</option>
-              <option>Other / Custom</option>
-            </select>
-          </label>
-
-          <label class="full-span">
-            <span>Confirmed retainer amount</span>
-            <input name="retainer_amount" type="text" placeholder="Enter the exact amount CBK confirmed, ex: $150" required />
-          </label>
-        </div>
-
-        <label class="terms-check">
-          <input name="retainer_terms" type="checkbox" required />
-          <span>I have received my acknowledgment code, service confirmation, and exact retainer amount from CBK.</span>
-        </label>
-
-        <button class="button button-dark booking-submit" type="submit">Pay Retainer</button>
-        <p class="form-status" id="retainer-status" role="status" aria-live="polite"></p>
-      </form>
+          <button class="button button-dark booking-submit" type="submit">Pay Retainer</button>
+          <p class="form-status" id="retainer-status" role="status" aria-live="polite"></p>
+        </form>
+      </details>
     </section>
   </div>
 
