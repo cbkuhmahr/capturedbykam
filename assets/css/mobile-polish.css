@@ -9,6 +9,7 @@
   box-shadow: none;
 }
 .slogan-strip {
+  padding-left: 112px;
   padding-right: 112px;
   gap: 5px;
 }
@@ -70,6 +71,8 @@
   .slogan-strip {
     padding: 15px 92px 14px 14px;
     margin-bottom: 8px;
+    text-align: left;
+    place-items: start;
   }
   .header-menu-button {
     top: 15px;
