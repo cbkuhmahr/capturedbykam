@@ -10,6 +10,8 @@ if (menuToggle) {
 
 const bookingForm = document.querySelector("#cbk-booking-form");
 const bookingStatus = document.querySelector("#booking-status");
+const retainerForm = document.querySelector("#retainer-form");
+const retainerStatus = document.querySelector("#retainer-status");
 
 const CBK_SUPABASE_URL = "https://waiopvueoobwrnlctmua.supabase.co";
 const CBK_SUPABASE_PUBLISHABLE_KEY = "";
@@ -35,8 +37,8 @@ function buildBookingPayload(formData) {
     "Terms accepted: Yes",
     "50% retainer required: Yes",
     "Deposit status: Not paid through this form",
-    `Retainer payment link: ${CBK_RETAINER_PAYMENT_LINK}`,
-    "Note: Client should only pay after CBK confirms date, package, and retainer amount."
+    "Retainer process: CBK confirms availability, sends acknowledgment code, then client pays retainer.",
+    `Retainer payment link: ${CBK_RETAINER_PAYMENT_LINK}`
   ].join("\n");
 
   return {
@@ -107,7 +109,7 @@ if (bookingForm) {
     try {
       if (CBK_SUPABASE_PUBLISHABLE_KEY) {
         await submitToSupabase(payload);
-        bookingStatus.textContent = "Booking request received. CBK will follow up with availability and retainer instructions.";
+        bookingStatus.textContent = "Booking request received. CBK will follow up with availability, acknowledgment code, and retainer instructions.";
         bookingForm.reset();
       } else {
         window.location.href = buildMailto(payload);
@@ -120,5 +122,25 @@ if (bookingForm) {
     } finally {
       if (submitButton) submitButton.disabled = false;
     }
+  });
+}
+
+if (retainerForm) {
+  retainerForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(retainerForm);
+    const code = bookingValue(formData, "acknowledgment_code");
+    const service = bookingValue(formData, "confirmed_service");
+    const amount = bookingValue(formData, "retainer_amount");
+    const acceptedTerms = formData.get("retainer_terms") === "on";
+
+    if (!code || !service || !amount || !acceptedTerms) {
+      retainerStatus.textContent = "Enter your acknowledgment code, confirmed service, exact retainer amount, and check the confirmation box.";
+      return;
+    }
+
+    retainerStatus.textContent = `Opening Stripe. Use acknowledgment code ${code} and pay the confirmed ${service} retainer amount: ${amount}.`;
+    window.open(CBK_RETAINER_PAYMENT_LINK, "_blank", "noopener");
   });
 }
