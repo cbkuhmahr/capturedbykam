@@ -67,7 +67,22 @@
   .instagram-shell { display: none; }
   .mobile-work-card { display: grid; }
   .booking-section { padding: 22px; }
-  .booking-preview { display: grid; gap: 18px; }
+  .booking-preview {
+    display: block;
+    overflow: visible;
+  }
+  .booking-preview .booking-note {
+    width: 100%;
+    min-width: 0;
+    margin-top: 18px;
+  }
+  .booking-preview .button {
+    width: 100%;
+  }
+  .booking-copy,
+  .booking-note {
+    min-width: 0;
+  }
   .booking-copy h2 { font-size: clamp(2rem, 10vw, 2.75rem); }
 }
 
