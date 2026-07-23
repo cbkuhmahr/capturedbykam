@@ -41,113 +41,25 @@
       </div>
     </section>
 
-    <section class="booking-section native-booking" id="booking">
+    <section class="booking-section" id="booking" aria-label="Booking preview">
       <div class="booking-copy">
         <p class="eyebrow">Booking</p>
-        <h2>Start the conversation.</h2>
-        <p>For photo, video, PhotoDay, and creative project inquiries.</p>
-
-        <div class="booking-note retainer-note">
-          <strong>50% Retainer</strong>
-          <span>A 50% retainer is required to reserve your date. Your booking is not confirmed until the deposit is paid and Capturedby_Kam confirms availability.</span>
-        </div>
-
-        <div class="booking-steps" aria-label="Booking process">
-          <div><strong>01</strong><span>Request date</span></div>
-          <div><strong>02</strong><span>Confirm package</span></div>
-          <div><strong>03</strong><span>Pay retainer</span></div>
-        </div>
-
-        <div class="terms-card">
-          <strong>Booking Terms</strong>
-          <ul>
-            <li>50% retainer required to reserve date.</li>
-            <li>Remaining balance due before or on session date.</li>
-            <li>Date is not confirmed until deposit is paid.</li>
-            <li>Deposits are non-refundable, but may be transferable once.</li>
-            <li>Weather or emergency rescheduling is handled case by case.</li>
-            <li>No raw files unless agreed separately in writing.</li>
-          </ul>
-        </div>
+        <h2>Start with the request.</h2>
+        <p>The full booking request, terms, and 50% retainer information now live on a dedicated booking page so the homepage stays clean.</p>
       </div>
 
-      <form class="booking-form" id="cbk-booking-form" action="mailto:kam@capturedbykam.com" method="post" enctype="text/plain">
-        <div class="form-grid">
-          <label>
-            <span>Name</span>
-            <input name="name" type="text" autocomplete="name" required />
-          </label>
-
-          <label>
-            <span>Email</span>
-            <input name="email" type="email" autocomplete="email" required />
-          </label>
-
-          <label>
-            <span>Phone</span>
-            <input name="phone" type="tel" autocomplete="tel" />
-          </label>
-
-          <label>
-            <span>Project type</span>
-            <select name="shoot_type" required>
-              <option value="">Select one</option>
-              <option>Youth Sports Media</option>
-              <option>Portrait Session</option>
-              <option>Event Coverage</option>
-              <option>Creative Project</option>
-              <option>PhotoDay / Gallery Support</option>
-              <option>Other</option>
-            </select>
-          </label>
-
-          <label>
-            <span>Preferred date</span>
-            <input name="preferred_date" type="date" />
-          </label>
-
-          <label>
-            <span>Preferred time</span>
-            <input name="preferred_time" type="text" placeholder="Morning, afternoon, exact time..." />
-          </label>
-
-          <label class="full-span">
-            <span>Location</span>
-            <input name="location" type="text" placeholder="City, venue, school, field, or address" />
-          </label>
-
-          <label class="full-span">
-            <span>Package / estimated budget</span>
-            <input name="budget" type="text" placeholder="Package, budget range, or what you have in mind" />
-          </label>
-
-          <label class="full-span">
-            <span>What do you need captured?</span>
-            <textarea name="message" rows="6" required></textarea>
-          </label>
-        </div>
-
-        <label class="terms-check">
-          <input name="terms" type="checkbox" required />
-          <span>I understand this is an inquiry. My date is not confirmed until Capturedby_Kam confirms availability and the 50% retainer is paid.</span>
-        </label>
-
-        <div class="deposit-card" aria-label="Deposit payment information">
-          <strong>Deposit payment</strong>
-          <span>After CBK confirms your date, package, and retainer amount, use the secure Stripe link below to pay the 50% retainer. Do not pay until your date and amount have been confirmed.</span>
-          <a class="button button-dark deposit-link" href="https://buy.stripe.com/dRm8wRa8B5Po5uycT96Zy00" target="_blank" rel="noopener">Pay 50% Retainer</a>
-        </div>
-
-        <button class="button button-dark booking-submit" type="submit">Submit Booking Request</button>
-        <p class="form-status" id="booking-status" role="status" aria-live="polite"></p>
-      </form>
+      <div class="booking-note retainer-note">
+        <strong>CBK Booking</strong>
+        <span>Request the date first. CBK confirms availability, package direction, and retainer amount before the date is locked.</span>
+        <a class="button button-dark booking-link" href="book.html">Book CBK</a>
+      </div>
     </section>
   </div>
 
   <aside class="menu-panel" aria-label="Site menu">
     <label class="close-button" for="menu-toggle" aria-label="Close menu">×</label>
     <div class="menu-links">
-      <a href="#booking">Book</a>
+      <a href="book.html">Book</a>
       <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
       <a href="shop.html">Shop</a>
       <a href="https://www.instagram.com/CapturedBy_Kam" target="_blank" rel="noopener">Instagram</a>
@@ -161,7 +73,7 @@
         <span>Every frame, Every Project—Timeless Authenticity, Est. 2025.</span>
       </div>
       <nav class="footer-links" aria-label="Footer links">
-        <a href="#booking">Booking</a>
+        <a href="book.html">Booking</a>
         <span aria-hidden="true">/</span>
         <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
         <span aria-hidden="true">/</span>
