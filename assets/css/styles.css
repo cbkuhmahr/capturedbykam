@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Libre+Baskerville:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Libre+Baskerville:wght@400;700&family=Space+Grotesk:wght@600;700&display=swap");
 
 :root {
   --ink: #0f0f0e;
@@ -24,6 +24,8 @@ body {
   font-family: "Inter Tight", Inter, Arial, Helvetica, sans-serif;
   font-feature-settings: "kern" 1, "liga" 1;
   text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 a { color: inherit; text-decoration: none; }
 button, input, select, textarea { font: inherit; }
@@ -50,6 +52,7 @@ button, input, select, textarea { font: inherit; }
   text-align: center;
   text-transform: uppercase;
   box-shadow: 0 18px 44px rgba(0,0,0,.30);
+  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
 }
 .slogan-strip::before {
   content: "";
@@ -62,16 +65,16 @@ button, input, select, textarea { font: inherit; }
   transform: translateX(-50%);
 }
 .slogan-strip strong {
-  font-size: clamp(.95rem, 1.8vw, 1.08rem);
-  font-weight: 900;
-  letter-spacing: .24em;
+  font-size: clamp(1rem, 1.8vw, 1.12rem);
+  font-weight: 700;
+  letter-spacing: .17em;
   line-height: 1;
 }
 .slogan-strip span {
   color: var(--muted);
-  font-size: .66rem;
-  font-weight: 800;
-  letter-spacing: .16em;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .09em;
   line-height: 1.45;
 }
 
@@ -121,9 +124,10 @@ button, input, select, textarea { font: inherit; }
   box-shadow: 0 12px 24px rgba(0,0,0,.11);
   cursor: pointer;
   text-transform: uppercase;
-  letter-spacing: .18em;
-  font-size: .64rem;
-  font-weight: 900;
+  letter-spacing: .12em;
+  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
+  font-size: .66rem;
+  font-weight: 700;
   transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
 }
 .menu-button:hover {
@@ -204,9 +208,10 @@ button, input, select, textarea { font: inherit; }
 .handle {
   color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: .18em;
+  letter-spacing: .11em;
+  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
   font-size: .68rem;
-  font-weight: 900;
+  font-weight: 700;
   white-space: nowrap;
   transition: opacity .18s ease, transform .18s ease;
 }
@@ -251,9 +256,10 @@ button, input, select, textarea { font: inherit; }
 }
 .booking-note strong {
   text-transform: uppercase;
-  letter-spacing: .14em;
+  letter-spacing: .11em;
+  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
   font-size: .68rem;
-  font-weight: 900;
+  font-weight: 700;
 }
 .booking-note span {
   color: var(--muted);
@@ -280,9 +286,10 @@ button, input, select, textarea { font: inherit; }
   border: 1px solid var(--ink);
   border-radius: 999px;
   padding: 0 19px;
+  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
   font-size: .68rem;
-  font-weight: 900;
-  letter-spacing: .13em;
+  font-weight: 700;
+  letter-spacing: .1em;
   text-transform: uppercase;
   cursor: pointer;
   transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease;
@@ -306,6 +313,7 @@ button, input, select, textarea { font: inherit; }
   background: linear-gradient(180deg, #fbf7ef 0%, var(--card) 100%);
   box-shadow: 0 20px 52px rgba(0,0,0,.30);
   text-align: center;
+  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
 }
 .footer-card::before {
   content: "";
@@ -324,16 +332,17 @@ button, input, select, textarea { font: inherit; }
 }
 .footer-brand strong {
   color: var(--ink);
-  letter-spacing: .24em;
-  font-size: clamp(.95rem, 1.8vw, 1.08rem);
+  letter-spacing: .17em;
+  font-size: clamp(1rem, 1.8vw, 1.12rem);
   line-height: 1;
+  font-weight: 700;
 }
 .footer-brand span {
   color: var(--muted);
-  letter-spacing: .16em;
+  letter-spacing: .09em;
   line-height: 1.45;
-  font-size: .66rem;
-  font-weight: 900;
+  font-size: .68rem;
+  font-weight: 700;
 }
 .footer-links {
   display: flex;
@@ -342,9 +351,9 @@ button, input, select, textarea { font: inherit; }
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
-  letter-spacing: .15em;
-  font-size: .66rem;
-  font-weight: 900;
+  letter-spacing: .11em;
+  font-size: .68rem;
+  font-weight: 700;
   color: var(--muted);
 }
 .footer-links span { color: rgba(15, 15, 14, 0.26); }
@@ -357,8 +366,8 @@ button, input, select, textarea { font: inherit; }
 .footer-email {
   color: var(--ink);
   font-size: .72rem;
-  font-weight: 900;
-  letter-spacing: .15em;
+  font-weight: 700;
+  letter-spacing: .11em;
   text-transform: uppercase;
 }
 
