@@ -13,6 +13,7 @@ const bookingStatus = document.querySelector("#booking-status");
 
 const CBK_SUPABASE_URL = "https://waiopvueoobwrnlctmua.supabase.co";
 const CBK_SUPABASE_PUBLISHABLE_KEY = "";
+const CBK_RETAINER_PAYMENT_LINK = "https://buy.stripe.com/dRm8wRa8B5Po5uycT96Zy00";
 
 function bookingValue(formData, key) {
   return String(formData.get(key) || "").trim();
@@ -33,7 +34,9 @@ function buildBookingPayload(formData) {
     `Package / estimated budget: ${budget || "Not provided"}`,
     "Terms accepted: Yes",
     "50% retainer required: Yes",
-    "Deposit status: Not sent yet"
+    "Deposit status: Not paid through this form",
+    `Retainer payment link: ${CBK_RETAINER_PAYMENT_LINK}`,
+    "Note: Client should only pay after CBK confirms date, package, and retainer amount."
   ].join("\n");
 
   return {
