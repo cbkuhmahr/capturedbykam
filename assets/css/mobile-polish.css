@@ -1,0 +1,82 @@
+.header-menu-button {
+  width: auto !important;
+  min-height: 34px;
+  padding: 0 13px;
+  justify-self: end;
+  box-shadow: none;
+}
+
+.mobile-work-card {
+  display: none;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: #fffdf8;
+  gap: 10px;
+}
+.mobile-work-card strong,
+.accordion-card summary,
+.retainer-drawer summary {
+  text-transform: uppercase;
+  letter-spacing: .11em;
+  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
+  font-size: .68rem;
+  font-weight: 700;
+}
+.mobile-work-card span {
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: .92rem;
+}
+
+.accordion-card,
+.retainer-drawer {
+  margin-top: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.52);
+}
+.accordion-card summary,
+.retainer-drawer summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 16px;
+}
+.accordion-card summary::-webkit-details-marker,
+.retainer-drawer summary::-webkit-details-marker { display: none; }
+.accordion-card summary::after,
+.retainer-drawer summary::after {
+  content: "+";
+  float: right;
+  color: var(--accent);
+}
+.accordion-card[open] summary::after,
+.retainer-drawer[open] summary::after { content: "–"; }
+.accordion-card ul { margin: 0; padding: 0 16px 16px 34px; }
+.retainer-drawer .booking-form {
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: var(--card-soft);
+}
+.retainer-payment { align-items: start; }
+
+@media (max-width: 780px) {
+  .hero-card {
+    height: clamp(220px, 56vw, 310px);
+    min-height: 220px;
+  }
+  .instagram-shell { display: none; }
+  .mobile-work-card { display: grid; }
+  .booking-section { padding: 22px; }
+  .booking-preview { display: grid; gap: 18px; }
+  .booking-copy h2 { font-size: clamp(2rem, 10vw, 2.75rem); }
+}
+
+@media (max-width: 480px) {
+  .header-menu-button { width: auto !important; }
+  .slogan-strip {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+  .slogan-strip span { grid-column: 1 / 2; }
+  .mobile-work-card .button { width: 100%; }
+}
