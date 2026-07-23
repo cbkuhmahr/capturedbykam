@@ -54,7 +54,8 @@ button, input, select, textarea { font: inherit; }
   box-shadow: 0 18px 44px rgba(0,0,0,.30);
   font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
 }
-.slogan-strip::before {
+.slogan-strip::before,
+.footer-card::before {
   content: "";
   position: absolute;
   top: -1px;
@@ -64,13 +65,16 @@ button, input, select, textarea { font: inherit; }
   background: var(--accent);
   transform: translateX(-50%);
 }
-.slogan-strip strong {
+.slogan-strip strong,
+.footer-brand strong {
+  color: var(--ink);
   font-size: clamp(1rem, 1.8vw, 1.12rem);
   font-weight: 700;
   letter-spacing: .17em;
   line-height: 1;
 }
-.slogan-strip span {
+.slogan-strip span,
+.footer-brand span {
   color: var(--muted);
   font-size: .68rem;
   font-weight: 700;
@@ -80,7 +84,6 @@ button, input, select, textarea { font: inherit; }
 
 .hero-card,
 .feed-card,
-.jotform-card,
 .booking-section {
   background: var(--card);
   border: 1px solid var(--outer-line);
@@ -112,8 +115,11 @@ button, input, select, textarea { font: inherit; }
   top: 12px;
   right: 12px;
   z-index: 3;
+}
+.menu-button,
+.button {
   min-height: 40px;
-  padding: 0 14px;
+  padding: 0 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -124,18 +130,22 @@ button, input, select, textarea { font: inherit; }
   box-shadow: 0 12px 24px rgba(0,0,0,.11);
   cursor: pointer;
   text-transform: uppercase;
-  letter-spacing: .12em;
+  letter-spacing: .1em;
   font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
-  font-size: .66rem;
+  font-size: .68rem;
   font-weight: 700;
-  transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease, opacity .18s ease;
 }
-.menu-button:hover {
+.menu-button:hover,
+.button:hover {
   transform: translateY(-1px);
   border-color: rgba(15,15,14,.42);
   background: #fff;
   box-shadow: 0 16px 28px rgba(0,0,0,.14);
 }
+.button-dark { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.button-dark:hover { background: #000; color: var(--paper); }
+button:disabled { opacity: .58; cursor: not-allowed; transform: none; }
 
 .menu-panel {
   position: fixed;
@@ -176,9 +186,7 @@ button, input, select, textarea { font: inherit; }
 }
 .menu-links a:hover { color: var(--accent); transform: translateY(-2px); }
 
-.feed-card {
-  padding: clamp(18px, 3vw, 28px);
-}
+.feed-card { padding: clamp(18px, 3vw, 28px); }
 .section-tight { padding-top: clamp(18px, 3vw, 28px); }
 .feed-head {
   display: flex;
@@ -236,7 +244,7 @@ button, input, select, textarea { font: inherit; }
   margin-top: 10px;
   padding: clamp(26px, 4vw, 44px);
   display: grid;
-  grid-template-columns: minmax(260px, .70fr) minmax(320px, 1fr);
+  grid-template-columns: minmax(260px, .72fr) minmax(320px, 1fr);
   gap: clamp(24px, 5vw, 54px);
   align-items: start;
 }
@@ -246,7 +254,9 @@ button, input, select, textarea { font: inherit; }
   line-height: .96;
 }
 .booking-copy p { margin: 0; color: var(--muted); line-height: 1.68; }
-.booking-note {
+.booking-note,
+.terms-card,
+.deposit-card {
   margin-top: 22px;
   padding: 16px;
   border: 1px solid var(--line);
@@ -254,48 +264,117 @@ button, input, select, textarea { font: inherit; }
   display: grid;
   gap: 7px;
 }
-.booking-note strong {
+.booking-note strong,
+.terms-card strong,
+.deposit-card strong {
   text-transform: uppercase;
   letter-spacing: .11em;
   font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
   font-size: .68rem;
   font-weight: 700;
 }
-.booking-note span {
+.booking-note span,
+.deposit-card span {
   color: var(--muted);
   line-height: 1.55;
   font-size: .92rem;
 }
-.booking-link { margin-top: 18px; }
-.jotform-card {
-  min-height: 760px;
-  box-shadow: none;
-  background: #fff;
+.retainer-note { background: #fffdf8; }
+.booking-steps {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--line);
 }
-.jotform-card iframe {
-  display: block;
-  width: 100%;
-  min-height: 760px;
-  border: none;
+.booking-steps div {
+  padding: 14px;
+  display: grid;
+  gap: 5px;
+  border-right: 1px solid var(--line);
 }
-.button {
-  display: inline-flex;
-  min-height: 46px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--ink);
-  border-radius: 999px;
-  padding: 0 19px;
+.booking-steps div:last-child { border-right: 0; }
+.booking-steps strong {
+  color: var(--accent);
   font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
-  font-size: .68rem;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease;
+  font-size: .66rem;
+  letter-spacing: .12em;
 }
-.button:hover { transform: translateY(-1px); box-shadow: 0 14px 24px rgba(0,0,0,.18); }
-.button-dark { background: var(--ink); color: var(--paper); }
+.booking-steps span {
+  font-weight: 700;
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.terms-card ul {
+  margin: 5px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: .9rem;
+}
+
+.booking-form {
+  display: grid;
+  gap: 18px;
+  padding: clamp(18px, 3vw, 24px);
+  border: 1px solid var(--line);
+  background: var(--card-soft);
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.booking-form label {
+  display: grid;
+  gap: 7px;
+}
+.booking-form label span {
+  color: rgba(15,15,14,.78);
+  text-transform: uppercase;
+  letter-spacing: .10em;
+  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
+  font-size: .64rem;
+  font-weight: 700;
+}
+.full-span { grid-column: 1 / -1; }
+.booking-form input,
+.booking-form select,
+.booking-form textarea {
+  width: 100%;
+  border: 1px solid rgba(15,15,14,.16);
+  border-radius: 0;
+  background: #fff;
+  color: var(--ink);
+  min-height: 44px;
+  padding: 11px 12px;
+  outline: none;
+}
+.booking-form textarea { resize: vertical; min-height: 132px; }
+.booking-form input:focus,
+.booking-form select:focus,
+.booking-form textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(200,76,49,.12); }
+.terms-check {
+  display: grid !important;
+  grid-template-columns: auto 1fr;
+  gap: 10px !important;
+  align-items: start;
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: rgba(244,239,231,.66);
+}
+.terms-check input { width: 18px; min-height: 18px; margin-top: 2px; }
+.terms-check span {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: "Inter Tight", Inter, Arial, Helvetica, sans-serif !important;
+  color: var(--muted) !important;
+  line-height: 1.5;
+  font-size: .92rem !important;
+  font-weight: 600 !important;
+}
+.booking-submit { justify-self: start; min-height: 48px; }
+.form-status { margin: 0; color: var(--muted); line-height: 1.5; font-size: .92rem; }
 
 .site-footer {
   padding: 0 0 46px;
@@ -315,35 +394,7 @@ button, input, select, textarea { font: inherit; }
   text-align: center;
   font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
 }
-.footer-card::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: 50%;
-  width: min(180px, 42%);
-  height: 2px;
-  background: var(--accent);
-  transform: translateX(-50%);
-}
-.footer-brand {
-  display: grid;
-  gap: 7px;
-  text-transform: uppercase;
-}
-.footer-brand strong {
-  color: var(--ink);
-  letter-spacing: .17em;
-  font-size: clamp(1rem, 1.8vw, 1.12rem);
-  line-height: 1;
-  font-weight: 700;
-}
-.footer-brand span {
-  color: var(--muted);
-  letter-spacing: .09em;
-  line-height: 1.45;
-  font-size: .68rem;
-  font-weight: 700;
-}
+.footer-brand { display: grid; gap: 7px; text-transform: uppercase; }
 .footer-links {
   display: flex;
   flex-wrap: wrap;
@@ -358,9 +409,7 @@ button, input, select, textarea { font: inherit; }
 }
 .footer-links span { color: rgba(15, 15, 14, 0.26); }
 .footer-links a,
-.footer-email {
-  transition: opacity .18s ease, color .18s ease, transform .18s ease;
-}
+.footer-email { transition: opacity .18s ease, color .18s ease, transform .18s ease; }
 .footer-links a:hover,
 .footer-email:hover { color: var(--accent); opacity: .9; transform: translateY(-1px); }
 .footer-email {
@@ -383,13 +432,15 @@ button, input, select, textarea { font: inherit; }
   .booking-section { display: block; }
   .handle { display: inline-block; margin-top: 14px; }
   .booking-copy p { margin-top: 16px; }
-  .jotform-card { margin-top: 24px; min-height: 820px; }
-  .jotform-card iframe { min-height: 820px; }
+  .booking-steps { grid-template-columns: 1fr; }
+  .booking-steps div { border-right: 0; border-bottom: 1px solid var(--line); }
+  .booking-steps div:last-child { border-bottom: 0; }
+  .booking-form { margin-top: 24px; }
+  .form-grid { grid-template-columns: 1fr; }
   .footer-links { justify-content: flex-start; }
 }
 @media (max-width: 480px) {
   .button { width: 100%; }
+  .booking-submit { justify-self: stretch; }
   .menu-links a { font-size: clamp(2.25rem, 15vw, 4.6rem); }
-  .jotform-card { min-height: 880px; }
-  .jotform-card iframe { min-height: 880px; }
 }
