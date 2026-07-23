@@ -37,7 +37,7 @@ button, input, select, textarea { font: inherit; }
   margin-left: auto;
   margin-right: auto;
 }
-.site-shell { margin-top: 18px; margin-bottom: 56px; }
+.site-shell { margin-top: 18px; margin-bottom: 46px; }
 
 .slogan-strip {
   position: relative;
@@ -94,8 +94,8 @@ button, input, select, textarea { font: inherit; }
 
 .hero-card {
   position: relative;
-  height: clamp(340px, 48vw, 560px);
-  margin-bottom: 10px;
+  height: clamp(330px, 46vw, 540px);
+  margin-bottom: 8px;
   background:
     linear-gradient(135deg, rgba(15,15,14,.16), rgba(15,15,14,.02)),
     repeating-linear-gradient(90deg, rgba(15,15,14,.055) 0 1px, transparent 1px 54px),
@@ -108,7 +108,7 @@ button, input, select, textarea { font: inherit; }
   border: 1px solid rgba(15,15,14,.10);
   pointer-events: none;
 }
-.photo-slot { min-height: 340px; }
+.photo-slot { min-height: 300px; }
 
 .menu-button {
   position: absolute;
@@ -146,6 +146,30 @@ button, input, select, textarea { font: inherit; }
 .button-dark { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .button-dark:hover { background: #000; color: var(--paper); }
 button:disabled { opacity: .58; cursor: not-allowed; transform: none; }
+
+.quick-nav {
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--outer-line);
+  background: rgba(247,242,234,.94);
+  box-shadow: 0 18px 44px rgba(0,0,0,.22);
+}
+.quick-nav a {
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--line);
+  color: rgba(15,15,14,.76);
+  text-transform: uppercase;
+  letter-spacing: .11em;
+  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
+  font-size: .66rem;
+  font-weight: 700;
+  transition: background .18s ease, color .18s ease;
+}
+.quick-nav a:last-child { border-right: 0; }
+.quick-nav a:hover { background: #fffdf8; color: var(--accent); }
 
 .menu-panel {
   position: fixed;
@@ -248,6 +272,10 @@ button:disabled { opacity: .58; cursor: not-allowed; transform: none; }
   gap: clamp(24px, 5vw, 54px);
   align-items: start;
 }
+.booking-preview {
+  align-items: center;
+  grid-template-columns: minmax(260px, .9fr) minmax(240px, .55fr);
+}
 .booking-copy h2 {
   margin: 0 0 14px;
   font-size: clamp(2.1rem, 4vw, 3.45rem);
@@ -264,6 +292,7 @@ button:disabled { opacity: .58; cursor: not-allowed; transform: none; }
   display: grid;
   gap: 7px;
 }
+.booking-preview .booking-note { margin-top: 0; }
 .booking-note strong,
 .terms-card strong,
 .deposit-card strong {
@@ -423,15 +452,25 @@ button:disabled { opacity: .58; cursor: not-allowed; transform: none; }
 @media (max-width: 780px) {
   .site-shell,
   .site-footer { width: min(100% - 18px, 1040px); }
-  .site-shell { margin-top: 10px; }
+  .site-shell { margin-top: 10px; margin-bottom: 34px; }
   .slogan-strip,
   .footer-card { text-align: left; place-items: start; }
+  .slogan-strip { padding: 15px 14px 14px; }
   .slogan-strip::before,
   .footer-card::before { left: 16px; transform: none; width: 120px; }
+  .hero-card { height: clamp(280px, 62vw, 420px); margin-bottom: 8px; }
+  .quick-nav { grid-template-columns: repeat(2, 1fr); margin-bottom: 8px; }
+  .quick-nav a:nth-child(2) { border-right: 0; }
+  .quick-nav a:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .feed-card { padding: 17px; }
   .feed-head,
   .booking-section { display: block; }
+  .feed-head { margin-bottom: 14px; }
+  .feed-title h1 { font-size: clamp(2.15rem, 12vw, 3.6rem); }
   .handle { display: inline-block; margin-top: 14px; }
-  .booking-copy p { margin-top: 16px; }
+  .booking-section { padding: 22px 18px; }
+  .booking-copy p { margin-top: 14px; }
+  .booking-preview .booking-note { margin-top: 18px; }
   .booking-steps { grid-template-columns: 1fr; }
   .booking-steps div { border-right: 0; border-bottom: 1px solid var(--line); }
   .booking-steps div:last-child { border-bottom: 0; }
@@ -440,7 +479,12 @@ button:disabled { opacity: .58; cursor: not-allowed; transform: none; }
   .footer-links { justify-content: flex-start; }
 }
 @media (max-width: 480px) {
+  .site-shell,
+  .site-footer { width: min(100% - 14px, 1040px); }
+  .hero-card { height: 285px; }
   .button { width: 100%; }
   .booking-submit { justify-self: stretch; }
+  .instagram-shell,
+  .instagram-shell iframe { min-height: 460px; }
   .menu-links a { font-size: clamp(2.25rem, 15vw, 4.6rem); }
 }
