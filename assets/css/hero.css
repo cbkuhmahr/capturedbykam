@@ -1,7 +1,7 @@
 .hero-card {
   background:
     linear-gradient(180deg, rgba(5,5,5,.03), rgba(5,5,5,.16)),
-    url("../img/cbk-hero-bridge.svg") center center / cover no-repeat;
+    url("../img/cbk-hero-bridge.jpg") center center / cover no-repeat;
   background-color: #0f0f0e;
 }
 
