@@ -22,7 +22,7 @@
   gap: 10px;
 }
 .mobile-work-card strong,
-.service-card span,
+.service-number,
 .service-card strong,
 .workflow-card span,
 .accordion-card summary,
@@ -52,16 +52,48 @@
 .service-card,
 .workflow-card {
   min-width: 0;
-  padding: 18px;
   border: 1px solid var(--line);
   background: rgba(255,255,255,.54);
+}
+.workflow-card {
+  padding: 18px;
   display: grid;
   gap: 10px;
 }
+.service-card {
+  display: block;
+}
 .service-card-wide { grid-column: 1 / -1; }
-.service-card span,
+.service-card summary {
+  position: relative;
+  cursor: pointer;
+  list-style: none;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 28px;
+  gap: 14px;
+  align-items: center;
+}
+.service-card summary::-webkit-details-marker { display: none; }
+.service-card summary::after {
+  content: "+";
+  grid-column: 3;
+  justify-self: end;
+  color: var(--accent);
+  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.service-card[open] summary::after { content: "–"; }
+.service-number,
 .workflow-card span { color: var(--accent); }
-.service-card h2,
+.service-label {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+}
+.service-title,
 .workflow-card h2 {
   margin: 0;
   font-family: "Libre Baskerville", Georgia, serif;
@@ -69,17 +101,29 @@
   letter-spacing: -.045em;
   line-height: 1;
 }
-.service-card p,
+.service-card strong {
+  color: var(--ink);
+}
+.service-details {
+  border-top: 1px solid var(--line);
+  padding: 0 18px 18px 74px;
+  display: grid;
+  gap: 10px;
+}
+.service-details p,
 .workflow-card p,
 .admin-format-body p {
   margin: 0;
   color: var(--muted);
   line-height: 1.55;
 }
-.service-card strong {
-  color: var(--ink);
-  margin-top: 4px;
+.service-details ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.55;
 }
+.service-details li + li { margin-top: 4px; }
 
 .accordion-card,
 .retainer-drawer {
@@ -158,31 +202,36 @@
   }
   .workflow-grid { grid-template-columns: 1fr; }
   .service-card-wide { grid-column: auto; }
-  .service-card {
+  .service-card summary {
     padding: 12px 13px;
-    gap: 4px 10px;
-    grid-template-columns: 28px minmax(0, 1fr);
-    align-items: start;
+    gap: 10px;
+    grid-template-columns: 28px minmax(0, 1fr) 22px;
+    align-items: center;
   }
-  .service-card span {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    margin-top: 1px;
+  .service-number {
     font-size: .58rem;
   }
-  .service-card h2 {
-    grid-column: 2;
+  .service-label {
+    gap: 4px;
+  }
+  .service-title {
     font-size: 1.18rem;
     line-height: 1;
   }
-  .service-card p {
-    display: none;
-  }
   .service-card strong {
-    grid-column: 2;
-    margin-top: 0;
     font-size: .56rem;
     letter-spacing: .1em;
+  }
+  .service-card summary::after {
+    font-size: 1rem;
+  }
+  .service-details {
+    padding: 0 13px 13px 51px;
+    gap: 8px;
+  }
+  .service-details p,
+  .service-details li {
+    font-size: .9rem;
   }
   .workflow-card { padding: 16px; }
   .booking-section { padding: 22px; }
