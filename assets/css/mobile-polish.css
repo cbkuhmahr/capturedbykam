@@ -18,7 +18,7 @@
   display: none;
   padding: 16px;
   border: 1px solid var(--line);
-  background: #fffdf8;
+  background: var(--ivory-deep);
   gap: 10px;
 }
 .mobile-work-card strong,
@@ -28,15 +28,15 @@
 .accordion-card summary,
 .retainer-drawer summary {
   text-transform: uppercase;
-  letter-spacing: .11em;
-  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
+  letter-spacing: .15em;
+  font-family: var(--font-label);
   font-size: .68rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 .mobile-work-card span {
-  color: var(--muted);
+  color: var(--ink-soft);
   line-height: 1.55;
-  font-size: .92rem;
+  font-size: 1rem;
 }
 
 .service-section,
@@ -53,7 +53,7 @@
 .workflow-card {
   min-width: 0;
   border: 1px solid var(--line);
-  background: rgba(255,255,255,.54);
+  background: color-mix(in srgb, var(--ivory) 68%, white);
 }
 .workflow-card {
   padding: 18px;
@@ -79,15 +79,15 @@
   content: "+";
   grid-column: 3;
   justify-self: end;
-  color: var(--accent);
-  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
+  color: var(--brass-text);
+  font-family: var(--font-label);
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
 }
 .service-card[open] summary::after { content: "–"; }
 .service-number,
-.workflow-card span { color: var(--accent); }
+.workflow-card span { color: var(--brass-text); }
 .service-label {
   min-width: 0;
   display: grid;
@@ -96,7 +96,9 @@
 .service-title,
 .workflow-card h2 {
   margin: 0;
-  font-family: "Libre Baskerville", Georgia, serif;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
   font-size: clamp(1.35rem, 2.3vw, 1.85rem);
   letter-spacing: -.045em;
   line-height: 1;
@@ -114,13 +116,13 @@
 .workflow-card p,
 .admin-format-body p {
   margin: 0;
-  color: var(--muted);
+  color: var(--ink-soft);
   line-height: 1.55;
 }
 .service-details ul {
   margin: 0;
   padding-left: 18px;
-  color: var(--muted);
+  color: var(--ink-soft);
   line-height: 1.55;
 }
 .service-details li + li { margin-top: 4px; }
@@ -129,7 +131,7 @@
 .retainer-drawer {
   margin-top: 22px;
   border: 1px solid var(--line);
-  background: rgba(255,255,255,.52);
+  background: color-mix(in srgb, var(--ivory) 68%, white);
 }
 .accordion-card summary,
 .retainer-drawer summary {
@@ -143,7 +145,7 @@
 .retainer-drawer summary::after {
   content: "+";
   float: right;
-  color: var(--accent);
+  color: var(--brass-text);
 }
 .accordion-card[open] summary::after,
 .retainer-drawer[open] summary::after { content: "–"; }
@@ -164,8 +166,8 @@
   white-space: pre-wrap;
   border: 1px solid var(--line);
   background: var(--card-soft);
-  color: rgba(15,15,14,.78);
-  font-family: "Space Grotesk", "Inter Tight", Arial, Helvetica, sans-serif;
+  color: var(--ink-soft);
+  font-family: var(--font-label);
   font-size: .74rem;
   line-height: 1.55;
 }
