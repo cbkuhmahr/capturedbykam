@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Studio Admin | Capturedby_Kam</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/cbk-camera.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/cbk-admin.css" />
+</head>
+<body>
+  <div class="cbk-admin-shell">
+    <header class="cbk-admin-header">
+      <div>
+        <p class="eyebrow">Capturedby_Kam</p>
+        <h1>Studio Admin</h1>
+      </div>
+      <div class="cbk-admin-header-actions">
+        <a class="button" href="shop.html">View Shop</a>
+        <button id="signOutButton" class="button button-dark" type="button" hidden>Sign Out</button>
+      </div>
+    </header>
+
+    <section id="loginPanel" class="cbk-admin-card cbk-login-card">
+      <p class="eyebrow">Private access</p>
+      <h2>Sign in to manage your galleries.</h2>
+      <p>No backend dashboard needed. Enter your CBK email and we'll send a secure sign-in link.</p>
+      <form id="loginForm" class="cbk-admin-form">
+        <label>
+          <span>Email</span>
+          <input id="loginEmail" type="email" value="kam@capturedbykam.com" autocomplete="email" required />
+        </label>
+        <button class="button button-dark" type="submit">Send Sign-In Link</button>
+        <p id="loginMessage" class="cbk-form-message" role="status"></p>
+      </form>
+    </section>
+
+    <main id="adminDashboard" hidden>
+      <section class="cbk-admin-stats" aria-label="Shop summary">
+        <div><span>Projects</span><strong id="statProjects">0</strong></div>
+        <div><span>Open</span><strong id="statOpen">0</strong></div>
+        <div><span>Photos</span><strong id="statPhotos">0</strong></div>
+        <div><span>New Orders</span><strong id="statOrders">0</strong></div>
+      </section>
+
+      <section class="cbk-admin-layout">
+        <div class="cbk-admin-card">
+          <p class="eyebrow">New project</p>
+          <h2>Create an event gallery.</h2>
+          <form id="projectForm" class="cbk-admin-form">
+            <label><span>Project / Event Name</span><input name="title" required placeholder="Whitmer Homecoming 2026" /></label>
+            <label><span>Event Date</span><input name="event_date" type="date" /></label>
+            <label><span>Description</span><textarea name="description" rows="3" placeholder="Optional short note for customers"></textarea></label>
+            <div class="cbk-admin-form-row">
+              <label><span>Photos Per Package</span><input name="package_size" type="number" min="1" value="5" required /></label>
+              <label><span>Package Price</span><input name="package_price" type="number" min="0" step="0.01" value="20.00" required /></label>
+            </div>
+            <label><span>Start As</span>
+              <select name="status">
+                <option value="draft">Draft — hidden</option>
+                <option value="open">Open — visible in Shop</option>
+              </select>
+            </label>
+            <button class="button button-dark" type="submit">Create Project</button>
+            <p id="projectMessage" class="cbk-form-message" role="status"></p>
+          </form>
+        </div>
+
+        <div class="cbk-admin-card">
+          <p class="eyebrow">Upload photos</p>
+          <h2>Build the gallery.</h2>
+          <p class="cbk-admin-help">Choose a project and select a batch of finished photos. The browser creates smaller watermarked previews before upload; your original files stay on your computer.</p>
+          <form id="uploadForm" class="cbk-admin-form">
+            <label><span>Project</span><select id="uploadProject" required><option value="">Choose project…</option></select></label>
+            <label class="cbk-file-drop">
+              <span>Select Finished Photos</span>
+              <input id="photoFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple required />
+              <small>Photo IDs come from the original filenames so orders match your master files.</small>
+            </label>
+            <button id="uploadButton" class="button button-dark" type="submit">Create Watermarked Previews</button>
+            <div id="uploadProgress" class="cbk-progress" hidden><span></span></div>
+            <p id="uploadMessage" class="cbk-form-message" role="status"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="cbk-admin-card cbk-admin-section">
+        <div class="cbk-admin-section-head">
+          <div><p class="eyebrow">Projects</p><h2>Manage galleries.</h2></div>
+          <button id="refreshButton" class="button" type="button">Refresh</button>
+        </div>
+        <div id="adminProjects" class="cbk-admin-project-list"></div>
+      </section>
+
+      <section class="cbk-admin-card cbk-admin-section">
+        <div class="cbk-admin-section-head">
+          <div><p class="eyebrow">Orders</p><h2>Customer selections.</h2></div>
+        </div>
+        <div id="adminOrders" class="cbk-order-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.min.js"></script>
+  <script src="assets/js/cbk-supabase.js"></script>
+  <script src="assets/js/admin.js" defer></script>
+</body>
+</html>
