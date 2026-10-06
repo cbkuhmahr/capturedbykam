@@ -1,94 +1,125 @@
 (() => {
   const cfg = window.CBK_SUPABASE;
-  const client = window.supabase.createClient(cfg.url, cfg.key, {
-    auth: { persistSession: true, detectSessionInUrl: true }
-  });
+  const client = window.supabase.createClient(cfg.url, cfg.key, { auth: { persistSession: false } });
+  const apiUrl = cfg.url + "/functions/v1/cbk-admin";
+  const tokenKey = "cbk_admin_session_v1";
 
   const loginPanel = document.getElementById("loginPanel");
   const dashboard = document.getElementById("adminDashboard");
   const signOutButton = document.getElementById("signOutButton");
   const loginForm = document.getElementById("loginForm");
+  const loginPin = document.getElementById("loginPin");
+  const loginMessage = document.getElementById("loginMessage");
   const projectForm = document.getElementById("projectForm");
   const uploadForm = document.getElementById("uploadForm");
   const uploadProject = document.getElementById("uploadProject");
   const projectList = document.getElementById("adminProjects");
   const orderList = document.getElementById("adminOrders");
 
+  let sessionToken = localStorage.getItem(tokenKey) || "";
   let projects = [];
   let photos = [];
   let orders = [];
 
+  async function api(action, payload = {}, includeToken = true) {
+    const headers = { "Content-Type": "application/json" };
+    if (includeToken && sessionToken) headers["x-cbk-admin-token"] = sessionToken;
+
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ action, ...payload })
+    });
+
+    let data = {};
+    try { data = await response.json(); } catch {}
+
+    if (response.status === 401 && action !== "login") {
+      localStorage.removeItem(tokenKey);
+      sessionToken = "";
+      showLogin("Session expired. Enter your passcode again.");
+      throw new Error(data.error || "Session expired.");
+    }
+
+    if (!response.ok) throw new Error(data.error || "Request failed.");
+    return data;
+  }
+
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const email = document.getElementById("loginEmail").value.trim();
-    const msg = document.getElementById("loginMessage");
-    msg.textContent = "Sending secure link…";
-    const { error } = await client.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: location.origin + "/admin.html" }
-    });
-    msg.textContent = error ? error.message : "Check your email and tap the secure sign-in link.";
+    const pin = loginPin.value.trim();
+    if (!/^\d{6}$/.test(pin)) {
+      loginMessage.textContent = "Enter all 6 digits.";
+      return;
+    }
+
+    loginMessage.textContent = "Unlocking…";
+    loginForm.querySelector("button").disabled = true;
+
+    try {
+      const data = await api("login", { pin }, false);
+      sessionToken = data.token;
+      localStorage.setItem(tokenKey, sessionToken);
+      loginPin.value = "";
+      await openDashboard();
+    } catch (error) {
+      loginMessage.textContent = error.message;
+      loginPin.select();
+    } finally {
+      loginForm.querySelector("button").disabled = false;
+    }
+  });
+
+  loginPin.addEventListener("input", () => {
+    loginPin.value = loginPin.value.replace(/\D/g, "").slice(0, 6);
   });
 
   signOutButton.addEventListener("click", async () => {
-    await client.auth.signOut();
-    await syncAuth();
+    try { if (sessionToken) await api("logout"); } catch {}
+    localStorage.removeItem(tokenKey);
+    sessionToken = "";
+    showLogin("Studio Admin locked.");
   });
 
-  client.auth.onAuthStateChange(() => setTimeout(syncAuth, 0));
-
-  async function syncAuth() {
-    const { data: { user } } = await client.auth.getUser();
-    if (!user) return showLogin();
-
-    const { data: allowed, error } = await client
-      .from("cbk_admin_emails")
-      .select("email")
-      .eq("email", String(user.email || "").toLowerCase())
-      .maybeSingle();
-
-    if (error || !allowed) {
-      await client.auth.signOut();
-      document.getElementById("loginMessage").textContent = "This account is not authorized for Studio Admin.";
-      return showLogin();
-    }
-
+  async function openDashboard() {
     loginPanel.hidden = true;
     dashboard.hidden = false;
     signOutButton.hidden = false;
+    loginMessage.textContent = "";
     await refreshAll();
   }
 
-  function showLogin() {
+  function showLogin(message = "") {
     loginPanel.hidden = false;
     dashboard.hidden = true;
     signOutButton.hidden = true;
+    loginMessage.textContent = message;
+    setTimeout(() => loginPin.focus(), 50);
   }
 
   projectForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const fd = new FormData(projectForm);
-    const title = String(fd.get("title")).trim();
-    const baseSlug = slugify(title);
-    const slug = baseSlug + "-" + Date.now().toString().slice(-5);
-
-    const { error } = await client.from("cbk_shop_projects").insert({
-      title,
-      slug,
-      event_date: fd.get("event_date") || null,
-      description: String(fd.get("description") || "").trim() || null,
-      package_size: Number(fd.get("package_size")),
-      package_price: Number(fd.get("package_price")),
-      status: fd.get("status")
-    });
-
     const message = document.getElementById("projectMessage");
-    if (error) return message.textContent = error.message;
-    message.textContent = "Project created. You can upload photos now.";
-    projectForm.reset();
-    projectForm.elements.package_size.value = 5;
-    projectForm.elements.package_price.value = "20.00";
-    await refreshAll();
+    message.textContent = "Creating project…";
+
+    try {
+      await api("createProject", {
+        title: String(fd.get("title")).trim(),
+        event_date: fd.get("event_date") || null,
+        description: String(fd.get("description") || "").trim(),
+        package_size: Number(fd.get("package_size")),
+        package_price: Number(fd.get("package_price")),
+        status: fd.get("status")
+      });
+      message.textContent = "Project created. You can upload photos now.";
+      projectForm.reset();
+      projectForm.elements.package_size.value = 5;
+      projectForm.elements.package_price.value = "20.00";
+      await refreshAll();
+    } catch (error) {
+      message.textContent = error.message;
+    }
   });
 
   uploadForm.addEventListener("submit", async (event) => {
@@ -98,16 +129,17 @@
     const message = document.getElementById("uploadMessage");
     const progress = document.getElementById("uploadProgress");
     const bar = progress.querySelector("span");
+    const button = document.getElementById("uploadButton");
+
     if (!projectId || !files.length) return;
 
-    const project = projects.find((p) => p.id === projectId);
-    const existingCodes = new Set(photos.filter((p) => p.project_id === projectId).map((p) => p.photo_code.toLowerCase()));
+    const existingCodes = new Set(
+      photos.filter((p) => p.project_id === projectId).map((p) => p.photo_code.toLowerCase())
+    );
+
     progress.hidden = false;
     bar.style.width = "0%";
-    message.textContent = "Creating watermarked previews…";
-    document.getElementById("uploadButton").disabled = true;
-
-    let firstPath = project?.cover_path || null;
+    button.disabled = true;
     let uploaded = 0;
 
     for (let index = 0; index < files.length; index++) {
@@ -119,41 +151,35 @@
       existingCodes.add(code.toLowerCase());
 
       try {
+        message.textContent = `Preparing ${index + 1} of ${files.length}…`;
         const blob = await makeWatermarkedPreview(file);
-        const safeName = code.toLowerCase().replace(/[^a-z0-9_-]+/g, "-");
-        const path = `${projectId}/${Date.now()}-${index}-${safeName}.jpg`;
-        const { error: uploadError } = await client.storage.from(cfg.bucket).upload(path, blob, {
-          contentType: "image/jpeg",
-          cacheControl: "31536000",
-          upsert: false
-        });
+        const prepared = await api("prepareUpload", { project_id: projectId, photo_code: code });
+
+        const { error: uploadError } = await client.storage
+          .from(cfg.bucket)
+          .uploadToSignedUrl(prepared.path, prepared.token, blob, {
+            contentType: "image/jpeg"
+          });
+
         if (uploadError) throw uploadError;
 
-        const { error: rowError } = await client.from("cbk_shop_photos").insert({
+        await api("registerPhoto", {
           project_id: projectId,
           photo_code: code,
-          storage_path: path,
-          sort_order: photos.filter((p) => p.project_id === projectId).length + index
+          storage_path: prepared.path
         });
-        if (rowError) throw rowError;
 
-        if (!firstPath) firstPath = path;
         uploaded++;
+        bar.style.width = Math.round(((index + 1) / files.length) * 100) + "%";
+        message.textContent = `Uploaded ${uploaded} of ${files.length} previews…`;
       } catch (error) {
         message.textContent = `Stopped after ${uploaded} uploads: ${error.message}`;
         break;
       }
-
-      bar.style.width = Math.round(((index + 1) / files.length) * 100) + "%";
-      message.textContent = `Uploaded ${index + 1} of ${files.length} previews…`;
-    }
-
-    if (firstPath && !project?.cover_path) {
-      await client.from("cbk_shop_projects").update({ cover_path: firstPath, updated_at: new Date().toISOString() }).eq("id", projectId);
     }
 
     if (uploaded === files.length) message.textContent = `${uploaded} photos added. Gallery is ready.`;
-    document.getElementById("uploadButton").disabled = false;
+    button.disabled = false;
     document.getElementById("photoFiles").value = "";
     await refreshAll();
   });
@@ -197,21 +223,18 @@
   }
 
   async function refreshAll() {
-    const [projectResult, photoResult, orderResult] = await Promise.all([
-      client.from("cbk_shop_projects").select("*").order("created_at", { ascending: false }),
-      client.from("cbk_shop_photos").select("*").order("created_at", { ascending: false }),
-      client.from("cbk_shop_orders").select("*,cbk_shop_projects(title)").order("created_at", { ascending: false })
-    ]);
-
-    if (projectResult.error) return;
-    projects = projectResult.data || [];
-    photos = photoResult.data || [];
-    orders = orderResult.data || [];
-
-    renderStats();
-    renderProjectSelect();
-    renderProjects();
-    renderOrders();
+    try {
+      const data = await api("dashboard");
+      projects = data.projects || [];
+      photos = data.photos || [];
+      orders = data.orders || [];
+      renderStats();
+      renderProjectSelect();
+      renderProjects();
+      renderOrders();
+    } catch (error) {
+      if (sessionToken) alert(error.message);
+    }
   }
 
   function renderStats() {
@@ -222,11 +245,11 @@
   }
 
   function renderProjectSelect() {
-    const value = uploadProject.value;
+    const current = uploadProject.value;
     uploadProject.innerHTML = '<option value="">Choose project…</option>' + projects.map((p) =>
       `<option value="${p.id}">${escapeHtml(p.title)} — ${p.status}</option>`
     ).join("");
-    if (projects.some((p) => p.id === value)) uploadProject.value = value;
+    if (projects.some((p) => p.id === current)) uploadProject.value = current;
   }
 
   function renderProjects() {
@@ -245,7 +268,7 @@
         </div>
         <div class="cbk-admin-actions">
           <button class="button" type="button" data-upload="${p.id}">Add Photos</button>
-          <a class="button" href="gallery.html?project=${encodeURIComponent(p.slug)}" target="_blank">Preview</a>
+          <a class="button" href="gallery.html?project=${encodeURIComponent(p.slug)}" target="_blank" rel="noopener">Preview</a>
           <button class="button" type="button" data-status="${p.id}" data-next="${p.status === "open" ? "closed" : "open"}">${p.status === "open" ? "Close" : "Open"}</button>
           <button class="button cbk-danger" type="button" data-delete="${p.id}">Delete</button>
         </div>
@@ -258,18 +281,19 @@
     }));
 
     projectList.querySelectorAll("[data-status]").forEach((button) => button.addEventListener("click", async () => {
-      await client.from("cbk_shop_projects").update({ status: button.dataset.next, updated_at: new Date().toISOString() }).eq("id", button.dataset.status);
-      await refreshAll();
+      try {
+        await api("setProjectStatus", { project_id: button.dataset.status, status: button.dataset.next });
+        await refreshAll();
+      } catch (error) { alert(error.message); }
     }));
 
     projectList.querySelectorAll("[data-delete]").forEach((button) => button.addEventListener("click", async () => {
       const project = projects.find((p) => p.id === button.dataset.delete);
       if (!confirm(`Delete "${project?.title}" and its gallery photos? This cannot be undone.`)) return;
-      const paths = photos.filter((p) => p.project_id === button.dataset.delete).map((p) => p.storage_path);
-      if (paths.length) await client.storage.from(cfg.bucket).remove(paths);
-      const { error } = await client.from("cbk_shop_projects").delete().eq("id", button.dataset.delete);
-      if (error) alert(error.message);
-      await refreshAll();
+      try {
+        await api("deleteProject", { project_id: button.dataset.delete });
+        await refreshAll();
+      } catch (error) { alert(error.message); }
     }));
   }
 
@@ -302,12 +326,17 @@
       </article>`).join("");
 
     orderList.querySelectorAll("[data-paid]").forEach((button) => button.addEventListener("click", async () => {
-      await client.from("cbk_shop_orders").update({ payment_status: "confirmed" }).eq("id", button.dataset.paid);
-      await refreshAll();
+      try {
+        await api("updateOrder", { order_id: button.dataset.paid, payment_status: "confirmed" });
+        await refreshAll();
+      } catch (error) { alert(error.message); }
     }));
+
     orderList.querySelectorAll("[data-sent]").forEach((button) => button.addEventListener("click", async () => {
-      await client.from("cbk_shop_orders").update({ fulfillment_status: "sent" }).eq("id", button.dataset.sent);
-      await refreshAll();
+      try {
+        await api("updateOrder", { order_id: button.dataset.sent, fulfillment_status: "sent" });
+        await refreshAll();
+      } catch (error) { alert(error.message); }
     }));
   }
 
@@ -316,12 +345,14 @@
   function filenameCode(name) {
     return String(name).replace(/\.[^.]+$/, "").trim().replace(/\s+/g, "-").slice(0, 80) || "CBK-PHOTO";
   }
-  function slugify(value) {
-    return String(value).toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "gallery";
-  }
+
   function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" }[m]));
   }
 
-  syncAuth();
+  if (sessionToken) {
+    openDashboard().catch(() => showLogin("Enter your passcode to unlock Studio Admin."));
+  } else {
+    showLogin();
+  }
 })();
