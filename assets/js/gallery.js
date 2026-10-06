@@ -34,8 +34,8 @@
     titleEl.textContent = project.title;
     descEl.textContent = project.description || "Select your favorite photos below.";
     document.getElementById("packageText").textContent = `${project.package_size} photos minimum`;
-    document.getElementById("packagePrice").textContent = `${Number(project.package_price).toFixed(0)} + ${Number(project.extra_photo_price).toFixed(0)} each extra`;
-    document.getElementById("orderTitle").textContent = `${project.package_size} photos — ${Number(project.package_price).toFixed(0)}`;
+    document.getElementById("packagePrice").textContent = `$${Number(project.package_price).toFixed(0)} + $${Number(project.extra_photo_price).toFixed(0)} each extra`;
+    document.getElementById("orderTitle").textContent = `${project.package_size} photos — $${Number(project.package_price).toFixed(0)}`;
 
     const { data, error } = await client
       .from("cbk_shop_photos")
