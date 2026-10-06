@@ -287,7 +287,7 @@
         <div>
           <span class="cbk-status cbk-status-${p.status}">${p.status}</span>
           <h3>${escapeHtml(p.title)}</h3>
-          <p>${count} photos · ${p.package_size} for ${Number(p.package_price).toFixed(0)} · +${Number(p.extra_photo_price || 0).toFixed(0)} each extra</p>
+          <p>${count} photos · ${p.package_size} for $${Number(p.package_price).toFixed(0)} · +$${Number(p.extra_photo_price || 0).toFixed(0)} each extra</p>
         </div>
         <div class="cbk-admin-actions">
           <button class="button" type="button" data-upload="${p.id}">Add Photos</button>
