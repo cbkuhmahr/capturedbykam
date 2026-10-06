@@ -73,15 +73,16 @@
         <div class="cbk-admin-card">
           <p class="eyebrow">Upload photos</p>
           <h2>Build the gallery.</h2>
-          <p class="cbk-admin-help">Choose a project and select a batch of finished photos. The browser creates smaller watermarked previews before upload; your original files stay on your computer.</p>
+          <p class="cbk-admin-help">Choose a project and select up to <strong>20 finished photos at once</strong>. The browser creates smaller watermarked previews before upload; your original files stay on your computer.</p>
           <form id="uploadForm" class="cbk-admin-form">
             <label><span>Project</span><select id="uploadProject" required><option value="">Choose project…</option></select></label>
             <label class="cbk-file-drop">
-              <span>Select Finished Photos</span>
+              <span>Select Finished Photos — up to 20</span>
               <input id="photoFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple required />
+              <small id="photoSelectionCount">No photos selected.</small>
               <small>Photo IDs come from the original filenames so orders match your master files.</small>
             </label>
-            <button id="uploadButton" class="button button-dark" type="submit">Create Watermarked Previews</button>
+            <button id="uploadButton" class="button button-dark" type="submit">Upload Batch</button>
             <div id="uploadProgress" class="cbk-progress" hidden><span></span></div>
             <p id="uploadMessage" class="cbk-form-message" role="status"></p>
           </form>
