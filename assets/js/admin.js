@@ -17,11 +17,15 @@
   const orderList = document.getElementById("adminOrders");
   const photoFilesInput = document.getElementById("photoFiles");
   const photoSelectionCount = document.getElementById("photoSelectionCount");
+  const editProjectDialog = document.getElementById("editProjectDialog");
+  const editProjectForm = document.getElementById("editProjectForm");
+  const editProjectMessage = document.getElementById("editProjectMessage");
 
   let sessionToken = localStorage.getItem(tokenKey) || "";
   let projects = [];
   let photos = [];
   let orders = [];
+  let orderFilter = "new";
 
   async function api(action, payload = {}, includeToken = true) {
     const headers = { "Content-Type": "application/json" };
@@ -291,12 +295,18 @@
         </div>
         <div class="cbk-admin-actions">
           <button class="button" type="button" data-upload="${p.id}">Add Photos</button>
+          <button class="button" type="button" data-edit="${p.id}">Edit</button>
+          <button class="button" type="button" data-photos="${p.id}">Manage Photos</button>
           <a class="button" href="gallery.html?project=${encodeURIComponent(p.slug)}" target="_blank" rel="noopener">Preview</a>
           <button class="button" type="button" data-status="${p.id}" data-next="${p.status === "open" ? "closed" : "open"}">${p.status === "open" ? "Close" : "Open"}</button>
           <button class="button cbk-danger" type="button" data-delete="${p.id}">Delete</button>
         </div>
+        <div class="cbk-project-photo-panel" id="photo-panel-${p.id}" hidden></div>
       </article>`;
     }).join("");
+
+    projectList.querySelectorAll("[data-edit]").forEach((button) => button.addEventListener("click", () => openEditProject(button.dataset.edit)));
+    projectList.querySelectorAll("[data-photos]").forEach((button) => button.addEventListener("click", () => toggleProjectPhotos(button.dataset.photos)));
 
     projectList.querySelectorAll("[data-upload]").forEach((button) => button.addEventListener("click", () => {
       uploadProject.value = button.dataset.upload;
@@ -320,17 +330,24 @@
     }));
   }
 
+  function orderStage(order) {
+    if (order.fulfillment_status === "sent") return "sent";
+    if (order.payment_status === "confirmed") return "paid";
+    return "new";
+  }
+
   function renderOrders() {
-    if (!orders.length) {
-      orderList.innerHTML = '<div class="cbk-admin-empty">No customer orders yet.</div>';
+    const visibleOrders = orderFilter === "all" ? orders : orders.filter((o) => orderStage(o) === orderFilter);
+    if (!visibleOrders.length) {
+      orderList.innerHTML = '<div class="cbk-admin-empty">No orders in this status.</div>';
       return;
     }
 
-    orderList.innerHTML = orders.map((o) => `
+    orderList.innerHTML = visibleOrders.map((o) => `
       <article class="cbk-order-card">
         <div class="cbk-order-top">
           <div>
-            <span class="cbk-status cbk-status-${o.fulfillment_status}">${o.fulfillment_status}</span>
+            <span class="cbk-status cbk-status-${orderStage(o)}">${orderStage(o).toUpperCase()}</span>
             <h3>${escapeHtml(o.order_code)} · ${escapeHtml(o.customer_name)}</h3>
             <p>${escapeHtml(o.cbk_shop_projects?.title || "Gallery")} · $${Number(o.amount).toFixed(2)} · ${escapeHtml(o.payment_method)}</p>
           </div>
@@ -362,6 +379,88 @@
       } catch (error) { alert(error.message); }
     }));
   }
+
+
+  function openEditProject(projectId) {
+    const p = projects.find((item) => item.id === projectId);
+    if (!p) return;
+    editProjectForm.elements.project_id.value = p.id;
+    editProjectForm.elements.title.value = p.title || "";
+    editProjectForm.elements.event_date.value = p.event_date || "";
+    editProjectForm.elements.description.value = p.description || "";
+    editProjectForm.elements.package_size.value = p.package_size;
+    editProjectForm.elements.package_price.value = Number(p.package_price).toFixed(2);
+    editProjectForm.elements.extra_photo_price.value = Number(p.extra_photo_price || 0).toFixed(2);
+    editProjectForm.elements.status.value = p.status;
+    editProjectMessage.textContent = "";
+    editProjectDialog.showModal();
+  }
+
+  editProjectForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const fd = new FormData(editProjectForm);
+    editProjectMessage.textContent = "Saving changes…";
+    try {
+      await api("updateProject", {
+        project_id: fd.get("project_id"),
+        title: String(fd.get("title") || "").trim(),
+        event_date: fd.get("event_date") || null,
+        description: String(fd.get("description") || "").trim(),
+        package_size: Number(fd.get("package_size")),
+        package_price: Number(fd.get("package_price")),
+        extra_photo_price: Number(fd.get("extra_photo_price")),
+        status: fd.get("status")
+      });
+      editProjectDialog.close();
+      await refreshAll();
+    } catch (error) {
+      editProjectMessage.textContent = error.message;
+    }
+  });
+
+  document.getElementById("closeEditProject").addEventListener("click", () => editProjectDialog.close());
+
+  function toggleProjectPhotos(projectId) {
+    const panel = document.getElementById("photo-panel-" + projectId);
+    if (!panel) return;
+    if (!panel.hidden) {
+      panel.hidden = true;
+      return;
+    }
+
+    const projectPhotos = photos.filter((photo) => photo.project_id === projectId);
+    if (!projectPhotos.length) {
+      panel.innerHTML = '<div class="cbk-admin-empty">No photos in this gallery yet.</div>';
+    } else {
+      panel.innerHTML = '<div class="cbk-admin-photo-grid">' + projectPhotos.map((photo) => {
+        const url = client.storage.from(cfg.bucket).getPublicUrl(photo.storage_path).data.publicUrl;
+        return '<article class="cbk-admin-photo"><img src="' + url + '" alt=""><span>' + escapeHtml(photo.photo_code) + '</span><button class="button cbk-danger" type="button" data-delete-photo="' + photo.id + '">Delete</button></article>';
+      }).join("") + '</div>';
+
+      panel.querySelectorAll("[data-delete-photo]").forEach((button) => button.addEventListener("click", async () => {
+        const photo = photos.find((item) => item.id === button.dataset.deletePhoto);
+        if (!photo || !confirm('Delete photo "' + photo.photo_code + '" from this gallery?')) return;
+        try {
+          await api("deletePhoto", { photo_id: photo.id });
+          await refreshAll();
+          const refreshedPanel = document.getElementById("photo-panel-" + projectId);
+          if (refreshedPanel) {
+            refreshedPanel.hidden = true;
+            toggleProjectPhotos(projectId);
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      }));
+    }
+    panel.hidden = false;
+  }
+
+  document.querySelectorAll("[data-order-filter]").forEach((button) => button.addEventListener("click", () => {
+    orderFilter = button.dataset.orderFilter;
+    document.querySelectorAll("[data-order-filter]").forEach((item) => item.classList.toggle("is-active", item === button));
+    renderOrders();
+  }));
 
   document.getElementById("refreshButton").addEventListener("click", refreshAll);
 
