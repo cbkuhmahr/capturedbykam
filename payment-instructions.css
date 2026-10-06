@@ -128,3 +128,5 @@ body {
     text-align: left;
   }
 }
+
+.piLead{margin:0 0 18px;text-align:center;line-height:1.45}.piSteps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:18px 0}.piSteps span{border:1px solid var(--pi-line);padding:8px 6px;text-align:center;font-size:.72rem;font-weight:900}.piSteps .active{background:var(--pi-ink);color:#fff}.piSecondary{background:transparent;color:var(--pi-ink);margin-left:8px}@media(max-width:520px){.piSteps{grid-template-columns:1fr 1fr}.piAction{width:100%;margin-left:0}.piSecondary{margin-left:0}}
