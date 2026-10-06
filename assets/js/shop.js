@@ -13,7 +13,7 @@
   async function loadProjects() {
     const { data, error } = await client
       .from("cbk_shop_projects")
-      .select("id,title,slug,event_date,description,package_size,package_price,cover_path,created_at")
+      .select("id,title,slug,event_date,description,package_size,package_price,extra_photo_price,cover_path,created_at")
       .eq("status", "open")
       .order("event_date", { ascending: false, nullsFirst: false })
       .order("created_at", { ascending: false });
@@ -40,7 +40,7 @@
             <h3>${escapeHtml(project.title)}</h3>
             <p>${escapeHtml(project.description || "View the gallery and choose your favorites.")}</p>
             <div class="cbk-project-bottom">
-              <strong>${project.package_size} photos — $${Number(project.package_price).toFixed(0)}</strong>
+              <strong>${project.package_size} photos — ${Number(project.package_price).toFixed(0)} · +${Number(project.extra_photo_price || 0).toFixed(0)} each extra</strong>
               <span>View Photos →</span>
             </div>
           </div>
