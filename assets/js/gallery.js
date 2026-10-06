@@ -97,12 +97,12 @@
     if (selected.size < minimum) {
       selectionCount.textContent = `${selected.size} selected — choose at least ${minimum}`;
     } else {
-      selectionCount.textContent = `${selected.size} selected — ${total.toFixed(2)}`;
+      selectionCount.textContent = `${selected.size} selected — $${total.toFixed(2)}`;
     }
     reviewButton.disabled = selected.size < minimum;
     document.getElementById("orderTitle").textContent = selected.size >= minimum
-      ? `${selected.size} photos — ${total.toFixed(2)}`
-      : `${minimum} photos — ${Number(project.package_price).toFixed(2)}`;
+      ? `${selected.size} photos — $${total.toFixed(2)}`
+      : `${minimum} photos — $${Number(project.package_price).toFixed(2)}`;
     selectedCodesEl.innerHTML = [...selected.values()].map((p) => `<span>${escapeHtml(p.photo_code)}</span>`).join("");
   }
 
