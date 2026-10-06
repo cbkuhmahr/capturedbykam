@@ -112,12 +112,14 @@
         description: String(fd.get("description") || "").trim(),
         package_size: Number(fd.get("package_size")),
         package_price: Number(fd.get("package_price")),
+        extra_photo_price: Number(fd.get("extra_photo_price")),
         status: fd.get("status")
       });
       message.textContent = "Project created. You can upload photos now.";
       projectForm.reset();
       projectForm.elements.package_size.value = 5;
       projectForm.elements.package_price.value = "20.00";
+      projectForm.elements.extra_photo_price.value = "2.00";
       await refreshAll();
     } catch (error) {
       message.textContent = error.message;
@@ -285,7 +287,7 @@
         <div>
           <span class="cbk-status cbk-status-${p.status}">${p.status}</span>
           <h3>${escapeHtml(p.title)}</h3>
-          <p>${count} photos · ${p.package_size} for $${Number(p.package_price).toFixed(0)}</p>
+          <p>${count} photos · ${p.package_size} for ${Number(p.package_price).toFixed(0)} · +${Number(p.extra_photo_price || 0).toFixed(0)} each extra</p>
         </div>
         <div class="cbk-admin-actions">
           <button class="button" type="button" data-upload="${p.id}">Add Photos</button>
