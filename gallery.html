@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Select Photos | Capturedby_Kam</title>
+  <meta name="description" content="Select your favorite photos from a Capturedby_Kam event gallery." />
+  <link rel="icon" type="image/svg+xml" href="assets/img/cbk-camera.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/cbk-shop.css" />
+</head>
+<body>
+  <div class="site-shell">
+    <div class="slogan-strip">
+      <strong>Capturedby_Kam</strong>
+      <span>Photo Selection</span>
+      <a class="button button-dark" href="shop.html">All Galleries</a>
+    </div>
+
+    <section class="feed-card section-tight cbk-gallery-hero">
+      <p class="eyebrow">Event gallery</p>
+      <h1 id="galleryTitle">Loading gallery…</h1>
+      <p id="galleryDescription" class="cbk-gallery-description"></p>
+      <div class="cbk-gallery-meta">
+        <strong id="packageText">Select 5 photos</strong>
+        <span id="packagePrice">$20</span>
+      </div>
+    </section>
+
+    <section class="cbk-photo-section">
+      <div class="cbk-selection-bar">
+        <div>
+          <strong id="selectionCount">0 / 5 selected</strong>
+          <span>Tap a photo to add or remove it.</span>
+        </div>
+        <button id="reviewButton" class="button button-dark" type="button" disabled>Review Order</button>
+      </div>
+      <div id="photoGrid" class="cbk-photo-grid" aria-live="polite">
+        <div class="cbk-empty">Loading photos…</div>
+      </div>
+    </section>
+  </div>
+
+  <div id="orderDrawer" class="cbk-order-drawer" aria-hidden="true">
+    <button id="drawerBackdrop" class="cbk-drawer-backdrop" aria-label="Close order review"></button>
+    <section class="cbk-order-panel" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
+      <button id="closeDrawer" class="cbk-close" type="button" aria-label="Close">×</button>
+      <p class="eyebrow">Your selection</p>
+      <h2 id="orderTitle">5 photos — $20</h2>
+      <div id="selectedCodes" class="cbk-code-list"></div>
+
+      <form id="orderForm" class="cbk-order-form">
+        <label>
+          <span>Name</span>
+          <input name="customer_name" autocomplete="name" required />
+        </label>
+        <label>
+          <span>Email</span>
+          <input name="customer_email" type="email" autocomplete="email" />
+        </label>
+        <label>
+          <span>Phone</span>
+          <input name="customer_phone" type="tel" autocomplete="tel" />
+        </label>
+
+        <fieldset>
+          <legend>Deliver my photos by</legend>
+          <label class="cbk-choice"><input type="radio" name="delivery_method" value="email" checked /> Email</label>
+          <label class="cbk-choice"><input type="radio" name="delivery_method" value="text" /> Text</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Payment method</legend>
+          <label class="cbk-choice"><input type="radio" name="payment_method" value="Cash App" checked /> Cash App</label>
+          <label class="cbk-choice"><input type="radio" name="payment_method" value="Apple Pay" /> Apple Pay / Apple Cash</label>
+        </fieldset>
+
+        <p class="cbk-order-note">After you submit, you'll get your payment code and payment instructions. Your unwatermarked files are delivered after payment is confirmed.</p>
+        <button id="submitOrder" class="button button-dark cbk-submit" type="submit">Submit Order & Pay</button>
+        <p id="orderMessage" class="cbk-form-message" role="status"></p>
+      </form>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.min.js"></script>
+  <script src="assets/js/cbk-supabase.js"></script>
+  <script src="assets/js/gallery.js" defer></script>
+</body>
+</html>
