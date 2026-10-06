@@ -24,6 +24,7 @@
       <p class="eyebrow">Event gallery</p>
       <h1 id="galleryTitle">Loading gallery…</h1>
       <p id="galleryDescription" class="cbk-gallery-description"></p>
+      <div class="cbk-checkout-steps" aria-label="Checkout progress"><span class="is-active">1 · Select</span><span>2 · Checkout</span><span>3 · Pay</span><span>4 · Delivery</span></div>
       <div class="cbk-gallery-meta">
         <strong id="packageText">5 photos minimum</strong>
         <span id="packagePrice">$20 + $2 each extra</span>
@@ -48,8 +49,11 @@
     <button id="drawerBackdrop" class="cbk-drawer-backdrop" aria-label="Close order review"></button>
     <section class="cbk-order-panel" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
       <button id="closeDrawer" class="cbk-close" type="button" aria-label="Close">×</button>
-      <p class="eyebrow">Your selection</p>
+      <p class="eyebrow">Checkout</p>
+      <div class="cbk-checkout-steps cbk-checkout-steps-compact" aria-label="Checkout progress"><span>1 · Select</span><span class="is-active">2 · Checkout</span><span>3 · Pay</span><span>4 · Delivery</span></div>
       <h2 id="orderTitle">5 photos — $20</h2>
+      <div class="cbk-checkout-summary"><div><span>Selected photos</span><strong id="orderPhotoCount">5</strong></div><div><span>Base package</span><strong id="orderBasePrice">$20.00</strong></div><div id="orderExtrasRow"><span>Additional photos</span><strong id="orderExtras">$0.00</strong></div><div class="cbk-checkout-total"><span>Total</span><strong id="orderTotal">$20.00</strong></div></div>
+      <p class="cbk-checkout-label">Photo IDs</p>
       <div id="selectedCodes" class="cbk-code-list"></div>
 
       <form id="orderForm" class="cbk-order-form">
@@ -72,14 +76,14 @@
           <label class="cbk-choice"><input type="radio" name="delivery_method" value="text" /> Text</label>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="cbk-payment-options">
           <legend>Payment method</legend>
-          <label class="cbk-choice"><input type="radio" name="payment_method" value="Cash App" checked /> Cash App</label>
-          <label class="cbk-choice"><input type="radio" name="payment_method" value="Apple Pay" /> Apple Pay / Apple Cash</label>
+          <label class="cbk-payment-choice"><input type="radio" name="payment_method" value="Apple Pay" checked /><span><strong>Apple Pay</strong><small>Pay from your Apple device</small></span></label>
+          <label class="cbk-payment-choice"><input type="radio" name="payment_method" value="Cash App" /><span><strong>Cash App</strong><small>Pay with $CapturedbyKam</small></span></label>
         </fieldset>
 
         <p class="cbk-order-note">After you submit, you'll get your payment code and payment instructions. Your unwatermarked files are delivered after payment is confirmed.</p>
-        <button id="submitOrder" class="button button-dark cbk-submit" type="submit">Submit Order & Pay</button>
+        <button id="submitOrder" class="button button-dark cbk-submit" type="submit">Place Order — $20.00</button>
         <p id="orderMessage" class="cbk-form-message" role="status"></p>
       </form>
     </section>
