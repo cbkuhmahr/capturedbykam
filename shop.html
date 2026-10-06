@@ -3,49 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CBK Shop | Capturedby_Kam</title>
-  <meta name="description" content="CBK Shop for prints, drops, and visual goods from Capturedby_Kam." />
+  <title>Photo Galleries | Capturedby_Kam</title>
+  <meta name="description" content="Shop event photo galleries from Capturedby_Kam. Select 5 digital photos for $20." />
   <link rel="icon" type="image/svg+xml" href="assets/img/cbk-camera.svg" />
-  <link rel="shortcut icon" href="assets/img/cbk-camera.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/cbk-shop.css" />
 </head>
 <body>
   <input class="menu-state" type="checkbox" id="menu-toggle" aria-label="Open menu" />
-
   <div class="site-shell" id="top">
     <div class="slogan-strip" aria-label="Captured by Kam brand mark">
       <strong>Capturedby_Kam</strong>
       <span>Every frame, Every Project—Timeless Authenticity, Est. 2025.</span>
+      <label class="button button-dark header-menu-button" for="menu-toggle" aria-label="Open menu">Menu</label>
     </div>
 
-    <section class="feed-card section-tight" aria-label="CBK shop introduction">
+    <section class="feed-card section-tight cbk-shop-hero">
       <div class="feed-head">
         <div class="feed-title">
-          <p class="eyebrow">Shop</p>
-          <h1>CBK Shop.</h1>
+          <p class="eyebrow">Photo Shop</p>
+          <h1>Find your event.</h1>
         </div>
-        <label class="button button-dark" for="menu-toggle" aria-label="Open menu">Menu</label>
       </div>
-
-      <div class="booking-note shop-note">
-        <strong>Coming soon</strong>
-        <span>Prints, drops, and visual goods from Capturedby_Kam.</span>
+      <div class="cbk-shop-intro">
+        <p>Choose your event, select your favorite photos, and submit your order.</p>
+        <div class="cbk-price-lockup">
+          <strong>5 Digital Photos</strong>
+          <span>$20</span>
+        </div>
       </div>
     </section>
 
-    <section class="booking-section" aria-label="Shop direction">
-      <div class="booking-copy">
-        <p class="eyebrow">Direction</p>
-        <h2>Keep it intentional.</h2>
-        <p>This page will stay simple until the products are real and ready.</p>
+    <section class="cbk-gallery-section" aria-label="Available photo galleries">
+      <div class="cbk-section-head">
+        <div>
+          <p class="eyebrow">Open galleries</p>
+          <h2>Current projects.</h2>
+        </div>
+        <p>Watermarked previews are shown online. Purchased photos are delivered without the watermark.</p>
       </div>
-
-      <div class="booking-note">
-        <strong>First lanes</strong>
-        <span>Prints. No Quiet Saints drops. Small visual goods. Nothing random.</span>
+      <div id="projectGrid" class="cbk-project-grid" aria-live="polite">
+        <div class="cbk-empty">Loading open galleries…</div>
       </div>
     </section>
   </div>
@@ -57,7 +58,7 @@
       <a href="book.html">Book</a>
       <a href="index.html#services">Services</a>
       <a href="about.html">About</a>
-      <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
+      <a href="shop.html">Photo Shop</a>
       <a href="https://www.instagram.com/CapturedBy_Kam" target="_blank" rel="noopener">Instagram</a>
     </div>
   </aside>
@@ -69,24 +70,19 @@
         <span>Every frame, Every Project—Timeless Authenticity, Est. 2025.</span>
       </div>
       <nav class="footer-links" aria-label="Footer links">
-        <a href="index.html">Home</a>
-        <span aria-hidden="true">/</span>
-        <a href="book.html">Booking</a>
-        <span aria-hidden="true">/</span>
-        <a href="index.html#services">Services</a>
-        <span aria-hidden="true">/</span>
-        <a href="about.html">About</a>
-        <span aria-hidden="true">/</span>
-        <a href="https://my.photoday.com/s/capturedbykam">PhotoDay</a>
-        <span aria-hidden="true">/</span>
-        <a href="shop.html">Shop</a>
-        <span aria-hidden="true">/</span>
-        <a href="https://www.instagram.com/CapturedBy_Kam" target="_blank" rel="noopener">Instagram</a>
+        <a href="index.html">Home</a><span>/</span>
+        <a href="book.html">Booking</a><span>/</span>
+        <a href="about.html">About</a><span>/</span>
+        <a href="shop.html">Photo Shop</a><span>/</span>
+        <a href="admin.html">Studio Admin</a>
       </nav>
       <a class="footer-email" href="mailto:kam@capturedbykam.com">kam@capturedbykam.com</a>
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.min.js"></script>
+  <script src="assets/js/cbk-supabase.js"></script>
+  <script src="assets/js/shop.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
