@@ -179,20 +179,28 @@
       try {
         message.textContent = `Preparing ${index + 1} of ${files.length}…`;
         const blob = await makeWatermarkedPreview(file);
-        const prepared = await api("prepareUpload", { project_id: projectId, photo_code: code });
+        const prepared = await api("prepareUpload", { project_id: projectId, photo_code: code, original_name: file.name });
 
-        const { error: uploadError } = await client.storage
+        const { error: previewUploadError } = await client.storage
           .from(cfg.bucket)
-          .uploadToSignedUrl(prepared.path, prepared.token, blob, {
+          .uploadToSignedUrl(prepared.preview.path, prepared.preview.token, blob, {
             contentType: "image/jpeg"
           });
+        if (previewUploadError) throw previewUploadError;
 
-        if (uploadError) throw uploadError;
+        const originalType = file.type || "application/octet-stream";
+        const { error: originalUploadError } = await client.storage
+          .from("cbk-gallery-originals")
+          .uploadToSignedUrl(prepared.original.path, prepared.original.token, file, {
+            contentType: originalType
+          });
+        if (originalUploadError) throw originalUploadError;
 
         await api("registerPhoto", {
           project_id: projectId,
           photo_code: code,
-          storage_path: prepared.path
+          storage_path: prepared.preview.path,
+          original_path: prepared.original.path
         });
 
         uploaded++;
@@ -434,7 +442,8 @@
     } else {
       panel.innerHTML = '<div class="cbk-admin-photo-grid">' + projectPhotos.map((photo) => {
         const url = client.storage.from(cfg.bucket).getPublicUrl(photo.storage_path).data.publicUrl;
-        return '<article class="cbk-admin-photo"><img src="' + url + '" alt=""><span>' + escapeHtml(photo.photo_code) + '</span><button class="button cbk-danger" type="button" data-delete-photo="' + photo.id + '">Delete</button></article>';
+        const originalStatus = photo.original_path ? "Original ready" : "Original missing";
+        return '<article class="cbk-admin-photo"><img src="' + url + '" alt=""><span>' + escapeHtml(photo.photo_code) + '</span><small class="' + (photo.original_path ? 'cbk-original-ready' : 'cbk-original-missing') + '">' + originalStatus + '</small><button class="button cbk-danger" type="button" data-delete-photo="' + photo.id + '">Delete</button></article>';
       }).join("") + '</div>';
 
       panel.querySelectorAll("[data-delete-photo]").forEach((button) => button.addEventListener("click", async () => {
