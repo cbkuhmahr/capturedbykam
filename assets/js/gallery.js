@@ -23,7 +23,7 @@
 
     const { data: projects, error: projectError } = await client
       .from("cbk_shop_projects")
-      .select("id,title,description,package_size,package_price,event_date")
+      .select("id,title,description,package_size,package_price,extra_photo_price,event_date")
       .eq("slug", slug)
       .eq("status", "open")
       .limit(1);
@@ -33,9 +33,9 @@
 
     titleEl.textContent = project.title;
     descEl.textContent = project.description || "Select your favorite photos below.";
-    document.getElementById("packageText").textContent = `Select ${project.package_size} photos`;
-    document.getElementById("packagePrice").textContent = `$${Number(project.package_price).toFixed(0)}`;
-    document.getElementById("orderTitle").textContent = `${project.package_size} photos — $${Number(project.package_price).toFixed(0)}`;
+    document.getElementById("packageText").textContent = `${project.package_size} photos minimum`;
+    document.getElementById("packagePrice").textContent = `${Number(project.package_price).toFixed(0)} + ${Number(project.extra_photo_price).toFixed(0)} each extra`;
+    document.getElementById("orderTitle").textContent = `${project.package_size} photos — ${Number(project.package_price).toFixed(0)}`;
 
     const { data, error } = await client
       .from("cbk_shop_photos")
@@ -75,11 +75,6 @@
       button.classList.remove("is-selected");
       button.setAttribute("aria-pressed", "false");
     } else {
-      if (selected.size >= project.package_size) {
-        button.classList.add("cbk-bump");
-        setTimeout(() => button.classList.remove("cbk-bump"), 240);
-        return;
-      }
       selected.set(id, photo);
       button.classList.add("is-selected");
       button.setAttribute("aria-pressed", "true");
@@ -87,10 +82,27 @@
     updateSelection();
   }
 
+  function calculateTotal() {
+    if (!project) return 0;
+    const baseCount = Number(project.package_size);
+    const basePrice = Number(project.package_price);
+    const extraPrice = Number(project.extra_photo_price || 0);
+    const extraCount = Math.max(selected.size - baseCount, 0);
+    return basePrice + (extraCount * extraPrice);
+  }
+
   function updateSelection() {
-    const max = project?.package_size || 5;
-    selectionCount.textContent = `${selected.size} / ${max} selected`;
-    reviewButton.disabled = selected.size !== max;
+    const minimum = project?.package_size || 5;
+    const total = calculateTotal();
+    if (selected.size < minimum) {
+      selectionCount.textContent = `${selected.size} selected — choose at least ${minimum}`;
+    } else {
+      selectionCount.textContent = `${selected.size} selected — ${total.toFixed(2)}`;
+    }
+    reviewButton.disabled = selected.size < minimum;
+    document.getElementById("orderTitle").textContent = selected.size >= minimum
+      ? `${selected.size} photos — ${total.toFixed(2)}`
+      : `${minimum} photos — ${Number(project.package_price).toFixed(2)}`;
     selectedCodesEl.innerHTML = [...selected.values()].map((p) => `<span>${escapeHtml(p.photo_code)}</span>`).join("");
   }
 
@@ -113,7 +125,7 @@
   orderForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     orderMessage.textContent = "";
-    if (selected.size !== project.package_size) return;
+    if (selected.size < project.package_size) return;
 
     const form = new FormData(orderForm);
     const deliveryMethod = form.get("delivery_method");
@@ -145,7 +157,7 @@
       customer_phone: phone || null,
       delivery_method: deliveryMethod,
       selected_photo_codes: [...selected.values()].map((p) => p.photo_code),
-      amount: Number(project.package_price),
+      amount: calculateTotal(),
       payment_method: paymentMethod
     });
 
@@ -156,7 +168,7 @@
       return;
     }
 
-    const total = "$" + Number(project.package_price).toFixed(2);
+    const total = "$" + calculateTotal().toFixed(2);
     location.href = `payment-instructions.html?method=${encodeURIComponent(paymentMethod)}&total=${encodeURIComponent(total)}&code=${encodeURIComponent(orderCode)}`;
   });
 
