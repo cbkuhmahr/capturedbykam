@@ -11,6 +11,12 @@
   const selectedCodesEl = document.getElementById("selectedCodes");
   const orderForm = document.getElementById("orderForm");
   const orderMessage = document.getElementById("orderMessage");
+  const orderPhotoCount = document.getElementById("orderPhotoCount");
+  const orderBasePrice = document.getElementById("orderBasePrice");
+  const orderExtras = document.getElementById("orderExtras");
+  const orderExtrasRow = document.getElementById("orderExtrasRow");
+  const orderTotal = document.getElementById("orderTotal");
+  const submitOrderButton = document.getElementById("submitOrder");
 
   let project = null;
   let photos = [];
@@ -82,13 +88,15 @@
     updateSelection();
   }
 
+  function calculateExtras() {
+    if (!project) return { count: 0, amount: 0 };
+    const count = Math.max(selected.size - Number(project.package_size), 0);
+    return { count, amount: count * Number(project.extra_photo_price || 0) };
+  }
+
   function calculateTotal() {
     if (!project) return 0;
-    const baseCount = Number(project.package_size);
-    const basePrice = Number(project.package_price);
-    const extraPrice = Number(project.extra_photo_price || 0);
-    const extraCount = Math.max(selected.size - baseCount, 0);
-    return basePrice + (extraCount * extraPrice);
+    return Number(project.package_price) + calculateExtras().amount;
   }
 
   function updateSelection() {
@@ -103,7 +111,14 @@
     document.getElementById("orderTitle").textContent = selected.size >= minimum
       ? `${selected.size} photos — $${total.toFixed(2)}`
       : `${minimum} photos — $${Number(project.package_price).toFixed(2)}`;
+    const extras = calculateExtras();
     selectedCodesEl.innerHTML = [...selected.values()].map((p) => `<span>${escapeHtml(p.photo_code)}</span>`).join("");
+    orderPhotoCount.textContent = String(selected.size);
+    orderBasePrice.textContent = "$" + Number(project?.package_price || 0).toFixed(2);
+    orderExtras.textContent = extras.count ? `${extras.count} × ${Number(project?.extra_photo_price || 0).toFixed(2)} = ${extras.amount.toFixed(2)}` : "$0.00";
+    orderExtrasRow.hidden = extras.count === 0;
+    orderTotal.textContent = "$" + total.toFixed(2);
+    submitOrderButton.textContent = selected.size >= minimum ? `Place Order — ${total.toFixed(2)}` : `Select ${minimum - selected.size} More`;
   }
 
   reviewButton.addEventListener("click", openDrawer);
@@ -144,7 +159,7 @@
     const orderCode = "CBK-" + [...crypto.getRandomValues(new Uint8Array(4))]
       .map((n) => n.toString(16).padStart(2, "0")).join("").toUpperCase();
 
-    const submit = document.getElementById("submitOrder");
+    const submit = submitOrderButton;
     submit.disabled = true;
     submit.textContent = "Saving Order…";
 
@@ -164,7 +179,7 @@
     if (error) {
       orderMessage.textContent = "Your order could not be saved. Please try again.";
       submit.disabled = false;
-      submit.textContent = "Submit Order & Pay";
+      updateSelection();
       return;
     }
 
