@@ -21,20 +21,20 @@
       </div>
       <div class="cbk-admin-header-actions">
         <a class="button" href="shop.html">View Shop</a>
-        <button id="signOutButton" class="button button-dark" type="button" hidden>Sign Out</button>
+        <button id="signOutButton" class="button button-dark" type="button" hidden>Lock Admin</button>
       </div>
     </header>
 
     <section id="loginPanel" class="cbk-admin-card cbk-login-card">
       <p class="eyebrow">Private access</p>
-      <h2>Sign in to manage your galleries.</h2>
-      <p>No backend dashboard needed. Enter your CBK email and we'll send a secure sign-in link.</p>
+      <h2>Enter your 6-digit passcode.</h2>
+      <p>Studio Admin uses a private server-side passcode check and temporary session. No email link required.</p>
       <form id="loginForm" class="cbk-admin-form">
         <label>
-          <span>Email</span>
-          <input id="loginEmail" type="email" value="kam@capturedbykam.com" autocomplete="email" required />
+          <span>Passcode</span>
+          <input id="loginPin" class="cbk-pin-input" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" aria-label="6-digit admin passcode" required />
         </label>
-        <button class="button button-dark" type="submit">Send Sign-In Link</button>
+        <button class="button button-dark" type="submit">Unlock Studio Admin</button>
         <p id="loginMessage" class="cbk-form-message" role="status"></p>
       </form>
     </section>
