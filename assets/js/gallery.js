@@ -1,0 +1,173 @@
+(() => {
+  const cfg = window.CBK_SUPABASE;
+  const client = window.supabase.createClient(cfg.url, cfg.key);
+  const slug = new URLSearchParams(location.search).get("project");
+  const titleEl = document.getElementById("galleryTitle");
+  const descEl = document.getElementById("galleryDescription");
+  const grid = document.getElementById("photoGrid");
+  const selectionCount = document.getElementById("selectionCount");
+  const reviewButton = document.getElementById("reviewButton");
+  const drawer = document.getElementById("orderDrawer");
+  const selectedCodesEl = document.getElementById("selectedCodes");
+  const orderForm = document.getElementById("orderForm");
+  const orderMessage = document.getElementById("orderMessage");
+
+  let project = null;
+  let photos = [];
+  const selected = new Map();
+
+  const publicUrl = (path) => client.storage.from(cfg.bucket).getPublicUrl(path).data.publicUrl;
+
+  async function loadGallery() {
+    if (!slug) return fail("Gallery not found.");
+
+    const { data: projects, error: projectError } = await client
+      .from("cbk_shop_projects")
+      .select("id,title,description,package_size,package_price,event_date")
+      .eq("slug", slug)
+      .eq("status", "open")
+      .limit(1);
+
+    if (projectError || !projects?.length) return fail("This gallery is not currently open.");
+    project = projects[0];
+
+    titleEl.textContent = project.title;
+    descEl.textContent = project.description || "Select your favorite photos below.";
+    document.getElementById("packageText").textContent = `Select ${project.package_size} photos`;
+    document.getElementById("packagePrice").textContent = `$${Number(project.package_price).toFixed(0)}`;
+    document.getElementById("orderTitle").textContent = `${project.package_size} photos — $${Number(project.package_price).toFixed(0)}`;
+
+    const { data, error } = await client
+      .from("cbk_shop_photos")
+      .select("id,photo_code,storage_path,sort_order")
+      .eq("project_id", project.id)
+      .order("sort_order", { ascending: true })
+      .order("photo_code", { ascending: true });
+
+    if (error) return fail("Photos could not be loaded.");
+    photos = data || [];
+    renderPhotos();
+    updateSelection();
+  }
+
+  function renderPhotos() {
+    if (!photos.length) {
+      grid.innerHTML = '<div class="cbk-empty">Photos are being added to this gallery.</div>';
+      return;
+    }
+    grid.innerHTML = photos.map((photo) => `
+      <button class="cbk-photo-card" type="button" data-id="${photo.id}" aria-pressed="false">
+        <img src="${publicUrl(photo.storage_path)}" alt="Photo ${escapeHtml(photo.photo_code)}" loading="lazy" />
+        <span class="cbk-photo-check">✓</span>
+        <span class="cbk-photo-code">${escapeHtml(photo.photo_code)}</span>
+      </button>`).join("");
+
+    grid.querySelectorAll(".cbk-photo-card").forEach((button) => {
+      button.addEventListener("click", () => togglePhoto(button.dataset.id, button));
+    });
+  }
+
+  function togglePhoto(id, button) {
+    const photo = photos.find((item) => item.id === id);
+    if (!photo) return;
+    if (selected.has(id)) {
+      selected.delete(id);
+      button.classList.remove("is-selected");
+      button.setAttribute("aria-pressed", "false");
+    } else {
+      if (selected.size >= project.package_size) {
+        button.classList.add("cbk-bump");
+        setTimeout(() => button.classList.remove("cbk-bump"), 240);
+        return;
+      }
+      selected.set(id, photo);
+      button.classList.add("is-selected");
+      button.setAttribute("aria-pressed", "true");
+    }
+    updateSelection();
+  }
+
+  function updateSelection() {
+    const max = project?.package_size || 5;
+    selectionCount.textContent = `${selected.size} / ${max} selected`;
+    reviewButton.disabled = selected.size !== max;
+    selectedCodesEl.innerHTML = [...selected.values()].map((p) => `<span>${escapeHtml(p.photo_code)}</span>`).join("");
+  }
+
+  reviewButton.addEventListener("click", openDrawer);
+  document.getElementById("closeDrawer").addEventListener("click", closeDrawer);
+  document.getElementById("drawerBackdrop").addEventListener("click", closeDrawer);
+
+  function openDrawer() {
+    updateSelection();
+    drawer.classList.add("is-open");
+    drawer.setAttribute("aria-hidden", "false");
+    document.body.classList.add("cbk-no-scroll");
+  }
+  function closeDrawer() {
+    drawer.classList.remove("is-open");
+    drawer.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("cbk-no-scroll");
+  }
+
+  orderForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    orderMessage.textContent = "";
+    if (selected.size !== project.package_size) return;
+
+    const form = new FormData(orderForm);
+    const deliveryMethod = form.get("delivery_method");
+    const email = String(form.get("customer_email") || "").trim();
+    const phone = String(form.get("customer_phone") || "").trim();
+
+    if (deliveryMethod === "email" && !email) {
+      orderMessage.textContent = "Enter an email address for email delivery.";
+      return;
+    }
+    if (deliveryMethod === "text" && !phone) {
+      orderMessage.textContent = "Enter a phone number for text delivery.";
+      return;
+    }
+
+    const orderCode = "CBK-" + [...crypto.getRandomValues(new Uint8Array(4))]
+      .map((n) => n.toString(16).padStart(2, "0")).join("").toUpperCase();
+
+    const submit = document.getElementById("submitOrder");
+    submit.disabled = true;
+    submit.textContent = "Saving Order…";
+
+    const paymentMethod = String(form.get("payment_method"));
+    const { error } = await client.from("cbk_shop_orders").insert({
+      order_code: orderCode,
+      project_id: project.id,
+      customer_name: String(form.get("customer_name")).trim(),
+      customer_email: email || null,
+      customer_phone: phone || null,
+      delivery_method: deliveryMethod,
+      selected_photo_codes: [...selected.values()].map((p) => p.photo_code),
+      amount: Number(project.package_price),
+      payment_method: paymentMethod
+    });
+
+    if (error) {
+      orderMessage.textContent = "Your order could not be saved. Please try again.";
+      submit.disabled = false;
+      submit.textContent = "Submit Order & Pay";
+      return;
+    }
+
+    const total = "$" + Number(project.package_price).toFixed(2);
+    location.href = `payment-instructions.html?method=${encodeURIComponent(paymentMethod)}&total=${encodeURIComponent(total)}&code=${encodeURIComponent(orderCode)}`;
+  });
+
+  function fail(message) {
+    titleEl.textContent = message;
+    grid.innerHTML = '<div class="cbk-empty">Return to <a href="shop.html">Photo Shop</a>.</div>';
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" }[m]));
+  }
+
+  loadGallery();
+})();
