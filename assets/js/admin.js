@@ -15,6 +15,8 @@
   const uploadProject = document.getElementById("uploadProject");
   const projectList = document.getElementById("adminProjects");
   const orderList = document.getElementById("adminOrders");
+  const photoFilesInput = document.getElementById("photoFiles");
+  const photoSelectionCount = document.getElementById("photoSelectionCount");
 
   let sessionToken = localStorage.getItem(tokenKey) || "";
   let projects = [];
@@ -122,16 +124,34 @@
     }
   });
 
+  photoFilesInput.addEventListener("change", () => {
+    const count = photoFilesInput.files.length;
+    if (count > 20) {
+      photoFilesInput.value = "";
+      photoSelectionCount.textContent = "Please select no more than 20 photos at a time.";
+      document.getElementById("uploadMessage").textContent = "Batch limit: 20 photos.";
+      return;
+    }
+    photoSelectionCount.textContent = count
+      ? count + " photo" + (count === 1 ? "" : "s") + " selected."
+      : "No photos selected.";
+    document.getElementById("uploadMessage").textContent = "";
+  });
+
   uploadForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const projectId = uploadProject.value;
-    const files = [...document.getElementById("photoFiles").files];
+    const files = [...photoFilesInput.files];
     const message = document.getElementById("uploadMessage");
     const progress = document.getElementById("uploadProgress");
     const bar = progress.querySelector("span");
     const button = document.getElementById("uploadButton");
 
     if (!projectId || !files.length) return;
+    if (files.length > 20) {
+      message.textContent = "Please select no more than 20 photos at a time.";
+      return;
+    }
 
     const existingCodes = new Set(
       photos.filter((p) => p.project_id === projectId).map((p) => p.photo_code.toLowerCase())
@@ -180,7 +200,8 @@
 
     if (uploaded === files.length) message.textContent = `${uploaded} photos added. Gallery is ready.`;
     button.disabled = false;
-    document.getElementById("photoFiles").value = "";
+    photoFilesInput.value = "";
+    photoSelectionCount.textContent = "No photos selected.";
     await refreshAll();
   });
 
