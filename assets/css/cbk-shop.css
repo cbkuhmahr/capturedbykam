@@ -33,3 +33,9 @@
   .cbk-express-lock{display:none}
   .cbk-payment-success{padding:20px 14px}
 }
+
+.cbk-card-payment{display:grid;gap:10px;padding-top:4px}
+.cbk-card-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;font-weight:800}
+#cardContainer{min-height:48px}
+#googlePay{min-height:52px}
+.cbk-card-payment .cbk-submit{margin-top:2px}
