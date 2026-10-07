@@ -4,3 +4,36 @@ body{background:#ece6dc;color:#141414}.cbk-admin-shell{width:min(1180px,calc(100
 .cbk-admin-photo small{font-size:.68rem;font-weight:700}.cbk-original-ready{color:#315b36}.cbk-original-missing{color:#8d2d2d}
 
 #repairOriginalsForm{max-width:760px}.cbk-admin-section .cbk-admin-help{max-width:760px}
+
+/* Studio Admin security */
+.cbk-passkey-primary{width:100%;min-height:52px;margin-top:18px;border-radius:999px}
+.cbk-auth-divider{display:flex;align-items:center;gap:10px;margin:18px 0 4px;color:#6c665d;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+.cbk-auth-divider::before,.cbk-auth-divider::after{content:"";height:1px;background:rgba(20,20,20,.16);flex:1}
+.cbk-mfa-panel{border-top:1px solid rgba(20,20,20,.16);padding-top:16px}
+.cbk-mfa-panel>p{margin:0;line-height:1.5}
+.cbk-security-card{margin:22px 0 0}
+.cbk-security-badge{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:0 10px;border:1px solid rgba(20,20,20,.18);background:#eee6d8;text-transform:uppercase;letter-spacing:.06em;font-size:.68rem;font-weight:800}
+.cbk-security-badge.is-secure{background:#dfeadf;color:#294c2e}
+.cbk-security-status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
+.cbk-security-status-grid>div{border:1px solid rgba(20,20,20,.14);background:#fff;padding:15px;display:grid;gap:5px}
+.cbk-security-status-grid span{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:#666}
+.cbk-security-status-grid strong{font-size:.95rem}
+.cbk-security-status-grid small{color:#5f5a52;line-height:1.35}
+.cbk-security-actions{display:flex;gap:8px;flex-wrap:wrap}
+.cbk-security-actions .button{min-height:42px}
+.cbk-totp-setup{margin-top:16px;border:1px solid rgba(20,20,20,.16);background:#fff;padding:16px}
+.cbk-totp-setup>p{margin:0 0 10px;line-height:1.5}
+.cbk-secret-row{display:flex;align-items:center;gap:10px;margin:12px 0}
+.cbk-secret-row code{flex:1;display:block;overflow-wrap:anywhere;background:#161616;color:#fff;padding:13px;font-size:.9rem;letter-spacing:.08em}
+.cbk-secret-row .button{flex:0 0 auto}
+@media(max-width:760px){
+  .cbk-security-status-grid{grid-template-columns:1fr}
+  .cbk-security-actions{display:grid}
+  .cbk-security-actions .button{width:100%}
+}
+@media(max-width:520px){
+  .cbk-login-card{margin:24px auto}
+  .cbk-admin-card{padding:18px}
+  .cbk-secret-row{display:grid}
+  .cbk-secret-row .button{width:100%}
+}
