@@ -26,6 +26,7 @@
   const walletMessage = document.getElementById("walletMessage");
   const applePayWrap = document.getElementById("applePayWrap");
   const applePayButton = document.getElementById("applePayButton");
+  const applePayUnavailable = document.getElementById("applePayUnavailable");
   const cashAppPayWrap = document.getElementById("cashAppPayWrap");
   const cashAppPayTarget = document.getElementById("cashAppPay");
   const googlePayWrap = document.getElementById("googlePayWrap");
@@ -302,6 +303,7 @@
     googlePayTarget.innerHTML = "";
     cardContainer.innerHTML = "";
     applePayWrap.hidden = true;
+    applePayUnavailable.hidden = true;
     cashAppPayWrap.hidden = true;
     googlePayWrap.hidden = true;
     cardPayWrap.hidden = true;
@@ -332,6 +334,7 @@
       }
 
       applePay = method;
+      applePayUnavailable.hidden = true;
       applePayWrap.hidden = false;
       available += 1;
 
@@ -367,6 +370,7 @@
     } catch {
       applePay = null;
       applePayWrap.hidden = true;
+      applePayUnavailable.hidden = false;
     }
 
     try {
@@ -505,6 +509,9 @@
       squareReady = false;
       expressCheckout.hidden = true;
       manualPaymentFallback.hidden = false;
+    } else {
+      expressCheckout.hidden = false;
+      manualPaymentFallback.hidden = true;
     }
   }
 
