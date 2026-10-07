@@ -20,6 +20,10 @@
   const editProjectDialog = document.getElementById("editProjectDialog");
   const editProjectForm = document.getElementById("editProjectForm");
   const editProjectMessage = document.getElementById("editProjectMessage");
+  const repairOriginalsForm = document.getElementById("repairOriginalsForm");
+  const repairProject = document.getElementById("repairProject");
+  const repairFiles = document.getElementById("repairFiles");
+  const repairSelectionCount = document.getElementById("repairSelectionCount");
 
   let sessionToken = localStorage.getItem(tokenKey) || "";
   let projects = [];
@@ -219,6 +223,84 @@
     await refreshAll();
   });
 
+
+  repairFiles.addEventListener("change", () => {
+    const count = repairFiles.files.length;
+    if (count > 20) {
+      repairFiles.value = "";
+      repairSelectionCount.textContent = "Please select no more than 20 originals at a time.";
+      return;
+    }
+    repairSelectionCount.textContent = count
+      ? count + " original" + (count === 1 ? "" : "s") + " selected."
+      : "No originals selected.";
+  });
+
+  repairOriginalsForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const projectId = repairProject.value;
+    const files = [...repairFiles.files];
+    const message = document.getElementById("repairMessage");
+    const progress = document.getElementById("repairProgress");
+    const bar = progress.querySelector("span");
+    const button = document.getElementById("repairButton");
+
+    if (!projectId || !files.length) return;
+    if (files.length > 20) {
+      message.textContent = "Please select no more than 20 originals at a time.";
+      return;
+    }
+
+    const missingByCode = new Map(
+      photos
+        .filter((photo) => photo.project_id === projectId && !photo.original_path)
+        .map((photo) => [photo.photo_code.toLowerCase(), photo])
+    );
+
+    progress.hidden = false;
+    bar.style.width = "0%";
+    button.disabled = true;
+    let matched = 0;
+    let skipped = 0;
+
+    for (let index = 0; index < files.length; index++) {
+      const file = files[index];
+      const code = filenameCode(file.name).toLowerCase();
+      const photo = missingByCode.get(code);
+      if (!photo) {
+        skipped++;
+        bar.style.width = Math.round(((index + 1) / files.length) * 100) + "%";
+        continue;
+      }
+
+      try {
+        message.textContent = `Attaching original ${index + 1} of ${files.length}…`;
+        const prepared = await api("prepareOriginalRepair", { photo_id: photo.id, original_name: file.name });
+        const { error: uploadError } = await client.storage
+          .from("cbk-gallery-originals")
+          .uploadToSignedUrl(prepared.path, prepared.token, file, {
+            contentType: file.type || "application/octet-stream"
+          });
+        if (uploadError) throw uploadError;
+
+        await api("attachOriginal", { photo_id: photo.id, original_path: prepared.path });
+        matched++;
+        bar.style.width = Math.round(((index + 1) / files.length) * 100) + "%";
+      } catch (error) {
+        message.textContent = `Stopped after ${matched} matched originals: ${error.message}`;
+        button.disabled = false;
+        await refreshAll();
+        return;
+      }
+    }
+
+    message.textContent = `${matched} originals attached${skipped ? `; ${skipped} filename${skipped === 1 ? "" : "s"} did not match a missing photo ID` : ""}.`;
+    button.disabled = false;
+    repairFiles.value = "";
+    repairSelectionCount.textContent = "No originals selected.";
+    await refreshAll();
+  });
+
   async function makeWatermarkedPreview(file) {
     const bitmap = await createImageBitmap(file);
     const maxSide = 1800;
@@ -280,11 +362,15 @@
   }
 
   function renderProjectSelect() {
-    const current = uploadProject.value;
-    uploadProject.innerHTML = '<option value="">Choose project…</option>' + projects.map((p) =>
+    const currentUpload = uploadProject.value;
+    const currentRepair = repairProject.value;
+    const options = '<option value="">Choose project…</option>' + projects.map((p) =>
       `<option value="${p.id}">${escapeHtml(p.title)} — ${p.status}</option>`
     ).join("");
-    if (projects.some((p) => p.id === current)) uploadProject.value = current;
+    uploadProject.innerHTML = options;
+    repairProject.innerHTML = options;
+    if (projects.some((p) => p.id === currentUpload)) uploadProject.value = currentUpload;
+    if (projects.some((p) => p.id === currentRepair)) repairProject.value = currentRepair;
   }
 
   function renderProjects() {
