@@ -62,19 +62,14 @@
           <input name="customer_name" autocomplete="name" required />
         </label>
         <label>
-          <span>Email</span>
-          <input name="customer_email" type="email" autocomplete="email" />
+          <span>Email — required for photo delivery</span>
+          <input name="customer_email" type="email" autocomplete="email" required />
         </label>
         <label>
           <span>Phone</span>
           <input name="customer_phone" type="tel" autocomplete="tel" />
         </label>
-
-        <fieldset>
-          <legend>Deliver my photos by</legend>
-          <label class="cbk-choice"><input type="radio" name="delivery_method" value="email" checked /> Email</label>
-          <label class="cbk-choice"><input type="radio" name="delivery_method" value="text" /> Text</label>
-        </fieldset>
+        <input type="hidden" name="delivery_method" value="email" />
 
         <fieldset class="cbk-payment-options">
           <legend>Payment method</legend>
