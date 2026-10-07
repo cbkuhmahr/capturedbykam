@@ -28,6 +28,11 @@
   const applePayButton = document.getElementById("applePayButton");
   const cashAppPayWrap = document.getElementById("cashAppPayWrap");
   const cashAppPayTarget = document.getElementById("cashAppPay");
+  const googlePayWrap = document.getElementById("googlePayWrap");
+  const googlePayTarget = document.getElementById("googlePay");
+  const cardPayWrap = document.getElementById("cardPayWrap");
+  const cardContainer = document.getElementById("cardContainer");
+  const cardPayButton = document.getElementById("cardPayButton");
   const paymentSuccess = document.getElementById("paymentSuccess");
   const successCopy = document.getElementById("successCopy");
   const downloadLinks = document.getElementById("downloadLinks");
@@ -40,6 +45,8 @@
   let payments = null;
   let applePay = null;
   let cashAppPay = null;
+  let googlePay = null;
+  let cardPay = null;
   let squareReady = false;
   let checkoutFinished = false;
   let walletGeneration = 0;
@@ -280,12 +287,24 @@
     try {
       if (applePay?.destroy) await applePay.destroy();
     } catch {}
+    try {
+      if (googlePay?.destroy) await googlePay.destroy();
+    } catch {}
+    try {
+      if (cardPay?.destroy) await cardPay.destroy();
+    } catch {}
 
     cashAppPay = null;
     applePay = null;
+    googlePay = null;
+    cardPay = null;
     cashAppPayTarget.innerHTML = "";
+    googlePayTarget.innerHTML = "";
+    cardContainer.innerHTML = "";
     applePayWrap.hidden = true;
     cashAppPayWrap.hidden = true;
+    googlePayWrap.hidden = true;
+    cardPayWrap.hidden = true;
   }
 
   async function setupWallets() {
@@ -393,6 +412,93 @@
       cashAppPayWrap.hidden = true;
     }
 
+    try {
+      const method = await payments.googlePay(paymentRequest);
+      if (generation !== walletGeneration) {
+        try { await method.destroy(); } catch {}
+        return;
+      }
+
+      googlePay = method;
+      googlePayWrap.hidden = false;
+      await googlePay.attach("#googlePay", { buttonColor: "default", buttonType: "long" });
+      googlePayTarget.onclick = async (event) => {
+        event.preventDefault();
+        if (checkoutFinished || !validateContact()) return;
+
+        setWalletBusy(true, "Opening Google Pay…");
+        try {
+          const tokenResult = await googlePay.tokenize();
+          if (tokenResult.status === "OK" && tokenResult.token) {
+            await handleWalletToken(tokenResult.token, "Google Pay");
+          } else if (tokenResult.status === "Cancel") {
+            walletMessage.textContent = "Google Pay was canceled.";
+          } else {
+            walletMessage.textContent = "Google Pay could not be completed. Try again.";
+          }
+        } catch {
+          walletMessage.textContent = "Google Pay could not be completed. Try again.";
+        } finally {
+          if (!checkoutFinished) setWalletBusy(false);
+        }
+      };
+      available += 1;
+    } catch {
+      googlePay = null;
+      googlePayWrap.hidden = true;
+    }
+
+    try {
+      const method = await payments.card();
+      if (generation !== walletGeneration) {
+        try { await method.destroy(); } catch {}
+        return;
+      }
+
+      cardPay = method;
+      await cardPay.attach("#cardContainer");
+      cardPayWrap.hidden = false;
+      cardPayButton.onclick = async (event) => {
+        event.preventDefault();
+        if (checkoutFinished || !validateContact()) return;
+
+        const form = new FormData(orderForm);
+        const fullName = String(form.get("customer_name") || "").trim();
+        const nameParts = fullName.split(/\s+/).filter(Boolean);
+        const verificationDetails = {
+          amount: calculateTotal().toFixed(2),
+          billingContact: {
+            givenName: nameParts[0] || fullName,
+            familyName: nameParts.slice(1).join(" "),
+            email: String(form.get("customer_email") || "").trim(),
+            phone: String(form.get("customer_phone") || "").trim()
+          },
+          currencyCode: "USD",
+          intent: "CHARGE",
+          customerInitiated: true,
+          sellerKeyedIn: false
+        };
+
+        setWalletBusy(true, "Securing card payment…");
+        try {
+          const tokenResult = await cardPay.tokenize(verificationDetails);
+          if (tokenResult.status === "OK" && tokenResult.token) {
+            await handleWalletToken(tokenResult.token, "Card");
+          } else {
+            walletMessage.textContent = "Card payment could not be completed. Check the card information and try again.";
+          }
+        } catch {
+          walletMessage.textContent = "Card payment could not be completed. Please try again.";
+        } finally {
+          if (!checkoutFinished) setWalletBusy(false);
+        }
+      };
+      available += 1;
+    } catch {
+      cardPay = null;
+      cardPayWrap.hidden = true;
+    }
+
     if (generation !== walletGeneration) return;
 
     if (!available) {
@@ -405,6 +511,7 @@
   function setWalletBusy(busy, message = "") {
     walletMethods.classList.toggle("is-processing", busy);
     applePayButton.disabled = busy;
+    cardPayButton.disabled = busy;
     if (message) walletMessage.textContent = message;
   }
 
@@ -497,7 +604,7 @@
     if (selected.size < 1) return;
 
     if (squareReady) {
-      walletMessage.textContent = "Choose Apple Pay or Cash App Pay to complete your purchase.";
+      walletMessage.textContent = "Choose Apple Pay, Google Pay, Cash App Pay, or card to complete your purchase.";
       return;
     }
 
