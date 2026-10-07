@@ -39,3 +39,88 @@
 #cardContainer{min-height:48px}
 #googlePay{min-height:52px}
 .cbk-card-payment .cbk-submit{margin-top:2px}
+
+/* Checkout cleanup */
+.cbk-express-checkout[hidden],
+.cbk-manual-payment[hidden],
+.cbk-wallet-method[hidden],
+.cbk-card-payment[hidden],
+.cbk-apple-pay-unavailable[hidden],
+.cbk-payment-success[hidden]{display:none!important}
+
+.cbk-express-checkout{
+  border:1px solid rgba(20,20,20,.14);
+  padding:18px;
+  box-shadow:0 10px 28px rgba(0,0,0,.05);
+}
+.cbk-wallet-methods{gap:12px;margin-top:14px}
+.cbk-wallet-method{min-height:50px}
+.cbk-apple-pay-unavailable{
+  min-height:52px;
+  border:1px solid rgba(20,20,20,.18);
+  border-radius:8px;
+  background:#f7f4ee;
+  padding:10px 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+}
+.cbk-apple-pay-unavailable strong{
+  font-family:"Cinzel",serif;
+  font-size:.9rem;
+  letter-spacing:.03em;
+}
+.cbk-apple-pay-unavailable span{
+  color:#6a655e;
+  font-size:.76rem;
+  text-align:right;
+  line-height:1.25;
+}
+.cbk-pay-divider{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:2px 0;
+  color:#777169;
+  font-size:.7rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.cbk-pay-divider::before,.cbk-pay-divider::after{
+  content:"";
+  height:1px;
+  background:rgba(20,20,20,.12);
+  flex:1;
+}
+.cbk-card-payment{
+  gap:10px;
+  padding:12px 0 0;
+  border-top:0;
+}
+.cbk-card-label{color:#4c473f}
+#cardContainer{
+  min-height:48px;
+  border-radius:8px;
+  overflow:hidden;
+}
+#googlePay,#cashAppPay{min-height:50px}
+.cbk-card-payment .cbk-submit{
+  min-height:48px;
+  border-radius:999px;
+}
+.cbk-manual-payment{
+  border:1px dashed rgba(20,20,20,.25);
+  background:#fffaf2;
+  padding:16px;
+  margin-top:4px;
+}
+.cbk-fallback-head{display:grid;gap:4px}
+.cbk-fallback-head strong{font-family:"Cormorant Garamond",serif;font-size:1.2rem}
+.cbk-fallback-head span{font-size:.85rem;line-height:1.35;color:#5e5951}
+
+@media(max-width:640px){
+  .cbk-express-checkout{padding:14px}
+  .cbk-apple-pay-unavailable{align-items:flex-start;flex-direction:column;gap:3px}
+  .cbk-apple-pay-unavailable span{text-align:left}
+}
