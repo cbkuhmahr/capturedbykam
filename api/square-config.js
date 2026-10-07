@@ -15,6 +15,27 @@ async function resolveSquareLocation(accessToken, host) {
   return active?.id || "";
 }
 
+let domainRegistrationAttempted = false;
+
+async function registerApplePayDomains(accessToken, host) {
+  if (domainRegistrationAttempted) return;
+  domainRegistrationAttempted = true;
+
+  for (const domainName of ["www.capturedbykam.com", "capturedbykam.com"]) {
+    try {
+      await fetch(host + "/v2/apple-pay/domains", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + accessToken,
+          "Square-Version": "2026-09-16",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ domain_name: domainName })
+      });
+    } catch {}
+  }
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
@@ -48,6 +69,8 @@ module.exports = async function handler(req, res) {
         reason: "No active Square location was found."
       });
     }
+
+    await registerApplePayDomains(accessToken, host);
 
     return res.status(200).json({
       enabled: true,
