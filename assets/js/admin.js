@@ -368,23 +368,26 @@
           <span>Delivery: ${escapeHtml(o.delivery_method)}</span>
         </div>
         <div class="cbk-admin-actions">
-          <button class="button" data-paid="${o.id}" type="button">${o.payment_status === "confirmed" ? "Payment ✓" : "Mark Paid"}</button>
-          <button class="button button-dark" data-sent="${o.id}" type="button">${o.fulfillment_status === "sent" ? "Sent ✓" : "Mark Sent"}</button>
+          <button class="button button-dark" data-deliver="${o.id}" type="button">${o.fulfillment_status === "sent" ? "Delivered ✓" : (o.payment_status === "confirmed" ? "Resend Delivery" : "Confirm Payment & Send Photos")}</button>
         </div>
       </article>`).join("");
 
-    orderList.querySelectorAll("[data-paid]").forEach((button) => button.addEventListener("click", async () => {
+    orderList.querySelectorAll("[data-deliver]").forEach((button) => button.addEventListener("click", async () => {
+      const order = orders.find((item) => item.id === button.dataset.deliver);
+      if (!order) return;
+      const actionText = order.payment_status === "confirmed" ? "Resend delivery email?" : "Confirm payment and send the purchased photos now?";
+      if (!confirm(actionText)) return;
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = order.payment_status === "confirmed" ? "Resending…" : "Confirming & Sending…";
       try {
-        await api("updateOrder", { order_id: button.dataset.paid, payment_status: "confirmed" });
+        await api("confirmAndDeliver", { order_id: order.id });
         await refreshAll();
-      } catch (error) { alert(error.message); }
-    }));
-
-    orderList.querySelectorAll("[data-sent]").forEach((button) => button.addEventListener("click", async () => {
-      try {
-        await api("updateOrder", { order_id: button.dataset.sent, fulfillment_status: "sent" });
-        await refreshAll();
-      } catch (error) { alert(error.message); }
+      } catch (error) {
+        alert(error.message);
+        button.disabled = false;
+        button.textContent = originalText;
+      }
     }));
   }
 
