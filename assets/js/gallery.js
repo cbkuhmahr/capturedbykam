@@ -62,8 +62,8 @@
     titleEl.textContent = project.title;
     descEl.textContent = project.description || "Select your favorite photos below.";
     const individualPrice = getIndividualPrice();
-    document.getElementById("packageText").textContent = `Individual photos — ${individualPrice.toFixed(2)} each`;
-    document.getElementById("packagePrice").textContent = `${project.package_size} for ${Number(project.package_price).toFixed(0)} · ${Number(project.extra_photo_price || 0).toFixed(0)} each after ${project.package_size}`;
+    document.getElementById("packageText").textContent = `Individual photos — $${individualPrice.toFixed(2)} each`;
+    document.getElementById("packagePrice").textContent = `${project.package_size} for $${Number(project.package_price).toFixed(0)} · $${Number(project.extra_photo_price || 0).toFixed(0)} each after ${project.package_size}`;
     document.getElementById("orderTitle").textContent = "Your photo order";
 
     const { data, error } = await client
@@ -147,12 +147,12 @@
     if (selected.size < minimum) {
       selectionCount.textContent = "0 selected — choose at least 1";
     } else {
-      selectionCount.textContent = `${selected.size} selected — ${total.toFixed(2)}`;
+      selectionCount.textContent = `${selected.size} selected — $${total.toFixed(2)}`;
     }
 
     reviewButton.disabled = selected.size < minimum;
     document.getElementById("orderTitle").textContent = selected.size >= minimum
-      ? `${selected.size} photo${selected.size === 1 ? "" : "s"} — ${total.toFixed(2)}`
+      ? `${selected.size} photo${selected.size === 1 ? "" : "s"} — $${total.toFixed(2)}`
       : "Your photo order";
 
     const extras = calculateExtras();
@@ -163,12 +163,12 @@
     orderPhotoCount.textContent = String(selected.size);
     orderBasePrice.textContent = "$" + calculateBaseAmount().toFixed(2);
     orderExtras.textContent = extras.count
-      ? `${extras.count} × ${extras.each.toFixed(2)} = ${extras.amount.toFixed(2)}`
+      ? `${extras.count} × $${extras.each.toFixed(2)} = $${extras.amount.toFixed(2)}`
       : "$0.00";
     orderExtrasRow.hidden = extras.count === 0;
     orderTotal.textContent = "$" + total.toFixed(2);
     submitOrderButton.textContent = selected.size >= minimum
-      ? `Place Order — ${total.toFixed(2)}`
+      ? `Place Order — $${total.toFixed(2)}`
       : "Select a Photo";
   }
 
