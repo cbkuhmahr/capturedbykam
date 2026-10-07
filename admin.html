@@ -27,19 +27,87 @@
 
     <section id="loginPanel" class="cbk-admin-card cbk-login-card">
       <p class="eyebrow">Private access</p>
-      <h2>Enter your 6-digit passcode.</h2>
-      <p>Studio Admin uses a private server-side passcode check and temporary session. No email link required.</p>
+      <h2>Studio Admin</h2>
+      <p id="loginIntro">Use your passkey for the fastest, strongest sign-in. Your PIN remains available as backup access.</p>
+
+      <button id="passkeyLoginButton" class="button button-dark cbk-passkey-primary" type="button" hidden>
+        Sign in with Passkey / Face ID
+      </button>
+
+      <div id="loginDivider" class="cbk-auth-divider" hidden><span>Backup access</span></div>
+
       <form id="loginForm" class="cbk-admin-form">
         <label>
-          <span>Passcode</span>
+          <span>6-digit Admin PIN</span>
           <input id="loginPin" class="cbk-pin-input" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" aria-label="6-digit admin passcode" required />
         </label>
-        <button class="button button-dark" type="submit">Unlock Studio Admin</button>
+        <button class="button" type="submit">Continue with PIN</button>
         <p id="loginMessage" class="cbk-form-message" role="status"></p>
+      </form>
+
+      <form id="totpLoginForm" class="cbk-admin-form cbk-mfa-panel" hidden>
+        <p>Open <strong>Microsoft Authenticator</strong> and enter the current 6-digit code for Capturedby_Kam.</p>
+        <label>
+          <span>Authenticator code</span>
+          <input id="loginTotpCode" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" aria-label="Microsoft Authenticator code" required />
+        </label>
+        <button class="button button-dark" type="submit">Verify & Open Admin</button>
+        <button id="cancelTotpLogin" class="button" type="button">Use a Different Method</button>
+        <p id="totpLoginMessage" class="cbk-form-message" role="status"></p>
       </form>
     </section>
 
     <main id="adminDashboard" hidden>
+      <section id="securityCard" class="cbk-admin-card cbk-security-card">
+        <div class="cbk-admin-section-head">
+          <div>
+            <p class="eyebrow">Security</p>
+            <h2>Protect Studio Admin.</h2>
+          </div>
+          <span id="securityOverall" class="cbk-security-badge">Setup required</span>
+        </div>
+
+        <div class="cbk-security-status-grid">
+          <div>
+            <span>Primary sign-in</span>
+            <strong>Passkey / Face ID</strong>
+            <small id="passkeyStatus">Not enrolled</small>
+          </div>
+          <div>
+            <span>Backup verification</span>
+            <strong>Microsoft Authenticator</strong>
+            <small id="totpStatus">Not enrolled</small>
+          </div>
+          <div>
+            <span>Session storage</span>
+            <strong>Secure cookie</strong>
+            <small>HttpOnly · SameSite · 12-hour session</small>
+          </div>
+        </div>
+
+        <div class="cbk-security-actions">
+          <button id="registerPasskeyButton" class="button button-dark" type="button">Register Passkey on This Device</button>
+          <button id="setupAuthenticatorButton" class="button" type="button" disabled>Set Up Microsoft Authenticator</button>
+        </div>
+
+        <div id="totpSetupPanel" class="cbk-totp-setup" hidden>
+          <p><strong>Microsoft Authenticator setup</strong></p>
+          <p>In Microsoft Authenticator, add an <strong>Other account</strong>, then enter this setup key manually. This works even when you are doing the setup on the same phone.</p>
+          <div class="cbk-secret-row">
+            <code id="totpSecret">—</code>
+            <button id="copyTotpSecret" class="button" type="button">Copy Key</button>
+          </div>
+          <form id="totpSetupForm" class="cbk-admin-form">
+            <label>
+              <span>Enter the current 6-digit code</span>
+              <input id="totpSetupCode" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required />
+            </label>
+            <button class="button button-dark" type="submit">Confirm Microsoft Authenticator</button>
+          </form>
+        </div>
+
+        <p id="securityMessage" class="cbk-form-message" role="status"></p>
+      </section>
       <section class="cbk-admin-stats" aria-label="Shop summary">
         <div><span>Projects</span><strong id="statProjects">0</strong></div>
         <div><span>Open</span><strong id="statOpen">0</strong></div>
@@ -146,6 +214,7 @@
     </form>
   </dialog>
 
+  <script src="https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@13.3.0/dist/bundle/index.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.min.js"></script>
   <script src="assets/js/cbk-supabase.js"></script>
   <script src="assets/js/admin.js" defer></script>
