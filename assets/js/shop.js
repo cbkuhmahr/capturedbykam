@@ -40,7 +40,7 @@
             <h3>${escapeHtml(project.title)}</h3>
             <p>${escapeHtml(project.description || "View the gallery and choose your favorites.")}</p>
             <div class="cbk-project-bottom">
-              <strong>${project.package_size} photos — $${Number(project.package_price).toFixed(0)} · +$${Number(project.extra_photo_price || 0).toFixed(0)} each extra</strong>
+              <strong>${(Number(project.package_price) / Math.max(Number(project.package_size) - 1, 1)).toFixed(2)} each · ${project.package_size} for ${Number(project.package_price).toFixed(0)} · +${Number(project.extra_photo_price || 0).toFixed(0)} each after ${project.package_size}</strong>
               <span>View Photos →</span>
             </div>
           </div>
