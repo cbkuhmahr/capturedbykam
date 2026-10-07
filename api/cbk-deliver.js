@@ -1,11 +1,4 @@
 module.exports = async function handler(req, res) {
-  if (req.method === "GET" && req.query?.health === "1") {
-    return res.status(200).json({
-      ok: true,
-      configured: Boolean(process.env.RESEND_API_KEY)
-    });
-  }
-
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method not allowed" });
