@@ -115,10 +115,10 @@
     selectedCodesEl.innerHTML = [...selected.values()].map((p) => `<span>${escapeHtml(p.photo_code)}</span>`).join("");
     orderPhotoCount.textContent = String(selected.size);
     orderBasePrice.textContent = "$" + Number(project?.package_price || 0).toFixed(2);
-    orderExtras.textContent = extras.count ? `${extras.count} × ${Number(project?.extra_photo_price || 0).toFixed(2)} = ${extras.amount.toFixed(2)}` : "$0.00";
+    orderExtras.textContent = extras.count ? `${extras.count} × $${Number(project?.extra_photo_price || 0).toFixed(2)} = $${extras.amount.toFixed(2)}` : "$0.00";
     orderExtrasRow.hidden = extras.count === 0;
     orderTotal.textContent = "$" + total.toFixed(2);
-    submitOrderButton.textContent = selected.size >= minimum ? `Place Order — ${total.toFixed(2)}` : `Select ${minimum - selected.size} More`;
+    submitOrderButton.textContent = selected.size >= minimum ? `Place Order — $${total.toFixed(2)}` : `Select ${minimum - selected.size} More`;
   }
 
   reviewButton.addEventListener("click", openDrawer);
