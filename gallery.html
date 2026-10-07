@@ -26,15 +26,15 @@
       <p id="galleryDescription" class="cbk-gallery-description"></p>
       <div class="cbk-checkout-steps" aria-label="Checkout progress"><span class="is-active">1 · Select</span><span>2 · Checkout</span><span>3 · Pay</span><span>4 · Delivery</span></div>
       <div class="cbk-gallery-meta">
-        <strong id="packageText">5 photos minimum</strong>
-        <span id="packagePrice">$20 + $2 each extra</span>
+        <strong id="packageText">Individual photos — $6.25 each</strong>
+        <span id="packagePrice">5 for $25 · $2 each after 5</span>
       </div>
     </section>
 
     <section class="cbk-photo-section">
       <div class="cbk-selection-bar">
         <div>
-          <strong id="selectionCount">0 selected — choose at least 5</strong>
+          <strong id="selectionCount">0 selected — choose at least 1</strong>
           <span>Tap a photo to add or remove it.</span>
         </div>
         <button id="reviewButton" class="button button-dark" type="button" disabled>Review Order</button>
@@ -51,8 +51,8 @@
       <button id="closeDrawer" class="cbk-close" type="button" aria-label="Close">×</button>
       <p class="eyebrow">Checkout</p>
       <div class="cbk-checkout-steps cbk-checkout-steps-compact" aria-label="Checkout progress"><span>1 · Select</span><span class="is-active">2 · Checkout</span><span>3 · Pay</span><span>4 · Delivery</span></div>
-      <h2 id="orderTitle">5 photos — $20</h2>
-      <div class="cbk-checkout-summary"><div><span>Selected photos</span><strong id="orderPhotoCount">5</strong></div><div><span>Base package</span><strong id="orderBasePrice">$20.00</strong></div><div id="orderExtrasRow"><span>Additional photos</span><strong id="orderExtras">$0.00</strong></div><div class="cbk-checkout-total"><span>Total</span><strong id="orderTotal">$20.00</strong></div></div>
+      <h2 id="orderTitle">Your photo order</h2>
+      <div class="cbk-checkout-summary"><div><span>Selected photos</span><strong id="orderPhotoCount">0</strong></div><div><span>Photo subtotal</span><strong id="orderBasePrice">$0.00</strong></div><div id="orderExtrasRow"><span>Additional photos after 5</span><strong id="orderExtras">$0.00</strong></div><div class="cbk-checkout-total"><span>Total</span><strong id="orderTotal">$0.00</strong></div></div>
       <p class="cbk-checkout-label">Photo IDs</p>
       <div id="selectedCodes" class="cbk-code-list"></div>
 
@@ -102,7 +102,7 @@
             <label class="cbk-payment-choice"><input type="radio" name="payment_method" value="Cash App" /><span><strong>Cash App</strong><small>Pay with $CapturedbyKam</small></span></label>
           </fieldset>
           <p class="cbk-order-note">Express checkout is being configured. For now, place the order and use the payment instructions provided.</p>
-          <button id="submitOrder" class="button button-dark cbk-submit" type="submit">Place Order — $20.00</button>
+          <button id="submitOrder" class="button button-dark cbk-submit" type="submit">Place Order</button>
           <p id="orderMessage" class="cbk-form-message" role="status"></p>
         </section>
 

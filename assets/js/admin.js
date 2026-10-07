@@ -127,7 +127,7 @@
       message.textContent = "Project created. You can upload photos now.";
       projectForm.reset();
       projectForm.elements.package_size.value = 5;
-      projectForm.elements.package_price.value = "20.00";
+      projectForm.elements.package_price.value = "25.00";
       projectForm.elements.extra_photo_price.value = "2.00";
       await refreshAll();
     } catch (error) {

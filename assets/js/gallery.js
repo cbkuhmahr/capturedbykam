@@ -61,9 +61,10 @@
 
     titleEl.textContent = project.title;
     descEl.textContent = project.description || "Select your favorite photos below.";
-    document.getElementById("packageText").textContent = `${project.package_size} photos minimum`;
-    document.getElementById("packagePrice").textContent = `$${Number(project.package_price).toFixed(0)} + $2 each extra`;
-    document.getElementById("orderTitle").textContent = `${project.package_size} photos — $${Number(project.package_price).toFixed(0)}`;
+    const individualPrice = getIndividualPrice();
+    document.getElementById("packageText").textContent = `Individual photos — $${individualPrice.toFixed(2)} each`;
+    document.getElementById("packagePrice").textContent = `${project.package_size} for $${Number(project.package_price).toFixed(0)} · $${Number(project.extra_photo_price || 0).toFixed(0)} each after ${project.package_size}`;
+    document.getElementById("orderTitle").textContent = "Your photo order";
 
     const { data, error } = await client
       .from("cbk_shop_photos")
@@ -113,31 +114,46 @@
     updateSelection();
   }
 
+  function getIndividualPrice() {
+    if (!project) return 0;
+    const bundleSize = Number(project.package_size);
+    const bundlePrice = Number(project.package_price);
+    return bundleSize > 1 ? bundlePrice / (bundleSize - 1) : bundlePrice;
+  }
+
   function calculateExtras() {
     if (!project) return { count: 0, amount: 0 };
-    const count = Math.max(selected.size - Number(project.package_size), 0);
-    return { count, amount: count * 2 };
+    const bundleSize = Number(project.package_size);
+    const count = Math.max(selected.size - bundleSize, 0);
+    const each = Number(project.extra_photo_price || 0);
+    return { count, amount: count * each, each };
+  }
+
+  function calculateBaseAmount() {
+    if (!project || selected.size < 1) return 0;
+    const bundleSize = Number(project.package_size);
+    if (selected.size >= bundleSize) return Number(project.package_price);
+    return selected.size * getIndividualPrice();
   }
 
   function calculateTotal() {
-    if (!project) return 0;
-    return Number(project.package_price) + calculateExtras().amount;
+    return calculateBaseAmount() + calculateExtras().amount;
   }
 
   function updateSelection() {
-    const minimum = project?.package_size || 5;
+    const minimum = 1;
     const total = calculateTotal();
 
     if (selected.size < minimum) {
-      selectionCount.textContent = `${selected.size} selected — choose at least ${minimum}`;
+      selectionCount.textContent = "0 selected — choose at least 1";
     } else {
       selectionCount.textContent = `${selected.size} selected — $${total.toFixed(2)}`;
     }
 
     reviewButton.disabled = selected.size < minimum;
     document.getElementById("orderTitle").textContent = selected.size >= minimum
-      ? `${selected.size} photos — $${total.toFixed(2)}`
-      : `${minimum} photos — $${Number(project?.package_price || 0).toFixed(2)}`;
+      ? `${selected.size} photo${selected.size === 1 ? "" : "s"} — $${total.toFixed(2)}`
+      : "Your photo order";
 
     const extras = calculateExtras();
     selectedCodesEl.innerHTML = [...selected.values()]
@@ -145,15 +161,15 @@
       .join("");
 
     orderPhotoCount.textContent = String(selected.size);
-    orderBasePrice.textContent = "$" + Number(project?.package_price || 0).toFixed(2);
+    orderBasePrice.textContent = "$" + calculateBaseAmount().toFixed(2);
     orderExtras.textContent = extras.count
-      ? `${extras.count} × $2.00 = $${extras.amount.toFixed(2)}`
+      ? `${extras.count} × $${extras.each.toFixed(2)} = $${extras.amount.toFixed(2)}`
       : "$0.00";
     orderExtrasRow.hidden = extras.count === 0;
     orderTotal.textContent = "$" + total.toFixed(2);
     submitOrderButton.textContent = selected.size >= minimum
       ? `Place Order — $${total.toFixed(2)}`
-      : `Select ${minimum - selected.size} More`;
+      : "Select a Photo";
   }
 
   reviewButton.addEventListener("click", openDrawer);
@@ -273,7 +289,7 @@
   }
 
   async function setupWallets() {
-    if (!squareReady || !payments || !project || selected.size < project.package_size) return;
+    if (!squareReady || !payments || !project || selected.size < 1) return;
 
     const generation = ++walletGeneration;
     await cleanupWallets();
@@ -478,7 +494,7 @@
     event.preventDefault();
     orderMessage.textContent = "";
 
-    if (selected.size < project.package_size) return;
+    if (selected.size < 1) return;
 
     if (squareReady) {
       walletMessage.textContent = "Choose Apple Pay or Cash App Pay to complete your purchase.";
