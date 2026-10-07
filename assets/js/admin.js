@@ -35,7 +35,8 @@
     const headers = { "Content-Type": "application/json" };
     if (includeToken && sessionToken) headers["x-cbk-admin-token"] = sessionToken;
 
-    const response = await fetch(apiUrl, {
+    const targetUrl = action === "confirmAndDeliver" ? "/api/cbk-deliver" : apiUrl;
+    const response = await fetch(targetUrl, {
       method: "POST",
       headers,
       body: JSON.stringify({ action, ...payload })
