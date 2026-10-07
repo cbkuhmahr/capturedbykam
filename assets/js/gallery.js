@@ -143,16 +143,11 @@
     if (selected.size < project.package_size) return;
 
     const form = new FormData(orderForm);
-    const deliveryMethod = form.get("delivery_method");
+    const deliveryMethod = "email";
     const email = String(form.get("customer_email") || "").trim();
     const phone = String(form.get("customer_phone") || "").trim();
-
-    if (deliveryMethod === "email" && !email) {
-      orderMessage.textContent = "Enter an email address for email delivery.";
-      return;
-    }
-    if (deliveryMethod === "text" && !phone) {
-      orderMessage.textContent = "Enter a phone number for text delivery.";
+    if (!email) {
+      orderMessage.textContent = "Enter an email address for photo delivery.";
       return;
     }
 
