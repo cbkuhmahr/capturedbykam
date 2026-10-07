@@ -71,15 +71,49 @@
         </label>
         <input type="hidden" name="delivery_method" value="email" />
 
-        <fieldset class="cbk-payment-options">
-          <legend>Payment method</legend>
-          <label class="cbk-payment-choice"><input type="radio" name="payment_method" value="Apple Pay" checked /><span><strong>Apple Pay</strong><small>Pay from your Apple device</small></span></label>
-          <label class="cbk-payment-choice"><input type="radio" name="payment_method" value="Cash App" /><span><strong>Cash App</strong><small>Pay with $CapturedbyKam</small></span></label>
-        </fieldset>
+        <section id="expressCheckout" class="cbk-express-checkout" hidden aria-label="Express checkout">
+          <div class="cbk-express-head">
+            <div>
+              <span class="cbk-express-kicker">Express checkout</span>
+              <strong>Pay securely. Get your photos immediately.</strong>
+            </div>
+            <span class="cbk-express-lock" aria-hidden="true">Secure</span>
+          </div>
 
-        <p class="cbk-order-note">After you submit, you'll get your payment code and payment instructions. Your unwatermarked files are delivered after payment is confirmed.</p>
-        <button id="submitOrder" class="button button-dark cbk-submit" type="submit">Place Order — $20.00</button>
-        <p id="orderMessage" class="cbk-form-message" role="status"></p>
+          <div id="walletLockMessage" class="cbk-wallet-lock-message">Enter your name and email to unlock payment.</div>
+
+          <div id="walletMethods" class="cbk-wallet-methods is-locked">
+            <div id="applePayWrap" class="cbk-wallet-method" hidden>
+              <button id="applePayButton" class="cbk-apple-pay-button" type="button" aria-label="Pay with Apple Pay"></button>
+            </div>
+            <div id="cashAppPayWrap" class="cbk-wallet-method" hidden>
+              <div id="cashAppPay"></div>
+            </div>
+          </div>
+
+          <p class="cbk-secure-copy">Secure wallet payment · automatic confirmation · instant digital delivery</p>
+          <p id="walletMessage" class="cbk-form-message" role="status"></p>
+        </section>
+
+        <section id="manualPaymentFallback" class="cbk-manual-payment">
+          <fieldset class="cbk-payment-options">
+            <legend>Payment method</legend>
+            <label class="cbk-payment-choice"><input type="radio" name="payment_method" value="Apple Pay" checked /><span><strong>Apple Pay</strong><small>Pay from your Apple device</small></span></label>
+            <label class="cbk-payment-choice"><input type="radio" name="payment_method" value="Cash App" /><span><strong>Cash App</strong><small>Pay with $CapturedbyKam</small></span></label>
+          </fieldset>
+          <p class="cbk-order-note">Express checkout is being configured. For now, place the order and use the payment instructions provided.</p>
+          <button id="submitOrder" class="button button-dark cbk-submit" type="submit">Place Order — $20.00</button>
+          <p id="orderMessage" class="cbk-form-message" role="status"></p>
+        </section>
+
+        <section id="paymentSuccess" class="cbk-payment-success" hidden>
+          <div class="cbk-success-mark" aria-hidden="true">✓</div>
+          <p class="eyebrow">Payment confirmed</p>
+          <h3>Your photos are ready.</h3>
+          <p id="successCopy">Download your photos below. A copy is also being sent to your email.</p>
+          <div id="downloadLinks" class="cbk-download-links"></div>
+          <a class="button button-dark cbk-submit" href="shop.html">Back to Photo Shop</a>
+        </section>
       </form>
     </section>
   </div>
