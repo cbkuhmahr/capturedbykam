@@ -1,8 +1,6 @@
 (() => {
   const cfg = window.CBK_SUPABASE;
   const client = window.supabase.createClient(cfg.url, cfg.key, { auth: { persistSession: false } });
-  const apiUrl = cfg.url + "/functions/v1/cbk-admin";
-  const tokenKey = "cbk_admin_session_v1";
 
   const loginPanel = document.getElementById("loginPanel");
   const dashboard = document.getElementById("adminDashboard");
@@ -10,6 +8,26 @@
   const loginForm = document.getElementById("loginForm");
   const loginPin = document.getElementById("loginPin");
   const loginMessage = document.getElementById("loginMessage");
+  const passkeyLoginButton = document.getElementById("passkeyLoginButton");
+  const loginDivider = document.getElementById("loginDivider");
+  const loginIntro = document.getElementById("loginIntro");
+  const totpLoginForm = document.getElementById("totpLoginForm");
+  const loginTotpCode = document.getElementById("loginTotpCode");
+  const totpLoginMessage = document.getElementById("totpLoginMessage");
+  const cancelTotpLogin = document.getElementById("cancelTotpLogin");
+
+  const securityOverall = document.getElementById("securityOverall");
+  const passkeyStatus = document.getElementById("passkeyStatus");
+  const totpStatus = document.getElementById("totpStatus");
+  const registerPasskeyButton = document.getElementById("registerPasskeyButton");
+  const setupAuthenticatorButton = document.getElementById("setupAuthenticatorButton");
+  const securityMessage = document.getElementById("securityMessage");
+  const totpSetupPanel = document.getElementById("totpSetupPanel");
+  const totpSecret = document.getElementById("totpSecret");
+  const copyTotpSecret = document.getElementById("copyTotpSecret");
+  const totpSetupForm = document.getElementById("totpSetupForm");
+  const totpSetupCode = document.getElementById("totpSetupCode");
+
   const projectForm = document.getElementById("projectForm");
   const uploadForm = document.getElementById("uploadForm");
   const uploadProject = document.getElementById("uploadProject");
@@ -25,35 +43,76 @@
   const repairFiles = document.getElementById("repairFiles");
   const repairSelectionCount = document.getElementById("repairSelectionCount");
 
-  let sessionToken = localStorage.getItem(tokenKey) || "";
+  // Remove the legacy readable browser token. New sessions live only in a Secure HttpOnly cookie.
+  localStorage.removeItem("cbk_admin_session_v1");
+
+  let mfaToken = "";
   let projects = [];
   let photos = [];
   let orders = [];
   let orderFilter = "new";
 
-  async function api(action, payload = {}, includeToken = true) {
-    const headers = { "Content-Type": "application/json" };
-    if (includeToken && sessionToken) headers["x-cbk-admin-token"] = sessionToken;
-
-    const targetUrl = action === "confirmAndDeliver" ? "/api/cbk-deliver" : apiUrl;
-    const response = await fetch(targetUrl, {
+  async function requestJson(url, action, payload = {}) {
+    const response = await fetch(url, {
       method: "POST",
-      headers,
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action, ...payload })
     });
 
     let data = {};
     try { data = await response.json(); } catch {}
 
-    if (response.status === 401 && action !== "login") {
-      localStorage.removeItem(tokenKey);
-      sessionToken = "";
-      showLogin("Session expired. Enter your passcode again.");
-      throw new Error(data.error || "Session expired.");
+    if (!response.ok) {
+      const error = new Error(data.error || "Request failed.");
+      error.status = response.status;
+      throw error;
     }
-
-    if (!response.ok) throw new Error(data.error || "Request failed.");
     return data;
+  }
+
+  async function authApi(action, payload = {}) {
+    try {
+      return await requestJson("/api/admin-auth", action, payload);
+    } catch (error) {
+      if (error.status === 401 && !["login", "verifyTotpLogin", "passkeyAuthenticate"].includes(action)) {
+        showLogin("Session expired. Sign in again.");
+      }
+      throw error;
+    }
+  }
+
+  async function api(action, payload = {}) {
+    try {
+      return await requestJson("/api/admin-api", action, payload);
+    } catch (error) {
+      if (error.status === 401) showLogin("Session expired. Sign in again.");
+      throw error;
+    }
+  }
+
+  async function refreshPublicSecurity() {
+    try {
+      const status = await authApi("publicSecurityStatus");
+      const hasPasskey = Boolean(status.passkey_enabled);
+      passkeyLoginButton.hidden = !hasPasskey;
+      loginDivider.hidden = !hasPasskey;
+      loginIntro.textContent = hasPasskey
+        ? "Use your passkey for the fastest, strongest sign-in. PIN + Microsoft Authenticator is your backup."
+        : "Enter your current admin PIN. Once inside, secure this page with a passkey and Microsoft Authenticator.";
+    } catch {
+      passkeyLoginButton.hidden = true;
+      loginDivider.hidden = true;
+    }
+  }
+
+  function completeLogin() {
+    mfaToken = "";
+    loginPin.value = "";
+    loginTotpCode.value = "";
+    totpLoginForm.hidden = true;
+    loginForm.hidden = false;
+    return openDashboard();
   }
 
   loginForm.addEventListener("submit", async (event) => {
@@ -64,32 +123,101 @@
       return;
     }
 
-    loginMessage.textContent = "Unlocking…";
-    loginForm.querySelector("button").disabled = true;
+    loginMessage.textContent = "Checking PIN…";
+    const button = loginForm.querySelector("button[type='submit']");
+    button.disabled = true;
 
     try {
-      const data = await api("login", { pin }, false);
-      sessionToken = data.token;
-      localStorage.setItem(tokenKey, sessionToken);
-      loginPin.value = "";
-      await openDashboard();
+      const data = await authApi("login", { pin });
+      if (data.mfa_required) {
+        mfaToken = data.mfa_token || "";
+        loginMessage.textContent = "";
+        loginForm.hidden = true;
+        passkeyLoginButton.hidden = true;
+        loginDivider.hidden = true;
+        totpLoginForm.hidden = false;
+        totpLoginMessage.textContent = "PIN accepted. Verify with Microsoft Authenticator.";
+        setTimeout(() => loginTotpCode.focus(), 50);
+      } else {
+        await completeLogin();
+      }
     } catch (error) {
       loginMessage.textContent = error.message;
       loginPin.select();
     } finally {
-      loginForm.querySelector("button").disabled = false;
+      button.disabled = false;
     }
+  });
+
+  totpLoginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const code = loginTotpCode.value.replace(/\D/g, "").slice(0, 6);
+    if (!/^\d{6}$/.test(code)) {
+      totpLoginMessage.textContent = "Enter the current 6-digit code.";
+      return;
+    }
+
+    const button = totpLoginForm.querySelector("button[type='submit']");
+    button.disabled = true;
+    totpLoginMessage.textContent = "Verifying…";
+    try {
+      await authApi("verifyTotpLogin", { mfa_token: mfaToken, code });
+      await completeLogin();
+    } catch (error) {
+      totpLoginMessage.textContent = error.message;
+      loginTotpCode.select();
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  passkeyLoginButton.addEventListener("click", async () => {
+    if (!window.SimpleWebAuthnBrowser?.startAuthentication) {
+      loginMessage.textContent = "This browser cannot use passkeys here. Use PIN backup access.";
+      return;
+    }
+
+    passkeyLoginButton.disabled = true;
+    loginMessage.textContent = "Waiting for your passkey…";
+    try {
+      const start = await authApi("passkeyAuthOptions");
+      const response = await window.SimpleWebAuthnBrowser.startAuthentication({ optionsJSON: start.options });
+      await authApi("passkeyAuthenticate", {
+        challenge_id: start.challenge_id,
+        response
+      });
+      await completeLogin();
+    } catch (error) {
+      loginMessage.textContent = error.message || "Passkey sign-in was canceled.";
+    } finally {
+      passkeyLoginButton.disabled = false;
+    }
+  });
+
+  cancelTotpLogin.addEventListener("click", async () => {
+    mfaToken = "";
+    loginTotpCode.value = "";
+    totpLoginForm.hidden = true;
+    loginForm.hidden = false;
+    totpLoginMessage.textContent = "";
+    await refreshPublicSecurity();
+    setTimeout(() => loginPin.focus(), 50);
   });
 
   loginPin.addEventListener("input", () => {
     loginPin.value = loginPin.value.replace(/\D/g, "").slice(0, 6);
   });
+  loginTotpCode.addEventListener("input", () => {
+    loginTotpCode.value = loginTotpCode.value.replace(/\D/g, "").slice(0, 6);
+  });
+  totpSetupCode.addEventListener("input", () => {
+    totpSetupCode.value = totpSetupCode.value.replace(/\D/g, "").slice(0, 6);
+  });
 
   signOutButton.addEventListener("click", async () => {
-    try { if (sessionToken) await api("logout"); } catch {}
-    localStorage.removeItem(tokenKey);
-    sessionToken = "";
+    try { await authApi("logout"); } catch {}
     showLogin("Studio Admin locked.");
+    await refreshPublicSecurity();
   });
 
   async function openDashboard() {
@@ -97,16 +225,150 @@
     dashboard.hidden = false;
     signOutButton.hidden = false;
     loginMessage.textContent = "";
-    await refreshAll();
+    totpLoginMessage.textContent = "";
+    await Promise.all([refreshAll(), refreshSecurity()]);
   }
 
   function showLogin(message = "") {
     loginPanel.hidden = false;
     dashboard.hidden = true;
     signOutButton.hidden = true;
+    totpLoginForm.hidden = true;
+    loginForm.hidden = false;
+    mfaToken = "";
     loginMessage.textContent = message;
+    securityMessage.textContent = "";
     setTimeout(() => loginPin.focus(), 50);
   }
+
+  function deviceLabel() {
+    const ua = navigator.userAgent || "";
+    if (/iPhone/i.test(ua)) return "iPhone Face ID";
+    if (/iPad/i.test(ua)) return "iPad Passkey";
+    if (/Macintosh|Mac OS/i.test(ua)) return "Mac Passkey";
+    if (/Windows/i.test(ua)) return "Windows Hello";
+    if (/Android/i.test(ua)) return "Android Passkey";
+    return "Studio Admin Passkey";
+  }
+
+  async function refreshSecurity() {
+    try {
+      const status = await authApi("securityStatus");
+      const passkeys = Array.isArray(status.passkeys) ? status.passkeys : [];
+
+      passkeyStatus.textContent = status.passkey_enabled
+        ? `Active · ${passkeys.length} passkey${passkeys.length === 1 ? "" : "s"}`
+        : "Not enrolled";
+      totpStatus.textContent = status.totp_enabled
+        ? "Active · Microsoft Authenticator"
+        : "Not enrolled";
+
+      registerPasskeyButton.textContent = status.passkey_enabled
+        ? "Add Another Passkey"
+        : "Register Passkey on This Device";
+
+      setupAuthenticatorButton.disabled = !status.passkey_enabled || status.totp_enabled;
+      setupAuthenticatorButton.textContent = status.totp_enabled
+        ? "Microsoft Authenticator Active"
+        : "Set Up Microsoft Authenticator";
+
+      securityOverall.textContent = status.upgraded ? "Protected" : "Setup required";
+      securityOverall.classList.toggle("is-secure", Boolean(status.upgraded));
+
+      if (status.upgraded) {
+        securityMessage.textContent = "Passkey is primary. PIN + Microsoft Authenticator is your backup.";
+        totpSetupPanel.hidden = true;
+      }
+    } catch (error) {
+      securityMessage.textContent = error.message;
+    }
+  }
+
+  registerPasskeyButton.addEventListener("click", async () => {
+    if (!/^(www\.)?capturedbykam\.com$/i.test(location.hostname)) {
+      securityMessage.textContent = "Passkeys must be enrolled from capturedbykam.com, not a Vercel preview address.";
+      return;
+    }
+    if (!window.SimpleWebAuthnBrowser?.startRegistration) {
+      securityMessage.textContent = "This browser does not support passkey setup.";
+      return;
+    }
+
+    registerPasskeyButton.disabled = true;
+    securityMessage.textContent = "Your device will ask you to create or save a passkey…";
+
+    try {
+      const start = await authApi("passkeyRegisterOptions");
+      const response = await window.SimpleWebAuthnBrowser.startRegistration({ optionsJSON: start.options });
+      await authApi("passkeyRegisterVerify", {
+        challenge_id: start.challenge_id,
+        response,
+        friendly_name: deviceLabel()
+      });
+      securityMessage.textContent = "Passkey registered. You can now sign in with Face ID, Touch ID, Windows Hello, or your saved passkey.";
+      await refreshSecurity();
+      await refreshPublicSecurity();
+    } catch (error) {
+      securityMessage.textContent = error.message || "Passkey setup was canceled.";
+    } finally {
+      registerPasskeyButton.disabled = false;
+    }
+  });
+
+  setupAuthenticatorButton.addEventListener("click", async () => {
+    setupAuthenticatorButton.disabled = true;
+    securityMessage.textContent = "Creating Microsoft Authenticator setup…";
+    try {
+      const data = await authApi("totpEnrollStart");
+      totpSecret.textContent = data.secret || "";
+      totpSetupPanel.hidden = false;
+      totpSetupCode.value = "";
+      securityMessage.textContent = "Add the setup key to Microsoft Authenticator, then enter the current code below.";
+      setTimeout(() => totpSetupCode.focus(), 50);
+    } catch (error) {
+      securityMessage.textContent = error.message;
+      setupAuthenticatorButton.disabled = false;
+    }
+  });
+
+  copyTotpSecret.addEventListener("click", async () => {
+    const value = totpSecret.textContent.trim();
+    if (!value || value === "—") return;
+    try {
+      await navigator.clipboard.writeText(value);
+      copyTotpSecret.textContent = "Copied";
+      setTimeout(() => { copyTotpSecret.textContent = "Copy Key"; }, 1400);
+    } catch {
+      securityMessage.textContent = "Press and hold the setup key to copy it.";
+    }
+  });
+
+  totpSetupForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const code = totpSetupCode.value.replace(/\D/g, "").slice(0, 6);
+    if (!/^\d{6}$/.test(code)) {
+      securityMessage.textContent = "Enter the current 6-digit Microsoft Authenticator code.";
+      return;
+    }
+
+    const button = totpSetupForm.querySelector("button[type='submit']");
+    button.disabled = true;
+    securityMessage.textContent = "Verifying Microsoft Authenticator…";
+    try {
+      await authApi("totpEnrollVerify", { code });
+      totpSetupPanel.hidden = true;
+      totpSecret.textContent = "—";
+      totpSetupCode.value = "";
+      securityMessage.textContent = "Microsoft Authenticator verified. Studio Admin security upgrade is complete.";
+      await refreshSecurity();
+      await refreshPublicSecurity();
+    } catch (error) {
+      securityMessage.textContent = error.message;
+      totpSetupCode.select();
+    } finally {
+      button.disabled = false;
+    }
+  });
 
   projectForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -351,7 +613,7 @@
       renderProjects();
       renderOrders();
     } catch (error) {
-      if (sessionToken) alert(error.message);
+      if (!dashboard.hidden) console.error(error);
     }
   }
 
@@ -571,9 +833,15 @@
     return String(value).replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" }[m]));
   }
 
-  if (sessionToken) {
-    openDashboard().catch(() => showLogin("Enter your passcode to unlock Studio Admin."));
-  } else {
-    showLogin();
+  async function initializeAdmin() {
+    try {
+      await authApi("securityStatus");
+      await openDashboard();
+    } catch {
+      showLogin();
+      await refreshPublicSecurity();
+    }
   }
+
+  initializeAdmin();
 })();
