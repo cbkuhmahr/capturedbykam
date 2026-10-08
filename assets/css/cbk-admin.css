@@ -37,3 +37,10 @@ body{background:#ece6dc;color:#141414}.cbk-admin-shell{width:min(1180px,calc(100
   .cbk-secret-row{display:grid}
   .cbk-secret-row .button{width:100%}
 }
+
+/* Booking inquiries */
+.cbk-booking-inquiry{border-top:1px solid rgba(20,20,20,.16);padding:17px 0;display:grid;gap:10px}
+.cbk-booking-inquiry h3{margin:7px 0 0;font-size:1.1rem}
+.cbk-booking-note{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.87rem;line-height:1.5;max-height:230px;overflow:auto;background:#fff;border:1px solid rgba(20,20,20,.12);padding:14px}
+.cbk-booking-inquiry a{color:inherit;font-weight:700;text-decoration:underline}
+@media(max-width:760px){.cbk-booking-inquiry .cbk-order-top{gap:5px}}
