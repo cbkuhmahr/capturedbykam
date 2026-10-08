@@ -14,7 +14,7 @@ const retainerForm = document.querySelector("#retainer-form");
 const retainerStatus = document.querySelector("#retainer-status");
 
 const CBK_SUPABASE_URL = "https://waiopvueoobwrnlctmua.supabase.co";
-const CBK_SUPABASE_PUBLISHABLE_KEY = "";
+const CBK_SUPABASE_PUBLISHABLE_KEY = window.CBK_SUPABASE?.key || "";
 const CBK_RETAINER_PAYMENT_LINK = "https://buy.stripe.com/dRm8wRa8B5Po5uycT96Zy00";
 
 function bookingValue(formData, key) {
@@ -89,7 +89,6 @@ async function submitToSupabase(payload) {
     method: "POST",
     headers: {
       apikey: CBK_SUPABASE_PUBLISHABLE_KEY,
-      Authorization: `Bearer ${CBK_SUPABASE_PUBLISHABLE_KEY}`,
       "Content-Type": "application/json",
       Prefer: "return=minimal"
     },
