@@ -9,10 +9,9 @@ module.exports = async function handler(req, res) {
     return res.status(401).json({ error: "Studio Admin session required." });
   }
 
-  const resendKey = process.env.RESEND_API_KEY;
-  if (!resendKey) {
-    return res.status(503).json({ error: "Email delivery is not configured yet." });
-  }
+  // Use the Vercel key when configured; Supabase also supports a server-side
+  // RESEND_API_KEY fallback. Never expose either key to the browser.
+  const resendKey = process.env.RESEND_API_KEY || "";
 
   let body = req.body || {};
   if (typeof body === "string") {
