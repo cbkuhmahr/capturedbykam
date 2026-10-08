@@ -33,6 +33,7 @@
   const uploadProject = document.getElementById("uploadProject");
   const projectList = document.getElementById("adminProjects");
   const orderList = document.getElementById("adminOrders");
+  const bookingList = document.getElementById("adminBookings");
   const photoFilesInput = document.getElementById("photoFiles");
   const photoSelectionCount = document.getElementById("photoSelectionCount");
   const editProjectDialog = document.getElementById("editProjectDialog");
@@ -50,6 +51,8 @@
   let projects = [];
   let photos = [];
   let orders = [];
+  let bookings = [];
+  let bookingsAvailable = true;
   let orderFilter = "new";
 
   async function requestJson(url, action, payload = {}) {
@@ -608,10 +611,13 @@
       projects = data.projects || [];
       photos = data.photos || [];
       orders = data.orders || [];
+      bookings = data.bookings || [];
+      bookingsAvailable = data.bookings_available !== false;
       renderStats();
       renderProjectSelect();
       renderProjects();
       renderOrders();
+      renderBookings();
     } catch (error) {
       if (!dashboard.hidden) console.error(error);
     }
@@ -685,6 +691,35 @@
         await refreshAll();
       } catch (error) { alert(error.message); }
     }));
+  }
+
+  function renderBookings() {
+    if (!bookingList) return;
+    if (!bookingsAvailable) {
+      bookingList.innerHTML = '<div class="cbk-admin-empty">Booking inquiries are currently unavailable. Refresh to retry.</div>';
+      return;
+    }
+    if (!bookings.length) {
+      bookingList.innerHTML = '<div class="cbk-admin-empty">No website booking inquiries yet.</div>';
+      return;
+    }
+
+    bookingList.innerHTML = bookings.map((booking) => {
+      const when = new Date(booking.created_at);
+      const date = Number.isNaN(when.getTime()) ? "" : when.toLocaleString();
+      const contact = booking.email ? '<a href="mailto:' + encodeURIComponent(booking.email) + '">' + escapeHtml(booking.email) + '</a>' : "No email";
+      return '<article class="cbk-booking-inquiry">'
+        + '<div class="cbk-order-top"><div>'
+        + '<span class="cbk-status cbk-status-new">' + escapeHtml(booking.status || "new") + '</span>'
+        + '<h3>' + escapeHtml(booking.name || "Customer") + ' · ' + escapeHtml(booking.shoot_type || "Project") + '</h3>'
+        + '</div><time>' + escapeHtml(date) + '</time></div>'
+        + '<div class="cbk-order-contact"><span>' + contact + '</span>'
+        + '<span>' + escapeHtml(booking.phone || "No phone") + '</span>'
+        + '<span>' + escapeHtml(booking.preferred_date || "Date TBD") + '</span>'
+        + '<span>' + escapeHtml(booking.budget || "Budget TBD") + '</span></div>'
+        + '<p class="cbk-booking-note">' + escapeHtml(booking.message || "") + '</p>'
+        + '</article>';
+    }).join("");
   }
 
   function orderStage(order) {
