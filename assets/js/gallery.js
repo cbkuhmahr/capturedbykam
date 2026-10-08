@@ -361,8 +361,8 @@
           } else {
             walletMessage.textContent = "Apple Pay could not be completed. Try again.";
           }
-        } catch {
-          walletMessage.textContent = "Apple Pay could not be completed. Try again.";
+        } catch (error) {
+          walletMessage.textContent = error?.message || "Apple Pay could not be completed. Try again.";
         } finally {
           if (!checkoutFinished) setWalletBusy(false);
         }
@@ -398,6 +398,8 @@
           setWalletBusy(true, "Confirming Cash App payment…");
           try {
             await handleWalletToken(tokenResult.token, "Cash App");
+          } catch (error) {
+            walletMessage.textContent = error?.message || "Cash App Pay could not be completed. Try again.";
           } finally {
             if (!checkoutFinished) setWalletBusy(false);
           }
@@ -440,8 +442,8 @@
           } else {
             walletMessage.textContent = "Google Pay could not be completed. Try again.";
           }
-        } catch {
-          walletMessage.textContent = "Google Pay could not be completed. Try again.";
+        } catch (error) {
+          walletMessage.textContent = error?.message || "Google Pay could not be completed. Try again.";
         } finally {
           if (!checkoutFinished) setWalletBusy(false);
         }
@@ -491,8 +493,8 @@
           } else {
             walletMessage.textContent = "Card payment could not be completed. Check the card information and try again.";
           }
-        } catch {
-          walletMessage.textContent = "Card payment could not be completed. Please try again.";
+        } catch (error) {
+          walletMessage.textContent = error?.message || "Card payment could not be completed. Please try again.";
         } finally {
           if (!checkoutFinished) setWalletBusy(false);
         }
