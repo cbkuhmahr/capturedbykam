@@ -661,6 +661,7 @@
           <button class="button" type="button" data-edit="${p.id}">Edit</button>
           <button class="button" type="button" data-photos="${p.id}">Manage Photos</button>
           <a class="button" href="gallery.html?project=${encodeURIComponent(p.slug)}" target="_blank" rel="noopener">Preview</a>
+          <a class="button" href="qr.html?project=${encodeURIComponent(p.slug)}&label=${encodeURIComponent(p.title)}" target="_blank" rel="noopener">QR Code</a>
           <button class="button" type="button" data-status="${p.id}" data-next="${p.status === "open" ? "closed" : "open"}">${p.status === "open" ? "Close" : "Open"}</button>
           <button class="button cbk-danger" type="button" data-delete="${p.id}">Delete</button>
         </div>
