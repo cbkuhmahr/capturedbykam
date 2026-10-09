@@ -1,0 +1,20 @@
+*{box-sizing:border-box}
+body{margin:0;background:#efece5;color:#171717}
+.cbk-qr-page{max-width:940px;margin:0 auto;padding:24px 20px 70px}
+.cbk-qr-nav{display:flex;justify-content:space-between;gap:20px;font-size:14px;margin-bottom:22px}
+.cbk-qr-nav a{color:#232323}
+.cbk-qr-sheet{max-width:640px;margin:0 auto;padding:42px 36px 32px;border:1px solid #242424;background:white;text-align:center}
+.cbk-qr-overline{margin:0 0 12px;font-size:14px;font-weight:800;letter-spacing:.22em}
+.cbk-qr-sheet h1{margin:0 0 12px;font-family:Georgia,serif;font-size:clamp(30px,4vw,48px);font-weight:500;line-height:1.12;letter-spacing:-.025em}
+.cbk-qr-subtitle{max-width:430px;margin:0 auto 26px;font-size:15px;line-height:1.6}
+.cbk-qr-frame{width:fit-content;max-width:100%;margin:0 auto;padding:21px;background:white;border:1px solid #ddd}
+#qrCode,#qrCode canvas,#qrCode img{display:block;margin:auto;max-width:100%;height:auto}
+.cbk-qr-scan-text{margin:24px 0 7px;font-size:15px;font-weight:800;letter-spacing:.14em}
+.cbk-qr-url{margin:0;overflow-wrap:anywhere;font-size:13px}
+.cbk-qr-tagline{margin:24px 0 0;font-family:Georgia,serif;font-style:italic;font-size:13px}
+.cbk-qr-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:22px auto}
+.cbk-qr-actions .button{cursor:pointer;font:inherit;padding:12px 16px;text-decoration:none}
+.cbk-qr-actions .button[disabled]{opacity:.45;cursor:not-allowed}
+.cbk-qr-help{max-width:640px;margin:12px auto;line-height:1.55;text-align:center;font-size:13px}
+@media(max-width:600px){.cbk-qr-sheet{padding:28px 18px 24px}.cbk-qr-frame{padding:12px}.cbk-qr-page{padding:15px 12px 40px}.cbk-qr-actions .button{flex:1 1 45%;text-align:center}}
+@media print{@page{margin:12mm}body{background:white}.cbk-qr-nav,.cbk-qr-actions,.cbk-qr-help{display:none!important}.cbk-qr-page{max-width:none;padding:0}.cbk-qr-sheet{border:none;max-width:none;margin:0;padding:10mm 0}#qrCode,#qrCode canvas,#qrCode img{max-width:80mm!important;max-height:80mm!important}.cbk-qr-frame{border:none}}
