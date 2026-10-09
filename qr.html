@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Photo Gallery QR Code | Capturedby_Kam</title>
+  <meta name="description" content="Print and share a Capturedby_Kam photo gallery QR code." />
+  <link rel="icon" type="image/svg+xml" href="assets/img/cbk-camera.svg" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/cbk-qr.css" />
+</head>
+<body>
+  <main class="cbk-qr-page">
+    <nav class="cbk-qr-nav" aria-label="Return links">
+      <a href="admin.html">← Studio Admin</a>
+      <a href="shop.html">Photo Shop</a>
+    </nav>
+    <section class="cbk-qr-sheet" aria-label="Shareable photo gallery QR sign">
+      <p class="cbk-qr-overline">CAPTUREDBY_KAM</p>
+      <h1 id="qrTitle">Your photos are one scan away.</h1>
+      <p class="cbk-qr-subtitle">Scan to view your photos, choose your favorites, and check out securely.</p>
+      <div class="cbk-qr-frame">
+        <div id="qrCode" role="img" aria-label="QR code to Capturedby_Kam photo shop"></div>
+      </div>
+      <p class="cbk-qr-scan-text">SCAN TO VIEW & BUY PHOTOS</p>
+      <p class="cbk-qr-url" id="qrAddress">www.capturedbykam.com/shop.html</p>
+      <p class="cbk-qr-tagline">Every Frame, Every Project — Timeless Authenticity.</p>
+    </section>
+    <section class="cbk-qr-actions" aria-label="QR sharing options">
+      <a id="openDestination" class="button button-dark" href="shop.html" target="_blank" rel="noopener">Test Destination</a>
+      <button class="button button-dark" id="downloadQr" type="button" disabled>Download QR (PNG)</button>
+      <button class="button" id="printQr" type="button">Print Sign</button>
+      <button class="button" id="copyQr" type="button">Copy Gallery Link</button>
+    </section>
+    <p class="cbk-qr-help" id="qrStatus" role="status">Preparing your QR code…</p>
+    <p class="cbk-qr-help">For business cards, shirts, and reusable signage, use the permanent Shop QR. For individual events, open the QR Code link from that gallery in Studio Admin. Keep the code on a white background with clear space around its edges.</p>
+  </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="assets/js/cbk-qr.js" defer></script>
+</body>
+</html>
