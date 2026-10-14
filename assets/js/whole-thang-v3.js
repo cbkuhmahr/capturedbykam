@@ -27,18 +27,61 @@ const HISTORY=raw.trim().split(/\n+/).map((line,i)=>{
  const tie=winner==="T", w=Number(winScore), l=Number(loseScore);
  return {id:"history-"+(i+1),week:Number(wk),away,home,pick,winner,tie,awayScore:tie?w:winner===away?w:l,homeScore:tie?w:winner===home?w:l,status:tie?"T":pick===winner?"W":"L"};
 });
-const EMPTY=()=>({picks:{},snfMargin:"",mnfMargin:"",locked:false,homeEdge:45});
+const EMPTY=()=>({picks:{},snfMargin:"",mnfMargin:"",locked:false,homeEdge:45,updatedAt:0});
 function safeLoad(){
  let existing=null,old=null;
  try{existing=JSON.parse(localStorage.getItem(KEY)||"null");}catch{}
  try{old=JSON.parse(localStorage.getItem(OLD_KEY)||localStorage.getItem("whole-thang-v1")||"null");}catch{}
  const source=existing||old||{};
  const allow=Object.fromEntries(GAMES.filter(g=>source.picks&&[g.away,g.home].includes(source.picks[g.id])).map(g=>[g.id,source.picks[g.id]]));
- return {picks:allow,snfMargin:validMargin(source.snfMargin),mnfMargin:validMargin(source.mnfMargin),locked:!!source.locked,homeEdge:[0,25,45,65,85].includes(Number(source.homeEdge))?Number(source.homeEdge):45};
+ return {picks:allow,snfMargin:validMargin(source.snfMargin),mnfMargin:validMargin(source.mnfMargin),locked:!!source.locked,homeEdge:[0,25,45,65,85].includes(Number(source.homeEdge))?Number(source.homeEdge):45,updatedAt:Number(source.updatedAt)||0};
 }
 function validMargin(v){return v===""||v==null?"":Number.isInteger(Number(v))&&Number(v)>=0&&Number(v)<=200?String(v):"";}
 let state=safeLoad(),tab="home",teamSort="rating",intelFilter="all";
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch{toast("Browser storage is unavailable.");}}
+let cloudStatus="Connecting cloud…",initialCloudLoad=true,cloudTimer=null,localRevision=0;
+async function cloudRequest(action,payload={}){
+ const r=await fetch("/api/whole-thang-sync",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...payload})});
+ const data=await r.json().catch(()=>({}));
+ if(!r.ok||!data.ok)throw Error(data.error||"Could not reach cloud sync");
+ return data;
+}
+function queueCloudSave(){
+ if(initialCloudLoad)return;
+ if(cloudTimer)clearTimeout(cloudTimer);
+ cloudTimer=setTimeout(async()=>{
+  const snapshot=JSON.parse(JSON.stringify(state));
+  try{
+   cloudStatus="Syncing…";
+   await cloudRequest("save",{state:snapshot});
+   if(snapshot.updatedAt===state.updatedAt){cloudStatus="Cloud synced";render();}
+   else queueCloudSave();
+  }catch{cloudStatus="Local backup · sync offline";render();}
+ },400);
+}
+function save(){
+ state.updatedAt=Date.now();
+ localRevision++;
+ try{localStorage.setItem(KEY,JSON.stringify(state));}catch{toast("Browser storage unavailable.");}
+ queueCloudSave();
+}
+async function initCloud(){
+ const started=localRevision;
+ try{
+  const response=await cloudRequest("load");
+  const remote=response.state;
+  const remoteTime=remote?Date.parse(remote.updated_at)||0:0;
+  const localTime=Number(state.updatedAt)||0;
+  if(remote&&started===localRevision&&remoteTime>=localTime){
+   state={...EMPTY(),picks:Object.fromEntries(GAMES.filter(g=>remote.picks&&[g.away,g.home].includes(remote.picks[g.id])).map(g=>[g.id,remote.picks[g.id]])),snfMargin:validMargin(remote.snf_margin),mnfMargin:validMargin(remote.mnf_margin),locked:!!remote.locked,homeEdge:[0,25,45,65,85].includes(Number(remote.home_edge))?Number(remote.home_edge):45,updatedAt:remoteTime};
+   try{localStorage.setItem(KEY,JSON.stringify(state));}catch{}
+   initialCloudLoad=false;cloudStatus="Cloud synced";
+  }else{
+   initialCloudLoad=false;cloudStatus="Cloud connected";
+   if(localRevision>started||state.updatedAt||Object.keys(state.picks).length||state.snfMargin!==""||state.mnfMargin!=="")queueCloudSave();
+  }
+ }catch{initialCloudLoad=false;cloudStatus="Local backup · sync offline";}
+ render();
+}
 function escape(s){return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
 function logo(a){return "https://a.espncdn.com/i/teamlogos/nfl/500/"+(LOGOS[a]||a).toLowerCase()+".png";}
 function fmt(n){return Number(n).toFixed(1);}
@@ -115,7 +158,7 @@ function homePage(){
  return section("2026 Season","Weeks 1–5 · verified import",
    '<div class="panel summary-grid">'+cardMetric("Record","54–24–1T","79 selections")+cardMetric("Win rate","69.23%","ties excluded")+cardMetric("Best week","14–2","Week 4")+'</div>')+
  section("Week 6 Control","Oct 15–19 · 14 matchups",
-   '<div class="panel focus-row"><div class="focus-copy"><small>On deck</small><strong>Seahawks @ Broncos</strong><span>Thursday · 8:15 PM ET · '+picked+' of 14 picks saved on this browser</span></div><div class="counter">'+picked+'<small>/14 picked</small></div></div><div class="action-row"><button class="btn primary" data-go="picks">Manage picks</button><button class="btn" data-go="intel">Open workhorse →</button></div>')+
+   '<div class="panel focus-row"><div class="focus-copy"><small>On deck</small><strong>Seahawks @ Broncos</strong><span>Thursday · 8:15 PM ET · '+picked+' of 14 picks captured</span></div><div class="counter">'+picked+'<small>/14 picked</small></div></div><div class="action-row"><button class="btn primary" data-go="picks">Manage picks</button><button class="btn" data-go="intel">Open workhorse →</button></div>')+
  section("Trend","Your weekly accuracy",'<div class="panel wt-pad">'+curve+'</div>')+
  section("Workhorse Brief","Based on all 79 game outcomes",
    '<div class="wt-brief-grid"><div class="panel wt-pad"><h3>Potential disagreements</h3>'+danger+'</div><div class="panel wt-pad"><h3>Closest calls</h3>'+closest.map(f=>'<div class="wt-brief-row"><strong>'+f.away+' @ '+f.home+'</strong><span>'+f.choice+' · '+Math.round(f.probability*100)+'% model estimate</span></div>').join("")+'</div></div>')+
@@ -131,11 +174,11 @@ function picksPage(){
  const forecasts=allForecasts(),picked=Object.keys(state.picks).filter(id=>GAMES.some(g=>g.id===id)).length;
  const groups=[...new Set(forecasts.map(f=>f.group))];
  return section("Week 6 Picks",picked+"/14 selected · "+(state.locked?"Locally locked":"Editable"),
-    '<div class="wt-info-bar"><span><strong>Computer:</strong> '+picked+' selections on this device</span><span>Not submitted to the family form</span></div>'+
+    '<div class="wt-info-bar"><span><strong>Save:</strong> '+escape(cloudStatus)+'</span><span>Official form submission still required</span></div>'+
     groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
  section("Pool Tiebreakers","Closest without going over",
  '<div class="tiebreak-grid"><div class="field"><label>SNF · DAL @ GB · victory margin</label><input aria-label="SNF margin" type="number" min="0" max="200" data-margin="snfMargin" value="'+escape(state.snfMargin)+'" '+(state.locked?"disabled":"")+' placeholder="Margin"></div><div class="field"><label>MNF · WAS @ SF · victory margin</label><input aria-label="MNF margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?"disabled":"")+' placeholder="Margin"></div></div>'+
- '<div class="action-row"><button class="btn primary" data-action="save">Save this browser</button><button class="btn" data-action="lock">'+(state.locked?"Unlock picks":"Lock picks")+'</button></div><p class="wt-helper">The lock is a personal reminder, not the league submission cutoff. Submit your official picks in the family form.</p>');
+ '<div class="action-row"><button class="btn primary" data-action="save">Save & sync picks</button><button class="btn" data-action="lock">'+(state.locked?"Unlock picks":"Lock picks")+'</button></div><p class="wt-helper">The lock is a personal reminder, not the league submission cutoff. Submit your official picks in the family form.</p>');
 }
 function intelCard(f){
  const chosen=state.picks[f.id];
@@ -182,8 +225,8 @@ function historyPage(){
 }
 function dataPage(){
  const json=JSON.stringify({version:3,scope:"browser-picks-only",week:6,...state},null,2);
- return section("Data / Backup","Device-only preferences",
- '<div class="note"><strong>Verified history is protected and cannot be overwritten by imported backups.</strong> Your personal Week 6 picks and settings are currently saved only in this browser. Use Copy backup to move them to another device; server sync is not enabled.</div>'+
+ return section("Data / Backup","Secure cloud sync and local backup",
+ '<div class="note"><strong>Verified history cannot be overwritten by imported backups.</strong> Week 6 picks sync across signed-in devices through the private admin database when online. Current status: '+escape(cloudStatus)+'. A local browser backup and manual JSON export remain available when offline.</div>'+
  '<div class="data-grid wt-data-grid"><div class="field"><label>Export local picks</label><textarea readonly id="exportBox">'+escape(json)+'</textarea><div class="action-row"><button class="btn" data-action="copy">Copy backup</button></div></div><div class="field"><label>Import local picks</label><textarea id="importBox" placeholder="Paste WHOLE THANG backup JSON"></textarea><div class="action-row"><button class="btn primary" data-action="import">Import picks</button><button class="btn danger" data-action="reset">Reset local picks</button></div></div></div>')+
  '<div class="note"><strong>Data source:</strong> Supplied Week 1–5 pick log and final scores, last updated October 12, 2026. All 79 selections are preserved as historical data. Week 6 results have not been entered.</div>';
 }
@@ -196,7 +239,7 @@ document.addEventListener("click",async function(e){
  state.picks[g.id]=target.dataset.team;save();render();return;}
  const action=e.target.closest("[data-action]");if(!action)return;
  switch(action.dataset.action){
- case "save":save();toast("Picks saved on this browser.");break;
+ case "save":save();toast("Saved locally; cloud sync requested.");break;
  case "lock":state.locked=!state.locked;save();render();toast(state.locked?"Locally locked.":"Unlocked.");break;
  case "copy":try{await navigator.clipboard.writeText(document.getElementById("exportBox").value);toast("Backup copied.");}catch{toast("Copy unavailable; select the backup text.");}break;
  case "import":try{
@@ -215,4 +258,5 @@ document.addEventListener("change",e=>{
  if(e.target.matches("[data-margin]")){state[e.target.dataset.margin]=validMargin(e.target.value);save();}
 });
 render();
+initCloud();
 })();
