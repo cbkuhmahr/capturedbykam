@@ -17,11 +17,14 @@
     <header class="cbk-admin-header">
       <div>
         <p class="eyebrow">Capturedby_Kam</p>
-        <h1>Studio Admin</h1>
+        <h1 id="adminTitle">Admin</h1>
       </div>
       <div class="cbk-admin-header-actions">
-        <a class="button" href="shop.html">View Shop</a>
-        <a class="button" href="qr.html" target="_blank" rel="noopener">Permanent Shop QR</a>
+        <div id="businessHeaderActions" class="cbk-admin-business-actions" hidden>
+          <a class="button" href="shop.html">View Shop</a>
+          <a class="button" href="qr.html" target="_blank" rel="noopener">Permanent Shop QR</a>
+        </div>
+        <button id="adminHomeButton" class="button" type="button" hidden>Admin Home</button>
         <button id="signOutButton" class="button button-dark" type="button" hidden>Lock Admin</button>
       </div>
     </header>
@@ -59,6 +62,27 @@
     </section>
 
     <main id="adminDashboard" hidden>
+      <section id="adminChoice" class="cbk-admin-card cbk-admin-launchpad">
+        <p class="eyebrow">Private workspace</p>
+        <h2>What are you here for?</h2>
+        <p class="cbk-admin-help">Choose your lane. WHOLE THANG stays completely separate from customer-facing CBK work.</p>
+        <div class="cbk-admin-choice-grid">
+          <button id="openWholeThangButton" class="cbk-admin-choice-card cbk-admin-choice-whole" type="button">
+            <span class="cbk-admin-choice-kicker">NFL</span>
+            <strong>WHOLE THANG 🪐</strong>
+            <small>Your picks, results, history, team trends, and NFL intelligence.</small>
+            <span class="cbk-admin-choice-action">Open Picks →</span>
+          </button>
+          <button id="openCbkBusinessButton" class="cbk-admin-choice-card cbk-admin-choice-business" type="button">
+            <span class="cbk-admin-choice-kicker">BUSINESS</span>
+            <strong>CBK Business</strong>
+            <small>Galleries, photo uploads, bookings, customer orders, and shop tools.</small>
+            <span class="cbk-admin-choice-action">Open Business →</span>
+          </button>
+        </div>
+      </section>
+
+      <div id="cbkBusinessPanel" hidden>
       <section id="securityCard" class="cbk-admin-card cbk-security-card">
         <div class="cbk-admin-section-head">
           <div>
@@ -199,6 +223,7 @@
         </div>
         <div class="cbk-order-filters" role="tablist" aria-label="Order status"><button class="button is-active" type="button" data-order-filter="new">NEW</button><button class="button" type="button" data-order-filter="paid">PAID</button><button class="button" type="button" data-order-filter="sent">SENT</button><button class="button" type="button" data-order-filter="all">ALL</button></div><div id="adminOrders" class="cbk-order-list"></div>
       </section>
+      </div>
     </main>
   </div>
 
