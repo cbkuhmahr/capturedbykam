@@ -199,3 +199,24 @@ url("../img/cbk-hero-bridge.jpg") center 54%/cover no-repeat;color:#fff}
   background:var(--studio-ink);
   color:var(--studio-paper);
 }
+
+
+/* Mobile hero tightening: move the category line into the open sky area */
+@media(max-width:600px){
+  .studio-hero{
+    position:relative;
+  }
+  .studio-hero .studio-hero-copy>.studio-kicker{
+    position:absolute;
+    top:18px;
+    left:16px;
+    right:16px;
+    margin:0;
+    color:#0a0a0a;
+    z-index:2;
+    line-height:1.35;
+  }
+  .studio-hero-copy{
+    padding-top:22px;
+  }
+}
