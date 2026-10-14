@@ -5,6 +5,13 @@
   const loginPanel = document.getElementById("loginPanel");
   const dashboard = document.getElementById("adminDashboard");
   const signOutButton = document.getElementById("signOutButton");
+  const adminTitle = document.getElementById("adminTitle");
+  const adminChoice = document.getElementById("adminChoice");
+  const cbkBusinessPanel = document.getElementById("cbkBusinessPanel");
+  const openWholeThangButton = document.getElementById("openWholeThangButton");
+  const openCbkBusinessButton = document.getElementById("openCbkBusinessButton");
+  const adminHomeButton = document.getElementById("adminHomeButton");
+  const businessHeaderActions = document.getElementById("businessHeaderActions");
   const loginForm = document.getElementById("loginForm");
   const loginPin = document.getElementById("loginPin");
   const loginMessage = document.getElementById("loginMessage");
@@ -223,19 +230,52 @@
     await refreshPublicSecurity();
   });
 
+  function showAdminChoice() {
+    adminChoice.hidden = false;
+    cbkBusinessPanel.hidden = true;
+    businessHeaderActions.hidden = true;
+    adminHomeButton.hidden = true;
+    adminTitle.textContent = "Admin";
+  }
+
+  async function openBusinessDashboard() {
+    adminChoice.hidden = true;
+    cbkBusinessPanel.hidden = false;
+    businessHeaderActions.hidden = false;
+    adminHomeButton.hidden = false;
+    adminTitle.textContent = "CBK Business";
+    await Promise.all([refreshAll(), refreshSecurity()]);
+  }
+
   async function openDashboard() {
     loginPanel.hidden = true;
     dashboard.hidden = false;
     signOutButton.hidden = false;
     loginMessage.textContent = "";
     totpLoginMessage.textContent = "";
-    await Promise.all([refreshAll(), refreshSecurity()]);
+    showAdminChoice();
   }
+
+  openWholeThangButton.addEventListener("click", () => {
+    window.location.href = "/whole-thang/";
+  });
+
+  openCbkBusinessButton.addEventListener("click", async () => {
+    await openBusinessDashboard();
+  });
+
+  adminHomeButton.addEventListener("click", () => {
+    showAdminChoice();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 
   function showLogin(message = "") {
     loginPanel.hidden = false;
     dashboard.hidden = true;
     signOutButton.hidden = true;
+    businessHeaderActions.hidden = true;
+    adminHomeButton.hidden = true;
+    adminTitle.textContent = "Admin";
     totpLoginForm.hidden = true;
     loginForm.hidden = false;
     mfaToken = "";
