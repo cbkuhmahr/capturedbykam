@@ -187,3 +187,15 @@ url("../img/cbk-hero-bridge.jpg") center 54%/cover no-repeat;color:#fff}
     padding-top:30px;
   }
 }
+
+.studio-footer-links .studio-admin-link{
+  border:1px solid var(--studio-ink);
+  padding:7px 10px;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.studio-footer-links .studio-admin-link:hover{
+  background:var(--studio-ink);
+  color:var(--studio-paper);
+}
