@@ -175,10 +175,15 @@ function picksPage(){
  const groups=[...new Set(forecasts.map(f=>f.group))];
  return section("Week 6 Picks",picked+"/14 selected · "+(state.locked?"Locally locked":"Editable"),
     '<div class="wt-info-bar"><span><strong>Save:</strong> '+escape(cloudStatus)+'</span><span>Official form submission still required</span></div>'+
+    '<div class="wt-edit-toolbar" role="group" aria-label="Week 6 editing controls">'+
+     '<button type="button" class="btn '+(state.locked?"primary":"")+'" data-action="edit" aria-pressed="'+(!state.locked)+'">✎ Edit Picks</button>'+
+     '<button type="button" class="btn '+(!state.locked?"primary":"")+'" data-action="save-lock" '+(state.locked?"disabled":"")+'>Save & Lock Picks</button>'+
+     '<span class="wt-edit-message" role="status">'+(state.locked?"Your choices are locked. Select Edit Picks to change them.":"Editing enabled. Tap either team in any matchup to change your pick.")+'</span>'+
+     '</div>'+
     groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
  section("Pool Tiebreakers","Closest without going over",
  '<div class="tiebreak-grid"><div class="field"><label>SNF · DAL @ GB · victory margin</label><input aria-label="SNF margin" type="number" min="0" max="200" data-margin="snfMargin" value="'+escape(state.snfMargin)+'" '+(state.locked?"disabled":"")+' placeholder="Margin"></div><div class="field"><label>MNF · WAS @ SF · victory margin</label><input aria-label="MNF margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?"disabled":"")+' placeholder="Margin"></div></div>'+
- '<div class="action-row"><button class="btn primary" data-action="save">Save & sync picks</button><button class="btn" data-action="lock">'+(state.locked?"Unlock picks":"Lock picks")+'</button></div><p class="wt-helper">The lock is a personal reminder, not the league submission cutoff. Submit your official picks in the family form.</p>');
+ '<div class="action-row"><button class="btn primary" data-action="save">Save & sync picks</button><button class="btn" data-action="lock">'+(state.locked?"Edit Picks":"Save & Lock Picks")+'</button></div><p class="wt-helper">The lock is a personal reminder, not the league submission cutoff. Submit your official picks in the family form.</p>');
 }
 function intelCard(f){
  const chosen=state.picks[f.id];
@@ -240,7 +245,18 @@ document.addEventListener("click",async function(e){
  const action=e.target.closest("[data-action]");if(!action)return;
  switch(action.dataset.action){
  case "save":save();toast("Saved locally; cloud sync requested.");break;
- case "lock":state.locked=!state.locked;save();render();toast(state.locked?"Locally locked.":"Unlocked.");break;
+ case "edit":
+  if(state.locked){state.locked=false;save();render();toast("Editing enabled. Tap a team to update its pick.");}
+  else toast("Your picks are already editable. Tap any team to change it.");
+  break;
+ case "save-lock":
+  if(!state.locked){state.locked=true;save();render();toast("Selections saved and locked. Use Edit Picks to change them.");}
+  else toast("Selections are already locked.");
+  break;
+ case "lock":
+  state.locked=!state.locked;save();render();
+  toast(state.locked?"Selections saved and locked.":"Editing enabled. Tap a team to update its pick.");
+  break;
  case "copy":try{await navigator.clipboard.writeText(document.getElementById("exportBox").value);toast("Backup copied.");}catch{toast("Copy unavailable; select the backup text.");}break;
  case "import":try{
  const v=JSON.parse(document.getElementById("importBox").value);
