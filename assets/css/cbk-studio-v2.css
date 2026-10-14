@@ -220,3 +220,59 @@ url("../img/cbk-hero-bridge.jpg") center 54%/cover no-repeat;color:#fff}
     padding-top:22px;
   }
 }
+
+
+/* Mobile density pass — less dead space, faster path to the work */
+@media(max-width:600px){
+  .studio-hero{
+    min-height:56vh;
+    max-height:560px;
+    align-items:flex-start;
+    background-position:60% 48%;
+  }
+  .studio-hero-copy{
+    padding:84px 16px 26px;
+  }
+  .studio-hero h1{
+    margin-top:0;
+    font-size:clamp(3.25rem,16vw,5rem);
+    line-height:.88;
+  }
+  .studio-hero p{
+    margin-top:14px;
+    font-size:.98rem;
+    line-height:1.45;
+  }
+  .studio-actions{
+    margin-top:18px;
+  }
+  .studio-section{
+    padding-top:36px;
+    padding-bottom:36px;
+  }
+  .studio-section-head{
+    gap:18px;
+    margin-bottom:22px;
+  }
+  .studio-section-head h2{
+    font-size:clamp(2.35rem,12vw,3.5rem);
+  }
+  .studio-section-head p{
+    line-height:1.45;
+  }
+  .studio-page-hero{
+    padding-top:34px;
+    padding-bottom:32px;
+  }
+  .studio-work-card,
+  .studio-work-card:nth-child(n+3){
+    min-height:300px;
+  }
+  .studio-social-row{
+    padding:18px 0;
+  }
+  .studio-footer{
+    padding-top:20px;
+    padding-bottom:28px;
+  }
+}
