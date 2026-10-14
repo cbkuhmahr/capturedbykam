@@ -44,3 +44,27 @@ body{background:#ece6dc;color:#141414}.cbk-admin-shell{width:min(1180px,calc(100
 .cbk-booking-note{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.87rem;line-height:1.5;max-height:230px;overflow:auto;background:#fff;border:1px solid rgba(20,20,20,.12);padding:14px}
 .cbk-booking-inquiry a{color:inherit;font-weight:700;text-decoration:underline}
 @media(max-width:760px){.cbk-booking-inquiry .cbk-order-top{gap:5px}}
+
+
+/* Admin launchpad */
+.cbk-admin-business-actions{display:flex;gap:8px;flex-wrap:wrap}
+.cbk-admin-launchpad{margin-top:22px;padding:28px}
+.cbk-admin-launchpad>h2{margin:4px 0 8px;font-size:clamp(1.8rem,4vw,2.8rem)}
+.cbk-admin-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:22px}
+.cbk-admin-choice-card{appearance:none;border:1px solid rgba(20,20,20,.18);padding:24px;text-align:left;min-height:220px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:10px;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.cbk-admin-choice-card:hover,.cbk-admin-choice-card:focus-visible{transform:translateY(-2px);box-shadow:0 16px 34px rgba(0,0,0,.12)}
+.cbk-admin-choice-card strong{font-family:"Cinzel",serif;font-size:clamp(1.3rem,3vw,2rem)}
+.cbk-admin-choice-card small{font-size:.94rem;line-height:1.5;max-width:38ch}
+.cbk-admin-choice-kicker{font-size:.7rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.cbk-admin-choice-action{margin-top:auto;font-weight:800;font-size:.86rem}
+.cbk-admin-choice-whole{background:#07111f;color:#f6f8fb;border-color:#20364f}
+.cbk-admin-choice-whole .cbk-admin-choice-kicker,.cbk-admin-choice-whole .cbk-admin-choice-action{color:#f7b928}
+.cbk-admin-choice-whole small{color:#a8b8c8}
+.cbk-admin-choice-business{background:#fffdf8;color:#171717}
+.cbk-admin-choice-business .cbk-admin-choice-kicker{color:#7b6745}
+@media(max-width:760px){
+  .cbk-admin-choice-grid{grid-template-columns:1fr}
+  .cbk-admin-choice-card{min-height:180px;padding:20px}
+  .cbk-admin-business-actions{display:grid;width:100%}
+  .cbk-admin-business-actions .button{width:100%}
+}
