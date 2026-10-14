@@ -119,3 +119,6 @@
 .wt-card-score:not(:empty){padding-top:9px;padding-bottom:8px;border-bottom:1px solid #252b34}
 .wt-card-score strong{color:#f2c977}
 @media(max-width:640px){.wt-score-grid{grid-template-columns:1fr}.wt-score-game{padding:10px 12px}}
+
+/* Single, MNF-only pool tiebreaker input. */
+.tiebreak-grid{grid-template-columns:minmax(0,1fr)}
