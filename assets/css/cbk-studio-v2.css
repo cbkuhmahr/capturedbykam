@@ -120,3 +120,70 @@ url("../img/cbk-hero-bridge.jpg") center 54%/cover no-repeat;color:#fff}
   .studio-footer-links{gap:12px}
   .studio-body .cbk-gallery-section,.studio-body .cbk-photo-section{padding-left:14px;padding-right:14px}
 }
+
+/* Photo Shop compact intro */
+.shop-compact-hero{
+  padding-top:clamp(34px,5vw,58px);
+  padding-bottom:clamp(30px,4vw,48px);
+}
+.shop-hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);
+  gap:clamp(28px,5vw,72px);
+  align-items:end;
+}
+.shop-compact-hero h1{
+  font-size:clamp(3.2rem,7vw,6.6rem);
+  line-height:.92;
+}
+.shop-compact-hero> .shop-hero-grid>div:first-child>p:last-child{
+  max-width:620px;
+  margin-top:14px;
+}
+.shop-hero-pricing{
+  border-top:1px solid var(--studio-line);
+  padding-top:14px;
+  display:grid;
+  gap:7px;
+}
+.shop-hero-pricing span{
+  color:var(--studio-accent);
+  font-size:.68rem;
+  font-weight:800;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+.shop-hero-pricing strong{
+  font-size:1rem;
+  line-height:1.45;
+}
+.shop-hero-pricing small{
+  color:var(--studio-muted);
+  font-size:.82rem;
+  line-height:1.5;
+}
+@media(max-width:760px){
+  .shop-compact-hero{
+    padding-top:26px;
+    padding-bottom:26px;
+  }
+  .shop-hero-grid{
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+  .shop-compact-hero h1{
+    font-size:clamp(3rem,14vw,4.5rem);
+    max-width:7ch;
+  }
+  .shop-compact-hero> .shop-hero-grid>div:first-child>p:last-child{
+    font-size:.98rem;
+    line-height:1.5;
+    margin-top:10px;
+  }
+  .shop-hero-pricing{
+    padding-top:12px;
+  }
+  .studio-body .cbk-gallery-section{
+    padding-top:30px;
+  }
+}
