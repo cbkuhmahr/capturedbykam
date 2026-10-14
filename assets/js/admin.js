@@ -268,6 +268,7 @@
     loginMessage.textContent = "";
     totpLoginMessage.textContent = "";
     showAdminChoice();
+    resetIdleTimer();
   }
 
   openWholeThangButton.addEventListener("click", () => {
@@ -284,6 +285,7 @@
   });
 
   function showLogin(message = "") {
+    clearTimeout(idleTimer);
     loginPanel.hidden = false;
     dashboard.hidden = true;
     signOutButton.hidden = true;
