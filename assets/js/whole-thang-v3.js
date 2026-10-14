@@ -27,14 +27,14 @@ const HISTORY=raw.trim().split(/\n+/).map((line,i)=>{
  const tie=winner==="T", w=Number(winScore), l=Number(loseScore);
  return {id:"history-"+(i+1),week:Number(wk),away,home,pick,winner,tie,awayScore:tie?w:winner===away?w:l,homeScore:tie?w:winner===home?w:l,status:tie?"T":pick===winner?"W":"L"};
 });
-const EMPTY=()=>({picks:{},snfMargin:"",mnfMargin:"",locked:false,homeEdge:45,updatedAt:0});
+const EMPTY=()=>({picks:{},mnfMargin:"",locked:false,homeEdge:45,updatedAt:0});
 function safeLoad(){
  let existing=null,old=null;
  try{existing=JSON.parse(localStorage.getItem(KEY)||"null");}catch{}
  try{old=JSON.parse(localStorage.getItem(OLD_KEY)||localStorage.getItem("whole-thang-v1")||"null");}catch{}
  const source=existing||old||{};
  const allow=Object.fromEntries(GAMES.filter(g=>source.picks&&[g.away,g.home].includes(source.picks[g.id])).map(g=>[g.id,source.picks[g.id]]));
- return {picks:allow,snfMargin:validMargin(source.snfMargin),mnfMargin:validMargin(source.mnfMargin),locked:!!source.locked,homeEdge:[0,25,45,65,85].includes(Number(source.homeEdge))?Number(source.homeEdge):45,updatedAt:Number(source.updatedAt)||0};
+ return {picks:allow,mnfMargin:validMargin(source.mnfMargin),locked:!!source.locked,homeEdge:[0,25,45,65,85].includes(Number(source.homeEdge))?Number(source.homeEdge):45,updatedAt:Number(source.updatedAt)||0};
 }
 function validMargin(v){return v===""||v==null?"":Number.isInteger(Number(v))&&Number(v)>=0&&Number(v)<=200?String(v):"";}
 let state=safeLoad(),tab="home",teamSort="rating",intelFilter="all";
@@ -72,12 +72,12 @@ async function initCloud(){
   const remoteTime=remote?Date.parse(remote.updated_at)||0:0;
   const localTime=Number(state.updatedAt)||0;
   if(remote&&started===localRevision&&remoteTime>=localTime){
-   state={...EMPTY(),picks:Object.fromEntries(GAMES.filter(g=>remote.picks&&[g.away,g.home].includes(remote.picks[g.id])).map(g=>[g.id,remote.picks[g.id]])),snfMargin:validMargin(remote.snf_margin),mnfMargin:validMargin(remote.mnf_margin),locked:!!remote.locked,homeEdge:[0,25,45,65,85].includes(Number(remote.home_edge))?Number(remote.home_edge):45,updatedAt:remoteTime};
+   state={...EMPTY(),picks:Object.fromEntries(GAMES.filter(g=>remote.picks&&[g.away,g.home].includes(remote.picks[g.id])).map(g=>[g.id,remote.picks[g.id]])),mnfMargin:validMargin(remote.mnf_margin),locked:!!remote.locked,homeEdge:[0,25,45,65,85].includes(Number(remote.home_edge))?Number(remote.home_edge):45,updatedAt:remoteTime};
    try{localStorage.setItem(KEY,JSON.stringify(state));}catch{}
    initialCloudLoad=false;cloudStatus="Cloud synced";
   }else{
    initialCloudLoad=false;cloudStatus="Cloud connected";
-   if(localRevision>started||state.updatedAt||Object.keys(state.picks).length||state.snfMargin!==""||state.mnfMargin!=="")queueCloudSave();
+   if(localRevision>started||state.updatedAt||Object.keys(state.picks).length||state.mnfMargin!=="")queueCloudSave();
   }
  }catch{initialCloudLoad=false;cloudStatus="Local backup · sync offline";}
  render();
@@ -181,8 +181,9 @@ function picksPage(){
      '<span class="wt-edit-message" role="status">'+(state.locked?"Your choices are locked. Select Edit Picks to change them.":"Editing enabled. Tap either team in any matchup to change your pick.")+'</span>'+
      '</div>'+
     groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
- section("Pool Tiebreakers","Closest without going over",
- '<div class="tiebreak-grid"><div class="field"><label>SNF · DAL @ GB · victory margin</label><input aria-label="SNF margin" type="number" min="0" max="200" data-margin="snfMargin" value="'+escape(state.snfMargin)+'" '+(state.locked?"disabled":"")+' placeholder="Margin"></div><div class="field"><label>MNF · WAS @ SF · victory margin</label><input aria-label="MNF margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?"disabled":"")+' placeholder="Margin"></div></div>'+
+ section("Monday Night Tiebreaker","MNF winner first · predicted margin second",
+ '<div class="tiebreak-grid"><div class="field"><label>MNF · WAS @ SF · predicted winning margin</label><input aria-label="MNF predicted winning margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?"disabled":"")+' placeholder="Margin"></div></div>'+ 
+ '<p class="wt-helper">If tied on correct picks, the MNF winner pick breaks the tie first. If still tied, the MNF predicted winning margin is used, closest without going over. No additional points are awarded.</p>'+
  '<div class="action-row"><button class="btn primary" data-action="save">Save & sync picks</button><button class="btn" data-action="lock">'+(state.locked?"Edit Picks":"Save & Lock Picks")+'</button></div><p class="wt-helper">The lock is a personal reminder, not the league submission cutoff. Submit your official picks in the family form.</p>');
 }
 function intelCard(f){
@@ -261,7 +262,7 @@ document.addEventListener("click",async function(e){
  case "import":try{
  const v=JSON.parse(document.getElementById("importBox").value);
  if(!v||typeof v!=="object"||!v.picks||typeof v.picks!=="object")throw Error("Invalid picks backup");
- state={...EMPTY(),picks:Object.fromEntries(GAMES.filter(g=>[g.away,g.home].includes(v.picks[g.id])).map(g=>[g.id,v.picks[g.id]])),snfMargin:validMargin(v.snfMargin),mnfMargin:validMargin(v.mnfMargin),locked:!!v.locked,homeEdge:[0,25,45,65,85].includes(Number(v.homeEdge))?Number(v.homeEdge):45};
+ state={...EMPTY(),picks:Object.fromEntries(GAMES.filter(g=>[g.away,g.home].includes(v.picks[g.id])).map(g=>[g.id,v.picks[g.id]])),mnfMargin:validMargin(v.mnfMargin),locked:!!v.locked,homeEdge:[0,25,45,65,85].includes(Number(v.homeEdge))?Number(v.homeEdge):45};
  save();render();toast("Picks imported; official history unchanged.");
  }catch{toast("Invalid picks backup.");}break;
  case "reset":if(confirm("Clear Week 6 browser picks and settings? Verified results will stay.")){state=EMPTY();save();render();toast("Local Week 6 picks reset.");}break;
