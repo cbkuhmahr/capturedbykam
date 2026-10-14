@@ -1,0 +1,95 @@
+
+/* WHOLE THANG intelligence screens – 2026 */
+.wt-pad{padding:15px}
+.wt-brief-grid,.wt-intel-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.wt-brief-grid h3,.wt-intro h3{margin:0 0 9px;font-size:15px;letter-spacing:-.02em}
+.wt-brief-row{display:flex;flex-direction:column;gap:3px;padding:11px 0;border-top:1px solid var(--line);font-size:12px}
+.wt-brief-row strong{color:var(--text);letter-spacing:.01em}
+.wt-brief-row span,.wt-intro p,.wt-helper{color:var(--muted);font-size:12px;line-height:1.65}
+.wt-bar-row{display:grid;grid-template-columns:30px 1fr 48px;gap:11px;align-items:center;padding:7px 0;font-size:12px}
+.wt-bar-row>span{font-weight:800;color:var(--muted)}
+.wt-bar-row>strong{text-align:right}
+.wt-bar-track{height:8px;border-radius:12px;background:#24262a;overflow:hidden}
+.wt-bar-fill{height:100%;background:linear-gradient(90deg,#806125,#eac471);border-radius:12px}
+.wt-info-bar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;background:#15120e;color:#c5b291;border:1px solid #393024;border-radius:9px;font-size:11px;padding:11px 13px;margin-bottom:13px}
+.wt-info-bar strong{color:#f4d593}
+.wt-group{margin-bottom:17px}
+.wt-match-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;border-top:0}
+.wt-game-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.wt-card-head,.wt-card-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 13px;color:var(--muted);font-size:10px}
+.wt-card-head{border-bottom:1px solid var(--line)}
+.wt-card-head strong{color:#ddd}
+.wt-card-foot{border-top:1px solid var(--line);line-height:1.5;flex-wrap:wrap}
+.wt-card-foot strong{color:#f7dfa5}
+.wt-team-option{display:flex;align-items:center;width:100%;gap:9px;padding:11px 13px;background:transparent;border:0;color:var(--text);text-align:left;cursor:pointer}
+.wt-team-option+.wt-team-option{border-top:1px solid #18191c}
+.wt-team-option:hover:not(:disabled){background:#171511}
+.wt-team-option.is-selected{background:#262012;box-shadow:inset 3px 0 #dfac4b}
+.wt-team-option span{font-size:13px;font-weight:800}
+.wt-team-option small{margin-left:auto;font-size:10px;color:var(--muted);text-align:right}
+.wt-team-option i{font-style:normal;color:var(--accent);font-size:17px;width:20px;text-align:right}
+.wt-logo{width:28px;height:28px;object-fit:contain;flex:0 0 28px}
+.wt-red{color:var(--red)!important}
+.wt-muted{color:var(--muted)}
+.wt-helper{margin:10px 2px}
+.wt-intro{padding:18px;background:radial-gradient(circle at right top,rgba(197,143,56,.15),transparent 53%),#0e0e0f;border:1px solid #393024;border-radius:12px;margin-bottom:13px}
+.wt-model-tag{display:inline-block;font-size:9px;color:#e9c482;letter-spacing:.13em;font-weight:850;margin-bottom:8px}
+.wt-intro h3{font-size:22px;letter-spacing:-.04em}
+.wt-intro p{margin:0;max-width:620px}
+.wt-controls{display:flex;justify-content:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.wt-controls label{display:flex;flex-direction:column;gap:6px;color:var(--muted);font-size:10px;letter-spacing:.04em;text-transform:uppercase;font-weight:800;min-width:190px}
+.wt-controls select{background:#0e0e10;color:#f5f5f5;border:1px solid #393b40;padding:9px 10px;border-radius:8px;font-size:12px;font-weight:750;min-height:39px}
+.wt-intel-card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px;min-width:0}
+.wt-intel-top,.wt-intel-result,.wt-factor-grid{display:flex;justify-content:space-between;gap:8px}
+.wt-intel-top{font-size:10px;color:var(--muted)}
+.wt-intel-top span:last-child{color:#f0d69d}
+.wt-intel-match{display:flex;align-items:center;justify-content:flex-start;gap:8px;margin:12px 0}
+.wt-intel-match>strong{font-size:16px;letter-spacing:-.03em}
+.wt-intel-match>span{color:var(--muted)}
+.wt-prob{height:7px;background:#22252a;border-radius:8px;overflow:hidden}
+.wt-prob-fill{background:linear-gradient(90deg,#8e6d33,#e2ba70);height:100%;border-radius:8px}
+.wt-intel-result{margin:10px 0 12px}
+.wt-intel-result>div{min-width:0}
+.wt-intel-result>div:last-child{text-align:right}
+.wt-intel-result small{display:block;color:var(--muted);font-size:10px;margin-bottom:3px}
+.wt-intel-result strong{font-size:14px}
+.wt-explain{color:#a9a9af;font-size:11px;line-height:1.7;margin:0;padding-bottom:10px;border-bottom:1px solid var(--line);min-height:82px}
+.wt-factor-grid{font-size:10px;color:#a2a2aa;padding:10px 0;flex-wrap:wrap}
+.wt-factor-grid strong{color:#ddd}
+.wt-small-btn{padding:7px 9px;font-size:10px}
+.wt-overflow{overflow-x:auto;overscroll-behavior-x:contain}
+.wt-overflow table{min-width:650px}
+.wt-overflow td,.wt-overflow th{white-space:nowrap}
+.wt-name{display:flex;align-items:center;gap:9px;min-width:124px}
+.wt-name small,.wt-table-sub{display:block;font-size:10px;color:var(--muted);font-weight:500;margin-top:3px}
+.wt-grade{background:#292113;border:1px solid #51402b;color:#ebc780;border-radius:6px;padding:4px 7px}
+.wt-history-weeks{display:grid;gap:10px;margin-top:12px}
+.wt-week{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.wt-week>summary{display:grid;grid-template-columns:1fr 100px 66px;align-items:center;gap:7px;padding:14px;cursor:pointer;list-style:none}
+.wt-week>summary::-webkit-details-marker{display:none}
+.wt-week>summary strong{font-size:13px}
+.wt-week>summary>span:first-child{display:flex;flex-direction:column;gap:3px}
+.wt-week>summary>span:first-child small{font-size:10px;color:var(--muted)}
+.wt-week>summary>span:last-child{text-align:right;font-size:12px;color:#e1bb75}
+.wt-history-table{overflow-x:auto;border-top:1px solid var(--line)}
+.wt-history-table table{min-width:385px}
+.wt-history-table td,.wt-history-table th{padding:10px 12px;font-variant-numeric:tabular-nums}
+.wt-win{color:var(--green);font-weight:800}
+.wt-loss{color:var(--red);font-weight:800}
+.wt-tie{color:#d5b87f;font-weight:800}
+.wt-data-grid{margin-top:13px}
+.wt-data-grid .field{min-width:0}
+.wt-data-grid textarea{min-height:175px}
+.tabs{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media(max-width:700px){
+ .wt-brief-grid,.wt-intel-grid,.wt-match-grid{grid-template-columns:1fr}
+ .wt-explain{min-height:0}
+ .wt-controls label{flex:1;min-width:145px}
+ .wt-card-head,.wt-card-foot{padding:10px 12px}
+ .tab{font-size:11px}
+ .tabs{height:48px}
+ .wt-week>summary{grid-template-columns:1fr 78px 56px;padding:11px}
+ .wt-logo{width:24px;height:24px;flex-basis:24px}
+ .wt-game-card{margin-bottom:0}
+}
+@media(max-width:380px){.tab{font-size:10px}.wt-team-option small{font-size:9px}}
