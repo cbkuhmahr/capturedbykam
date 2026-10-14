@@ -12,6 +12,8 @@
   const openCbkBusinessButton = document.getElementById("openCbkBusinessButton");
   const adminHomeButton = document.getElementById("adminHomeButton");
   const businessHeaderActions = document.getElementById("businessHeaderActions");
+  const businessTabs = [...document.querySelectorAll("[data-admin-view-target]")];
+  const businessViews = [...document.querySelectorAll("[data-admin-view]")];
   const loginForm = document.getElementById("loginForm");
   const loginPin = document.getElementById("loginPin");
   const loginMessage = document.getElementById("loginMessage");
@@ -226,7 +228,7 @@
 
   signOutButton.addEventListener("click", async () => {
     try { await authApi("logout"); } catch {}
-    showLogin("Studio Admin locked.");
+    showLogin("Admin locked.");
     await refreshPublicSecurity();
   });
 
@@ -238,14 +240,26 @@
     adminTitle.textContent = "Admin";
   }
 
+  async function showBusinessView(name) {
+    businessTabs.forEach((button) => button.classList.toggle("is-active", button.dataset.adminViewTarget === name));
+    businessViews.forEach((view) => { view.hidden = view.dataset.adminView !== name; });
+    if (name === "security") await refreshSecurity();
+  }
+
   async function openBusinessDashboard() {
     adminChoice.hidden = true;
     cbkBusinessPanel.hidden = false;
     businessHeaderActions.hidden = false;
     adminHomeButton.hidden = false;
     adminTitle.textContent = "CBK Business";
-    await Promise.all([refreshAll(), refreshSecurity()]);
+    await showBusinessView("overview");
+    await refreshAll();
   }
+
+  businessTabs.forEach((button) => button.addEventListener("click", async () => {
+    await showBusinessView(button.dataset.adminViewTarget);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }));
 
   async function openDashboard() {
     loginPanel.hidden = true;
@@ -909,10 +923,28 @@
     return String(value).replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" }[m]));
   }
 
+  const ADMIN_IDLE_MS = 30 * 60 * 1000;
+  let idleTimer = null;
+
+  function resetIdleTimer() {
+    clearTimeout(idleTimer);
+    if (dashboard.hidden) return;
+    idleTimer = setTimeout(async () => {
+      try { await authApi("logout"); } catch {}
+      showLogin("Admin locked after 30 minutes of inactivity.");
+      await refreshPublicSecurity();
+    }, ADMIN_IDLE_MS);
+  }
+
+  ["pointerdown","keydown","touchstart"].forEach((eventName) => {
+    window.addEventListener(eventName, resetIdleTimer, { passive: true });
+  });
+
   async function initializeAdmin() {
     try {
       await authApi("securityStatus");
       await openDashboard();
+      resetIdleTimer();
     } catch {
       showLogin();
       await refreshPublicSecurity();
