@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/whole-thang",
+      "destination": "/api/whole-thang"
+    },
+    {
+      "source": "/whole-thang/",
+      "destination": "/api/whole-thang"
+    },
+    {
       "source": "/.well-known/apple-developer-merchantid-domain-association",
       "destination": "/api/apple-domain"
     }
