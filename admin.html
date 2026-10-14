@@ -1,60 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Studio Admin | Capturedby_Kam</title>
-  <meta name="robots" content="noindex,nofollow" />
-  <link rel="icon" type="image/svg+xml" href="assets/img/cbk-camera.svg" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin | Capturedby_Kam</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="icon" type="image/svg+xml" href="assets/img/cbk-camera.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <link rel="stylesheet" href="assets/css/cbk-admin.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/cbk-admin.css">
+  <link rel="stylesheet" href="assets/css/cbk-admin-v2.css">
 </head>
 <body>
   <div class="cbk-admin-shell">
     <header class="cbk-admin-header">
-      <div>
-        <p class="eyebrow">Capturedby_Kam</p>
-        <h1 id="adminTitle">Admin</h1>
-      </div>
+      <div><p class="eyebrow">Capturedby_Kam</p><h1 id="adminTitle">Admin</h1></div>
       <div class="cbk-admin-header-actions">
         <div id="businessHeaderActions" class="cbk-admin-business-actions" hidden>
-          <a class="button" href="shop.html">View Shop</a>
-          <a class="button" href="qr.html" target="_blank" rel="noopener">Permanent Shop QR</a>
+          <a class="button" href="shop.html">View Galleries</a>
+          <a class="button" href="qr.html" target="_blank" rel="noopener">Shop QR</a>
         </div>
         <button id="adminHomeButton" class="button" type="button" hidden>Admin Home</button>
-        <button id="signOutButton" class="button button-dark" type="button" hidden>Lock Admin</button>
+        <button id="signOutButton" class="button button-dark" type="button" hidden>Lock</button>
       </div>
     </header>
 
     <section id="loginPanel" class="cbk-admin-card cbk-login-card">
       <p class="eyebrow">Private access</p>
-      <h2>Studio Admin</h2>
-      <p id="loginIntro">Use your passkey for the fastest, strongest sign-in. Your PIN remains available as backup access.</p>
-
-      <button id="passkeyLoginButton" class="button button-dark cbk-passkey-primary" type="button" hidden>
-        Sign in with Passkey / Face ID
-      </button>
-
+      <h2>Admin</h2>
+      <p id="loginIntro">Use your passkey for the fastest sign-in. PIN remains available as backup.</p>
+      <button id="passkeyLoginButton" class="button button-dark cbk-passkey-primary" type="button" hidden>Sign in with Passkey / Face ID</button>
       <div id="loginDivider" class="cbk-auth-divider" hidden><span>Backup access</span></div>
-
       <form id="loginForm" class="cbk-admin-form">
-        <label>
-          <span>6-digit Admin PIN</span>
-          <input id="loginPin" class="cbk-pin-input" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" aria-label="6-digit admin passcode" required />
-        </label>
+        <label><span>6-digit Admin PIN</span><input id="loginPin" class="cbk-pin-input" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></label>
         <button class="button" type="submit">Continue with PIN</button>
         <p id="loginMessage" class="cbk-form-message" role="status"></p>
       </form>
-
       <form id="totpLoginForm" class="cbk-admin-form cbk-mfa-panel" hidden>
-        <p>Open <strong>Microsoft Authenticator</strong> and enter the current 6-digit code for Capturedby_Kam.</p>
-        <label>
-          <span>Authenticator code</span>
-          <input id="loginTotpCode" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" aria-label="Microsoft Authenticator code" required />
-        </label>
+        <p>Open <strong>Microsoft Authenticator</strong> and enter the current 6-digit code.</p>
+        <label><span>Authenticator code</span><input id="loginTotpCode" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></label>
         <button class="button button-dark" type="submit">Verify & Open Admin</button>
         <button id="cancelTotpLogin" class="button" type="button">Use a Different Method</button>
         <p id="totpLoginMessage" class="cbk-form-message" role="status"></p>
@@ -62,185 +48,159 @@
     </section>
 
     <main id="adminDashboard" hidden>
-      <section id="adminChoice" class="cbk-admin-card cbk-admin-launchpad">
+      <section id="adminChoice" class="cbk-admin-launchpad">
         <p class="eyebrow">Private workspace</p>
-        <h2>What are you here for?</h2>
-        <p class="cbk-admin-help">Choose your lane. WHOLE THANG stays completely separate from customer-facing CBK work.</p>
+        <h2>Where are you going?</h2>
+        <p class="cbk-admin-help">One secure admin. Two separate workspaces.</p>
         <div class="cbk-admin-choice-grid">
           <button id="openWholeThangButton" class="cbk-admin-choice-card cbk-admin-choice-whole" type="button">
-            <span class="cbk-admin-choice-kicker">NFL</span>
-            <strong>WHOLE THANG 🪐</strong>
-            <small>Your picks, results, history, team trends, and NFL intelligence.</small>
-            <span class="cbk-admin-choice-action">Open Picks →</span>
+            <span class="cbk-admin-choice-kicker">NFL</span><strong>WHOLE THANG 🪐</strong>
+            <small>Picks, results, history, team trends, and NFL intelligence.</small><span class="cbk-admin-choice-action">Open Picks →</span>
           </button>
           <button id="openCbkBusinessButton" class="cbk-admin-choice-card cbk-admin-choice-business" type="button">
-            <span class="cbk-admin-choice-kicker">BUSINESS</span>
-            <strong>CBK Business</strong>
-            <small>Galleries, photo uploads, bookings, customer orders, and shop tools.</small>
-            <span class="cbk-admin-choice-action">Open Business →</span>
+            <span class="cbk-admin-choice-kicker">STUDIO</span><strong>CBK Business</strong>
+            <small>Galleries, uploads, bookings, orders, and studio operations.</small><span class="cbk-admin-choice-action">Open Studio →</span>
           </button>
         </div>
       </section>
 
       <div id="cbkBusinessPanel" hidden>
-      <section id="securityCard" class="cbk-admin-card cbk-security-card">
-        <div class="cbk-admin-section-head">
-          <div>
-            <p class="eyebrow">Security</p>
-            <h2>Protect Studio Admin.</h2>
-          </div>
-          <span id="securityOverall" class="cbk-security-badge">Setup required</span>
-        </div>
+        <nav class="cbk-admin-tabs" aria-label="CBK Business">
+          <button class="cbk-admin-tab is-active" type="button" data-admin-view-target="overview">Overview</button>
+          <button class="cbk-admin-tab" type="button" data-admin-view-target="galleries">Galleries</button>
+          <button class="cbk-admin-tab" type="button" data-admin-view-target="bookings">Bookings</button>
+          <button class="cbk-admin-tab" type="button" data-admin-view-target="orders">Orders</button>
+          <button class="cbk-admin-tab" type="button" data-admin-view-target="security">Security</button>
+        </nav>
 
-        <div class="cbk-security-status-grid">
-          <div>
-            <span>Primary sign-in</span>
-            <strong>Passkey / Face ID</strong>
-            <small id="passkeyStatus">Not enrolled</small>
+        <section class="cbk-admin-view" data-admin-view="overview">
+          <div class="cbk-admin-stats" aria-label="Studio summary">
+            <div><span>Projects</span><strong id="statProjects">0</strong></div>
+            <div><span>Open</span><strong id="statOpen">0</strong></div>
+            <div><span>Photos</span><strong id="statPhotos">0</strong></div>
+            <div><span>New Orders</span><strong id="statOrders">0</strong></div>
           </div>
-          <div>
-            <span>Backup verification</span>
-            <strong>Microsoft Authenticator</strong>
-            <small id="totpStatus">Not enrolled</small>
+          <div class="cbk-overview-grid">
+            <div class="cbk-overview-note"><p class="eyebrow">Studio</p><h2>Operate without the clutter.</h2><p>Use Galleries for project creation and uploads, Bookings for new inquiries, Orders for customer delivery, and Security only when you need it.</p></div>
+            <div class="cbk-overview-note"><p class="eyebrow">Private</p><h2>Admin is locked down.</h2><p>Passkey / Face ID is primary, with PIN + Microsoft Authenticator as backup. The console also auto-locks after inactivity.</p></div>
           </div>
-          <div>
-            <span>Session storage</span>
-            <strong>Secure cookie</strong>
-            <small>HttpOnly · SameSite · 12-hour session</small>
-          </div>
-        </div>
+        </section>
 
-        <div class="cbk-security-actions">
-          <button id="registerPasskeyButton" class="button button-dark" type="button">Register Passkey on This Device</button>
-          <button id="setupAuthenticatorButton" class="button" type="button" disabled>Set Up Microsoft Authenticator</button>
-        </div>
-
-        <div id="totpSetupPanel" class="cbk-totp-setup" hidden>
-          <p><strong>Microsoft Authenticator setup</strong></p>
-          <p>In Microsoft Authenticator, add an <strong>Other account</strong>, then enter this setup key manually. This works even when you are doing the setup on the same phone.</p>
-          <div class="cbk-secret-row">
-            <code id="totpSecret">—</code>
-            <button id="copyTotpSecret" class="button" type="button">Copy Key</button>
-          </div>
-          <form id="totpSetupForm" class="cbk-admin-form">
-            <label>
-              <span>Enter the current 6-digit code</span>
-              <input id="totpSetupCode" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required />
-            </label>
-            <button class="button button-dark" type="submit">Confirm Microsoft Authenticator</button>
-          </form>
-        </div>
-
-        <p id="securityMessage" class="cbk-form-message" role="status"></p>
-      </section>
-      <section class="cbk-admin-stats" aria-label="Shop summary">
-        <div><span>Projects</span><strong id="statProjects">0</strong></div>
-        <div><span>Open</span><strong id="statOpen">0</strong></div>
-        <div><span>Photos</span><strong id="statPhotos">0</strong></div>
-        <div><span>New Orders</span><strong id="statOrders">0</strong></div>
-      </section>
-
-      <section class="cbk-admin-layout">
-        <div class="cbk-admin-card">
-          <p class="eyebrow">New project</p>
-          <h2>Create an event gallery.</h2>
-          <form id="projectForm" class="cbk-admin-form">
-            <label><span>Project / Event Name</span><input name="title" required placeholder="Whitmer Homecoming 2026" /></label>
-            <label><span>Event Date</span><input name="event_date" type="date" /></label>
-            <label><span>Description</span><textarea name="description" rows="3" placeholder="Optional short note for customers"></textarea></label>
-            <div class="cbk-admin-form-row">
-              <label><span>Photos Per Package</span><input name="package_size" type="number" min="1" value="5" required /></label>
-              <label><span>Package Price ($)</span><input name="package_price" type="number" min="0" step="0.01" value="25.00" required /></label>
-              <label><span>Each Extra Photo ($)</span><input name="extra_photo_price" type="number" min="0" step="0.01" value="2.00" required /></label>
+        <section class="cbk-admin-view" data-admin-view="galleries" hidden>
+          <section class="cbk-admin-layout">
+            <div class="cbk-admin-card">
+              <p class="eyebrow">New gallery</p><h2>Create project.</h2>
+              <form id="projectForm" class="cbk-admin-form">
+                <label><span>Project / Event Name</span><input name="title" required placeholder="Whitmer Homecoming 2026"></label>
+                <label><span>Event Date</span><input name="event_date" type="date"></label>
+                <label><span>Description</span><textarea name="description" rows="3" placeholder="Optional short note for customers"></textarea></label>
+                <div class="cbk-admin-form-row">
+                  <label><span>Photos Per Package</span><input name="package_size" type="number" min="1" value="5" required></label>
+                  <label><span>Package Price ($)</span><input name="package_price" type="number" min="0" step="0.01" value="25.00" required></label>
+                  <label><span>Each Extra Photo ($)</span><input name="extra_photo_price" type="number" min="0" step="0.01" value="2.00" required></label>
+                </div>
+                <label><span>Start As</span><select name="status"><option value="draft">Draft — hidden</option><option value="open">Open — visible in Shop</option></select></label>
+                <button class="button button-dark" type="submit">Create Project</button>
+                <p id="projectMessage" class="cbk-form-message" role="status"></p>
+              </form>
             </div>
-            <label><span>Start As</span>
-              <select name="status">
-                <option value="draft">Draft — hidden</option>
-                <option value="open">Open — visible in Shop</option>
-              </select>
-            </label>
-            <button class="button button-dark" type="submit">Create Project</button>
-            <p id="projectMessage" class="cbk-form-message" role="status"></p>
-          </form>
-        </div>
 
-        <div class="cbk-admin-card">
-          <p class="eyebrow">Upload photos</p>
-          <h2>Build the gallery.</h2>
-          <p class="cbk-admin-help">Choose a project and select up to <strong>20 finished photos at once</strong>. The browser creates smaller watermarked previews before upload; your original files stay on your computer.</p>
-          <form id="uploadForm" class="cbk-admin-form">
-            <label><span>Project</span><select id="uploadProject" required><option value="">Choose project…</option></select></label>
-            <label class="cbk-file-drop">
-              <span>Select Finished Photos — up to 20</span>
-              <input id="photoFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple required />
-              <small id="photoSelectionCount">No photos selected.</small>
-              <small>Photo IDs come from the original filenames so orders match your master files.</small>
-            </label>
-            <button id="uploadButton" class="button button-dark" type="submit">Upload Batch</button>
-            <div id="uploadProgress" class="cbk-progress" hidden><span></span></div>
-            <p id="uploadMessage" class="cbk-form-message" role="status"></p>
-          </form>
-        </div>
-      </section>
+            <div class="cbk-admin-card">
+              <p class="eyebrow">Upload</p><h2>Add finished photos.</h2>
+              <p class="cbk-admin-help">Choose a project and select up to 20 finished photos at once. Watermarked previews are created in-browser while clean originals remain private.</p>
+              <form id="uploadForm" class="cbk-admin-form">
+                <label><span>Project</span><select id="uploadProject" required><option value="">Choose project…</option></select></label>
+                <label class="cbk-file-drop"><span>Select Finished Photos — up to 20</span><input id="photoFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple required><small id="photoSelectionCount">No photos selected.</small><small>Photo IDs come from original filenames.</small></label>
+                <button id="uploadButton" class="button button-dark" type="submit">Upload Batch</button>
+                <div id="uploadProgress" class="cbk-progress" hidden><span></span></div>
+                <p id="uploadMessage" class="cbk-form-message" role="status"></p>
+              </form>
+            </div>
+          </section>
 
-      <section class="cbk-admin-card cbk-admin-section">
-        <div class="cbk-admin-section-head">
-          <div><p class="eyebrow">Existing galleries</p><h2>Attach missing originals.</h2></div>
-        </div>
-        <p class="cbk-admin-help">For galleries uploaded before private originals were enabled. Choose the project, then select the clean originals. Files are matched to existing photo IDs by filename.</p>
-        <form id="repairOriginalsForm" class="cbk-admin-form">
-          <label><span>Project</span><select id="repairProject" required><option value="">Choose project…</option></select></label>
-          <label class="cbk-file-drop">
-            <span>Select Original Photos — up to 20</span>
-            <input id="repairFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple required />
-            <small id="repairSelectionCount">No originals selected.</small>
-          </label>
-          <button id="repairButton" class="button button-dark" type="submit">Attach Originals</button>
-          <div id="repairProgress" class="cbk-progress" hidden><span></span></div>
-          <p id="repairMessage" class="cbk-form-message" role="status"></p>
-        </form>
-      </section>
+          <details class="cbk-tool-drawer">
+            <summary>Repair older gallery originals</summary>
+            <section class="cbk-admin-card">
+              <p class="cbk-admin-help">Only use this for galleries uploaded before private originals were enabled. Files are matched by filename.</p>
+              <form id="repairOriginalsForm" class="cbk-admin-form">
+                <label><span>Project</span><select id="repairProject" required><option value="">Choose project…</option></select></label>
+                <label class="cbk-file-drop"><span>Select Original Photos — up to 20</span><input id="repairFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple required><small id="repairSelectionCount">No originals selected.</small></label>
+                <button id="repairButton" class="button button-dark" type="submit">Attach Originals</button>
+                <div id="repairProgress" class="cbk-progress" hidden><span></span></div>
+                <p id="repairMessage" class="cbk-form-message" role="status"></p>
+              </form>
+            </section>
+          </details>
 
-      <section class="cbk-admin-card cbk-admin-section">
-        <div class="cbk-admin-section-head">
-          <div><p class="eyebrow">Projects</p><h2>Manage galleries.</h2></div>
-          <button id="refreshButton" class="button" type="button">Refresh</button>
-        </div>
-        <div id="adminProjects" class="cbk-admin-project-list"></div>
-      </section>
+          <section class="cbk-admin-card">
+            <div class="cbk-admin-section-head"><div><p class="eyebrow">Projects</p><h2>Manage galleries.</h2></div><button id="refreshButton" class="button" type="button">Refresh</button></div>
+            <div id="adminProjects" class="cbk-admin-project-list"></div>
+          </section>
+        </section>
 
-      <section class="cbk-admin-card cbk-admin-section">
-        <div class="cbk-admin-section-head">
-          <div><p class="eyebrow">Bookings</p><h2>New inquiries.</h2></div>
-        </div>
-        <p class="cbk-admin-help">Booking requests from your website appear here. Reply directly to customers to confirm availability and retainers.</p>
-        <div id="adminBookings" class="cbk-order-list" aria-live="polite"></div>
-      </section>
+        <section class="cbk-admin-view" data-admin-view="bookings" hidden>
+          <section class="cbk-admin-card">
+            <div class="cbk-admin-section-head"><div><p class="eyebrow">Bookings</p><h2>New inquiries.</h2></div></div>
+            <p class="cbk-admin-help">Website booking requests appear here.</p>
+            <div id="adminBookings" class="cbk-order-list" aria-live="polite"></div>
+          </section>
+        </section>
 
-      <section class="cbk-admin-card cbk-admin-section">
-        <div class="cbk-admin-section-head">
-          <div><p class="eyebrow">Orders</p><h2>Customer selections.</h2></div>
-        </div>
-        <div class="cbk-order-filters" role="tablist" aria-label="Order status"><button class="button is-active" type="button" data-order-filter="new">NEW</button><button class="button" type="button" data-order-filter="paid">PAID</button><button class="button" type="button" data-order-filter="sent">SENT</button><button class="button" type="button" data-order-filter="all">ALL</button></div><div id="adminOrders" class="cbk-order-list"></div>
-      </section>
+        <section class="cbk-admin-view" data-admin-view="orders" hidden>
+          <section class="cbk-admin-card">
+            <div class="cbk-admin-section-head"><div><p class="eyebrow">Orders</p><h2>Customer delivery.</h2></div></div>
+            <div class="cbk-order-filters" role="tablist" aria-label="Order status">
+              <button class="button is-active" type="button" data-order-filter="new">NEW</button>
+              <button class="button" type="button" data-order-filter="paid">PAID</button>
+              <button class="button" type="button" data-order-filter="sent">SENT</button>
+              <button class="button" type="button" data-order-filter="all">ALL</button>
+            </div>
+            <div id="adminOrders" class="cbk-order-list"></div>
+          </section>
+        </section>
+
+        <section class="cbk-admin-view" data-admin-view="security" hidden>
+          <section id="securityCard" class="cbk-admin-card cbk-security-card">
+            <div class="cbk-admin-section-head">
+              <div><p class="eyebrow">Security</p><h2>Admin protection.</h2></div>
+              <span id="securityOverall" class="cbk-security-badge">Checking</span>
+            </div>
+            <div class="cbk-security-status-grid">
+              <div><span>Primary sign-in</span><strong>Passkey / Face ID</strong><small id="passkeyStatus">Checking…</small></div>
+              <div><span>Backup verification</span><strong>Microsoft Authenticator</strong><small id="totpStatus">Checking…</small></div>
+              <div><span>Session</span><strong>Secure cookie</strong><small>HttpOnly · SameSite · auto-lock after inactivity</small></div>
+            </div>
+            <div class="cbk-security-actions">
+              <button id="registerPasskeyButton" class="button button-dark" type="button">Register Passkey on This Device</button>
+              <button id="setupAuthenticatorButton" class="button" type="button" disabled>Set Up Microsoft Authenticator</button>
+            </div>
+            <div id="totpSetupPanel" class="cbk-totp-setup" hidden>
+              <p><strong>Microsoft Authenticator setup</strong></p>
+              <p>Add an <strong>Other account</strong>, enter this setup key manually, then verify the current code.</p>
+              <div class="cbk-secret-row"><code id="totpSecret">—</code><button id="copyTotpSecret" class="button" type="button">Copy Key</button></div>
+              <form id="totpSetupForm" class="cbk-admin-form">
+                <label><span>Current 6-digit code</span><input id="totpSetupCode" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></label>
+                <button class="button button-dark" type="submit">Confirm Microsoft Authenticator</button>
+              </form>
+            </div>
+            <p id="securityMessage" class="cbk-form-message" role="status"></p>
+          </section>
+        </section>
       </div>
     </main>
   </div>
 
   <dialog id="editProjectDialog" class="cbk-admin-dialog">
     <form id="editProjectForm" class="cbk-admin-form">
-      <div class="cbk-dialog-head">
-        <div><p class="eyebrow">Edit project</p><h2>Update gallery details.</h2></div>
-        <button id="closeEditProject" class="cbk-close-dialog" type="button" aria-label="Close">×</button>
-      </div>
-      <input type="hidden" name="project_id" />
-      <label><span>Project / Event Name</span><input name="title" required /></label>
-      <label><span>Event Date</span><input name="event_date" type="date" /></label>
+      <div class="cbk-dialog-head"><div><p class="eyebrow">Edit project</p><h2>Update gallery details.</h2></div><button id="closeEditProject" class="cbk-close-dialog" type="button" aria-label="Close">×</button></div>
+      <input type="hidden" name="project_id">
+      <label><span>Project / Event Name</span><input name="title" required></label>
+      <label><span>Event Date</span><input name="event_date" type="date"></label>
       <label><span>Description</span><textarea name="description" rows="3"></textarea></label>
       <div class="cbk-admin-form-row">
-        <label><span>Photos Per Package</span><input name="package_size" type="number" min="1" required /></label>
-        <label><span>Package Price ($)</span><input name="package_price" type="number" min="0" step="0.01" required /></label>
-        <label><span>Each Extra Photo ($)</span><input name="extra_photo_price" type="number" min="0" step="0.01" required /></label>
+        <label><span>Photos Per Package</span><input name="package_size" type="number" min="1" required></label>
+        <label><span>Package Price ($)</span><input name="package_price" type="number" min="0" step="0.01" required></label>
+        <label><span>Each Extra Photo ($)</span><input name="extra_photo_price" type="number" min="0" step="0.01" required></label>
       </div>
       <label><span>Status</span><select name="status"><option value="draft">Draft — hidden</option><option value="open">Open — visible in Shop</option><option value="closed">Closed</option></select></label>
       <button class="button button-dark" type="submit">Save Changes</button>
