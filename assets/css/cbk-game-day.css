@@ -14,3 +14,9 @@
 .cbk-gallery-links a{font-weight:800;text-decoration:underline;text-underline-offset:3px}
 .cbk-project-card a:focus-visible{outline:3px solid #705420;outline-offset:3px}
 @media(max-width:760px){.cbk-game-day{grid-template-columns:1fr;padding:19px;gap:18px}.cbk-project-bottom{flex-wrap:wrap}.cbk-gallery-links{width:100%;justify-content:space-between}}
+.cbk-game-day-photo-tools{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin:0 0 18px;padding:15px;background:#eae5dc;border:1px solid #c7c0b5}
+.cbk-game-day-photo-tools>div{display:grid;gap:5px;flex:1;min-width:185px}
+.cbk-game-day-photo-tools label{font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:.7rem}
+.cbk-game-day-photo-tools input{width:100%;padding:10px 11px;min-height:42px;border:1px solid #999;background:#fff;font:inherit}
+.cbk-game-day-photo-tools .button{min-height:42px;cursor:pointer}
+#photoFeedStatus{width:100%;font-size:.74rem;color:#555}
