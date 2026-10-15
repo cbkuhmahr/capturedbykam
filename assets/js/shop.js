@@ -76,7 +76,7 @@
             <p>${escapeHtml(project.description || "View the gallery and choose your favorites.")}</p>
             <div class="cbk-project-bottom">
               <strong>$${(Number(project.package_price) / Math.max(Number(project.package_size) - 1, 1)).toFixed(2)} each · ${project.package_size} for $${Number(project.package_price).toFixed(0)} · +$${Number(project.extra_photo_price || 0).toFixed(0)} each after ${project.package_size}</strong>
-              <span class="cbk-gallery-links"><a href="gallery.html?project=${encodeURIComponent(project.slug)}">View Photos →</a><a href="qr.html?project=${encodeURIComponent(project.slug)}&label=${encodeURIComponent(project.title)}" aria-label="Open printable QR code for ${escapeHtml(project.title)}">Event QR ↗</a></span>
+              <span class="cbk-gallery-links"><a href="gallery.html?project=${encodeURIComponent(project.slug)}">View Photos →</a><a href="qr.html?project=${encodeURIComponent(project.slug)}&label=${encodeURIComponent(project.title)}" aria-label="Open printable QR code for ${escapeHtml(project.title)}">Event QR ↗</a><button type="button" class="cbk-native-share" data-share-gallery="${escapeHtml(project.slug)}">Share in Messages</button></span>
             </div>
           </div>
         </article>`;
@@ -86,6 +86,29 @@
   function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" }[m]));
   }
+
+  grid?.addEventListener("click", async (event) => {
+    const button = event.target.closest("[data-share-gallery]");
+    if (!button) return;
+    const project = projects.find(p => p.slug === button.dataset.shareGallery);
+    if (!project) return;
+    const title = "Capturedby_Kam · " + project.title;
+    const url = new URL("gallery.html?project=" + encodeURIComponent(project.slug), location.href).href;
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title, text: "Check out photos from " + project.title + " on Capturedby_Kam.", url });
+        return;
+      } catch (error) {
+        if (error.name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      updateStatus("Gallery link copied. Paste it into Apple Messages.");
+    } catch {
+      updateStatus("Open this gallery in Safari on your iPhone to use the Messages share sheet.");
+    }
+  });
 
   search?.addEventListener("input", renderProjects);
   refresh?.addEventListener("click", loadProjects);
