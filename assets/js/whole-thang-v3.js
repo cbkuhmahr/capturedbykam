@@ -90,6 +90,26 @@ if(HISTORY.length!==79||summary.wins!==54||summary.losses!==24||summary.ties!==1
 const pct=(w,l)=>w+l?(100*w/(w+l)):0;
 function weekStats(w){const a=HISTORY.filter(x=>x.week===w);const won=a.filter(x=>x.status==="W").length, lost=a.filter(x=>x.status==="L").length,tied=a.filter(x=>x.status==="T").length;return {week:w,wins:won,losses:lost,ties:tied,record:won+"–"+lost+(tied?"–"+tied+"T":""),rate:pct(won,lost),games:a};}
 const weeks=[1,2,3,4,5].map(weekStats);
+/* Current cloud-aware choices are exposed read-only for the optional Apple Share panel. */
+window.WTAppleSnapshot = function () {
+ return {
+  week: 6,
+  picks: GAMES.map(g => ({
+   away: g.away, home: g.home, group: g.group, day: g.day,
+   time: g.time, choice: state.picks[g.id] || ""
+  })),
+  mnfMargin: state.mnfMargin,
+  season: { wins: summary.wins, losses: summary.losses, ties: summary.ties,
+   accuracy: pct(summary.wins,summary.losses).toFixed(2) },
+  weeks: weeks.map(w => ({ week: w.week, wins: w.wins, losses: w.losses,
+    ties: w.ties, record: w.record, rate: w.rate.toFixed(2),
+    games: w.games.map(g => ({
+      away: g.away, home: g.home, pick: g.pick,
+      awayScore: g.awayScore, homeScore: g.homeScore, status: g.status
+    })) }))
+ };
+};
+
 function teamStats(){
  const ts=Object.fromEntries(Object.keys(NAMES).map(abbr=>[abbr,{abbr,w:0,l:0,t:0,pf:0,pa:0,elo:1500,games:[],chosen:0,right:0,wrong:0,drawn:0,opp:[]}]));
  // Sequential Elo with a capped margin factor and home field adjustment.
