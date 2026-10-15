@@ -1,0 +1,54 @@
+/* $billi-type uh’day. persistent sports lounge */
+.wt-top-actions{display:flex;align-items:center;gap:8px}
+.wt-media-launch{font-weight:850;white-space:nowrap;background:linear-gradient(115deg,#332718,#1a222c);border-color:#896b37;color:#ffe1a0;cursor:pointer}
+.wt-media-launch:hover,.wt-media-launch:focus-visible{border-color:#f6c965;background:#342b1e}
+.wt-media-shade{position:fixed;inset:0;z-index:89;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s,visibility .22s}
+.wt-media-shade.is-open{opacity:1;visibility:visible;pointer-events:auto}
+.wt-media-panel{position:fixed;z-index:90;right:0;top:0;bottom:0;width:min(700px,100%);transform:translateX(102%);visibility:hidden;pointer-events:none;background:#0b1016;border-left:1px solid #3e4652;box-shadow:-24px 0 90px #000b;transition:transform .23s,visibility .23s;display:flex;flex-direction:column;color:#f8f8f8}
+.wt-media-panel.is-open{transform:translateX(0);visibility:visible;pointer-events:auto}
+.wt-media-panel *{box-sizing:border-box}
+.wt-media-head{padding:19px 24px 16px;border-bottom:1px solid #2a3440;display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(100deg,#1a2027,#0e1219)}
+.wt-media-eyebrow{color:#e8bb5a;font-size:10px;letter-spacing:.14em;font-weight:900;text-transform:uppercase}
+.wt-media-head h2{font-size:24px;margin:5px 0 0;letter-spacing:-.035em}
+.wt-media-close{width:38px;height:38px;background:#181e27;color:#eee;border:1px solid #4b515b;border-radius:10px;font-size:20px;cursor:pointer}
+.wt-media-content{padding:20px 24px 78px;overflow:auto;overscroll-behavior:contain}
+.wt-media-banner{display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(110deg,#292117,#121a21 78%);border:1px solid #75603a;border-radius:14px;padding:18px}
+.wt-media-banner strong{display:block;font-size:18px;letter-spacing:-.02em}
+.wt-media-banner p{color:#bfc6ce;font-size:12px;margin:7px 0 0;line-height:1.6}
+.wt-media-signal{border:1px solid #a48752;border-radius:999px;color:#f3d89c;padding:7px 10px;font-size:10px;font-weight:900;letter-spacing:.1em;white-space:nowrap}
+.wt-media-section{margin-top:21px}
+.wt-media-sectiontitle{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+.wt-media-sectiontitle h3{font-size:17px;margin:0}
+.wt-media-sectiontitle small{font-size:11px;color:#a2abb6}
+.wt-radio-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wt-radio-choice{cursor:pointer;border:1px solid #34404d;border-radius:12px;background:#141b23;text-align:left;color:#edf1f4;padding:15px;min-height:110px}
+.wt-radio-choice.selected{border-color:#dbb45e;background:linear-gradient(130deg,#352b1b,#19222d)}
+.wt-radio-choice:focus-visible{outline:2px solid #eed394;outline-offset:2px}
+.wt-radio-choice strong,.wt-radio-choice span,.wt-radio-choice small{display:block}
+.wt-radio-choice strong{font-size:15px;margin:5px 0}
+.wt-radio-choice span{color:#e9bb61;font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:900}
+.wt-radio-choice small{font-size:11px;line-height:1.4;color:#b8c4d1}
+.wt-radio-shell{margin-top:11px;background:#090d12;border:1px solid #303945;border-radius:12px;padding:14px}
+.wt-radio-status{font-size:12px;line-height:1.5;color:#b7c4d1;min-height:35px}
+.wt-radio-frame{width:100%;height:210px;display:block;background:#121820;border:0;border-radius:8px;margin:9px 0}
+.wt-radio-actions,.wt-watch-actions{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0}
+.wt-media-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:39px;border-radius:9px;background:#1b2530;border:1px solid #485462;color:#fff;font-size:12px;font-weight:800;padding:10px 14px;text-decoration:none;cursor:pointer}
+.wt-media-btn.primary{background:#e8bb5a;border-color:#e8bb5a;color:#101820}
+.wt-media-btn:hover,.wt-media-btn:focus-visible{border-color:#f3d998}
+.wt-radio-hint{font-size:11px;line-height:1.6;color:#9faab7;margin:8px 0 0}
+.wt-watch-screen{aspect-ratio:16/9;border:1px solid #454c58;border-radius:12px;background:radial-gradient(circle at 65% 30%,#302824,#101824 56%,#080c11);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.wt-watch-screen:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,#ffffff05 4px);pointer-events:none}
+.wt-watch-center{padding:18px;text-align:center;position:relative;z-index:1}
+.wt-watch-center span{font-size:11px;letter-spacing:.18em;color:#f6c66d;font-weight:900}
+.wt-watch-center strong{display:block;margin:8px 0 0;font-size:clamp(25px,5vw,36px);font-weight:900;letter-spacing:-.045em}
+.wt-watch-center p{margin:8px auto 0;max-width:350px;line-height:1.55;color:#b5bec8;font-size:12px}
+.wt-watch-screenmark{position:absolute;top:14px;left:16px;font-size:10px;color:#e9bc66;letter-spacing:.12em;font-weight:800}
+.wt-media-disclaimer{font-size:11px;color:#a4afb8;line-height:1.65;margin-top:12px;padding:12px 13px;background:#111820;border-left:3px solid #c49c56;border-radius:7px}
+.wt-media-disclaimer strong{color:#e7ebef}
+.wt-media-dock{position:fixed;z-index:80;left:50%;bottom:14px;transform:translateX(-50%);width:min(470px,calc(100% - 24px));display:none;align-items:center;justify-content:space-between;gap:12px;background:#151d27;color:#fff;border:1px solid #a98747;border-radius:14px;padding:11px 12px;box-shadow:0 10px 35px #000d}
+.wt-media-dock.is-active{display:flex}
+.wt-media-dock-copy{min-width:0;flex:1;text-align:left;border:0;background:transparent;color:#fff;cursor:pointer}
+.wt-media-dock-copy strong{display:block;font-size:12px}
+.wt-media-dock-copy small{display:block;font-size:10px;color:#aab6c3;margin-top:3px}
+.wt-media-dock button.wt-dock-stop{background:#2f1d20;color:#ffb9bc;border:1px solid #673b3f;border-radius:8px;padding:9px;font-weight:800;font-size:11px;cursor:pointer}
+@media(max-width:640px){.wt-media-launch{font-size:11px;padding:8px}.wt-top-actions{gap:5px}.wt-media-head{padding:15px}.wt-media-content{padding:15px 15px 85px}.wt-media-banner{align-items:start;padding:14px}.wt-media-signal{font-size:9px}.wt-radio-choice{min-height:126px;padding:12px}.wt-radio-choice strong{font-size:13px}.wt-media-head h2{font-size:21px}.brand{font-size:17px!important}.orbit{display:none}}
