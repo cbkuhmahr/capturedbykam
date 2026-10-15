@@ -1,0 +1,71 @@
+/* Private Week 6 fantasy board: independent of pick'em state. */
+.tabs{grid-template-columns:repeat(8,minmax(88px,1fr));overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.mf-shell{display:grid;gap:14px;color:#edf1f5}
+.mf-hero{border:1px solid #68552e;border-radius:14px;background:linear-gradient(130deg,#24211b,#131920 60%);padding:19px;display:flex;gap:16px;align-items:center;justify-content:space-between}
+.mf-hero h2{font-size:23px;line-height:1.18;margin:7px 0;letter-spacing:-.03em}
+.mf-hero small{font-size:10px;font-weight:800;letter-spacing:.055em;color:#e7ba61}
+.mf-hero p{color:#b4bdc9;font-size:11px;line-height:1.55;margin:0}
+.mf-main-total{text-align:right;flex-shrink:0;border-left:1px solid #645533;padding-left:18px}
+.mf-main-total strong{display:block;font-size:31px;color:#f4c870;line-height:1.2}
+.mf-main-total small{display:block;font-size:9px;white-space:nowrap;color:#b5bdc5}
+.mf-toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:11px;color:#afb8c2}
+.mf-toolbar select,.mf-edit-form input,.mf-edit-form select,.mf-add input,.mf-add select{color:#f2f4f6;background:#0c1118;border:1px solid #47515a;border-radius:7px;padding:9px;max-width:100%;min-width:0}
+.mf-toolbar select{margin-left:8px}
+.mf-advice{border:1px solid #544e3c;border-radius:12px;background:#141a20;padding:14px}
+.mf-section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:10px}
+.mf-section-head h3{font-size:18px;margin:0}
+.mf-section-head span{font-size:11px;color:#b1bac5;text-align:right}
+.mf-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.mf-metrics>div{border:1px solid #33404b;border-radius:9px;padding:10px;background:#101720}
+.mf-metrics small{display:block;color:#aebbc7;font-size:10px;line-height:1.45}
+.mf-metrics strong{display:block;color:#f3d084;font-size:21px;margin-top:4px;font-variant-numeric:tabular-nums}
+.mf-swap{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #323b46;padding:14px 0}
+.mf-swap>div{min-width:0}
+.mf-swap strong,.mf-swap small{display:block}
+.mf-swap strong{font-size:15px;margin-top:5px}
+.mf-swap small{font-size:11px;color:#cbd2d9;margin-top:4px}
+.mf-swap small.mf-swap-kicker{font-size:10px;color:#e8bb5a;font-weight:800;letter-spacing:.05em}
+.mf-swap p{font-size:11px;line-height:1.6;color:#b2bfcb;max-width:630px}
+.mf-swap .btn{flex-shrink:0}
+.mf-no-swaps{padding:15px;border-top:1px solid #323b46;font-size:12px;color:#c0c8cf}
+.mf-warning{margin:9px 0;border-left:3px solid #df9b59;background:#29221b;padding:12px;border-radius:6px;font-size:12px;color:#f2d4b6;line-height:1.55}
+.mf-warning strong{display:block;color:#fff;margin-bottom:5px}
+.mf-warning p{margin:4px 0}
+.mf-disclaimer{font-size:11px;line-height:1.65;color:#9ea9b7;margin:12px 0 0}
+.mf-roster{border:1px solid #343d46;border-radius:12px;overflow:hidden}
+.mf-roster>.mf-section-head{padding:14px;background:#14191f;border-bottom:1px solid #333d47;margin:0}
+.mf-roster>.mf-bench-header{background:#20262f;border-top:1px solid #343e49}
+.mf-player{border-bottom:1px solid #343b43;background:#10151b}
+.mf-player:last-child{border-bottom:0}
+.mf-roster-main{display:grid;grid-template-columns:43px minmax(0,1fr) 62px 53px;gap:10px;align-items:center;padding:12px 11px}
+.mf-position{border:1px solid #a77a36;color:#e0bb73;display:grid;place-items:center;height:43px;border-radius:9px;font-size:12px;font-weight:800}
+.mf-position.mf-bench{border-color:#636c7d;color:#a5b2c3}
+.mf-person{min-width:0}
+.mf-person strong{display:block;font-size:13px;white-space:normal;line-height:1.4}
+.mf-person small{display:block;font-size:10px;color:#a6b2bf;line-height:1.5;margin-top:4px}
+.mf-injury{font-weight:900;color:#ffb3b3;background:#49262a;padding:1px 5px;border-radius:3px;font-size:10px}
+.mf-proj{text-align:right}
+.mf-proj strong{display:block;font-size:17px;font-variant-numeric:tabular-nums}
+.mf-proj small{font-size:9px;color:#9ca8b5}
+.mf-edit{font-size:11px!important;padding:8px!important}
+.mf-edit-form{padding:10px;border-top:1px solid #343b43;background:#171f29}
+.mf-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.mf-fields label{display:grid;gap:5px;color:#b6c0cc;font-size:10px;font-weight:700}
+.mf-row-actions{display:flex;gap:8px;margin-top:12px}
+.mf-add{border:1px dashed #495363;border-radius:12px;padding:14px;background:#101720}
+.mf-add summary{font-size:12px;font-weight:800;color:#e8bb5a;cursor:pointer}
+.mf-add form{margin-top:12px}
+.mf-add form>.btn{margin-top:12px}
+.mf-footer{border:1px solid #343d46;border-radius:11px;padding:12px;font-size:11px;line-height:1.6;color:#9fabb7}
+.mf-footer .btn{margin:0 8px 8px 0}
+.mf-footer p{margin:4px 0}
+@media(max-width:640px){.tabs{grid-template-columns:repeat(8,minmax(77px,1fr))}
+.mf-hero{padding:14px;gap:10px}.mf-hero h2{font-size:18px}.mf-main-total{padding-left:10px}.mf-main-total strong{font-size:24px}
+.mf-metrics>div{padding:8px}.mf-metrics strong{font-size:17px}
+.mf-swap{align-items:stretch;flex-direction:column}.mf-swap .btn{align-self:flex-start}
+.mf-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mf-roster-main{grid-template-columns:35px minmax(0,1fr) 57px 43px;gap:6px;padding:10px 7px}
+.mf-position{height:37px;font-size:10px}.mf-person strong{font-size:12px}.mf-person small{font-size:9px}
+.mf-edit{padding:7px 5px!important;font-size:10px!important}.mf-proj strong{font-size:14px}
+}
