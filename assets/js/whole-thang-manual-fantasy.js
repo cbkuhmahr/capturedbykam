@@ -100,7 +100,8 @@ function comparison(p) {
 }
 function rosterRow(p) {
   const editing=editId===p.id;
-  const number=p.projection===null?"—":TWO(p.projection);
+  const actual=livePlayer(p);
+  const number=actual?.points!=null?TWO(actual.points):(p.projection===null?"—":TWO(p.projection));
   const status=p.status==="ACTIVE"?"":'<span class="mf-injury">'+ESC(p.status)+'</span>';
   let html='<article class="mf-player"><div class="mf-roster-main">'+
     '<span class="mf-position '+(starter(p)?"mf-start":"mf-bench")+'">'+ESC(p.slot)+'</span>'+
@@ -143,7 +144,7 @@ function advice() {
  }else markup+='<div class="mf-no-swaps">Your current starters match this advisor’s projection-based lineup. No immediate swap suggested.</div>';
  if(warnings.length) markup+='<div class="mf-warning"><strong>Availability watch</strong>'+
    warnings.map(p=>'<p>'+ESC(p.name)+' is marked '+ESC(p.status)+' in the saved screenshot/roster. Verify the latest injury status before kickoff, especially for late games.</p>').join("")+'</div>';
- markup+='<p class="mf-disclaimer">Advisory only: source projections and opponent rankings are from your Yahoo Week 6 screenshots. Scouting grades are editable subjective inputs, not verified player rankings. Small modifiers avoid double-counting matchups already reflected in Yahoo projections. This planner does not update your actual Yahoo starters.</p></section>';
+ markup+='<p class="mf-disclaimer">Advisory only: source projections and opponent rankings are from your Yahoo Week 6 screenshots. Scouting grades are editable subjective inputs, not verified player rankings. Small modifiers avoid double-counting matchups already reflected in Yahoo projections. This planner does not update your actual Yahoo starters. Live estimates use common NFL scoring rules, not your Yahoo league settings.</p></section>';
  return markup;
 }
 function page() {
@@ -172,23 +173,88 @@ function page() {
   '<button type="submit" class="btn primary">Add to bench</button></form></details>'+
   '<div class="mf-footer"><button class="btn" type="button" data-mf-export>Copy roster backup</button>'+
   '<button class="btn" type="button" data-mf-reset>Restore screenshot lineup</button>'+
-  '<p>Stats and projections will not automatically update from Yahoo. Edit values as news changes or send an updated roster screenshot. Manual changes are private to this browser until cloud syncing is implemented.</p></div></section>';
+  '<p>Yahoo projections remain the screenshot snapshot. ESPN-derived individual game stats refresh during games and use the scoring selector, but are NOT official Yahoo scoring. Defense scoring and special kicking bonuses may be unavailable. Edit values as news changes or send an updated roster screenshot. Manual changes are private to this browser until cloud syncing is implemented.</p></div></section>';
 }
+
+// Public ESPN box score is optional; its estimate is not official Yahoo scoring.
+const gameBox=new Map(),lastGameCheck=new Map(),activeRequests=new Set();
+function normalizeName(value){return String(value||"").toLowerCase().replace(/\\b(jr|sr|ii|iii|iv)\\b/g,"").replace(/[^a-z]/g,"");}
+function stat(g,cat,keys){
+ const row=g?.[cat];if(!row)return 0;
+ const pair=Object.entries(row).find(([k])=>keys.includes(k.toUpperCase()));
+ const value=Number(pair?.[1]);return Number.isFinite(value)?value:0;
+}
+function boxScore(p,game){
+ const list=gameBox.get(game.away+"-"+game.home)||[];
+ const record=list.find(x=>x.team===p.team&&normalizeName(x.name)===normalizeName(p.name));
+ if(!record)return null;
+ const g=record.groups||{};
+ const passY=stat(g,"passing",["YDS"]),passTD=stat(g,"passing",["TD"]),ints=stat(g,"passing",["INT"]);
+ const rushY=stat(g,"rushing",["YDS"]),rushTD=stat(g,"rushing",["TD"]);
+ const rec=stat(g,"receiving",["REC"]),recY=stat(g,"receiving",["YDS"]),recTD=stat(g,"receiving",["TD"]);
+ const lost=stat(g,"fumbles",["LST","FL"]);
+ let points=null;
+ if(["QB","RB","WR","TE"].includes(p.pos))
+    points=passY/25+passTD*4-ints*2+rushY/10+rushTD*6+recY/10+recTD*6+rec*({standard:0,half:.5,ppr:1}[data.scoring]??.5)-lost*2;
+ let summary=[];
+ if(g.passing)summary.push(passY+" pass yds",passTD+" pass TD");
+ if(g.rushing)summary.push(rushY+" rush yds",rushTD+" rush TD");
+ if(g.receiving)summary.push(rec+" rec",recY+" rec yds",recTD+" rec TD");
+ if(p.pos==="K"&&g.kicking){
+   const pair=Object.entries(g.kicking).find(([k])=>["FG","FGM-A"].includes(k.toUpperCase()));
+   const xp=Object.entries(g.kicking).find(([k])=>["XP","XPM-A"].includes(k.toUpperCase()));
+   const made=v=>Number(String(v||"0").split("/")[0])||0;
+   points=made(pair?.[1])*3+made(xp?.[1]);
+   summary.push(made(pair?.[1])+" FG",made(xp?.[1])+" XP");
+ }
+ return {points:typeof points==="number"?Math.round(points*100)/100:null,detail:summary.join(" · ")};
+}
+function livePlayer(p){
+ for(const key of gameBox.keys()){
+   const teams=key.split("-");
+   if(teams.includes(p.team))return boxScore(p,{away:teams[0],home:teams[1]});
+ }
+ return null;
+}
+function repaint(){
+ document.dispatchEvent(new Event("wt-fantasy-change"));
+ const root=document.getElementById("wt-manual-fantasy-root");
+ if(root)root.innerHTML=page();
+}
+document.addEventListener("wt-score-update",event=>{
+ for(const game of (event.detail?.games||[])){
+   if(!game?.id||!["in","post"].includes(game.state))continue;
+   if(!data.players.some(p=>p.team===game.away||p.team===game.home))continue;
+   const key=game.away+"-"+game.home;
+   if(activeRequests.has(key)||Date.now()-(lastGameCheck.get(key)||0)<(game.state==="post"?1200000:60000))continue;
+   lastGameCheck.set(key,Date.now());activeRequests.add(key);
+   fetch("/api/nfl-player-box?event="+encodeURIComponent(game.id),{cache:"no-store",credentials:"same-origin"})
+     .then(async response=>{if(!response.ok)throw Error("Unavailable");return response.json();})
+     .then(result=>{if(result.ok&&Array.isArray(result.players)){gameBox.set(key,result.players);repaint();}})
+     .catch(()=>{}).finally(()=>activeRequests.delete(key));
+ }
+});
+
 function gameRows(game) {
  const matched=data.players.filter(p=>p.team===game.away||p.team===game.home);
  if(!matched.length)return "";
  matched.sort((a,b)=>Number(starter(b))-Number(starter(a)));
  return '<div class="wt-fantasy-inside"><div class="wt-fantasy-match-head"><strong>Monsters of the Midway · Fantasy</strong><span>'+matched.length+' player'+(matched.length===1?"":"s")+'</span></div>'+
-  matched.map(p=>'<div class="wt-fantasy-player"><span class="wt-fantasy-role '+(starter(p)?"starter":"bench")+'">'+ESC(p.slot)+'</span>'+
-    '<div class="wt-fantasy-person"><strong>'+ESC(p.name)+(p.status!=="ACTIVE"?' · '+ESC(p.status):'')+'</strong>'+
-    '<small>'+ESC(p.pos)+' · '+ESC(p.team)+' · '+ESC(comparison(p))+'</small></div>'+
-    '<div class="wt-fantasy-pts"><strong>'+TWO(p.projection)+'</strong><small>PROJ</small></div></div>').join("")+
+  matched.map(p=>{
+    const actual=boxScore(p,game);
+    const number=actual?.points!=null?actual.points:p.projection;
+    const label=actual?.points!=null?"EST PTS":"PROJ";
+    return '<div class="wt-fantasy-player"><span class="wt-fantasy-role '+(starter(p)?"starter":"bench")+'">'+ESC(p.slot)+'</span>'+
+      '<div class="wt-fantasy-person"><strong>'+ESC(p.name)+(p.status!=="ACTIVE"?' · '+ESC(p.status):'')+'</strong>'+
+      '<small>'+ESC(p.pos)+' · '+ESC(p.team)+(actual?.detail?' · '+ESC(actual.detail):' · '+ESC(comparison(p)))+'</small></div>'+
+      '<div class="wt-fantasy-pts"><strong>'+TWO(number)+'</strong><small>'+label+'</small></div></div>';
+    }).join("")+
   '</div>';
 }
 function toolbar() {
  const starters=data.players.filter(starter);
  return '<div class="wt-fantasy-toolbar"><div><strong>Monsters of the Midway · My Fantasy</strong>'+
-   '<small>Manual Yahoo roster · 16 players · Week 6 · Projections saved</small></div>'+
+   '<small>Manual roster · Week 6 · Live points from ESPN are estimates</small></div>'+
    '<div class="wt-fantasy-total"><strong>'+TWO(total(starters))+'</strong><small>Projected starter points</small></div>'+
    '<button class="btn primary" type="button" data-go="fantasy">Start / Sit Advisor →</button></div>';
 }
