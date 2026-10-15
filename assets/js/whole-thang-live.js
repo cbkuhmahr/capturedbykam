@@ -71,7 +71,7 @@ function markup(){
  const filters='<div class="wt-live-filters" aria-label="Filter scoreboard">'+
   [["all","All games"],["live","Live now"],["picked","My picks"]].map(([key,name])=>'<button type="button" data-live-filter="'+key+'" class="btn '+(viewFilter===key?"primary":"")+'" aria-pressed="'+(viewFilter===key)+'">'+name+'</button>').join("")+
  '</div>';
- const status='<div class="wt-score-meta"><span class="'+(state==="error"?"wt-score-error":"")+'"><strong>'+esc(info)+'</strong>'+(stamp?" · Updated "+esc(stamp):"")+'</span>'+
+ const status='<div class="wt-score-meta"><span class="'+(state==="error"?"wt-score-error":"")+'">'+esc(info||(stamp?"Updated "+stamp:"Scores ready"))+'</span>'+
  '<button type="button" class="btn wt-score-refresh" data-score-refresh="1" '+(fetching?"disabled":"")+'>'+(fetching?"Updating…":"↻ Refresh scores")+'</button></div>';
  const board='<div class="wt-score-grid">'+(shown.length?shown.map(({game,result:x,choice,verdict:outcome})=>{
   const active=x&&x.state==="in",final=x&&x.state==="post";
