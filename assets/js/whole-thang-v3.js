@@ -142,6 +142,7 @@ function teamStats(){
  return ts;
 }
 const TS=teamStats();
+window.WTScouting={teams:Object.fromEntries(Object.entries(TS).map(([id,t])=>[id,{pa:t.pa,pf:t.pf,games:t.games.length,elo:t.elo}])),games:GAMES.map(g=>({away:g.away,home:g.home,id:g.id,state:"pre"}))};
 function forecast(g){
  const away=TS[g.away],home=TS[g.home];
  const advantage=g.neutral?0:state.homeEdge;
