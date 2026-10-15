@@ -55,7 +55,7 @@ function gameRows(game,result){
 function rosterEditor(){
  const scoring=option(["standard","half","ppr"],state.scoring);
  return '<div class="wt-manual-editor"><div class="wt-manual-settings"><label>Scoring<select data-m-scoring="1">'+scoring+'</select></label><span>Yahoo public leagues generally use half-PPR; confirm your private league rules.</span></div>'+
- '<label class="wt-manual-paste-label">Paste your roster <small>(one player per line: Name | TEAM | POS | Avg PPG; names alone also work)</small><textarea id="wt-m-paste" rows="4" placeholder="Josh Allen | BUF | QB | 20.5\nBijan Robinson | ATL | RB | 18.1\nOr just a player name"></textarea></label>'+
+ '<label class="wt-manual-paste-label">Paste players or backup JSON <small>(Name | TEAM | POS | Avg PPG; names alone also work)</small><textarea id="wt-m-paste" rows="4" placeholder="Josh Allen | BUF | QB | 20.5\nBijan Robinson | ATL | RB | 18.1\nOr just a player name"></textarea></label>'+
  '<div class="wt-manual-editor-actions"><button type="button" class="btn primary" data-m-import="1">Add players</button><button type="button" class="btn" data-m-auto="1">Use suggested lineup here</button><button type="button" class="btn" data-m-backup="1">Copy backup</button></div>'+
  (note?'<p class="wt-manual-note">'+html(note)+'</p>':"")+
  '<div class="wt-manual-edit-list">'+state.players.map(p=>
@@ -86,6 +86,22 @@ function toolbar(){
  return '<section class="wt-manual-shell"><div class="wt-manual-intro"><div><h3>Fantasy Scouting Lab <small>Week 6</small></h3><p>No Yahoo access needed. Compare your roster against current NFL matchups and our five-week team data.</p></div><button type="button" class="btn primary" data-m-toggle="1">'+(editor?"Close editor":"Manage roster")+'</button></div>'+details+(editor?rosterEditor():"")+'</section>';
 }
 function importPlayers(raw){
+ const input=String(raw||"").trim();
+ if(input.startsWith("{")){
+  try{
+   const parsed=JSON.parse(input);
+   if(!parsed||!Array.isArray(parsed.players)||parsed.players.length>80)throw Error("Invalid backup");
+   state.players=parsed.players.filter(p=>p&&typeof p.name==="string"&&p.name.trim()).map(p=>({
+    id:Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10),
+    name:p.name.slice(0,75),team:TEAMS.includes(p.team)?p.team:"",pos:POSITIONS.includes(p.pos)?p.pos:"",
+    avg:validAvg(p.avg),tier:Math.max(1,Math.min(5,+p.tier||3)),
+    slot:p.slot==="START"?"START":"BN",availability:["active","Q","OUT"].includes(p.availability)?p.availability:"active"
+   }));
+   state.scoring=["standard","half","ppr"].includes(parsed.scoring)?parsed.scoring:"half";
+   note="Roster backup imported into this device. Check lineup and scoring.";persist();
+  }catch{note="Backup JSON could not be imported.";emit();}
+  return;
+ }
  let added=0;
  for(const line of String(raw||"").split(/\r?\n/).map(s=>s.trim()).filter(Boolean).slice(0,80)){
   let [name,team,pos,avg]=line.split(/[|,]/).map(s=>s.trim());
