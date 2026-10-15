@@ -22,3 +22,12 @@ body.wt-apple-open{overflow:hidden}
 .wt-apple-status{border:1px solid #51402d;background:#221b12;color:#e8cfa0;border-radius:8px;padding:12px;font-size:12px;line-height:1.6}
 .wt-apple-file{position:relative;cursor:pointer}
 @media(max-width:640px){.wt-apple-drawer{width:100%}.wt-apple-top{padding-top:max(20px,env(safe-area-inset-top));}.wt-apple-scroll{padding-bottom:calc(30px + env(safe-area-inset-bottom))}.wt-apple-launch{white-space:nowrap;font-size:11px!important}.wt-top-actions{gap:4px;flex-wrap:wrap;justify-content:flex-end}.wt-apple-contact-line{flex-wrap:wrap}.wt-apple-contact-line select{flex-basis:100%}}
+
+@media(max-width:640px){
+ .topbar-inner{height:auto;min-height:72px;gap:8px;padding-top:7px;padding-bottom:7px}
+ .topbar-inner .brand-wrap{min-width:0;flex:1 1 auto}
+ .topbar-inner .brand{font-size:clamp(13px,4.4vw,17px)!important;overflow-wrap:anywhere;line-height:1.05}
+ .topbar-inner .wt-top-actions{display:flex;flex:0 1 183px;gap:4px;row-gap:4px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+ .wt-top-actions .admin-link{padding:7px 8px;font-size:10px}
+ .wt-top-actions .wt-media-launch{font-size:10px!important}
+}
