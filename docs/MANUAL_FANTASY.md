@@ -6,13 +6,13 @@ Private dashboard: https://www.capturedbykam.com/whole-thang/
 A Yahoo-free way to follow personal fantasy players in the existing Live Game Center and evaluate the next NFL lineup. It requires **no Yahoo developer application, API key, or password**.
 
 ## Steps
-1. Sign into the private Captured by Kam admin dashboard and open **$billi-type uh’day. → Live**.
+1. Sign into the private Captured by Kam admin dashboard and open **$billi-type uh’day. → Fantasy**.
 2. Choose **Manage roster** under **Fantasy Scouting Lab**.
 3. Paste one player per line using `Player Name | TEAM | POSITION | Avg PPG` (example: `Josh Allen | BUF | QB | 20.5`). A name by itself works, but **team and position must be assigned** before matchup advice and box-score matching can function.
 4. Edit each player’s position (QB/RB/WR/TE/K/DST), team, average fantasy points per game (optional), manually selected talent tier 1–5, and starter/bench status.
 5. Select scoring type: Standard, Half-PPR (Yahoo public league default), or Full-PPR. Average PPG values must be entered for that scoring type; they are not automatically converted.
 6. View estimated start/sit ratings based on a manually supplied average (or an explicitly labeled generic position/talent baseline) and Week 1–5 NFL opponent scoring numbers. Select **Use suggested lineup here** to assign starters locally. This **does not** submit a Yahoo fantasy lineup.
-7. During active or completed games, the Live Game Center attempts to show manual-roster player box-score estimates below the relevant NFL matchup. ESPN stats are unofficial and may be unavailable; Yahoo custom scoring, kickers, D/ST, bonuses, and other special rules are not reproduced.
+7. During active or completed games, the Fantasy tab attempts to show manual-roster player box-score estimates below the relevant NFL matchup. ESPN stats are unofficial and may be unavailable; Yahoo custom scoring, kickers, D/ST, bonuses, and other special rules are not reproduced.
 8. Select **Copy backup** to copy a JSON roster. On another device choose **Manage roster**, paste that JSON into the same text area, and select **Add players** to restore it.
 
 ## Recommendation logic
