@@ -46,6 +46,23 @@
   let project = null;
   let photos = [];
   const selected = new Map();
+  const previewCache = new Map();
+  const photoShareStatus = document.getElementById("photoShareStatus");
+  const sharePreviewsButton = document.getElementById("sharePreviews");
+
+  async function preparePreviewForSharing(photo) {
+    if (previewCache.has(photo.id)) return;
+    try {
+      const response = await fetch(publicUrl(photo.storage_path), { mode: "cors" });
+      if (!response.ok) return;
+      const blob = await response.blob();
+      if (!blob.type.startsWith("image/") || blob.size > 10 * 1024 * 1024) return;
+      const ext = blob.type.includes("png") ? "png" : blob.type.includes("webp") ? "webp" : "jpg";
+      const code = String(photo.photo_code || "photo").replace(/[^a-z0-9_-]/gi, "-").slice(0, 60);
+      previewCache.set(photo.id, new File([blob], code + "-CBK-preview." + ext, { type: blob.type }));
+    } catch { /* Still share the public photo link if cross-origin file loading is blocked. */ }
+  }
+
 
   let squareConfig = null;
   let payments = null;
@@ -149,12 +166,46 @@
       button.setAttribute("aria-pressed", "false");
     } else {
       selected.set(id, photo);
+      if (selected.size <= 3) preparePreviewForSharing(photo);
       button.classList.add("is-selected");
       button.setAttribute("aria-pressed", "true");
     }
 
     updateSelection();
   }
+
+  sharePreviewsButton?.addEventListener("click", async () => {
+    const chosen = [...selected.values()];
+    if (!project) {
+      if (photoShareStatus) photoShareStatus.textContent = "The gallery has not loaded.";
+      return;
+    }
+    const url = new URL("gallery.html?project=" + encodeURIComponent(slug), location.href).href;
+    const title = "Capturedby_Kam · " + project.title;
+    const codes = chosen.map(p => p.photo_code).filter(Boolean);
+    const text = chosen.length
+      ? "Check out these " + chosen.length + " Capturedby_Kam photo previews: " + codes.join(", ") + "."
+      : "Check out this Capturedby_Kam photo gallery.";
+    const files = chosen.map(p => previewCache.get(p.id)).filter(Boolean);
+    try {
+      if (typeof navigator.share === "function") {
+        if (chosen.length && chosen.length <= 3 && files.length === chosen.length &&
+            typeof navigator.canShare === "function" && navigator.canShare({ files })) {
+          await navigator.share({ title, files });
+          if (photoShareStatus) photoShareStatus.textContent = "Watermarked previews shared using the device share sheet.";
+        } else {
+          await navigator.share({ title, text, url });
+          if (photoShareStatus) photoShareStatus.textContent = "Gallery shared through the device share sheet. Select Messages and choose a contact.";
+        }
+      } else {
+        await navigator.clipboard.writeText(url + (codes.length ? "\nPhoto IDs: " + codes.join(", ") : ""));
+        if (photoShareStatus) photoShareStatus.textContent = "Photo link copied. Paste into Apple Messages.";
+      }
+    } catch (error) {
+      if (error.name !== "AbortError" && photoShareStatus)
+        photoShareStatus.textContent = "Native sharing is unavailable; open this gallery on your iPhone Safari or copy its URL.";
+    }
+  });
 
   function getIndividualPrice() {
     if (!project) return 0;
