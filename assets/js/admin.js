@@ -142,6 +142,8 @@
     try {
       const status = await authApi("publicSecurityStatus");
       const hasPasskey = Boolean(status.passkey_enabled);
+      const label = document.getElementById("passkeyButtonLabel");
+      if (label) label.textContent = /iPhone/i.test(navigator.userAgent || "") ? "Continue with Face ID" : "Continue with device passkey";
       passkeyLoginButton.hidden = !hasPasskey;
       loginDivider.hidden = !hasPasskey;
       loginIntro.textContent = hasPasskey
