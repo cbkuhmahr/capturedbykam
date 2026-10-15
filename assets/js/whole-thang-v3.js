@@ -165,7 +165,7 @@ function render(){
  document.querySelectorAll(".tab").forEach(b=>{b.classList.toggle("active",b.dataset.tab===tab);b.setAttribute("aria-selected",b.dataset.tab===tab?"true":"false");});
  document.querySelector(".season-strip .record").innerHTML=summary.wins+"–"+summary.losses+"–"+summary.ties+"T <span>2026</span>";
  document.querySelector(".season-strip .metric strong").textContent=pct(summary.wins,summary.losses).toFixed(2)+"%";
- const pages={home:homePage,live:()=>"",picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
+ const pages={home:homePage,live:()=>"",fantasy:()=>'<div id="wt-manual-fantasy-root">'+(window.WTManualFantasy?.toolbar?.()||'<div class="empty">Loading Fantasy HQ…</div>')+'</div>',picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
  document.getElementById("app").innerHTML=(pages[tab]||homePage)();
 }
 function section(title,sub,body){return '<section class="section"><div class="section-head"><h2>'+title+'</h2><span>'+sub+'</span></div>'+body+'</section>';}
