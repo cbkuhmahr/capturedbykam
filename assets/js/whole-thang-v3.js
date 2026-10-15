@@ -165,25 +165,15 @@ function render(){
  document.querySelectorAll(".tab").forEach(b=>{b.classList.toggle("active",b.dataset.tab===tab);b.setAttribute("aria-selected",b.dataset.tab===tab?"true":"false");});
  document.querySelector(".season-strip .record").innerHTML=summary.wins+"–"+summary.losses+"–"+summary.ties+"T <span>2026</span>";
  document.querySelector(".season-strip .metric strong").textContent=pct(summary.wins,summary.losses).toFixed(2)+"%";
- const pages={home:homePage,live:()=>"",fantasy:()=>'<section class="wt-fantasy-page"><header class="wt-fantasy-page-head"><div><h2>Fantasy</h2><p>Your roster, lineup decisions, and player game stats in one place.</p></div><small>2026 · Week 6</small></header><div id="wt-manual-fantasy-root">'+(window.WTManualFantasy?.toolbar?.()||'<div class="empty">Loading roster…</div>')+'</div><section class="wt-fantasy-games-section" aria-label="My players by NFL game"><h3>My players in this week’s games</h3><div id="wt-fantasy-games"><p class="muted">Loading matchups…</p></div></section><details class="wt-fantasy-yahoo-optional"><summary>Optional Yahoo account connection</summary><div id="wt-fantasy-yahoo"></div><p class="wt-fantasy-yahoo-info">Yahoo access is optional. You can manage your players here without an API key. Fantasy data provided by <a href="https://football.fantasysports.yahoo.com/" target="_blank" rel="noopener noreferrer">Yahoo Fantasy</a> when connected.</p></details></section>',picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
+ const pages={home:homePage,live:()=>"",fantasy:()=>'<section class="wt-fantasy-page"><header class="wt-fantasy-page-head"><h2>Fantasy · Week 6</h2></header><div id="wt-manual-fantasy-root">'+(window.WTManualFantasy?.toolbar?.()||'<div class="empty">Loading roster…</div>')+'</div><section class="wt-fantasy-games-section"><h3>My players · NFL games</h3><div id="wt-fantasy-games"></div></section></section>',picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
  document.getElementById("app").innerHTML=(pages[tab]||homePage)();
 }
-function section(title,sub,body){return '<section class="section"><div class="section-head"><h2>'+title+'</h2><span>'+sub+'</span></div>'+body+'</section>';}
-function cardMetric(label,value,foot){return '<div class="summary-item"><small>'+label+'</small><strong>'+value+'</strong><em>'+foot+'</em></div>';}
+function section(title,sub,body){return '<section class="section"><div class="section-head"><h2>'+title+'</h2></div>'+body+'</section>';}
+function cardMetric(label,value,foot){return '<div class="summary-item"><small>'+label+'</small><strong>'+value+'</strong></div>';}
 function homePage(){
- const forecasts=allForecasts(),picked=GAMES.filter(g=>state.picks[g.id]).length;
- const disagreements=forecasts.filter(f=>state.picks[f.id]&&state.picks[f.id]!==f.choice);
- const closest=[...forecasts].sort((a,b)=>a.probability-b.probability).slice(0,3);
- const danger=disagreements.length?disagreements.slice(0,3).map(f=>'<div class="wt-brief-row"><strong>'+f.away+' @ '+f.home+'</strong><span>Your '+state.picks[f.id]+' vs model '+f.choice+' · '+Math.round(f.probability*100)+'% preliminary</span></div>').join(""):'<div class="wt-brief-row"><span>No model disagreements among saved Week 6 picks yet.</span></div>';
- const curve=weeks.map(w=>'<div class="wt-bar-row"><span>W'+w.week+'</span><div class="wt-bar-track"><div class="wt-bar-fill" style="width:'+w.rate+'%"></div></div><strong>'+fmt(w.rate)+'%</strong></div>').join("");
- return section("2026 Season","Weeks 1–5 · verified import",
-   '<div class="panel summary-grid">'+cardMetric("Record","54–24–1T","79 selections")+cardMetric("Win rate","69.23%","ties excluded")+cardMetric("Best week","14–2","Week 4")+'</div>')+
- section("Week 6 Control","Oct 15–19 · 14 matchups",
-   '<div class="panel focus-row"><div class="focus-copy"><small>On deck</small><strong>Seahawks @ Broncos</strong><span>Thursday · 8:15 PM ET · '+picked+' of 14 picks captured</span></div><div class="counter">'+picked+'<small>/14 picked</small></div></div><div class="action-row"><button class="btn primary" data-go="picks">Manage picks</button><button class="btn" data-go="live">Live Game Center →</button><button class="btn" data-go="intel">Open workhorse →</button></div>')+
- section("Trend","Your weekly accuracy",'<div class="panel wt-pad">'+curve+'</div>')+
- section("Workhorse Brief","Based on all 79 game outcomes",
-   '<div class="wt-brief-grid"><div class="panel wt-pad"><h3>Potential disagreements</h3>'+danger+'</div><div class="panel wt-pad"><h3>Closest calls</h3>'+closest.map(f=>'<div class="wt-brief-row"><strong>'+f.away+' @ '+f.home+'</strong><span>'+f.choice+' · '+Math.round(f.probability*100)+'% model estimate</span></div>').join("")+'</div></div>')+
- '<div class="note"><strong>Integrity:</strong> Week 1 grading corrections are included. Three formerly misgraded wins: Ravens over Colts, Raiders over Dolphins, Eagles over Commanders. The engine is a statistical model, not a connected live AI service. Injury reports, live odds, and real-time news are not included.</div>';
+ const picked=GAMES.filter(g=>state.picks[g.id]).length;
+ return section("Week 6","",'<div class="panel focus-row"><div class="focus-copy"><strong>'+picked+' of '+GAMES.length+' picks saved</strong><span>SEA @ DEN · Thu 8:15 PM ET</span></div><div class="counter">'+picked+'/'+GAMES.length+'</div></div>'+
+ '<div class="action-row"><button class="btn primary" data-go="picks">Edit picks</button><button class="btn" data-go="fantasy">Fantasy players</button><button class="btn" data-go="intel">Matchups</button></div>');
 }
 function pickCard(f){
  const chosen=state.picks[f.id]||"",canPick=!state.locked;
@@ -192,20 +182,15 @@ function pickCard(f){
  '<div class="wt-card-foot"><span>MODEL: <strong>'+f.choice+'</strong> · '+Math.round(f.probability*100)+'%</span><span class="'+(chosen&&chosen!==f.choice?"wt-red":"wt-muted")+'">'+(chosen?(chosen===f.choice?"Agrees with model":"Against model"):"Not picked")+'</span></div></article>';
 }
 function picksPage(){
- const forecasts=allForecasts(),picked=Object.keys(state.picks).filter(id=>GAMES.some(g=>g.id===id)).length;
- const groups=[...new Set(forecasts.map(f=>f.group))];
- return section("Week 6 Picks",picked+"/14 selected · "+(state.locked?"Locally locked":"Editable"),
-    '<div class="wt-info-bar"><span><strong>Save:</strong> '+escape(cloudStatus)+'</span><span>Official form submission still required</span></div>'+
-    '<div class="wt-edit-toolbar" role="group" aria-label="Week 6 editing controls">'+
-     '<button type="button" class="btn '+(state.locked?"primary":"")+'" data-action="edit" aria-pressed="'+(!state.locked)+'">✎ Edit Picks</button>'+
-     '<button type="button" class="btn '+(!state.locked?"primary":"")+'" data-action="save-lock" '+(state.locked?"disabled":"")+'>Save & Lock Picks</button>'+
-     '<span class="wt-edit-message" role="status">'+(state.locked?"Your choices are locked. Select Edit Picks to change them.":"Editing enabled. Tap either team in any matchup to change your pick.")+'</span>'+
-     '</div>'+
-    groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
- section("Monday Night Tiebreaker","MNF winner first · predicted margin second",
- '<div class="tiebreak-grid"><div class="field"><label>MNF · WAS @ SF · predicted winning margin</label><input aria-label="MNF predicted winning margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?"disabled":"")+' placeholder="Margin"></div></div>'+ 
- '<p class="wt-helper">If tied on correct picks, the MNF winner pick breaks the tie first. If still tied, the MNF predicted winning margin is used, closest without going over. No additional points are awarded.</p>'+
- '<div class="action-row"><button class="btn primary" data-action="save">Save & sync picks</button><button class="btn" data-action="lock">'+(state.locked?"Edit Picks":"Save & Lock Picks")+'</button></div><p class="wt-helper">The lock is a personal reminder, not the league submission cutoff. Submit your official picks in the family form.</p>');
+ const forecasts=allForecasts(),groups=[...new Set(forecasts.map(f=>f.group))];
+ return section("Week 6 Picks","",
+ '<div class="wt-edit-toolbar" role="group" aria-label="Pick controls">'+
+ '<button type="button" class="btn" data-action="edit" '+(!state.locked?'disabled':'')+'>Edit picks</button>'+
+ '<button type="button" class="btn primary" data-action="save-lock" '+(state.locked?'disabled':'')+'>Save & Lock</button>'+
+ '<button type="button" class="btn" data-action="save">Save picks</button>'+
+ '<span class="wt-cloud-status" role="status">'+escape(cloudStatus)+'</span></div>'+
+ groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
+ section("Monday Night Tiebreaker","",'<div class="tiebreak-grid"><div class="field"><label>Winning margin · WAS @ SF</label><input aria-label="MNF predicted winning margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?'disabled':'')+' placeholder="Margin"></div></div>');
 }
 function intelCard(f){
  const chosen=state.picks[f.id];
