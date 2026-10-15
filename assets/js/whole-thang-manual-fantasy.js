@@ -10,7 +10,7 @@ let state={players:[],scoring:"half"},editor=false,note="",gameList=[],box=new M
 function emit(){document.dispatchEvent(new Event("wt-manual-fantasy-change"));}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch{note="Browser storage may be unavailable.";}emit();}
 function load(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&Array.isArray(x.players)){state.players=x.players.filter(p=>p&&typeof p.name==="string").slice(0,80).map(p=>({id:String(p.id||""),name:p.name.slice(0,75),team:TEAMS.includes(p.team)?p.team:"",pos:POSITIONS.includes(p.pos)?p.pos:"",avg:validAvg(p.avg),tier:Math.max(1,Math.min(5,+p.tier||3)),slot:p.slot==="START"?"START":"BN",availability:["active","Q","OUT"].includes(p.availability)?p.availability:"active"}));state.scoring=["standard","half","ppr"].includes(x.scoring)?x.scoring:"half";}}catch{}}
-function games(){return window.WTScoreGames||gameList;}
+function games(){return window.WTScoreGames?.length?window.WTScoreGames:(window.WTScouting?.games||gameList);}
 function match(p){
  const g=games().find(g=>g.away===p.team||g.home===p.team),against=g?(g.away===p.team?g.home:g.away):"";
  const t=window.WTScouting?.teams?.[against];
