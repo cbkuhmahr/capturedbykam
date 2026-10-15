@@ -35,7 +35,7 @@
   panel.setAttribute("aria-label", "Live Sports Lounge");
   panel.innerHTML =
     '<div class="wt-media-head"><div><div class="wt-media-eyebrow">$billi-type uh’day. / Game Day</div><h2>Live Sports Lounge</h2></div>' +
-    '<button class="wt-media-close" type="button" data-media-close aria-label="Close lounge">×</button></div>' +
+    '<div class="wt-media-head-actions"><button class="wt-media-btn wt-media-emergency-stop" type="button" data-media-stop>Stop audio</button><button class="wt-media-close" type="button" data-media-close aria-label="Close lounge and stop audio">×</button></div></div>' +
     '<div class="wt-media-content">' +
       '<div class="wt-media-banner"><div><strong>Chicago radio. National sports talk. Bears football.</strong>' +
         '<p>A dedicated listening and viewing hub while you track your picks and scores.</p></div>' +
@@ -98,10 +98,19 @@
     dockTitle.textContent = station.name;
   }
   function stopRadio() {
-    // Removing the iframe reliably stops an existing third-party player.
+    // Kill the actual embedded document before removing it. Simply hiding
+    // the lounge does not stop third-party radio playback on iOS Safari.
+    player.querySelectorAll("iframe").forEach(frame => {
+      try { frame.src = "about:blank"; } catch (_) {}
+      frame.remove();
+    });
+    player.querySelectorAll("audio, video").forEach(media => {
+      try { media.pause(); media.removeAttribute("src"); media.load(); } catch (_) {}
+    });
     player.replaceChildren();
     loaded = false;
     refreshRadio();
+    status.textContent = "Radio stopped.";
   }
   function loadRadio() {
     stopRadio();
@@ -118,6 +127,8 @@
     status.textContent = "Player loaded from " + STATIONS[selected].provider + ". Use Play in the widget. If unavailable, choose Open at broadcaster. " + STATIONS[selected].description;
   }
   function setOpen(next) {
+    // Closing the lounge is also an explicit STOP, never background playback.
+    if (!next) stopRadio();
     opened = !!next;
     layer.classList.toggle("is-open", opened);
     panel.classList.toggle("is-open", opened);
@@ -152,6 +163,11 @@
   });
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && opened) setOpen(false);
+  });
+  // Do not let a station continue playing after the user leaves the page/app.
+  window.addEventListener("pagehide", stopRadio);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && loaded) stopRadio();
   });
   refreshRadio();
 })();
