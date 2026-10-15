@@ -37,12 +37,24 @@
 .wt-fantasy-game-card .wt-manual-slot.on{background:#536675;color:#f5f9fc}
 .wt-fantasy-game-card .wt-fantasy-pts strong{color:#d7e3ee}
 .wt-fantasy-quiet{font-size:12px;color:#9caab8;line-height:1.7;border:1px dashed #34414e;padding:18px;border-radius:9px;margin:0}
-.wt-fantasy-yahoo-optional{background:#0d1319;border:1px solid #28333e;border-radius:9px;padding:0 14px}
-.wt-fantasy-yahoo-optional>summary{font-size:12px;font-weight:700;color:#aab9c6;cursor:pointer;min-height:45px;display:list-item;align-content:center;list-style:disclosure-closed inside}
-.wt-fantasy-yahoo-optional[open]>summary{list-style:disclosure-open inside;border-bottom:1px solid #28333e}
-.wt-fantasy-yahoo-optional .wt-fantasy-toolbar{margin:14px 0;background:#121a22;border:1px solid #2d3c49;padding:12px}
-.wt-fantasy-yahoo-optional .wt-fantasy-toolbar>div:first-child{flex:1}
-.wt-fantasy-yahoo-info{font-size:10px;line-height:1.5;color:#8c9cab;margin:9px 0 14px}
-.wt-fantasy-yahoo-info a{color:#c5d6e5;text-decoration:underline}
 @media(max-width:720px){.tabs{grid-template-columns:repeat(8,minmax(54px,1fr));overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.wt-fantasy-game-grid{grid-template-columns:1fr}.wt-fantasy-page-head{align-items:flex-start}}
 @media(max-width:430px){.wt-fantasy-page-head{display:block}.wt-fantasy-page-head>small{display:block;margin-top:7px}.wt-fantasy-game-card{padding:11px}.wt-fantasy-page .wt-manual-intro{padding:12px}}
+
+/* Clean NFL dashboard: essential actions, scores, players and selections only. */
+.wt-scout-expand{border-top:1px solid #2e3944}
+.wt-scout-expand>summary{padding:13px 15px;font-size:13px;font-weight:750;cursor:pointer;color:#d2dce5}
+.wt-scout-expand[open]>summary{border-bottom:1px solid #2e3944}
+.wt-scout-expand .wt-manual-rankings{margin-top:0}
+.wt-fantasy-page{gap:14px}
+.wt-fantasy-page .wt-manual-intro h3{margin:0}
+.wt-fantasy-game-card{padding:15px}
+.wt-manual-game-players{margin-top:8px}
+.wt-fantasy-page-head p,.wt-score-help,.wt-manual-disclosure,.wt-manual-foot,.wt-manual-light,.wt-manual-settings span,.wt-explain,.wt-factor-grid,.wt-intro,.wt-helper,.note,.wt-edit-message,.wt-info-bar,.wt-score-summary{display:none!important}
+.wt-cloud-status{font-size:11px;color:#a9b4be;margin-left:auto}
+.wt-edit-toolbar{background:transparent!important;border:0!important;padding:0!important}
+.wt-intel-card .wt-card-foot>span{display:none!important}
+.wt-intel-card .wt-card-foot{justify-content:flex-end}
+.wt-game-card .wt-card-foot{display:none!important}
+.wt-score-meta strong:empty{display:none}
+.wt-score-meta strong:empty + span{display:none}
+@media(max-width:580px){.wt-cloud-status{width:100%;margin-left:0}}
