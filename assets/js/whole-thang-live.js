@@ -82,9 +82,9 @@ function markup(){
   return '<article class="wt-score-game '+(active?"is-live":"")+'"><div class="wt-score-top"><span>'+esc(active?"LIVE":final?"FINAL":game.day+" · "+game.time+" ET")+'</span>'+
    '<span class="wt-score-status '+(active?"is-live":final?"is-final":"")+'">'+esc(label(x))+'</span></div>'+
    team(game.away,"away")+team(game.home,"home")+
-   '<div class="wt-score-pick">YOUR PICK: <strong>'+esc(choice||"—")+'</strong><span class="wt-pick-verdict wt-v-'+outcome+'">'+esc(explanation)+'</span></div>'+(window.WTFantasy?.gameRows?.(game)||"")+'</article>';
+   '<div class="wt-score-pick">YOUR PICK: <strong>'+esc(choice||"—")+'</strong><span class="wt-pick-verdict wt-v-'+outcome+'">'+esc(explanation)+'</span></div>'+(window.WTFantasy?.gameRows?.(game)||"")+(window.WTManualFantasy?.gameRows?.(game,x)||"")+'</article>';
  }).join(""):'<div class="empty">No games match this view right now.</div>')+'</div>';
- return status+(window.WTFantasy?.toolbar?.()||"")+summary+filters+board+
+ return status+(window.WTManualFantasy?.toolbar?.()||"")+(window.WTFantasy?.toolbar?.()||"")+summary+filters+board+
  '<p class="wt-score-help">Scores from ESPN · Auto-refreshes about every 45 seconds when this page is open. In-progress leads can change; this view does not edit picks, grade official family submissions, or calculate prizes. Official picks must still be submitted using the family form.</p>';
 }
 function ensure(){
@@ -127,6 +127,7 @@ async function refresh(){
   const next=new Map(json.games.filter(g=>g&&typeof g.away==="string"&&typeof g.home==="string").map(g=>[g.away+"-"+g.home,g]));
   if(!GAMES.some(g=>next.has(g.away+"-"+g.home)))throw Error("No matching matchups");
   live=next;updatedAt=json.updatedAt||new Date().toISOString();state="ready";
+  window.WTScoreGames=json.games;document.dispatchEvent(new Event("wt-scores-ready"));
  }catch{state="error";}
  finally{fetching=false;ensure();}
 }
@@ -136,6 +137,7 @@ document.addEventListener("click",e=>{
  if(filter&&["all","live","picked"].includes(filter.dataset.liveFilter)){viewFilter=filter.dataset.liveFilter;ensure();}
 });
 document.addEventListener("wt-fantasy-change",ensure);
+document.addEventListener("wt-manual-fantasy-change",ensure);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh();});
 ensure();refresh();
 setInterval(()=>{if(!document.hidden)refresh();},45000);
