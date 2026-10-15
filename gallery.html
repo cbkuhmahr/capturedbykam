@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="assets/css/cbk-shop.css">
   <link rel="stylesheet" href="assets/css/cbk-game-day.css">
   <link rel="stylesheet" href="assets/css/cbk-studio-v2.css">
+  <link rel="stylesheet" href="assets/css/cbk-apple-share.css">
 </head>
 <body class="studio-body">
   <div class="studio-shell">
@@ -54,8 +55,10 @@
           <strong id="selectionCount">0 selected — choose at least 1</strong>
           <span>Tap a photo to add or remove it.</span>
         </div>
+        <button id="sharePreviews" class="cbk-native-share" type="button">Share selected previews</button>
         <button id="reviewButton" class="button button-dark" type="button" disabled>Review Order</button>
       </div>
+      <p id="photoShareStatus" class="cbk-photo-share-note" role="status" aria-live="polite">Share public, watermarked previews or a gallery link. Original files remain protected until purchase.</p>
       <div class="cbk-game-day-photo-tools">
         <div><label for="photoSearch">Find a photo by ID</label><input id="photoSearch" type="search" placeholder="Search photo codes" autocomplete="off"></div>
         <button id="refreshPhotos" class="button" type="button">Check for new photos</button>
