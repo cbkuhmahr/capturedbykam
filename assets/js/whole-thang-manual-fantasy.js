@@ -7,7 +7,7 @@ const SNAPSHOT=[["Dak Prescott","DAL","QB","START",21.86,29,"active"],["D'Andre 
 function screenshotRoster(){return SNAPSHOT.map(([name,team,pos,slot,avg,rank,availability],i)=>({id:"screenshot-"+i,name,team,pos,slot,avg,rank,availability,tier:3,source:"yahoo-week6"}));}
 
 const html=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const norm=s=>String(s||"").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]/g,"");
+const norm=s=>String(s||"").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]/g,"").replace(/(jr|sr|ii|iii|iv)$/,"");
 const validAvg=v=>v===""||v==null?null:Number.isFinite(+v)?Math.max(0,Math.min(75,+v)):null;
 let state={players:screenshotRoster(),scoring:"half"},editor=false,note="",gameList=[],box=new Map(),busy=new Set();
 function emit(){const root=document.getElementById("wt-manual-fantasy-root");if(root)root.innerHTML=toolbar();document.dispatchEvent(new Event("wt-manual-fantasy-change"));}
@@ -18,7 +18,7 @@ function match(p){
  const g=games().find(g=>g.away===p.team||g.home===p.team),against=g?(g.away===p.team?g.home:g.away):"";
  const t=window.WTScouting?.teams?.[against];
  const rank=Number(p.rank)||0;
- if(rank>=1&&rank<=32){const factor=((16.5-rank)/15.5)*.055;return {against,factor,label:(rank<=10?"Favorable":rank>=24?"Difficult":"Neutral")+" (Yahoo positional defense rank "+rank+"/32; Week 6 screenshot)"};}
+ if(rank>=1&&rank<=32){const factor=((16.5-rank)/15.5)*.055;return {against,factor,label:(rank<=10?"Favorable":rank>=24?"Difficult":"Neutral")+" (opponent rank "+rank+"/32)"};}
  if(!against)return {against:"",factor:0,label:"Bye / no scheduled Week 6 game"};
  if(!t?.games)return {against,factor:0,label:"Opponent strength unavailable"};
  const difference=p.pos==="DST"?22-t.pf/t.games:t.pa/t.games-22;
@@ -39,27 +39,34 @@ function recommended(){
  return list;
 }
 function option(values,value,blank){return (blank?'<option value="">'+html(blank)+'</option>':"")+values.map(v=>'<option value="'+html(v)+'" '+(v===value?"selected":"")+'>'+html(v)+'</option>').join("");}
-function fantasyPoints(obj){
+function fantasyPoints(obj,p){
  if(!obj)return null;
- const s=obj.stats||{},ppr=state.scoring==="ppr"?1:state.scoring==="half"?.5:0;
+ const s=obj.stats||{};
+ if(p?.pos==="K"){
+  const fg=Number(s.fgMade||0),xp=Number(s.xpMade||0);
+  if(s.kickPts==null&&!fg&&!xp)return null;
+  return Number(s.kickPts??(3*fg+xp)).toFixed(2);
+ }
+ const ppr=state.scoring==="ppr"?1:state.scoring==="half"?.5:0;
  return ((s.passYds||0)/25+(s.passTD||0)*4-(s.int||0)+(s.rushYds||0)/10+(s.rushTD||0)*6+(s.recYds||0)/10+(s.recTD||0)*6+(s.rec||0)*ppr-(s.fumLost||0)*2).toFixed(2);
 }
 function gameRows(game,result){
  const roster=state.players.filter(p=>p.team&&(p.team===game.away||p.team===game.home));
  if(!roster.length)return "";
- const available=box.get(String(result?.id||""))?.data?.players||[];
- const lines=roster.map(p=>{
-  const row=result?.state!=="pre"?available.find(x=>x.team===p.team&&norm(x.name)===norm(p.name)):null;
-  const stats=row?.stats||{};
-  const detail=[stats.passYds!=null?stats.passYds+" pass yd":"",stats.rushYds!=null?stats.rushYds+" rush yd":"",stats.rec!=null?stats.rec+" rec":"",stats.recYds!=null?stats.recYds+" rec yd":""].filter(Boolean).join(" · ");
-  const points=p.pos==="K"||p.pos==="DST"?null:fantasyPoints(row);
-  return '<div class="wt-manual-game-player"><span class="wt-manual-slot '+(p.slot==="START"?"on":"")+'">'+(p.slot==="START"?"START":"BENCH")+'</span><span><b>'+html(p.name)+'</b><small>'+html(p.pos||"Assign position")+' · '+html(detail||(result?.state==="pre"?"Upcoming":"Stats pending"))+'</small></span><strong>'+(points??"—")+'</strong></div>';
- }).join("");
- return '<div class="wt-manual-game-players"><div class="wt-manual-match-head"><strong>My fantasy players</strong><span>Est. '+(state.scoring==="half"?"½-PPR":html(state.scoring.toUpperCase()))+' points</span></div>'+lines+'<small class="wt-manual-foot">Read-only ESPN box-score estimates, not official Yahoo totals. Bonuses, kickers, and team defenses are excluded.</small></div>';
+ const rows=box.get(String(result?.id||""))?.data?.players||[];
+ return '<div class="wt-manual-game-players">'+roster.map(p=>{
+  const row=result?.state!=="pre"?rows.find(x=>x.team===p.team&&norm(x.name)===norm(p.name)):null;
+  const st=row?.stats||{};
+  const details=[st.passYds!=null?st.passYds+" pass yd":"",st.passTD?st.passTD+" pass TD":"",st.int?st.int+" INT":"",st.rushYds!=null?st.rushYds+" rush yd":"",st.rushTD?st.rushTD+" rush TD":"",st.rec!=null?st.rec+" rec":"",st.recYds!=null?st.recYds+" rec yd":"",st.recTD?st.recTD+" rec TD":"",st.fgMade!=null?st.fgMade+" FG":"",st.xpMade!=null?st.xpMade+" XP":""].filter(Boolean);
+  if(p.pos==="DST"&&result?.state!=="pre"){const allowed=p.team===game.away?result?.homeScore:result?.awayScore;if(allowed!=null)details.push(allowed+" allowed");}
+  const detail=details.join(" · ")||(result?.state==="pre"?"Upcoming":"Stats pending");
+  const points=p.pos==="DST"?null:fantasyPoints(row,p);
+  return '<div class="wt-manual-game-player"><span class="wt-manual-slot '+(p.slot==="START"?"on":"")+'">'+(p.slot==="START"?"START":"BENCH")+'</span><span><b>'+html(p.name)+'</b><small>'+html(p.pos||"—")+' · '+html(detail)+'</small></span><strong>'+(points===null?"—":"~"+points)+'</strong></div>';
+ }).join("")+'</div>';
 }
 function rosterEditor(){
  const scoring=option(["standard","half","ppr"],state.scoring);
- return '<div class="wt-manual-editor"><div class="wt-manual-settings"><label>Scoring<select data-m-scoring="1">'+scoring+'</select></label><span>Yahoo public leagues generally use half-PPR; confirm your private league rules.</span></div>'+
+ return '<div class="wt-manual-editor"><div class="wt-manual-settings"><label>Scoring<select data-m-scoring="1">'+scoring+'</select></label><span></span></div>'+
  '<label class="wt-manual-paste-label">Paste players or backup JSON <small>(Name | TEAM | POS | Avg PPG; names alone also work)</small><textarea id="wt-m-paste" rows="4" placeholder="Josh Allen | BUF | QB | 20.5\nBijan Robinson | ATL | RB | 18.1\nOr just a player name"></textarea></label>'+
  '<div class="wt-manual-editor-actions"><button type="button" class="btn primary" data-m-import="1">Add players</button><button type="button" class="btn" data-m-auto="1">Use suggested lineup here</button><button type="button" class="btn" data-m-backup="1">Copy backup</button></div>'+
  (note?'<p class="wt-manual-note">'+html(note)+'</p>':"")+
@@ -67,28 +74,22 @@ function rosterEditor(){
  '<div class="wt-manual-edit-player" data-m-id="'+html(p.id)+'"><label>Name<input maxlength="75" data-m-field="name" value="'+html(p.name)+'"></label>'+
  '<label>Team<select data-m-field="team">'+option(TEAMS,p.team,"Team")+'</select></label>'+
  '<label>Pos<select data-m-field="pos">'+option(POSITIONS,p.pos,"Pos")+'</select></label>'+
- '<label>Week 6 proj / Avg PPG<input type="number" data-m-field="avg" min="0" max="75" step=".1" placeholder="Optional" value="'+(p.avg??"")+'"></label>'+
- '<label>Yahoo opponent rank (1–32)<input type="number" data-m-field="rank" min="1" max="32" value="'+(p.rank||"")+'"></label>'+ '<label>Talent tier<select data-m-field="tier">'+[1,2,3,4,5].map(v=>'<option value="'+v+'" '+(p.tier===v?"selected":"")+'>'+v+'</option>').join("")+'</select></label>'+
+ '<label>Avg points<input type="number" data-m-field="avg" min="0" max="75" step=".1" placeholder="Optional" value="'+(p.avg??"")+'"></label>'+
+ '<label>Opponent rank (1–32)<input type="number" data-m-field="rank" min="1" max="32" value="'+(p.rank||"")+'"></label>'+ '<label>Talent tier<select data-m-field="tier">'+[1,2,3,4,5].map(v=>'<option value="'+v+'" '+(p.tier===v?"selected":"")+'>'+v+'</option>').join("")+'</select></label>'+
  '<label>Lineup<select data-m-field="slot"><option value="START" '+(p.slot==="START"?"selected":"") +'>Starter</option><option value="BN" '+(p.slot==="BN"?"selected":"") +'>Bench</option></select></label>'+
  '<label>Injury status*<select data-m-field="availability"><option value="active" '+(p.availability==="active"?"selected":"")+'>Active</option><option value="Q" '+(p.availability==="Q"?"selected":"")+'>Questionable</option><option value="OUT" '+(p.availability==="OUT"?"selected":"")+'>Out</option></select></label>'+
  '<button class="btn danger" data-m-remove="'+html(p.id)+'">Remove</button></div>').join("")+'</div>'+
- '<small>Injury statuses are manually entered, not checked against a live report. Your fantasy roster is stored only on this device; pick’em cloud data is untouched.</small></div>';
+ '<small></small></div>';
 }
 function toolbar(){
- const list=scores(),chosen=recommended(),selection=new Set(chosen.map(x=>x.id)),swaps=list.filter(p=>selection.has(p.id)&&p.slot!=="START"),poor=list.filter(p=>p.slot==="START"&&!selection.has(p.id));
- let advice=swaps.length?'<div class="wt-manual-swap">'+swaps.slice(0,5).map(p=>{
-  const replacing=poor.find(x=>x.pos===p.pos||(["RB","WR","TE"].includes(p.pos)&&["RB","WR","TE"].includes(x.pos)));
-  return '<div><strong>Consider START '+html(p.name)+'</strong><span>'+(replacing?'over '+html(replacing.name)+' · ':'')+
-  (p.points>=0?p.points.toFixed(1):"—")+' planning points · '+html(p.match.label)+'</span></div>';
- }).join("")+'</div>':list.length?'<p class="wt-manual-light">Your selected starters match this preliminary lineup.</p>':"";
- if(list.length&&!list.some(x=>x.known))advice='<p class="wt-manual-light">No player averages entered yet. Ratings currently use generic position baselines and your talent tiers, not verified projections.</p>'+advice;
- const details=list.length?'<div class="wt-manual-recommendations"><div class="wt-manual-headline"><strong>Start / Sit · Preliminary</strong><span>Default lineup: QB · 2 RB · 3 WR · TE · FLEX · K · DST</span></div>'+advice+
- '<div class="wt-manual-rankings">'+list.map(p=>{
-  const flag=p.points<0?"VERIFY":selection.has(p.id)?"START":"SIT";
-  return '<div class="wt-manual-ranked"><span class="wt-manual-advice '+flag.toLowerCase()+'">'+flag+'</span><div><b>'+html(p.name)+'</b><small>'+html(p.pos||"Position needed")+' · '+html(p.team||"Team needed")+(p.match.against?' vs '+html(p.match.against):' · Bye/unknown')+' · '+(p.source==="yahoo-week6"?"Yahoo screenshot projection":p.known?"Points entered":"Tier "+p.tier+" assumption")+'</small></div><strong>'+(p.points<0?"—":p.points.toFixed(1))+'</strong></div>';
- }).join("")+'</div><p class="wt-manual-disclosure">These are planning estimates, not official Yahoo projections. Opponent defense is approximated using the first five NFL weeks’ points allowed, not position-specific fantasy points allowed. Check injuries, usage, scoring, and lineup settings.</p></div>':
- '<div class="wt-manual-empty">Add your roster to see Week 6 matchups, projected start/sit rankings, and live player stats. Names alone are fine — then assign NFL team and position.</div>';
- return '<section class="wt-manual-shell"><div class="wt-manual-intro"><div><h3>Fantasy Scouting Lab <small>Week 6</small></h3><p>No Yahoo access needed. Your Monsters of the Midway roster is loaded from the screenshots. Compare Week 6 matchups and estimated points.</p></div><button type="button" class="btn primary" data-m-toggle="1">'+(editor?"Close editor":"Manage roster")+'</button></div>'+details+(editor?rosterEditor():"")+'</section>';
+ const list=scores(),selected=new Set(recommended().map(p=>p.id));
+ const ranked=list.map(p=>{
+  const flag=p.points<0?"VERIFY":selected.has(p.id)?"START":"SIT";
+  return '<div class="wt-manual-ranked"><span class="wt-manual-advice '+flag.toLowerCase()+'">'+flag+'</span><div><b>'+html(p.name)+'</b><small>'+html(p.pos||"—")+' · '+html(p.team||"—")+(p.match.against?' vs '+html(p.match.against):'')+'</small></div><strong>'+(p.points<0?"—":"~"+p.points.toFixed(1))+'</strong></div>';
+ }).join("");
+ return '<section class="wt-manual-shell"><div class="wt-manual-intro"><h3>My Roster <small>'+state.players.length+' players</small></h3><button type="button" class="btn primary" data-m-toggle="1">'+(editor?"Close editor":"Manage roster")+'</button></div>'+
+ (list.length?'<details class="wt-scout-expand"><summary>Start / Sit · Estimates</summary><div class="wt-manual-recommendations"><div class="wt-manual-rankings">'+ranked+'</div></div></details>':'')+
+ (editor?rosterEditor():"")+'</section>';
 }
 function importPlayers(raw){
  const input=String(raw||"").trim();
@@ -136,7 +137,7 @@ document.addEventListener("click",e=>{
  if(e.target.closest("[data-m-import]")){importPlayers(document.getElementById("wt-m-paste")?.value);refreshBox();return;}
  const remove=e.target.closest("[data-m-remove]");
  if(remove){state.players=state.players.filter(p=>p.id!==remove.dataset.mRemove);persist();return;}
- if(e.target.closest("[data-m-auto]")){const chosen=new Set(recommended().map(x=>x.id));state.players.forEach(p=>p.slot=chosen.has(p.id)?"START":"BN");note="Suggested starters saved locally. Your Yahoo lineup was not changed.";persist();return;}
+ if(e.target.closest("[data-m-auto]")){const chosen=new Set(recommended().map(x=>x.id));state.players.forEach(p=>p.slot=chosen.has(p.id)?"START":"BN");note="Suggested starters saved locally. ";persist();return;}
  if(e.target.closest("[data-m-backup]")){navigator.clipboard?.writeText(JSON.stringify(state,null,2)).then(()=>{note="Backup copied";emit();}).catch(()=>{note="Clipboard unavailable";emit();});}
 });
 document.addEventListener("change",e=>{
