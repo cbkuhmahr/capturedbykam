@@ -29,7 +29,7 @@ function setSessionCookie(res, token) {
   res.setHeader(
     "Set-Cookie",
     COOKIE_NAME + "=" + encodeURIComponent(token) +
-      "; Path=/; Max-Age=43200; HttpOnly; Secure; SameSite=Strict"
+      "; Path=/; Max-Age=3600; HttpOnly; Secure; SameSite=Strict"
   );
 }
 
