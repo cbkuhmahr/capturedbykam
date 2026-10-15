@@ -208,7 +208,9 @@ module.exports = async function handler(req, res) {
       const result = await getTokens({ grant_type:"authorization_code", code:String(req.query.code),
         redirect_uri:process.env.YAHOO_REDIRECT_URI });
       res.setHeader("Set-Cookie", [forget(STATE_COOKIE), cookie(YAHOO_COOKIE, seal(tokenState(result)))]);
-      return res.redirect(302, "/whole-thang/?yahoo=connected");
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'");
+      return res.status(200).send('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Yahoo connected</title><body style="background:#0b1016;color:#fff;font-family:system-ui;display:grid;place-items:center;min-height:90vh;text-align:center"><main><h1>Yahoo Fantasy connected</h1><p>Your read-only Yahoo roster connection is ready.</p><a href="/whole-thang/" style="color:#f5c75c">Open $billi-type uh’day. →</a></main></body></html>');
     } catch { return res.redirect(302, "/whole-thang/?yahoo=error"); }
   }
   if (!(await isAdmin(req))) return fail(res, 401, "Unlock the site with your admin login first");
