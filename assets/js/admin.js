@@ -56,7 +56,42 @@
   // Remove the legacy readable browser token. New sessions live only in a Secure HttpOnly cookie.
   localStorage.removeItem("cbk_admin_session_v1");
 
+  const MFA_PENDING_KEY = "cbk_admin_pending_totp";
   let mfaToken = "";
+  function clearPendingMfa() {
+    mfaToken = "";
+    try { sessionStorage.removeItem(MFA_PENDING_KEY); } catch {}
+  }
+  function savePendingMfa(token, expiry) {
+    mfaToken = String(token || "");
+    if (!mfaToken) return;
+    try {
+      sessionStorage.setItem(MFA_PENDING_KEY, JSON.stringify({
+        token: mfaToken,
+        expires: Date.parse(String(expiry || "")) || Date.now() + 5 * 60 * 1000
+      }));
+    } catch {}
+  }
+  function restorePendingMfa() {
+    try {
+      const pending = JSON.parse(sessionStorage.getItem(MFA_PENDING_KEY) || "null");
+      if (!pending || typeof pending.token !== "string" || !/^[a-f0-9]{64}$/i.test(pending.token) ||
+          !Number.isFinite(pending.expires) || Date.now() >= pending.expires) {
+        clearPendingMfa();
+        return false;
+      }
+      mfaToken = pending.token;
+      loginForm.hidden = true;
+      passkeyLoginButton.hidden = true;
+      loginDivider.hidden = true;
+      totpLoginForm.hidden = false;
+      totpLoginMessage.textContent = "PIN already accepted. Enter the current 6-digit code from Microsoft Authenticator. No number-matching approval is needed.";
+      return true;
+    } catch {
+      clearPendingMfa();
+      return false;
+    }
+  }
   let projects = [];
   let photos = [];
   let orders = [];
@@ -119,7 +154,7 @@
   }
 
   function completeLogin() {
-    mfaToken = "";
+    clearPendingMfa();
     loginPin.value = "";
     loginTotpCode.value = "";
     totpLoginForm.hidden = true;
@@ -142,13 +177,13 @@
     try {
       const data = await authApi("login", { pin });
       if (data.mfa_required) {
-        mfaToken = data.mfa_token || "";
+        savePendingMfa(data.mfa_token, data.expires_at);
         loginMessage.textContent = "";
         loginForm.hidden = true;
         passkeyLoginButton.hidden = true;
         loginDivider.hidden = true;
         totpLoginForm.hidden = false;
-        totpLoginMessage.textContent = "PIN accepted. Verify with Microsoft Authenticator.";
+        totpLoginMessage.textContent = "PIN accepted. Enter the 6-digit code shown in Microsoft Authenticator. Do not use number-matching approval.";
         setTimeout(() => loginTotpCode.focus(), 50);
       } else {
         await completeLogin();
@@ -176,8 +211,14 @@
       await authApi("verifyTotpLogin", { mfa_token: mfaToken, code });
       await completeLogin();
     } catch (error) {
-      totpLoginMessage.textContent = error.message;
-      loginTotpCode.select();
+      if (/challenge (expired|is missing)|challenge missing/i.test(String(error.message || ""))) {
+        clearPendingMfa();
+        showLogin("Authenticator verification expired. Enter your PIN again or use your iPhone passkey.");
+        await refreshPublicSecurity();
+      } else {
+        totpLoginMessage.textContent = error.message;
+        loginTotpCode.select();
+      }
     } finally {
       button.disabled = false;
     }
@@ -207,7 +248,7 @@
   });
 
   cancelTotpLogin.addEventListener("click", async () => {
-    mfaToken = "";
+    clearPendingMfa();
     loginTotpCode.value = "";
     totpLoginForm.hidden = true;
     loginForm.hidden = false;
@@ -925,16 +966,29 @@
     return String(value).replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" }[m]));
   }
 
-  const ADMIN_IDLE_MS = 30 * 60 * 1000;
+  const ADMIN_IDLE_MS = 10 * 60 * 1000;
+  const BACKGROUND_LOCK_MS = 60 * 1000;
   let idleTimer = null;
+  let hiddenAt = 0;
+  let lastActivity = Date.now();
+  let locking = false;
+
+  async function lockAdmin(message) {
+    if (locking || dashboard.hidden) return;
+    locking = true;
+    showLogin(message || "Session locked. Unlock with your passkey.");
+    clearPendingMfa();
+    try { await requestJson("/api/admin-auth", "logout"); } catch {}
+    await refreshPublicSecurity();
+    locking = false;
+  }
 
   function resetIdleTimer() {
     clearTimeout(idleTimer);
     if (dashboard.hidden) return;
-    idleTimer = setTimeout(async () => {
-      try { await authApi("logout"); } catch {}
-      showLogin("Admin locked after 30 minutes of inactivity.");
-      await refreshPublicSecurity();
+    lastActivity = Date.now();
+    idleTimer = setTimeout(() => {
+      lockAdmin("Admin locked after 10 minutes of inactivity.");
     }, ADMIN_IDLE_MS);
   }
 
@@ -942,15 +996,34 @@
     window.addEventListener(eventName, resetIdleTimer, { passive: true });
   });
 
-  async function initializeAdmin() {
-    try {
-      await authApi("securityStatus");
-      await openDashboard();
-      resetIdleTimer();
-    } catch {
-      showLogin();
-      await refreshPublicSecurity();
+  // The native Face ID / passkey ceremony is required again after leaving the app.
+  // Never lock the unauthenticated PIN/TOTP flow when switching to Authenticator.
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      hiddenAt = Date.now();
+    } else if (hiddenAt && !dashboard.hidden && Date.now() - hiddenAt >= BACKGROUND_LOCK_MS) {
+      lockAdmin("Welcome back. Verify with Face ID / passkey.");
     }
+    if (!document.hidden) hiddenAt = 0;
+  });
+  window.addEventListener("pageshow", event => {
+    if (event.persisted && !dashboard.hidden) {
+      lockAdmin("Security lock restored. Sign in again.");
+    }
+  });
+
+  // Keep server idle tracking synchronized with actual interaction, not passive open tabs.
+  setInterval(async () => {
+    if (dashboard.hidden || document.hidden || Date.now() - lastActivity > 2 * 60 * 1000) return;
+    try { await authApi("securityStatus"); } catch {}
+  }, 60 * 1000);
+
+  async function initializeAdmin() {
+    // Never silently enter Admin based solely on a prior browser cookie.
+    showLogin("Unlock with your device passkey or PIN + Authenticator.");
+    try { await requestJson("/api/admin-auth", "logout"); } catch {}
+    await refreshPublicSecurity();
+    restorePendingMfa();
   }
 
   initializeAdmin();
