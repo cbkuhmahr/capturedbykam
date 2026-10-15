@@ -24,14 +24,14 @@ Register the **exact** callback URL in the approved Yahoo application and redepl
 ## User experience
 
 1. Log into the CBK private dashboard as usual.
-2. Go to `https://www.capturedbykam.com/whole-thang/` and open **Live**.
+2. Go to `https://www.capturedbykam.com/whole-thang/` and open **Fantasy**.
 3. Select **Connect Yahoo**; approve the Yahoo read-only prompt.
 4. On the confirmation page, choose **Open $billi-type uh’day.**
 5. If you manage multiple Yahoo teams, select one in the Fantasy panel.
-6. The Live tab shows each rostered player beneath their NFL game, with Yahoo weekly fantasy points and stat categories when Yahoo supplies them.
+6. The Fantasy tab shows each rostered player beneath their NFL game, with Yahoo weekly fantasy points and stat categories when Yahoo supplies them.
 7. Select **Disconnect** at any time to delete the device's encrypted Yahoo session.
 
-NFL scores continue to update independently, even if Yahoo is unavailable. Yahoo roster data refreshes while the tab is open, about every 90 seconds.
+The separate Live tab continues to show NFL scores independently, even if Yahoo is unavailable. Yahoo roster data refreshes while the tab is open, about every 90 seconds.
 
 ## Data and security notes
 
