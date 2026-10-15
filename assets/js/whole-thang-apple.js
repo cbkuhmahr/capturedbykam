@@ -6,7 +6,7 @@ const launch=document.createElement("button");
 launch.id="wt-apple-open";
 launch.type="button";
 launch.className="admin-link wt-apple-launch";
-launch.textContent="↗ Share / Apple";
+launch.textContent="↗ Apple";
 header.insertBefore(launch,header.querySelector("a"));
 const shade=document.createElement("div");
 shade.className="wt-apple-shade";
@@ -162,7 +162,7 @@ panel.addEventListener("click",async e=>{
   return;
  }
  if(action==="message-contact"){
-  const contact=contacts[Number(contactSelect.value)];
+  const contact=contactSelect.value === "" ? null : contacts[Number(contactSelect.value)];
   if(!contact){note("Select or import a contact first.");return;}
   try{openMessages(composed(),contact.phone);}catch(err){note(err.message);}
  }
