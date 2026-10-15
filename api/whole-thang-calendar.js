@@ -52,7 +52,9 @@ module.exports = async function handler(req,res) {
   start:cutoff-15*60*1000,end:cutoff,
   description:"Submit the official Microsoft Form before Thursday's first kickoff. Picks on the private website alone do not count as submission.",alarm:true}));
  parts.push("END:VCALENDAR");
- const body=parts.join("\r\n")+"\r\n";
+ // RFC 5545 line folding: keep iCalendar property lines below 75 octets.
+ const fold = line => line.match(/.{1,70}/g)?.join("\r\n ") || "";
+ const body=parts.map(fold).join("\r\n")+"\r\n";
  res.setHeader("Content-Type","text/calendar; charset=utf-8");
  res.setHeader("Content-Disposition",'inline; filename="scott-family-nfl-pickem.ics"');
  res.setHeader("Cache-Control","public, s-maxage=1800, max-age=300");
