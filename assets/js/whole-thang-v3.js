@@ -37,7 +37,7 @@ function safeLoad(){
  return {picks:allow,mnfMargin:validMargin(source.mnfMargin),locked:!!source.locked,homeEdge:[0,25,45,65,85].includes(Number(source.homeEdge))?Number(source.homeEdge):45,updatedAt:Number(source.updatedAt)||0};
 }
 function validMargin(v){return v===""||v==null?"":Number.isInteger(Number(v))&&Number(v)>=0&&Number(v)<=200?String(v):"";}
-let state=safeLoad(),tab="home",teamSort="rating",intelFilter="all";
+let state=safeLoad(),tab="live",teamSort="rating",intelFilter="all";
 let cloudStatus="Connecting cloud…",initialCloudLoad=true,cloudTimer=null,localRevision=0;
 async function cloudRequest(action,payload={}){
  const r=await fetch("/api/whole-thang-sync",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...payload})});
@@ -162,6 +162,7 @@ function tinyLogo(team){return '<img class="wt-logo" src="'+logo(team)+'" alt=""
 function outcomeClass(g){return g.status==="W"?"wt-win":g.status==="L"?"wt-loss":"wt-tie";}
 function toast(msg){const el=document.createElement("div");el.className="toast";el.textContent=msg;document.body.appendChild(el);setTimeout(()=>el.remove(),2200);}
 function render(){
+ document.body.dataset.wtView=tab;
  document.querySelectorAll(".tab").forEach(b=>{b.classList.toggle("active",b.dataset.tab===tab);b.setAttribute("aria-selected",b.dataset.tab===tab?"true":"false");});
  document.querySelector(".season-strip .record").innerHTML=summary.wins+"–"+summary.losses+"–"+summary.ties+"T <span>2026</span>";
  document.querySelector(".season-strip .metric strong").textContent=pct(summary.wins,summary.losses).toFixed(2)+"%";
@@ -242,7 +243,7 @@ function dataPage(){
  '<div class="data-grid wt-data-grid"><div class="field"><label>Export local picks</label><textarea readonly id="exportBox">'+escape(json)+'</textarea><div class="action-row"><button class="btn" data-action="copy">Copy backup</button></div></div><div class="field"><label>Import local picks</label><textarea id="importBox" placeholder="Paste WHOLE THANG backup JSON"></textarea><div class="action-row"><button class="btn primary" data-action="import">Import picks</button><button class="btn danger" data-action="reset">Reset local picks</button></div></div></div>')+
  '<div class="note"><strong>Data source:</strong> Supplied Week 1–5 pick log and final scores, last updated October 12, 2026. All 79 selections are preserved as historical data. Week 6 results have not been entered.</div>';
 }
-function switchTab(next){tab=next;render();window.scrollTo({top:0,behavior:"smooth"});}
+function switchTab(next){if(!["home","live","fantasy","picks","intel","teams","history","data"].includes(next))return;tab=next;render();const m=document.getElementById("wt-more-menu"),b=document.getElementById("wt-more-toggle");if(m)m.hidden=true;if(b)b.setAttribute("aria-expanded","false");window.scrollTo({top:0,behavior:"smooth"});}
 document.querySelectorAll(".tab").forEach(el=>el.addEventListener("click",()=>switchTab(el.dataset.tab)));
 document.addEventListener("click",async function(e){
  const nav=e.target.closest("[data-go]");if(nav){switchTab(nav.dataset.go);return;}
@@ -280,6 +281,16 @@ document.addEventListener("change",e=>{
  if(e.target.id==="intelFilter"){intelFilter=e.target.value;render();}
  if(e.target.matches("[data-margin]")){state[e.target.dataset.margin]=validMargin(e.target.value);save();}
 });
+document.addEventListener("click",event=>{
+ const trigger=event.target.closest("[data-wt-menu]");
+ const menu=document.getElementById("wt-more-menu"),toggle=document.getElementById("wt-more-toggle");
+ if(!menu||!toggle)return;
+ if(trigger){menu.hidden=!menu.hidden;toggle.setAttribute("aria-expanded",String(!menu.hidden));return;}
+ const action=event.target.closest("[data-wt-open]");
+ if(action){document.getElementById(action.dataset.wtOpen==="apple"?"wt-apple-open":"wt-media-launch")?.click();menu.hidden=true;toggle.setAttribute("aria-expanded","false");return;}
+ if(!event.target.closest(".wt-more-wrap")){menu.hidden=true;toggle.setAttribute("aria-expanded","false");}
+});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"){const m=document.getElementById("wt-more-menu"),b=document.getElementById("wt-more-toggle");if(m)m.hidden=true;if(b)b.setAttribute("aria-expanded","false");}});
 render();
 initCloud();
 })();

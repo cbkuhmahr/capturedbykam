@@ -1,0 +1,170 @@
+
+/* Sports: Apple-inspired clarity with independent CBK identity. */
+:root{--bg:#050506;--panel:#131416;--panel2:#191b1e;--line:#2a2b30;--text:#f5f5f7;--muted:#a1a1aa;--subtle:#777985;--accent:#edc66c;--green:#51d3a0;--red:#f57479;--blue:#8bb7f3}
+html,body{background:var(--bg)!important;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body{margin:0}
+button,input,select,textarea{font-family:inherit}
+button,a,summary{-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid #a8c8ff!important;outline-offset:3px}
+.shell{max-width:1120px;padding-bottom:70px}
+.topbar{background:rgba(5,5,6,.94)!important;border-bottom:1px solid #202127;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+.topbar-inner{height:78px;min-height:78px;padding:12px 25px;gap:14px}
+.brand-wrap{gap:11px;min-width:0}
+.brand{font-size:clamp(21px,3vw,30px)!important;line-height:1.05;font-weight:850;letter-spacing:-.055em;white-space:normal;overflow-wrap:anywhere}
+.orbit{width:29px;height:29px;flex:0 0 29px;border:0;border-radius:9px;background:#f5cb70;color:#080808;font-size:20px;line-height:1;font-weight:900}
+.wt-top-actions{display:none!important}
+.season-strip{display:flex;justify-content:flex-start;align-items:center;gap:20px!important;background:transparent!important;padding:0 25px 12px!important;border:0!important}
+.season-strip .record{font-size:13px!important;color:#dedee3;font-weight:750}
+.season-strip .record span{font-size:11px!important;color:#8b8e97}
+.season-strip .metric{text-align:left}
+.season-strip .metric strong{display:inline;font-size:13px!important;font-weight:730;color:#bcbfc5}
+.season-strip .metric small{display:none}
+.season-strip .metric:last-child{display:none}
+.tabs{display:flex!important;grid-template-columns:none!important;height:56px!important;align-items:stretch;gap:5px;padding:0 18px!important;overflow:visible!important;scrollbar-width:auto!important;border-top:0!important;border-bottom:0!important;background:transparent!important}
+.tabs .tab{flex:0 1 130px;min-width:0!important;white-space:nowrap;font-weight:700;font-size:14px!important;color:#9799a1;background:transparent;border:0;border-radius:0;letter-spacing:-.01em;position:relative}
+.tabs .tab.active{color:#f8f8fa!important}
+.tabs .tab.active:after{position:absolute;left:18px;right:18px;bottom:0;height:3px;display:block;content:"";border-radius:3px 3px 0 0;background:#f1c66b}
+.wt-more-wrap{margin-left:auto;position:relative;display:flex;align-items:stretch}
+.wt-more-toggle{background:transparent;border:0;color:#a0a2ad;font-size:14px;font-weight:700;padding:0 16px;min-width:78px;cursor:pointer}
+.wt-more-toggle[aria-expanded="true"],.wt-more-toggle:hover{color:#fff}
+.wt-more-toggle span{font-size:16px;margin-left:3px}
+.wt-more-menu[hidden]{display:none!important}
+.wt-more-menu{position:absolute;right:0;top:calc(100% + 5px);width:236px;background:#1b1c20;border:1px solid #3a3b40;border-radius:16px;box-shadow:0 17px 48px rgba(0,0,0,.62);padding:8px;z-index:130;display:grid;gap:2px}
+.wt-more-menu button,.wt-more-menu a{min-height:43px;display:flex;align-items:center;text-align:left;border:0;background:transparent;color:#f0f0f2;padding:9px 12px;font-weight:630;font-size:14px;border-radius:10px;cursor:pointer}
+.wt-more-menu button:hover,.wt-more-menu a:hover{background:#303138}
+main{padding:25px 21px 50px!important}
+.section{margin-bottom:25px}
+.section-head{align-items:center;margin:0 0 13px}
+.section-head h2,.wt-fantasy-page-head h2{font-size:26px!important;font-weight:800;color:#f8f8fa;letter-spacing:-.045em}
+.section-head span{display:none}
+.panel,.wt-game-card,.wt-intel-card,.wt-week,.table-wrap,.wt-manual-shell,.wt-fantasy-game-card{background:#141518!important;border:1px solid #2a2b30!important;border-radius:17px!important;box-shadow:none!important}
+.btn,.wt-more-toggle{transition:background .15s,color .15s,border-color .15s}
+.btn{border-radius:11px!important;min-height:42px;padding:10px 14px!important;border:1px solid #393b41!important;background:#222327!important;color:#f4f4f5!important;font-size:13px!important;font-weight:750!important}
+.btn:hover{background:#303136!important}
+.btn.primary{background:#f0c76e!important;color:#111214!important;border-color:#f0c76e!important}
+.btn.primary:hover{background:#ffdc8a!important}
+.wt-score-shell{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important}
+.wt-live-filters{gap:9px!important;margin:0 0 17px!important}
+.wt-live-filters .btn{border-radius:24px!important;min-height:39px!important;padding:8px 16px!important}
+.wt-score-meta{display:flex;justify-content:space-between;align-items:center;margin:0 0 14px!important;font-size:12px!important;color:#868892;gap:10px}
+.wt-score-meta .wt-score-refresh{border:0!important;background:transparent!important;color:#e5c375!important;min-height:33px!important}
+.wt-score-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.wt-score-game{min-width:0;background:#121316!important;border:1px solid #2b2c31!important;border-radius:18px!important;padding:16px 17px!important}
+.wt-score-game.is-live{background:#141619!important;border-color:#4b4c50!important;box-shadow:inset 3px 0 0 #d7ad51!important}
+.wt-score-top{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #26282d!important;margin-bottom:8px!important;padding-bottom:10px!important;font-size:11px!important;color:#8a8c96}
+.wt-score-week{letter-spacing:.085em;font-weight:760;font-size:10px}
+.wt-score-status{font-size:12px!important;line-height:1.3;text-align:right;font-weight:760!important;color:#aeb1b9}
+.wt-score-status.is-live{color:#fa797b!important}
+.wt-score-status.is-live:before{content:"";display:inline-block;width:7px;height:7px;background:#f56f76;border-radius:50%;margin-right:6px;vertical-align:1px;box-shadow:0 0 0 3px rgba(240,80,91,.12)}
+.wt-score-status.is-final{color:#d5d5d9!important}
+.wt-score-teams{display:grid;gap:2px}
+.wt-score-team{display:grid!important;grid-template-columns:36px minmax(0,1fr) auto!important;gap:12px!important;align-items:center!important;min-height:53px;padding:7px 0!important;font-size:15px!important}
+.wt-score-team .wt-logo{width:34px!important;height:34px!important;flex-basis:34px!important;object-fit:contain}
+.wt-score-team-label{display:flex;flex-direction:column;gap:3px;min-width:0}
+.wt-score-team-label strong{font-size:16px!important;font-weight:760;letter-spacing:-.018em;color:#f4f4f5}
+.wt-score-team-label small{font-size:10px;color:#9295a0;font-weight:650;letter-spacing:.035em}
+.wt-score-team.is-pick .wt-score-team-label small{color:#e8c77e}
+.wt-score-num{font-size:31px!important;font-weight:850!important;letter-spacing:-.05em;font-variant-numeric:tabular-nums;min-width:35px;line-height:1.1;color:#fff}
+.wt-score-pick{border-top:1px solid #28292f!important;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px!important;padding-top:10px!important;min-height:31px;font-size:11px!important;color:#a6a6ae}
+.wt-score-pick strong{font-size:12px;color:#efc875!important;margin-left:5px}
+.wt-pick-verdict{border:0!important;padding:0!important;background:none!important;border-radius:0!important;font-weight:750;font-size:11px!important}
+.wt-v-ahead,.wt-v-correct{color:#62d49b!important}
+.wt-v-behind,.wt-v-incorrect{color:#f2868c!important}
+.wt-v-even,.wt-v-tied{color:#e8c678!important}
+.wt-score-players{margin-top:6px;border-top:1px solid #292a2f}
+.wt-score-players .wt-manual-game-players{border:0;padding:0;margin:0}
+.wt-score-players .wt-manual-game-player{grid-template-columns:53px minmax(0,1fr) auto;gap:10px}
+.wt-score-players .wt-manual-game-player:first-child{border:0}
+.wt-score-players .wt-manual-game-player b{font-size:13px}
+.wt-score-players .wt-manual-game-player>strong{color:#fff;font-size:16px}
+.wt-score-players .wt-manual-slot.on{background:#3b3424;color:#f0c96e}
+.wt-score-grid>.empty{grid-column:1/-1}
+.wt-fantasy-page{gap:20px!important}
+.wt-fantasy-page-head{padding:0!important}
+.wt-fantasy-page .wt-manual-shell{margin:0!important;overflow:hidden}
+.wt-fantasy-page .wt-manual-intro{display:flex;gap:12px;justify-content:space-between;align-items:center;background:#141518!important;padding:18px 20px!important;flex-wrap:wrap}
+.wt-manual-roster-heading h3{font-size:21px!important;font-weight:800;margin:0 0 5px!important;letter-spacing:-.035em}
+.wt-manual-roster-heading small{font-size:12px;color:#a3a4ae;font-weight:560}
+.wt-quick-lineup{padding:0 19px 10px;border-top:1px solid #2b2c31}
+.wt-lineup-title{display:flex;justify-content:space-between;align-items:center;padding:16px 0 4px;gap:12px}
+.wt-lineup-title strong{font-size:16px;font-weight:780;letter-spacing:-.025em}
+.wt-lineup-title span{font-size:11px;color:#9295a0}
+.wt-manual-rankings{margin-top:8px!important}
+.wt-manual-ranked{grid-template-columns:63px minmax(0,1fr) auto!important;min-height:56px;padding:11px 0!important;gap:13px!important}
+.wt-manual-ranked b{font-size:14px!important;font-weight:720}
+.wt-manual-ranked small{font-size:11px!important}
+.wt-manual-ranked>strong{font-size:18px!important;color:#f2f2f4!important;font-variant-numeric:tabular-nums}
+.wt-manual-advice{font-size:10px!important;border-radius:8px!important;padding:7px 5px!important}
+.wt-manual-advice.start{background:#18362b!important;color:#6bdea6!important}
+.wt-manual-advice.sit{background:#292b32!important;color:#b6b8c1!important}
+.wt-manual-advice.verify{background:#39301e!important;color:#f1cb77!important}
+.wt-scout-expand{border-top:1px solid #303137!important}
+.wt-scout-expand>summary{padding:13px 2px!important;color:#e9c875!important}
+.wt-scout-expand .wt-manual-rankings{padding:0 2px}
+.wt-fantasy-games-section h3{font-size:19px!important;letter-spacing:-.035em;color:#f6f6f7;margin-bottom:13px}
+.wt-fantasy-game-grid{gap:12px!important}
+.wt-fantasy-game-card{padding:16px!important}
+.wt-fantasy-game-top{font-size:12px!important}
+.wt-fantasy-game-top small{font-size:11px!important}
+.wt-fantasy-game-top small.is-live{color:#f37b80!important}
+.wt-fantasy-game-score{padding:12px 0!important;gap:6px!important}
+.wt-fantasy-game-score img{width:31px!important;height:31px!important}
+.wt-fantasy-game-score b{font-size:15px!important}
+.wt-fantasy-game-score strong{font-size:27px!important;font-weight:800;letter-spacing:-.04em}
+.wt-fantasy-game-score>span{color:#51525c;font-size:16px}
+.wt-manual-game-players{margin-top:7px!important;padding-top:5px!important}
+.wt-manual-game-player{grid-template-columns:54px minmax(0,1fr) auto;gap:12px!important;min-height:55px;padding:10px 0!important}
+.wt-manual-game-player b{font-size:14px!important}
+.wt-manual-game-player small{font-size:11px!important;color:#a1a3ad!important}
+.wt-manual-game-player>strong{font-size:17px!important;color:#fff!important}
+.wt-manual-slot{border-radius:7px!important;background:#2a2d34!important;color:#aaadb8!important;font-size:9px;padding:7px 3px!important}
+.wt-manual-slot.on{background:#423824!important;color:#f3d085!important}
+.wt-game-card{overflow:hidden}
+.wt-card-head{padding:12px 14px!important}
+.wt-team-option{min-height:64px;padding:13px 14px!important}
+.wt-team-option span{font-size:15px!important}
+.wt-team-option.is-selected{background:#252118!important;box-shadow:inset 3px 0 #e8c267!important}
+.wt-team-option i{color:#efc875!important}
+.wt-match-grid,.wt-intel-grid,.wt-brief-grid{gap:12px!important}
+.wt-intel-card{padding:17px!important}
+.wt-intel-match strong{font-size:17px!important}
+.wt-intel-result strong{font-size:16px!important}
+.wt-intel-result small{font-size:11px!important}
+.wt-prob{background:#2b2c34}
+.wt-prob-fill{background:#e7c172}
+.wt-edit-toolbar .btn{flex-shrink:0}
+.wt-cloud-status{font-size:11px;color:#9395a0}
+.wt-history-weeks{gap:12px}
+.wt-week>summary strong{font-size:14px}
+.wt-week>summary{min-height:64px}
+.wt-score-help,.wt-manual-disclosure,.wt-manual-foot,.wt-explain,.wt-factor-grid,.wt-intro,.wt-helper,.note{display:none!important}
+@media (max-width:720px){
+ .shell{padding-bottom:45px}
+ .topbar-inner{min-height:68px;height:auto!important;padding:12px 16px 9px!important}
+ .brand{font-size:clamp(19px,5.1vw,25px)!important}
+ .orbit{width:25px;height:25px;flex-basis:25px;border-radius:7px;font-size:17px}
+ .season-strip{padding:0 16px 10px!important;gap:16px!important}
+ .season-strip .record{font-size:12px!important}
+ .tabs{height:51px!important;padding:0 7px!important;gap:0}
+ .tabs .tab{flex:1 1 19%;font-size:13px!important}
+ .tabs .tab.active:after{left:8px;right:8px}
+ .wt-more-wrap{margin-left:0;flex:0 1 19%}
+ .wt-more-toggle{padding:0 4px;min-width:0;width:100%;font-size:12px}
+ .wt-more-toggle span{font-size:12px}
+ .wt-more-menu{right:5px;width:min(235px,85vw)}
+ main{padding:16px 12px 35px!important}
+ .section-head h2,.wt-fantasy-page-head h2{font-size:22px!important}
+ .wt-score-grid,.wt-fantasy-game-grid,.wt-match-grid,.wt-intel-grid{grid-template-columns:minmax(0,1fr)!important}
+ .wt-score-game{padding:14px 15px!important}
+ .wt-score-team{grid-template-columns:33px minmax(0,1fr) auto!important}
+ .wt-score-team .wt-logo{width:31px!important;height:31px!important}
+ .wt-score-num{font-size:30px!important}
+ .wt-score-team-label strong{font-size:15px!important}
+ .wt-fantasy-page .wt-manual-intro{padding:15px!important}
+ .wt-quick-lineup{padding:0 14px 10px}
+ .wt-fantasy-game-card{padding:14px!important}
+ .wt-manual-ranked{gap:8px!important;grid-template-columns:56px minmax(0,1fr) auto!important}
+ .wt-manual-ranked>strong{font-size:16px!important}
+ .wt-fantasy-page .wt-manual-editor{padding:12px!important}
+}
+@media (prefers-reduced-motion:reduce){.btn,.tab{transition:none!important}html{scroll-behavior:auto!important}}

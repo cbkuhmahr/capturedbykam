@@ -75,13 +75,18 @@ function markup(){
  '<button type="button" class="btn wt-score-refresh" data-score-refresh="1" '+(fetching?"disabled":"")+'>'+(fetching?"Updating…":"↻ Refresh scores")+'</button></div>';
  const board='<div class="wt-score-grid">'+(shown.length?shown.map(({game,result:x,choice,verdict:outcome})=>{
   const active=x&&x.state==="in",final=x&&x.state==="post";
-  function team(t,side){return '<div class="wt-score-team '+(choice===t?"is-pick":"")+'"><img class="wt-logo" src="'+logo(t)+'" alt="" loading="lazy"><span>'+esc(t)+'</span><span class="wt-score-num">'+score(x,side)+'</span></div>';}
-  const explanation={correct:"✓ Correct pick",incorrect:"✕ Incorrect pick",tied:"Final tie · no winning pick",ahead:"Currently winning",behind:"Currently losing",even:"Currently tied",upcoming:"Game not started",unpicked:"No pick saved",unknown:"Score not available"}[outcome];
-  return '<article class="wt-score-game '+(active?"is-live":"")+'"><div class="wt-score-top"><span>'+esc(active?"LIVE":final?"FINAL":game.day+" · "+game.time+" ET")+'</span>'+
-   '<span class="wt-score-status '+(active?"is-live":final?"is-final":"")+'">'+esc(label(x))+'</span></div>'+
-   team(game.away,"away")+team(game.home,"home")+
-   '<div class="wt-score-pick">YOUR PICK: <strong>'+esc(choice||"—")+'</strong><span class="wt-pick-verdict wt-v-'+outcome+'">'+esc(explanation)+'</span></div>'+'</article>';
- }).join(""):'<div class="empty">No games match this view right now.</div>')+'</div>';
+  const status=active?label(x):final?"FINAL":game.day+" · "+game.time+" ET";
+  const names={ARI:"Cardinals",ATL:"Falcons",BAL:"Ravens",BUF:"Bills",CAR:"Panthers",CHI:"Bears",CIN:"Bengals",CLE:"Browns",DAL:"Cowboys",DEN:"Broncos",DET:"Lions",GB:"Packers",HOU:"Texans",IND:"Colts",JAX:"Jaguars",KC:"Chiefs",LAC:"Chargers",LAR:"Rams",LV:"Raiders",MIA:"Dolphins",MIN:"Vikings",NE:"Patriots",NO:"Saints",NYG:"Giants",NYJ:"Jets",PHI:"Eagles",PIT:"Steelers",SEA:"Seahawks",SF:"49ers",TB:"Buccaneers",TEN:"Titans",WAS:"Commanders"};
+  function team(t,side){return '<div class="wt-score-team '+(choice===t?"is-pick":"")+'"><img class="wt-logo" src="'+logo(t)+'" alt="" loading="lazy"><span class="wt-score-team-label"><strong>'+esc(names[t]||t)+'</strong><small>'+esc(t)+(choice===t?' · MY PICK':'')+'</small></span><span class="wt-score-num">'+score(x,side)+'</span></div>';}
+  const verdictText={correct:"Correct",incorrect:"Incorrect",tied:"Tied game",ahead:"Ahead",behind:"Behind",even:"Tied",upcoming:"Upcoming",unpicked:"",unknown:""}[outcome]||"";
+  const myPlayers=window.WTManualFantasy?.gameRows?.(game,x)||"";
+  return '<article class="wt-score-game '+(active?"is-live":"")+' '+(final?"is-final":"")+'">'+
+    '<div class="wt-score-top"><span class="wt-score-week">NFL · WEEK 6</span><span class="wt-score-status '+(active?"is-live":final?"is-final":"")+'">'+esc(status)+'</span></div>'+
+    '<div class="wt-score-teams">'+team(game.away,"away")+team(game.home,"home")+'</div>'+
+    (choice?'<div class="wt-score-pick"><span>MY PICK <strong>'+esc(choice)+'</strong></span><span class="wt-pick-verdict wt-v-'+outcome+'">'+esc(verdictText)+'</span></div>':'')+
+    (myPlayers?'<div class="wt-score-players">'+myPlayers+'</div>':'')+
+    '</article>';
+ }).join(""):'<div class="empty">No games in this view.</div>')+'</div>';
  return status+filters+board;
 }
  function ensure(){

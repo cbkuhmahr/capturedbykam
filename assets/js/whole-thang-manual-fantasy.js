@@ -83,12 +83,14 @@ function rosterEditor(){
 }
 function toolbar(){
  const list=scores(),selected=new Set(recommended().map(p=>p.id));
+ const starters=state.players.filter(p=>p.slot==="START").length;
  const ranked=list.map(p=>{
   const flag=p.points<0?"VERIFY":selected.has(p.id)?"START":"SIT";
   return '<div class="wt-manual-ranked"><span class="wt-manual-advice '+flag.toLowerCase()+'">'+flag+'</span><div><b>'+html(p.name)+'</b><small>'+html(p.pos||"—")+' · '+html(p.team||"—")+(p.match.against?' vs '+html(p.match.against):'')+'</small></div><strong>'+(p.points<0?"—":"~"+p.points.toFixed(1))+'</strong></div>';
- }).join("");
- return '<section class="wt-manual-shell"><div class="wt-manual-intro"><h3>My Roster <small>'+state.players.length+' players</small></h3><button type="button" class="btn primary" data-m-toggle="1">'+(editor?"Close editor":"Manage roster")+'</button></div>'+
- (list.length?'<details class="wt-scout-expand"><summary>Start / Sit · Estimates</summary><div class="wt-manual-recommendations"><div class="wt-manual-rankings">'+ranked+'</div></div></details>':'')+
+ });
+ return '<section class="wt-manual-shell"><div class="wt-manual-intro"><div class="wt-manual-roster-heading"><h3>My Roster</h3><small>'+state.players.length+' players · '+starters+' starters · '+(state.players.length-starters)+' bench</small></div><button type="button" class="btn primary" data-m-toggle="1">'+(editor?"Close editor":"Manage roster")+'</button></div>'+
+ (list.length?'<div class="wt-quick-lineup"><div class="wt-lineup-title"><strong>Start / Sit</strong><span>Estimated pts</span></div><div class="wt-manual-rankings">'+ranked.slice(0,5).join("")+'</div>'+
+ (ranked.length>5?'<details class="wt-scout-expand"><summary>View all '+ranked.length+' players</summary><div class="wt-manual-rankings">'+ranked.slice(5).join("")+'</div></details>':'')+'</div>':'')+
  (editor?rosterEditor():"")+'</section>';
 }
 function importPlayers(raw){
