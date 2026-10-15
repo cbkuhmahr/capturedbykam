@@ -21,26 +21,22 @@ function gameCard(game, result, manual, yahoo) {
     manual + yahoo + '</article>';
 }
 function render(){
-  if (document.querySelector(".tab.active")?.dataset.tab !== "fantasy") return;
-  const gamesRoot=document.getElementById("wt-fantasy-games"), yahooRoot=document.getElementById("wt-fantasy-yahoo");
-  if(!gamesRoot || !yahooRoot) return;
-  const schedule=window.WTScouting?.games || [];
-  const manual=window.WTManualFantasy, yahoo=window.WTFantasy;
-  const cards=[];
-  for (const game of schedule){
-    const result=currentMatchup(game);
-    const manualRows=manual?.gameRows?.(game,result) || "";
-    const yahooRows=yahoo?.gameRows?.(game) || "";
-    if(manualRows || yahooRows) cards.push(gameCard(game,result,manualRows,yahooRows));
-  }
-  gamesRoot.innerHTML=cards.length?
-    '<div class="wt-fantasy-game-grid">' + cards.join("") + '</div>' :
-    '<p class="wt-fantasy-quiet">No games matched your roster. Check each player’s team assignment, or use Manage roster to add players.</p>';
-  yahooRoot.innerHTML=yahoo?.toolbar?.() || '<p class="wt-fantasy-quiet">Checking Yahoo connection options…</p>';
+ if(document.querySelector(".tab.active")?.dataset.tab!=="fantasy")return;
+ const root=document.getElementById("wt-fantasy-games");if(!root)return;
+ const schedule=window.WTScouting?.games||[];
+ const roster=window.WTManualFantasy;
+ const cards=[];
+ for(const game of schedule){
+  const result=currentMatchup(game),players=roster?.gameRows?.(game,result)||"";
+  if(players)cards.push({priority:result.state==="in"?0:result.state==="pre"?1:2,markup:gameCard(game,result,players,"")});
+ }
+ cards.sort((a,b)=>a.priority-b.priority);
+ root.innerHTML=cards.length?'<div class="wt-fantasy-game-grid">'+cards.map(x=>x.markup).join("")+'</div>':
+ '<p class="wt-fantasy-quiet">No assigned players for this week. Select Manage roster.</p>';
 }
 const observer=new MutationObserver(render);
 observer.observe(app,{childList:true});
-for(const name of ["wt-manual-fantasy-change","wt-fantasy-change","wt-scores-ready"]){
+for(const name of ["wt-manual-fantasy-change","wt-scores-ready"]){
   document.addEventListener(name,render);
 }
 render();
