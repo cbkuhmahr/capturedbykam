@@ -1,5 +1,6 @@
 (() => {
 "use strict";
+const SCREENSHOT_WEEK6=[{"id":"dak","name":"Dak Prescott","team":"DAL","pos":"QB","slot":"START","avg":21.86,"tier":4,"availability":"active","seedProjection":true},{"id":"swift","name":"D'Andre Swift","team":"CHI","pos":"RB","slot":"START","avg":14.4,"tier":4,"availability":"active","seedProjection":true},{"id":"irving","name":"Bucky Irving","team":"TB","pos":"RB","slot":"START","avg":14.04,"tier":4,"availability":"active","seedProjection":true},{"id":"jsn","name":"Jaxon Smith-Njigba","team":"SEA","pos":"WR","slot":"START","avg":21.53,"tier":5,"availability":"active","seedProjection":true},{"id":"london","name":"Drake London","team":"ATL","pos":"WR","slot":"START","avg":18.37,"tier":5,"availability":"active","seedProjection":true},{"id":"diggs","name":"Stefon Diggs","team":"WAS","pos":"WR","slot":"START","avg":11.53,"tier":4,"availability":"Q","seedProjection":true},{"id":"loveland","name":"Colston Loveland","team":"CHI","pos":"TE","slot":"START","avg":9.86,"tier":4,"availability":"active","seedProjection":true},{"id":"stevenson","name":"Rhamondre Stevenson","team":"NE","pos":"RB","slot":"START","avg":17.24,"tier":4,"availability":"active","seedProjection":true},{"id":"dicker","name":"Cameron Dicker","team":"LAC","pos":"K","slot":"START","avg":6.95,"tier":4,"availability":"active","seedProjection":true},{"id":"sea-dst","name":"Seattle Seahawks D/ST","team":"SEA","pos":"DST","slot":"START","avg":6.67,"tier":4,"availability":"active","seedProjection":true},{"id":"pitts","name":"Kyle Pitts Sr.","team":"ATL","pos":"TE","slot":"BN","avg":7.91,"tier":4,"availability":"active","seedProjection":true},{"id":"love","name":"Jordan Love","team":"GB","pos":"QB","slot":"BN","avg":24.33,"tier":4,"availability":"active","seedProjection":true},{"id":"jeudy","name":"Jerry Jeudy","team":"CLE","pos":"WR","slot":"BN","avg":5.45,"tier":3,"availability":"active","seedProjection":true},{"id":"kupp","name":"Cooper Kupp","team":"SEA","pos":"WR","slot":"BN","avg":6.14,"tier":4,"availability":"active","seedProjection":true},{"id":"kmet","name":"Cole Kmet","team":"CHI","pos":"TE","slot":"BN","avg":3.29,"tier":3,"availability":"active","seedProjection":true},{"id":"douglas","name":"Demario Douglas","team":"NE","pos":"WR","slot":"BN","avg":7.29,"tier":3,"availability":"active","seedProjection":true}];
 const KEY="wt-fantasy-manual-v1",POSITIONS=["QB","RB","WR","TE","K","DST"];
 const TEAMS="ARI ATL BAL BUF CAR CHI CIN CLE DAL DEN DET GB HOU IND JAX KC LAC LAR LV MIA MIN NE NO NYG NYJ PHI PIT SEA SF TB TEN WAS".split(" ");
 const BASE={QB:17,RB:10,WR:10,TE:7,K:8,DST:7};
@@ -9,7 +10,7 @@ const validAvg=v=>v===""||v==null?null:Number.isFinite(+v)?Math.max(0,Math.min(7
 let state={players:[],scoring:"half"},editor=false,note="",gameList=[],box=new Map(),busy=new Set();
 function emit(){document.dispatchEvent(new Event("wt-manual-fantasy-change"));}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch{note="Browser storage may be unavailable.";}emit();}
-function load(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&Array.isArray(x.players)){state.players=x.players.filter(p=>p&&typeof p.name==="string").slice(0,80).map(p=>({id:String(p.id||""),name:p.name.slice(0,75),team:TEAMS.includes(p.team)?p.team:"",pos:POSITIONS.includes(p.pos)?p.pos:"",avg:validAvg(p.avg),tier:Math.max(1,Math.min(5,+p.tier||3)),slot:p.slot==="START"?"START":"BN",availability:["active","Q","OUT"].includes(p.availability)?p.availability:"active"}));state.scoring=["standard","half","ppr"].includes(x.scoring)?x.scoring:"half";}}catch{}}
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&Array.isArray(x.players)){state.players=x.players.filter(p=>p&&typeof p.name==="string").slice(0,80).map(p=>({id:String(p.id||""),name:p.name.slice(0,75),team:TEAMS.includes(p.team)?p.team:"",pos:POSITIONS.includes(p.pos)?p.pos:"",avg:validAvg(p.avg),tier:Math.max(1,Math.min(5,+p.tier||3)),slot:p.slot==="START"?"START":"BN",availability:["active","Q","OUT"].includes(p.availability)?p.availability:"active",seedProjection:!!p.seedProjection}));state.scoring=["standard","half","ppr"].includes(x.scoring)?x.scoring:"half";return;}}catch{}state.players=SCREENSHOT_WEEK6.map(p=>({...p}));}
 function games(){return window.WTScoreGames?.length?window.WTScoreGames:(window.WTScouting?.games||gameList);}
 function match(p){
  const g=games().find(g=>g.away===p.team||g.home===p.team),against=g?(g.away===p.team?g.home:g.away):"";
@@ -22,15 +23,15 @@ function match(p){
 }
 function model(p){
  const m=match(p),known=p.avg!=null,baseline=known?p.avg:BASE[p.pos]||0;
- const tier=known?1+(p.tier-3)*.035:({1:.68,2:.84,3:1,4:1.18,5:1.38}[p.tier]||1);
- const points=!p.pos||!m.against||p.availability==="OUT"?-1:baseline*tier*(1+m.factor)*(p.availability==="Q"?.85:1);
+ const tier=p.seedProjection?1+(p.tier-3)*.012:known?1+(p.tier-3)*.035:({1:.68,2:.84,3:1,4:1.18,5:1.38}[p.tier]||1);
+ const points=!p.pos||!m.against||p.availability==="OUT"?-1:baseline*tier*(1+(p.seedProjection?0:m.factor))*(p.availability==="Q"?.85:1);
  return {...p,match:m,points,known};
 }
 function scores(){return state.players.map(model).sort((a,b)=>b.points-a.points);}
 function recommended(){
  const all=scores().filter(p=>p.points>=0),used=new Set(),list=[];
  function take(allowed){const next=all.find(p=>!used.has(p.id)&&allowed.includes(p.pos));if(next){used.add(next.id);list.push(next);}}
- take(["QB"]);take(["RB"]);take(["RB"]);take(["WR"]);take(["WR"]);take(["TE"]);take(["RB","WR","TE"]);take(["K"]);take(["DST"]);
+ take(["QB"]);take(["RB"]);take(["RB"]);take(["WR"]);take(["WR"]);take(["WR"]);take(["TE"]);take(["RB","WR","TE"]);take(["K"]);take(["DST"]);
  return list;
 }
 function option(values,value,blank){return (blank?'<option value="">'+html(blank)+'</option>':"")+values.map(v=>'<option value="'+html(v)+'" '+(v===value?"selected":"")+'>'+html(v)+'</option>').join("");}
@@ -48,9 +49,10 @@ function gameRows(game,result){
   const stats=row?.stats||{};
   const detail=[stats.passYds!=null?stats.passYds+" pass yd":"",stats.rushYds!=null?stats.rushYds+" rush yd":"",stats.rec!=null?stats.rec+" rec":"",stats.recYds!=null?stats.recYds+" rec yd":""].filter(Boolean).join(" · ");
   const points=p.pos==="K"||p.pos==="DST"?null:fantasyPoints(row);
-  return '<div class="wt-manual-game-player"><span class="wt-manual-slot '+(p.slot==="START"?"on":"")+'">'+(p.slot==="START"?"START":"BENCH")+'</span><span><b>'+html(p.name)+'</b><small>'+html(p.pos||"Assign position")+' · '+html(detail||(result?.state==="pre"?"Upcoming":"Stats pending"))+'</small></span><strong>'+(points??"—")+'</strong></div>';
+  const shown=points??(p.seedProjection&&p.avg!=null?p.avg.toFixed(2):"—");
+  return '<div class="wt-manual-game-player"><span class="wt-manual-slot '+(p.slot==="START"?"on":"")+'">'+(p.slot==="START"?"START":"BENCH")+'</span><span><b>'+html(p.name)+'</b><small>'+html(p.pos||"Assign position")+' · '+html(detail||(result?.state==="pre"?"Upcoming":"Stats pending"))+'</small></span><strong>'+shown+'</strong></div>';
  }).join("");
- return '<div class="wt-manual-game-players"><div class="wt-manual-match-head"><strong>My fantasy players</strong><span>Est. '+(state.scoring==="half"?"½-PPR":html(state.scoring.toUpperCase()))+' points</span></div>'+lines+'<small class="wt-manual-foot">Read-only ESPN box-score estimates, not official Yahoo totals. Bonuses, kickers, and team defenses are excluded.</small></div>';
+ return '<div class="wt-manual-game-players"><div class="wt-manual-match-head"><strong>My fantasy players</strong><span>Est. '+(state.scoring==="half"?"½-PPR":html(state.scoring.toUpperCase()))+' points</span></div>'+lines+'<small class="wt-manual-foot">Before kickoff, seeded entries display Yahoo screenshot projections. After kickoff, ESPN estimates appear, not official Yahoo scores. Kicker and DST live points are excluded.</small></div>';
 }
 function rosterEditor(){
  const scoring=option(["standard","half","ppr"],state.scoring);
@@ -62,12 +64,12 @@ function rosterEditor(){
  '<div class="wt-manual-edit-player" data-m-id="'+html(p.id)+'"><label>Name<input maxlength="75" data-m-field="name" value="'+html(p.name)+'"></label>'+
  '<label>Team<select data-m-field="team">'+option(TEAMS,p.team,"Team")+'</select></label>'+
  '<label>Pos<select data-m-field="pos">'+option(POSITIONS,p.pos,"Pos")+'</select></label>'+
- '<label>Avg PPG<input type="number" data-m-field="avg" min="0" max="75" step=".1" placeholder="Optional" value="'+(p.avg??"")+'"></label>'+
+ '<label>Week 6 proj / Avg<input type="number" data-m-field="avg" min="0" max="75" step=".1" placeholder="Optional" value="'+(p.avg??"")+'"></label>'+
  '<label>Talent tier<select data-m-field="tier">'+[1,2,3,4,5].map(v=>'<option value="'+v+'" '+(p.tier===v?"selected":"")+'>'+v+'</option>').join("")+'</select></label>'+
  '<label>Lineup<select data-m-field="slot"><option value="START" '+(p.slot==="START"?"selected":"") +'>Starter</option><option value="BN" '+(p.slot==="BN"?"selected":"") +'>Bench</option></select></label>'+
  '<label>Injury status*<select data-m-field="availability"><option value="active" '+(p.availability==="active"?"selected":"")+'>Active</option><option value="Q" '+(p.availability==="Q"?"selected":"")+'>Questionable</option><option value="OUT" '+(p.availability==="OUT"?"selected":"")+'>Out</option></select></label>'+
  '<button class="btn danger" data-m-remove="'+html(p.id)+'">Remove</button></div>').join("")+'</div>'+
- '<small>Injury statuses are manually entered, not checked against a live report. Your fantasy roster is stored only on this device; pick’em cloud data is untouched.</small></div>';
+ '<small>Injury statuses are manually entered, not checked against a live report. Week 6 screenshot numbers are projected points, not actual season averages. The talent tiers are subjective and editable. Edits are stored only on this device; pick’em cloud data is untouched.</small></div>';
 }
 function toolbar(){
  const list=scores(),chosen=recommended(),selection=new Set(chosen.map(x=>x.id)),swaps=list.filter(p=>selection.has(p.id)&&p.slot!=="START"),poor=list.filter(p=>p.slot==="START"&&!selection.has(p.id));
@@ -77,13 +79,15 @@ function toolbar(){
   (p.points>=0?p.points.toFixed(1):"—")+' planning points · '+html(p.match.label)+'</span></div>';
  }).join("")+'</div>':list.length?'<p class="wt-manual-light">Your selected starters match this preliminary lineup.</p>':"";
  if(list.length&&!list.some(x=>x.known))advice='<p class="wt-manual-light">No player averages entered yet. Ratings currently use generic position baselines and your talent tiers, not verified projections.</p>'+advice;
- const details=list.length?'<div class="wt-manual-recommendations"><div class="wt-manual-headline"><strong>Start / Sit · Preliminary</strong><span>Default lineup: QB · 2 RB · 2 WR · TE · FLEX · K · DST</span></div>'+advice+
+ const doubtful=state.players.filter(p=>p.slot==="START"&&p.availability!=="active");
+ if(doubtful.length)advice+='<p class="wt-manual-injury">Injury watch: '+doubtful.map(p=>html(p.name)+" ("+html(p.availability)+")").join(", ")+'. Verify before kickoff.</p>';
+ const details=list.length?'<div class="wt-manual-recommendations"><div class="wt-manual-headline"><strong>Start / Sit · Preliminary</strong><span>Your lineup: QB · 2 RB · 3 WR · TE · FLEX · K · DST</span></div>'+advice+
  '<div class="wt-manual-rankings">'+list.map(p=>{
   const flag=p.points<0?"VERIFY":selection.has(p.id)?"START":"SIT";
   return '<div class="wt-manual-ranked"><span class="wt-manual-advice '+flag.toLowerCase()+'">'+flag+'</span><div><b>'+html(p.name)+'</b><small>'+html(p.pos||"Position needed")+' · '+html(p.team||"Team needed")+(p.match.against?' vs '+html(p.match.against):' · Bye/unknown')+' · '+(p.known?"Avg PPG entered":"Tier "+p.tier+" assumption")+'</small></div><strong>'+(p.points<0?"—":p.points.toFixed(1))+'</strong></div>';
  }).join("")+'</div><p class="wt-manual-disclosure">These are planning estimates, not official Yahoo projections. Opponent defense is approximated using the first five NFL weeks’ points allowed, not position-specific fantasy points allowed. Check injuries, usage, scoring, and lineup settings.</p></div>':
  '<div class="wt-manual-empty">Add your roster to see Week 6 matchups, projected start/sit rankings, and live player stats. Names alone are fine — then assign NFL team and position.</div>';
- return '<section class="wt-manual-shell"><div class="wt-manual-intro"><div><h3>Fantasy Scouting Lab <small>Week 6</small></h3><p>No Yahoo access needed. Compare your roster against current NFL matchups and our five-week team data.</p></div><button type="button" class="btn primary" data-m-toggle="1">'+(editor?"Close editor":"Manage roster")+'</button></div>'+details+(editor?rosterEditor():"")+'</section>';
+ return '<section class="wt-manual-shell"><div class="wt-manual-intro"><div><h3>Fantasy Scouting Lab <small>Week 6</small></h3><p>Monsters of the Midway · 3–2 · 5th of 12. Your 16 players and Yahoo Week 6 projected scores are preloaded from the screenshots.</p></div><button type="button" class="btn primary" data-m-toggle="1">'+(editor?"Close editor":"Manage roster")+'</button></div>'+details+(editor?rosterEditor():"")+'</section>';
 }
 function importPlayers(raw){
  const input=String(raw||"").trim();
@@ -93,6 +97,7 @@ function importPlayers(raw){
    if(!parsed||!Array.isArray(parsed.players)||parsed.players.length>80)throw Error("Invalid backup");
    state.players=parsed.players.filter(p=>p&&typeof p.name==="string"&&p.name.trim()).map(p=>({
     id:Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10),
+    seedProjection:!!p.seedProjection,
     name:p.name.slice(0,75),team:TEAMS.includes(p.team)?p.team:"",pos:POSITIONS.includes(p.pos)?p.pos:"",
     avg:validAvg(p.avg),tier:Math.max(1,Math.min(5,+p.tier||3)),
     slot:p.slot==="START"?"START":"BN",availability:["active","Q","OUT"].includes(p.availability)?p.availability:"active"
@@ -109,7 +114,7 @@ function importPlayers(raw){
   if(short){pos=short[1];name=short[2];team=short[3];}
   if(!name||name.length<2||state.players.some(p=>norm(p.name)===norm(name)))continue;
   if(state.players.length>=80)break;
-  state.players.push({id:Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10),name:name.slice(0,75),team:TEAMS.includes(String(team||"").toUpperCase())?team.toUpperCase():"",pos:POSITIONS.includes(String(pos||"").toUpperCase())?pos.toUpperCase():"",avg:validAvg(avg),tier:3,slot:"BN",availability:"active"});added++;
+  state.players.push({id:Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10),name:name.slice(0,75),seedProjection:false,team:TEAMS.includes(String(team||"").toUpperCase())?team.toUpperCase():"",pos:POSITIONS.includes(String(pos||"").toUpperCase())?pos.toUpperCase():"",avg:validAvg(avg),tier:3,slot:"BN",availability:"active"});added++;
  }
  note=added?added+" player(s) added.":"No new players detected.";persist();
 }
@@ -143,7 +148,7 @@ document.addEventListener("change",e=>{
  if(f==="name")p.name=v.trim().slice(0,75)||p.name;
  if(f==="team")p.team=TEAMS.includes(v)?v:"";
  if(f==="pos")p.pos=POSITIONS.includes(v)?v:"";
- if(f==="avg")p.avg=validAvg(v);
+ if(f==="avg"){p.avg=validAvg(v);p.seedProjection=false;}
  if(f==="tier")p.tier=Math.max(1,Math.min(5,Number(v)||3));
  if(f==="slot")p.slot=v==="START"?"START":"BN";
  if(f==="availability")p.availability=["active","Q","OUT"].includes(v)?v:"active";
