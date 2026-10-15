@@ -165,7 +165,7 @@ function render(){
  document.querySelectorAll(".tab").forEach(b=>{b.classList.toggle("active",b.dataset.tab===tab);b.setAttribute("aria-selected",b.dataset.tab===tab?"true":"false");});
  document.querySelector(".season-strip .record").innerHTML=summary.wins+"–"+summary.losses+"–"+summary.ties+"T <span>2026</span>";
  document.querySelector(".season-strip .metric strong").textContent=pct(summary.wins,summary.losses).toFixed(2)+"%";
- const pages={home:homePage,live:()=>"",picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
+ const pages={home:homePage,live:()=>"",fantasy:()=>window.WTManualFantasy?.toolbar?.()||'<div class="empty">Loading fantasy roster…</div>',picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
  document.getElementById("app").innerHTML=(pages[tab]||homePage)();
 }
 function section(title,sub,body){return '<section class="section"><div class="section-head"><h2>'+title+'</h2><span>'+sub+'</span></div>'+body+'</section>';}
@@ -259,6 +259,7 @@ function dataPage(){
 }
 function switchTab(next){tab=next;render();window.scrollTo({top:0,behavior:"smooth"});}
 document.querySelectorAll(".tab").forEach(el=>el.addEventListener("click",()=>switchTab(el.dataset.tab)));
+document.addEventListener("wt-manual-fantasy-change",()=>{if(tab==="fantasy")document.getElementById("app").innerHTML=window.WTManualFantasy?.toolbar?.()||"";});
 document.addEventListener("click",async function(e){
  const nav=e.target.closest("[data-go]");if(nav){switchTab(nav.dataset.go);return;}
  const target=e.target.closest("[data-pick]");
