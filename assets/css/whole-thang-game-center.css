@@ -1,0 +1,17 @@
+/* Dedicated live score and pick-outcome dashboard */
+.tabs{grid-template-columns:repeat(7,minmax(0,1fr))}
+.wt-score-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:11px 0 14px}
+.wt-score-summary>div{border:1px solid #36414a;border-radius:9px;padding:12px;background:#111b22;min-width:0}
+.wt-score-summary small{display:block;color:#afbbc5;font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.wt-score-summary strong{display:block;margin:5px 0;font-size:22px;letter-spacing:-.03em}
+.wt-score-summary span{display:block;color:#99a6b2;font-size:10px}
+.wt-live-filters{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 14px}
+.wt-live-filters .btn{min-height:36px}
+.wt-score-pick{display:flex;justify-content:space-between;gap:6px;align-items:center;flex-wrap:wrap}
+.wt-pick-verdict{font-size:10px;font-weight:850;border:1px solid #404750;padding:4px 6px;border-radius:5px;color:#acb3be}
+.wt-v-correct,.wt-v-ahead{color:#77e2b4;border-color:#32584b;background:#132821}
+.wt-v-incorrect,.wt-v-behind{color:#ffadb4;border-color:#6a353a;background:#2a1317}
+.wt-v-tied,.wt-v-even{color:#f0d28c;border-color:#735f30;background:#2a2517}
+.wt-score-grid>.empty{grid-column:1/-1}
+@media(max-width:700px){.wt-score-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.tabs .tab{font-size:10px}}
+@media(max-width:400px){.tab{font-size:9px!important}.wt-score-summary strong{font-size:19px}.wt-score-summary>div{padding:9px}}
