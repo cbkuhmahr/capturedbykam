@@ -41,7 +41,7 @@ module.exports=async function handler(req,res){
   res.setHeader("Access-Control-Allow-Origin","https://www.capturedbykam.com");
   if(req.method!=="GET"){res.setHeader("Allow","GET");return res.status(405).json({ok:false,error:"Method not allowed"});}
   const event=String(req.query?.event||"");
-  if(!/^\\d{7,12}$/.test(event))return res.status(400).json({ok:false,error:"Invalid ESPN event ID"});
+  if(!/^\d{7,12}$/.test(event))return res.status(400).json({ok:false,error:"Invalid ESPN event ID"});
   try{
     const request=await fetch(ESPN+"?event="+encodeURIComponent(event),{
       headers:{Accept:"application/json"},signal:AbortSignal.timeout(8500)
