@@ -1,0 +1,30 @@
+/* Yahoo Fantasy layer — deliberately scoped to avoid changing pick'em controls. */
+.wt-fantasy-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px;margin:12px 0 16px;border:1px solid #554b35;border-radius:12px;background:linear-gradient(115deg,#211e19,#11161d 68%);color:#f4f6f9}
+.wt-fantasy-toolbar>div:first-child{min-width:185px;flex:1}
+.wt-fantasy-toolbar strong{font-size:15px}
+.wt-fantasy-toolbar small,.wt-fantasy-toolbar span:not(.wt-fantasy-online){display:block;font-size:11px;line-height:1.5;color:#b0b8c3;margin-top:4px}
+.wt-fantasy-toolbar .btn{white-space:nowrap}
+.wt-fantasy-toolbar a.btn{display:inline-flex;text-decoration:none;align-items:center}
+.wt-fantasy-online{color:#53d29b;font-weight:800;font-size:10px;margin-left:7px}
+.wt-fantasy-title{min-width:210px}
+.wt-fantasy-total{text-align:center;padding:4px 18px;border-left:1px solid #454038;border-right:1px solid #454038}
+.wt-fantasy-total strong{display:block;font-size:25px;font-variant-numeric:tabular-nums;color:#e8bb5a}
+.wt-fantasy-total small{white-space:nowrap}
+.wt-fantasy-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.wt-fantasy-select{font-size:11px;color:#d9dce2}
+.wt-fantasy-select select{display:block;color:#fff;background:#141b24;border:1px solid #454d57;border-radius:7px;padding:8px;max-width:170px}
+.wt-fantasy-error{color:#ffb4b4!important}
+.wt-fantasy-inside{margin-top:13px;border-top:1px solid #343a40;padding-top:12px}
+.wt-fantasy-match-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.wt-fantasy-match-head strong{color:#e8bb5a;font-size:12px}
+.wt-fantasy-match-head span{color:#b8c3ce;font-size:11px}
+.wt-fantasy-player{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px 0;border-top:1px solid #242c35}
+.wt-fantasy-role{font-size:10px;font-weight:800;letter-spacing:.04em;color:#141414;background:#dfb66b;padding:6px 4px;border-radius:5px;text-align:center}
+.wt-fantasy-role.bench{background:#343d48;color:#c0cad4}
+.wt-fantasy-person{min-width:0}
+.wt-fantasy-person strong{display:block;font-size:12px;color:#f0f1f4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wt-fantasy-person small{display:block;font-size:10px;line-height:1.5;color:#acb6c2;overflow-wrap:anywhere;margin-top:2px}
+.wt-fantasy-pts{text-align:right;font-variant-numeric:tabular-nums}
+.wt-fantasy-pts strong{display:block;color:#e8bb5a;font-size:16px}
+.wt-fantasy-pts small{display:block;color:#909fad;font-size:9px;letter-spacing:.08em}
+@media(max-width:640px){.wt-fantasy-toolbar{padding:12px;gap:10px}.wt-fantasy-toolbar>div:first-child{flex:1 1 100%}.wt-fantasy-total{padding:2px 12px 2px 0;border:0;text-align:left}.wt-fantasy-actions{flex:1;justify-content:flex-end}.wt-fantasy-select select{max-width:120px}.wt-fantasy-player{grid-template-columns:38px minmax(0,1fr) 55px;gap:7px}}
