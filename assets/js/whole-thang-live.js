@@ -49,9 +49,7 @@ function verdict(game, result, choice) {
 }
 function markup(){
  const selected=picks();
- const info=state==="loading"?"Connecting to NFL scores…":
-  state==="error"?(live.size?"Feed unavailable · last received scores shown":"Live scores temporarily unavailable"):
-  "Score feed connected";
+ const info=state==="error"?"Scores unavailable":state==="loading"?"Loading scores…":"";
  const stamp=updatedAt?new Date(updatedAt).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/New_York"})+" ET":"";
  const details=GAMES.map(game=>({game,result:get(game),choice:selected[game.id]||"",verdict:verdict(game,get(game),selected[game.id]||"")}));
  const completed=details.filter(x=>x.result&&x.result.state==="post"&&x.choice);
@@ -84,10 +82,9 @@ function markup(){
    team(game.away,"away")+team(game.home,"home")+
    '<div class="wt-score-pick">YOUR PICK: <strong>'+esc(choice||"—")+'</strong><span class="wt-pick-verdict wt-v-'+outcome+'">'+esc(explanation)+'</span></div>'+'</article>';
  }).join(""):'<div class="empty">No games match this view right now.</div>')+'</div>';
- return status+summary+filters+board+
- '<p class="wt-score-help">Scores from ESPN · Auto-refreshes about every 45 seconds when this page is open. In-progress leads can change; this view does not edit picks, grade official family submissions, or calculate prizes. Official picks must still be submitted using the family form.</p>';
+ return status+filters+board;
 }
-function ensure(){
+ function ensure(){
  const active=document.querySelector(".tab.active")?.dataset.tab;
  if(active!=="home"&&active!=="picks"&&active!=="live")return;
  let section=document.getElementById("wt-scoreboard");
@@ -95,7 +92,7 @@ function ensure(){
   section=document.createElement("section");
   section.className="section";
   section.id="wt-scoreboard";
-  section.innerHTML='<div class="section-head"><h2>Live Game Center</h2><span>Week 6 · 14 matchups</span></div><div class="wt-score-shell" id="wt-live-scoreboard"></div>';
+  section.innerHTML='<div class="section-head"><h2>Live Game Center</h2></div><div class="wt-score-shell" id="wt-live-scoreboard"></div>';
   app.prepend(section);
  }
  const cards=app.querySelectorAll(".wt-game-card");
