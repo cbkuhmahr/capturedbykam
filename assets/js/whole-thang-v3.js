@@ -144,7 +144,7 @@ function render(){
  document.querySelectorAll(".tab").forEach(b=>{b.classList.toggle("active",b.dataset.tab===tab);b.setAttribute("aria-selected",b.dataset.tab===tab?"true":"false");});
  document.querySelector(".season-strip .record").innerHTML=summary.wins+"–"+summary.losses+"–"+summary.ties+"T <span>2026</span>";
  document.querySelector(".season-strip .metric strong").textContent=pct(summary.wins,summary.losses).toFixed(2)+"%";
- const pages={home:homePage,picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
+ const pages={home:homePage,live:()=>"",picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
  document.getElementById("app").innerHTML=(pages[tab]||homePage)();
 }
 function section(title,sub,body){return '<section class="section"><div class="section-head"><h2>'+title+'</h2><span>'+sub+'</span></div>'+body+'</section>';}
@@ -158,7 +158,7 @@ function homePage(){
  return section("2026 Season","Weeks 1–5 · verified import",
    '<div class="panel summary-grid">'+cardMetric("Record","54–24–1T","79 selections")+cardMetric("Win rate","69.23%","ties excluded")+cardMetric("Best week","14–2","Week 4")+'</div>')+
  section("Week 6 Control","Oct 15–19 · 14 matchups",
-   '<div class="panel focus-row"><div class="focus-copy"><small>On deck</small><strong>Seahawks @ Broncos</strong><span>Thursday · 8:15 PM ET · '+picked+' of 14 picks captured</span></div><div class="counter">'+picked+'<small>/14 picked</small></div></div><div class="action-row"><button class="btn primary" data-go="picks">Manage picks</button><button class="btn" data-go="intel">Open workhorse →</button></div>')+
+   '<div class="panel focus-row"><div class="focus-copy"><small>On deck</small><strong>Seahawks @ Broncos</strong><span>Thursday · 8:15 PM ET · '+picked+' of 14 picks captured</span></div><div class="counter">'+picked+'<small>/14 picked</small></div></div><div class="action-row"><button class="btn primary" data-go="picks">Manage picks</button><button class="btn" data-go="live">Live Game Center →</button><button class="btn" data-go="intel">Open workhorse →</button></div>')+
  section("Trend","Your weekly accuracy",'<div class="panel wt-pad">'+curve+'</div>')+
  section("Workhorse Brief","Based on all 79 game outcomes",
    '<div class="wt-brief-grid"><div class="panel wt-pad"><h3>Potential disagreements</h3>'+danger+'</div><div class="panel wt-pad"><h3>Closest calls</h3>'+closest.map(f=>'<div class="wt-brief-row"><strong>'+f.away+' @ '+f.home+'</strong><span>'+f.choice+' · '+Math.round(f.probability*100)+'% model estimate</span></div>').join("")+'</div></div>')+
