@@ -80,3 +80,27 @@ body{background:var(--admin-bg)!important;color:var(--admin-text)!important;font
   .cbk-admin-choice-grid{grid-template-columns:1fr}
   .cbk-admin-layout{grid-template-columns:1fr}
 }
+/* Real platform passkey trigger: browser invokes Apple's Face ID/Touch ID UI. */
+#passkeyLoginButton[hidden]{display:none!important}
+.cbk-passkey-primary{
+  width:100%;
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  min-height:56px!important;
+  border:1px solid #49515a!important;
+  border-radius:13px!important;
+  background:#111317!important;
+  color:#fff!important;
+  font-weight:750!important;
+  font-size:16px!important;
+  letter-spacing:-.018em;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.cbk-passkey-primary:active{background:#242832!important;transform:scale(.995)}
+.cbk-passkey-primary:focus-visible{outline:3px solid #a7ccff!important;outline-offset:3px}
+.cbk-passkey-primary:disabled{opacity:.65;cursor:wait}
+.cbk-face-icon{width:29px;height:29px;flex:0 0 29px;display:block}
+.cbk-admin-form .cbk-pin-input{font-variant-numeric:tabular-nums;letter-spacing:.28em}
