@@ -38,7 +38,7 @@ function normalize(p) {
     status:["ACTIVE","Q","D","OUT","IR"].includes(p.status)?p.status:"ACTIVE"};
 }
 function fresh() {
-  return {version:1,teamName:"MONSTERS OF THE MIDWAY",week:6,scoring:"half",
+  return {version:1,teamName:"MONSTERS OF THE MIDWAY",week:6,scoring:"unknown",
     players:SEED.map(row=>normalize({id:row[0],name:row[1],team:row[2],opponent:row[3],pos:row[4],slot:row[5],
       projection:row[6],rank:row[7],talent:row[8],status:row[9]}))};
 }
@@ -47,7 +47,7 @@ function load() {
    const data=JSON.parse(localStorage.getItem(KEY)||"null");
    if(data && data.version===1 && Array.isArray(data.players)) return {
      ...fresh(),teamName:String(data.teamName||"MONSTERS OF THE MIDWAY").slice(0,75),
-     scoring:["standard","half","ppr"].includes(data.scoring)?data.scoring:"half",
+     scoring:["unknown","standard","half","ppr"].includes(data.scoring)?data.scoring:"unknown",
      players:data.players.slice(0,65).map(normalize).filter(p=>p.id)
    };
  } catch {}
@@ -144,17 +144,17 @@ function advice() {
  }else markup+='<div class="mf-no-swaps">Your current starters match this advisor’s projection-based lineup. No immediate swap suggested.</div>';
  if(warnings.length) markup+='<div class="mf-warning"><strong>Availability watch</strong>'+
    warnings.map(p=>'<p>'+ESC(p.name)+' is marked '+ESC(p.status)+' in the saved screenshot/roster. Verify the latest injury status before kickoff, especially for late games.</p>').join("")+'</div>';
- markup+='<p class="mf-disclaimer">Advisory only: source projections and opponent rankings are from your Yahoo Week 6 screenshots. Scouting grades are editable subjective inputs, not verified player rankings. Small modifiers avoid double-counting matchups already reflected in Yahoo projections. This planner does not update your actual Yahoo starters. Live estimates use common NFL scoring rules, not your Yahoo league settings.</p></section>';
+ markup+='<p class="mf-disclaimer">Advisory only: source projections and opponent rankings are from your Yahoo Week 6 screenshots. Scouting grades are provisional, editable subjective inputs, not verified player rankings. Small modifiers avoid double-counting matchups already reflected in Yahoo projections. This planner does not update your actual Yahoo starters. Live estimates use common NFL scoring rules, not your Yahoo league settings.</p></section>';
  return markup;
 }
 function page() {
  const starters=data.players.filter(starter),bench=data.players.filter(p=>!starter(p));
  const current=total(starters);
  return '<section class="mf-shell"><div class="mf-hero"><div><small>MANUAL YAHOO ROSTER · WEEK 6</small>'+
-  '<h2>'+ESC(data.teamName)+'</h2><p>3–2 · 5th of 12 from your screenshot · 16 players captured</p></div>'+
+  '<h2>'+ESC(data.teamName)+'</h2><p>3–2 · 5th of 12 (Week 6 screenshot) · '+data.players.length+' players</p></div>'+
   '<div class="mf-main-total"><small>LINEUP PROJECTION</small><strong>'+TWO(current)+'</strong><small>Yahoo screenshot baseline</small></div></div>'+
   '<div class="mf-toolbar"><span>Saved locally on this device · No Yahoo authorization needed</span>'+
-  '<label>Scoring <select data-mf-scoring><option value="standard" '+(data.scoring==="standard"?"selected":"")+'>Standard</option>'+
+  '<label>Scoring label only <select data-mf-scoring><option value="unknown">Not provided</option><option value="standard" '+(data.scoring==="standard"?"selected":"")+'>Standard</option>'+
   '<option value="half" '+(data.scoring==="half"?"selected":"")+'>Half-PPR</option>'+
   '<option value="ppr" '+(data.scoring==="ppr"?"selected":"")+'>Full PPR</option></select></label></div>'+
   (error?'<div class="mf-warning">'+ESC(error)+'</div>':"")+
@@ -172,7 +172,7 @@ function page() {
   '<label>Opponent rank<input name="rank" type="number" min="1" max="32"></label></div>'+
   '<button type="submit" class="btn primary">Add to bench</button></form></details>'+
   '<div class="mf-footer"><button class="btn" type="button" data-mf-export>Copy roster backup</button>'+
-  '<button class="btn" type="button" data-mf-reset>Restore screenshot lineup</button>'+
+  '<button class="btn" type="button" data-mf-import>Import roster backup</button><button class="btn" type="button" data-mf-reset>Restore screenshot lineup</button>'+
   '<p>Yahoo projections remain the screenshot snapshot. ESPN-derived individual game stats refresh during games and use the scoring selector, but are NOT official Yahoo scoring. Defense scoring and special kicking bonuses may be unavailable. Edit values as news changes or send an updated roster screenshot. Manual changes are private to this browser until cloud syncing is implemented.</p></div></section>';
 }
 
@@ -277,6 +277,16 @@ document.addEventListener("click",event=>{
  if(del){if(confirm("Remove this player from your planner?")){data.players=data.players.filter(p=>p.id!==del.dataset.mfRemove);editId="";refresh();}return;}
  if(event.target.closest("[data-mf-reset]")){
    if(confirm("Restore all 16 players and starting slots from your Week 6 screenshots? This overwrites manual edits.")){data=fresh();editId="";refresh();}return;
+ }
+ if(event.target.closest("[data-mf-import]")){
+   const imported=prompt("Paste a roster backup JSON copied from another device:");
+   if(!imported)return;
+   try { const parsed=JSON.parse(imported);if(parsed.version!==1||parsed.week!==6||!Array.isArray(parsed.players)||!parsed.players.length||parsed.players.length>65)throw Error("Invalid backup");
+     const cleanPlayers=parsed.players.map(normalize).filter(p=>p.id&&p.name);
+     if(cleanPlayers.length!==parsed.players.length)throw Error("Invalid players");
+     data={...fresh(),teamName:String(parsed.teamName||"MONSTERS OF THE MIDWAY").slice(0,75),scoring:["unknown","standard","half","ppr"].includes(parsed.scoring)?parsed.scoring:"unknown",players:cleanPlayers};
+     editId="";refresh();alert("Roster backup imported.");
+   }catch {alert("Invalid roster backup. No changes were made.");}return;
  }
  if(event.target.closest("[data-mf-export]")){
    const text=JSON.stringify(data,null,2);
