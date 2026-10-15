@@ -38,6 +38,7 @@ function mini(game){
 function verdict(game, result, choice) {
  if(!choice)return "unpicked";
  if(!result||result.state==="pre")return "upcoming";
+ if(result.awayScore==null||result.homeScore==null)return "unknown";
  const away=Number(result.awayScore),home=Number(result.homeScore);
  if(!Number.isFinite(away)||!Number.isFinite(home))return "unknown";
  if(away===home)return result.state==="post"?"tied":"even";
