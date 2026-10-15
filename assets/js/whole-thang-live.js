@@ -84,7 +84,7 @@ function markup(){
    team(game.away,"away")+team(game.home,"home")+
    '<div class="wt-score-pick">YOUR PICK: <strong>'+esc(choice||"—")+'</strong><span class="wt-pick-verdict wt-v-'+outcome+'">'+esc(explanation)+'</span></div>'+(window.WTFantasy?.gameRows?.(game)||"")+(window.WTManualFantasy?.gameRows?.(game,x)||"")+'</article>';
  }).join(""):'<div class="empty">No games match this view right now.</div>')+'</div>';
- return status+(window.WTManualFantasy?.toolbar?.()||"")+(window.WTFantasy?.toolbar?.()||"")+summary+filters+board+
+ return status+(window.WTManualFantasy?.toolbar?.()||"")+((window.WTManualFantasy?.roster?.().length||0)?"":(window.WTFantasy?.toolbar?.()||""))+summary+filters+board+
  '<p class="wt-score-help">Scores from ESPN · Auto-refreshes about every 45 seconds when this page is open. In-progress leads can change; this view does not edit picks, grade official family submissions, or calculate prizes. Official picks must still be submitted using the family form.</p>';
 }
 function ensure(){
