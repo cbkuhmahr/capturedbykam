@@ -31,15 +31,15 @@
       <p class="eyebrow">Private access</p>
       <h2>Admin</h2>
       <p id="loginIntro">Use your passkey for the fastest sign-in. PIN remains available as backup.</p>
-      <button id="passkeyLoginButton" class="button button-dark cbk-passkey-primary" type="button" hidden>Sign in with Passkey / Face ID</button>
+      <button id="passkeyLoginButton" class="button button-dark cbk-passkey-primary" type="button" hidden><svg class="cbk-face-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3H7a4 4 0 0 0-4 4v4M21 3h4a4 4 0 0 1 4 4v4M3 21v4a4 4 0 0 0 4 4h4m18-8v4a4 4 0 0 1-4 4h-4"/><path d="M11.5 12v3m9-3v3M16 12.5v6h-2m-2 3a6.5 6.5 0 0 0 8 0"/></svg><span id="passkeyButtonLabel">Continue with passkey</span></button>
       <div id="loginDivider" class="cbk-auth-divider" hidden><span>Backup access</span></div>
       <form id="loginForm" class="cbk-admin-form">
-        <label><span>6-digit Admin PIN</span><input id="loginPin" class="cbk-pin-input" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></label>
+        <label><span>6-digit Admin PIN</span><input id="loginPin" class="cbk-pin-input" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="off" required></label>
         <button class="button" type="submit">Continue with PIN</button>
         <p id="loginMessage" class="cbk-form-message" role="status"></p>
       </form>
       <form id="totpLoginForm" class="cbk-admin-form cbk-mfa-panel" hidden>
-        <p>Open <strong>Microsoft Authenticator</strong> and enter the current 6-digit code.</p>
+        <p>Open <strong>Microsoft Authenticator</strong>, select your Capturedby_Kam account, and enter its 6-digit rotating code. This does not use Microsoft number matching.</p>
         <label><span>Authenticator code</span><input id="loginTotpCode" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></label>
         <button class="button button-dark" type="submit">Verify & Open Admin</button>
         <button id="cancelTotpLogin" class="button" type="button">Use a Different Method</button>
@@ -168,7 +168,7 @@
             <div class="cbk-security-status-grid">
               <div><span>Primary sign-in</span><strong>Passkey / Face ID</strong><small id="passkeyStatus">Checking…</small></div>
               <div><span>Backup verification</span><strong>Microsoft Authenticator</strong><small id="totpStatus">Checking…</small></div>
-              <div><span>Session</span><strong>Secure cookie</strong><small>HttpOnly · SameSite · auto-lock after inactivity</small></div>
+              <div><span>Session</span><strong>Secure cookie</strong><small>HttpOnly · SameSite · 10-minute inactivity · 1-hour maximum</small></div>
             </div>
             <div class="cbk-security-actions">
               <button id="registerPasskeyButton" class="button button-dark" type="button">Register Passkey on This Device</button>
