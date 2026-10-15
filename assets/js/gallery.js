@@ -102,7 +102,7 @@
       const next = data || [];
       const previous = new Set(photos.map(p => p.id));
       const newCount = next.filter(p => !previous.has(p.id)).length;
-      lastPhotoCount = newCount;
+      lastPhotoCount = firstLoad ? 0 : newCount;
       photos = next;
       const ids = new Set(photos.map(p => p.id));
       for (const id of selected.keys()) if (!ids.has(id)) selected.delete(id);
