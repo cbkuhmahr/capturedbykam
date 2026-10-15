@@ -6,6 +6,11 @@
   const titleEl = document.getElementById("galleryTitle");
   const descEl = document.getElementById("galleryDescription");
   const grid = document.getElementById("photoGrid");
+  const photoSearch = document.getElementById("photoSearch");
+  const refreshPhotosButton = document.getElementById("refreshPhotos");
+  const photoFeedStatus = document.getElementById("photoFeedStatus");
+  let photosRefreshing = false;
+  let lastPhotoCount = 0;
   const selectionCount = document.getElementById("selectionCount");
   const reviewButton = document.getElementById("reviewButton");
   const drawer = document.getElementById("orderDrawer");
@@ -74,17 +79,39 @@
     document.getElementById("packagePrice").textContent = `${project.package_size} for $${Number(project.package_price).toFixed(0)} · $${Number(project.extra_photo_price || 0).toFixed(0)} each after ${project.package_size}`;
     document.getElementById("orderTitle").textContent = "Your photo order";
 
-    const { data, error } = await client
-      .from("cbk_shop_photos")
-      .select("id,photo_code,storage_path,sort_order")
-      .eq("project_id", project.id)
-      .order("sort_order", { ascending: true })
-      .order("photo_code", { ascending: true });
+    await refreshPhotos(true);
+  }
 
-    if (error) return fail("Photos could not be loaded.");
-    photos = data || [];
-    renderPhotos();
-    updateSelection();
+  async function refreshPhotos(firstLoad = false) {
+    if (!project || photosRefreshing || (!firstLoad && drawer.classList.contains("is-open"))) return;
+    photosRefreshing = true;
+    if (refreshPhotosButton) refreshPhotosButton.disabled = true;
+    if (photoFeedStatus) photoFeedStatus.textContent = "Checking for new photos…";
+    try {
+      const { data, error } = await client
+        .from("cbk_shop_photos")
+        .select("id,photo_code,storage_path,sort_order")
+        .eq("project_id", project.id)
+        .order("sort_order", { ascending: true })
+        .order("photo_code", { ascending: true });
+      if (error) {
+        if (firstLoad) fail("Photos could not be loaded.");
+        if (photoFeedStatus) photoFeedStatus.textContent = "Refresh failed · retry in a moment.";
+        return;
+      }
+      const next = data || [];
+      const previous = new Set(photos.map(p => p.id));
+      const newCount = next.filter(p => !previous.has(p.id)).length;
+      lastPhotoCount = newCount;
+      photos = next;
+      const ids = new Set(photos.map(p => p.id));
+      for (const id of selected.keys()) if (!ids.has(id)) selected.delete(id);
+      renderPhotos();
+      updateSelection();
+    } finally {
+      photosRefreshing = false;
+      if (refreshPhotosButton) refreshPhotosButton.disabled = false;
+    }
   }
 
   function renderPhotos() {
@@ -93,8 +120,15 @@
       return;
     }
 
-    grid.innerHTML = photos.map((photo) => `
-      <button class="cbk-photo-card" type="button" data-id="${photo.id}" aria-pressed="false">
+    const searchTerm = (photoSearch?.value || "").trim().toLowerCase();
+    const displayed = photos.filter(photo => String(photo.photo_code || "").toLowerCase().includes(searchTerm));
+    if (photoFeedStatus) photoFeedStatus.textContent = displayed.length + " of " + photos.length + " photos shown" + (lastPhotoCount ? " · " + lastPhotoCount + " new this check" : "") + " · Updates checked every 75 seconds.";
+    if (!displayed.length) {
+      grid.innerHTML = '<div class="cbk-empty">No photo IDs match that search.</div>';
+      return;
+    }
+    grid.innerHTML = displayed.map((photo) => `
+      <button class="cbk-photo-card ${selected.has(photo.id) ? "is-selected" : ""}" type="button" data-id="${photo.id}" aria-pressed="${selected.has(photo.id) ? "true" : "false"}">
         <img src="${publicUrl(photo.storage_path)}" alt="Photo ${escapeHtml(photo.photo_code)}" loading="lazy" />
         <span class="cbk-photo-check">✓</span>
         <span class="cbk-photo-code">${escapeHtml(photo.photo_code)}</span>
@@ -674,6 +708,10 @@
     }[m]));
   }
 
+  photoSearch?.addEventListener("input", renderPhotos);
+  refreshPhotosButton?.addEventListener("click", () => refreshPhotos());
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshPhotos(); });
+  window.setInterval(() => { if (!document.hidden) refreshPhotos(); }, 75000);
   loadGallery();
   loadSquareCheckout();
 })();
