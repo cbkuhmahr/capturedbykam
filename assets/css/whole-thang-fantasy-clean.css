@@ -1,0 +1,48 @@
+/* Dedicated, understated fantasy workspace; leaves the Live scoreboard independent. */
+.tabs{grid-template-columns:repeat(8,minmax(0,1fr))}
+.wt-fantasy-page{display:grid;gap:19px}
+.wt-fantasy-page-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:5px 2px 0}
+.wt-fantasy-page-head h2{font-size:21px;line-height:1.3;margin:0;color:#f1f4f6;letter-spacing:-.025em}
+.wt-fantasy-page-head p{font-size:12px;color:#9caab7;margin:6px 0 0;line-height:1.5}
+.wt-fantasy-page-head>small{font-size:11px;color:#aab5bf;white-space:nowrap}
+.wt-fantasy-page .wt-manual-shell{margin:0;background:#10151b;border:1px solid #2e3944;border-radius:10px}
+.wt-fantasy-page .wt-manual-intro{padding:14px 15px;background:#111820;border:0}
+.wt-fantasy-page .wt-manual-intro h3{font-size:15px;letter-spacing:0;font-weight:750}
+.wt-fantasy-page .wt-manual-intro h3 small{color:#aeb9c3;font-weight:600}
+.wt-fantasy-page .wt-manual-intro p{font-size:11px;color:#8e9cab}
+.wt-fantasy-page .wt-manual-recommendations{padding:13px 15px;background:#10151b;border-color:#2d3742}
+.wt-fantasy-page .wt-manual-swap>div{border-left-color:#a6b3c1;background:#18212a}
+.wt-fantasy-page .wt-manual-swap strong{font-size:11px}
+.wt-fantasy-page .wt-manual-ranked>strong,.wt-fantasy-page .wt-manual-game-player>strong{color:#cbd4dc}
+.wt-fantasy-page .wt-manual-advice.start{color:#a4e7c2;background:#173327}
+.wt-fantasy-page .wt-manual-advice.sit{color:#abb9c5;background:#26313c}
+.wt-fantasy-page .wt-manual-editor{background:#10151b}
+.wt-fantasy-page .wt-manual-editor input,.wt-fantasy-page .wt-manual-editor select,.wt-fantasy-page .wt-manual-editor textarea{background:#171f28}
+.wt-fantasy-games-section h3{font-size:15px;margin:0 0 11px;color:#e0e7ee}
+.wt-fantasy-game-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.wt-fantasy-game-card{min-width:0;border:1px solid #303b46;border-radius:10px;background:#10161c;padding:13px}
+.wt-fantasy-game-top{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#acb9c5;font-size:11px;font-weight:700}
+.wt-fantasy-game-top small{color:#8999a8;font-size:10px;font-weight:700}
+.wt-fantasy-game-top small.is-live{color:#78d2a5}
+.wt-fantasy-game-score{display:flex;align-items:center;gap:11px;padding:14px 0 9px}
+.wt-fantasy-game-score>div{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
+.wt-fantasy-game-score>div:last-child{justify-content:flex-end}
+.wt-fantasy-game-score img{width:25px;height:25px;object-fit:contain}
+.wt-fantasy-game-score b{font-size:14px}
+.wt-fantasy-game-score strong{font-size:17px;margin-left:auto;min-width:18px;font-variant-numeric:tabular-nums;text-align:right}
+.wt-fantasy-game-score>div:last-child strong{margin:0 0 0 5px}
+.wt-fantasy-game-score>span{font-size:14px;color:#7b8a98}
+.wt-fantasy-game-card .wt-manual-game-players,.wt-fantasy-game-card .wt-fantasy-inside{border-color:#2d3945;padding-top:9px}
+.wt-fantasy-game-card .wt-manual-match-head strong,.wt-fantasy-game-card .wt-fantasy-match-head strong{color:#b8c8d5}
+.wt-fantasy-game-card .wt-manual-slot.on{background:#536675;color:#f5f9fc}
+.wt-fantasy-game-card .wt-fantasy-pts strong{color:#d7e3ee}
+.wt-fantasy-quiet{font-size:12px;color:#9caab8;line-height:1.7;border:1px dashed #34414e;padding:18px;border-radius:9px;margin:0}
+.wt-fantasy-yahoo-optional{background:#0d1319;border:1px solid #28333e;border-radius:9px;padding:0 14px}
+.wt-fantasy-yahoo-optional>summary{font-size:12px;font-weight:700;color:#aab9c6;cursor:pointer;min-height:45px;display:list-item;align-content:center;list-style:disclosure-closed inside}
+.wt-fantasy-yahoo-optional[open]>summary{list-style:disclosure-open inside;border-bottom:1px solid #28333e}
+.wt-fantasy-yahoo-optional .wt-fantasy-toolbar{margin:14px 0;background:#121a22;border:1px solid #2d3c49;padding:12px}
+.wt-fantasy-yahoo-optional .wt-fantasy-toolbar>div:first-child{flex:1}
+.wt-fantasy-yahoo-info{font-size:10px;line-height:1.5;color:#8c9cab;margin:9px 0 14px}
+.wt-fantasy-yahoo-info a{color:#c5d6e5;text-decoration:underline}
+@media(max-width:720px){.tabs{grid-template-columns:repeat(8,minmax(54px,1fr));overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.wt-fantasy-game-grid{grid-template-columns:1fr}.wt-fantasy-page-head{align-items:flex-start}}
+@media(max-width:430px){.wt-fantasy-page-head{display:block}.wt-fantasy-page-head>small{display:block;margin-top:7px}.wt-fantasy-game-card{padding:11px}.wt-fantasy-page .wt-manual-intro{padding:12px}}
