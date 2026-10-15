@@ -3,8 +3,8 @@ const ENDPOINT="https://site.api.espn.com/apis/site/v2/sports/football/nfl/summa
 const ALIASES={WSH:"WAS",JAC:"JAX",LA:"LAR",OAK:"LV",SD:"LAC"};
 const code=s=>ALIASES[String(s||"").toUpperCase()]||String(s||"").toUpperCase();
 const simple=s=>String(s||"").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]/g,"");
-const number=s=>{const n=Number(String(s??"").replace(/,/g,""));return Number.isFinite(n)?n:0;};
-const STATS={passing:{YDS:"passYds",TD:"passTD",INT:"int"},rushing:{YDS:"rushYds",TD:"rushTD"},receiving:{REC:"rec",YDS:"recYds",TD:"recTD"},fumbling:{LOST:"fumLost"},fumbles:{LOST:"fumLost"}};
+const number=s=>{const n=Number(String(s??"").replace(/,/g,"").split("/")[0]);return Number.isFinite(n)?n:0;};
+const STATS={passing:{YDS:"passYds",TD:"passTD",INT:"int"},rushing:{YDS:"rushYds",TD:"rushTD"},receiving:{REC:"rec",YDS:"recYds",TD:"recTD"},fumbling:{LOST:"fumLost"},fumbles:{LOST:"fumLost"},kicking:{FG:"fgMade",FGM:"fgMade",XP:"xpMade",XPM:"xpMade",PTS:"kickPts"}};
 function parseBoxscore(data){
  const result=new Map();
  for(const group of data?.boxscore?.players||[]){
