@@ -1,0 +1,16 @@
+/* CBK Game-Day storefront enhancements */
+.cbk-game-day{width:min(1180px,calc(100% - 28px));margin:24px auto 0;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(270px,1fr);gap:28px;align-items:center;padding:25px;background:#161a1d;color:#f9f4ec;border:1px solid #30353a}
+.cbk-game-day .studio-kicker{color:#dcc29a}
+.cbk-game-day h2{font-family:"Cormorant Garamond",serif;font-size:clamp(2rem,4vw,3rem);font-weight:500;line-height:1.05;margin:7px 0 12px}
+.cbk-game-day p{line-height:1.6;margin:0;color:#d2d2d2;font-size:.9rem;max-width:540px}
+.cbk-game-day-tools{display:grid;gap:10px}
+.cbk-game-day-tools label{text-transform:uppercase;letter-spacing:.08em;font-size:.74rem;font-weight:800}
+.cbk-game-day-tools input{width:100%;min-height:48px;border:1px solid #59626a;background:#fff;padding:11px 13px;color:#16191b;font:inherit}
+.cbk-game-day-actions{display:flex;gap:9px;flex-wrap:wrap}
+.cbk-game-day-actions .button{min-height:40px;display:inline-flex;align-items:center;justify-content:center;font-size:.81rem;cursor:pointer}
+.cbk-game-day-tools #galleryFeedStatus{font-size:.75rem;color:#c9bb9f;min-height:1.5em}
+.cbk-project-cover{display:block;min-width:0}
+.cbk-gallery-links{display:flex;align-items:center;justify-content:flex-end;gap:13px;flex-wrap:wrap}
+.cbk-gallery-links a{font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.cbk-project-card a:focus-visible{outline:3px solid #705420;outline-offset:3px}
+@media(max-width:760px){.cbk-game-day{grid-template-columns:1fr;padding:19px;gap:18px}.cbk-project-bottom{flex-wrap:wrap}.cbk-gallery-links{width:100%;justify-content:space-between}}
