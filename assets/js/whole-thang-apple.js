@@ -58,7 +58,7 @@ function pickText(){
 function seasonText(){
  const s=snapshot(),r=s.season;
  const lines=["$billi-type uh’day. | Whole Thang | 2026 NFL Pick'em",
-  "Season through Week 5: "+r.wins+"–"+r.losses+"–"+r.ties+"T",
+  "Season through Week "+Math.max(...s.weeks.map(w=>Number(w.week)))+": "+r.wins+"–"+r.losses+"–"+r.ties+"T",
   "Winning percentage: "+r.accuracy+"%",""];
  for(const w of s.weeks)lines.push("Week "+w.week+": "+w.record+" ("+Number(w.rate).toFixed(2)+"%)");
  return lines.join("\n");

@@ -190,3 +190,16 @@ main{padding:25px 21px 50px!important}
  .wt-score-summary .wt-score-tally-wrong{border-left:1px solid #33343a!important}
  .wt-score-summary .wt-score-summary-note{padding:10px 16px}
 }
+
+/* Live cumulative season record, updated when Week 6 games become final. */
+.wt-live-season-line{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 19px;margin:0 0 16px;border:1px solid #32333a;background:#111216;border-radius:14px}
+.wt-live-season-line>div{display:flex;flex-direction:column;gap:3px}
+.wt-live-season-line>div:last-child{text-align:right}
+.wt-live-season-line small{font-size:10px;letter-spacing:.065em;color:#a5a6ae;font-weight:780}
+.wt-live-season-line strong{font-size:23px;font-weight:840;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.wt-live-season-line>div:last-child strong{color:#ebc879;font-size:20px}
+.wt-history-season-line{display:flex;align-items:center;gap:14px;padding:13px 4px;margin-bottom:12px;color:#c6c7ca;font-size:12px}
+.wt-history-season-line strong{font-size:16px;color:white;font-variant-numeric:tabular-nums}
+.wt-history-season-line span{color:#eecb79;font-weight:760}
+.wt-history-season-line small{margin-left:auto;color:#a2a3a8}
+@media(max-width:640px){.wt-live-season-line{padding:12px 15px}.wt-live-season-line strong{font-size:21px}.wt-live-season-line>div:last-child strong{font-size:18px}.wt-history-season-line{flex-wrap:wrap;gap:7px 11px}.wt-history-season-line small{margin-left:0}}

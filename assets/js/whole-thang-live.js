@@ -75,6 +75,8 @@ function markup(){
   '<div class="wt-score-tally wt-score-tally-right"><small>✓ CORRECT</small><strong>'+(displayable?right:"—")+'</strong></div>'+
   '<div class="wt-score-tally wt-score-tally-wrong"><small>✕ WRONG</small><strong>'+(displayable?wrong:"—")+'</strong></div>'+
   '<div class="wt-score-summary-note" role="status" aria-live="polite">'+esc(tallyNote)+'</div></section>';
+ const overall=window.WTSeasonTotals?.();
+ const seasonLine=overall?'<div class="wt-live-season-line" aria-label="Overall season results"><div><small>OVERALL · 2026 SEASON</small><strong>'+esc(overall.record)+'</strong></div><div><strong>'+esc(overall.accuracy)+'%</strong><small>ACCURACY</small></div></div>':"";
  const filters='<div class="wt-live-filters" aria-label="Filter scoreboard">'+
   [["all","All games"],["live","Live now"],["picked","My picks"]].map(([key,name])=>'<button type="button" data-live-filter="'+key+'" class="btn '+(viewFilter===key?"primary":"")+'" aria-pressed="'+(viewFilter===key)+'">'+name+'</button>').join("")+
  '</div>';
@@ -94,7 +96,7 @@ function markup(){
     (myPlayers?'<div class="wt-score-players">'+myPlayers+'</div>':'')+
     '</article>';
  }).join(""):'<div class="empty">No games in this view.</div>')+'</div>';
- return summary+status+filters+board;
+ return summary+seasonLine+status+filters+board;
 }
  function ensure(){
  const active=document.querySelector(".tab.active")?.dataset.tab;
