@@ -63,11 +63,18 @@ function markup(){
  const order=g=>g&&g.state==="in"?0:g&&g.state==="pre"?1:g&&g.state==="post"?2:1;
  const sorted=details.sort((a,b)=>order(a.result)-order(b.result)||GAMES.indexOf(a.game)-GAMES.indexOf(b.game));
  const shown=sorted.filter(x=>viewFilter==="live"?(x.result&&x.result.state==="in"):viewFilter==="picked"?!!x.choice:true);
- const summary='<div class="wt-score-summary" aria-label="Current pick outcomes">'+
-  '<div><small>Final picks</small><strong>'+right+'–'+wrong+(ties?'–'+ties+'T':'')+'</strong><span>Completed games</span></div>'+
-  '<div><small>Currently ahead</small><strong>'+liveAhead+'</strong><span>In-progress picks</span></div>'+
-  '<div><small>Currently behind</small><strong>'+liveBehind+'</strong><span>In-progress picks</span></div>'+
-  '<div><small>Picks saved</small><strong>'+picked+'/'+GAMES.length+'</strong><span>Week 6 card</span></div></div>';
+ const counted=right+wrong+ties;
+ const displayable=state==="ready"||!!updatedAt;
+ let tallyNote="Final: "+counted+" of "+picked+" selected picks";
+ if(ties)tallyNote+=" · "+ties+" tied";
+ if(liveAhead||liveBehind)tallyNote+=" · In play: "+liveAhead+" ahead, "+liveBehind+" behind";
+ if(state==="loading"&&!updatedAt)tallyNote="Loading scores…";
+ if(state==="error")tallyNote=updatedAt?"Last available · "+tallyNote:"Scores temporarily unavailable";
+ const summary='<section class="wt-score-summary" aria-label="Week 6 running pick tally">'+
+  '<div class="wt-score-summary-title"><span>WEEK 6 · LIVE TALLY</span><strong>Your results</strong></div>'+
+  '<div class="wt-score-tally wt-score-tally-right"><small>✓ CORRECT</small><strong>'+(displayable?right:"—")+'</strong></div>'+
+  '<div class="wt-score-tally wt-score-tally-wrong"><small>✕ WRONG</small><strong>'+(displayable?wrong:"—")+'</strong></div>'+
+  '<div class="wt-score-summary-note" role="status" aria-live="polite">'+esc(tallyNote)+'</div></section>';
  const filters='<div class="wt-live-filters" aria-label="Filter scoreboard">'+
   [["all","All games"],["live","Live now"],["picked","My picks"]].map(([key,name])=>'<button type="button" data-live-filter="'+key+'" class="btn '+(viewFilter===key?"primary":"")+'" aria-pressed="'+(viewFilter===key)+'">'+name+'</button>').join("")+
  '</div>';
@@ -87,7 +94,7 @@ function markup(){
     (myPlayers?'<div class="wt-score-players">'+myPlayers+'</div>':'')+
     '</article>';
  }).join(""):'<div class="empty">No games in this view.</div>')+'</div>';
- return status+filters+board;
+ return summary+status+filters+board;
 }
  function ensure(){
  const active=document.querySelector(".tab.active")?.dataset.tab;

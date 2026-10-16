@@ -168,3 +168,25 @@ main{padding:25px 21px 50px!important}
  .wt-fantasy-page .wt-manual-editor{padding:12px!important}
 }
 @media (prefers-reduced-motion:reduce){.btn,.tab{transition:none!important}html{scroll-behavior:auto!important}}
+
+/* Running weekly pick record — visible above the live scores and pick cards. */
+.wt-score-summary{display:grid!important;grid-template-columns:minmax(0,1.25fr) repeat(2,minmax(0,.85fr))!important;gap:0!important;margin:0 0 18px!important;background:#16171b!important;border:1px solid #33343a!important;border-radius:18px!important;overflow:hidden}
+.wt-score-summary>div{min-width:0;border:0!important;border-radius:0!important;background:transparent!important}
+.wt-score-summary .wt-score-summary-title{display:flex;flex-direction:column;justify-content:center;gap:6px;padding:18px 22px}
+.wt-score-summary-title span{color:#a7a7b0!important;letter-spacing:.095em;font-size:10px!important;font-weight:780}
+.wt-score-summary-title strong{font-size:21px!important;font-weight:830;letter-spacing:-.04em;color:#f5f5f7;line-height:1.1}
+.wt-score-summary .wt-score-tally{padding:15px 23px;border-left:1px solid #33343a!important}
+.wt-score-tally small{display:block;font-size:11px!important;letter-spacing:.055em;font-weight:830}
+.wt-score-tally-right small,.wt-score-tally-right strong{color:#60d7a5!important}
+.wt-score-tally-wrong small,.wt-score-tally-wrong strong{color:#fa7d84!important}
+.wt-score-summary .wt-score-tally strong{display:block;margin:1px 0 0!important;font-size:clamp(35px,4.5vw,49px)!important;line-height:1.12;font-weight:860;letter-spacing:-.055em;font-variant-numeric:tabular-nums}
+.wt-score-summary .wt-score-summary-note{grid-column:1/-1;color:#aeb0b8!important;font-size:12px!important;font-weight:600;letter-spacing:0;padding:11px 22px;border-top:1px solid #303137!important}
+@media(max-width:640px){
+ .wt-score-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .wt-score-summary .wt-score-summary-title{grid-column:1/-1;padding:15px 16px 12px}
+ .wt-score-summary-title strong{font-size:19px!important}
+ .wt-score-summary .wt-score-tally{padding:10px 16px 15px}
+ .wt-score-summary .wt-score-tally-right{border-left:0!important}
+ .wt-score-summary .wt-score-tally-wrong{border-left:1px solid #33343a!important}
+ .wt-score-summary .wt-score-summary-note{padding:10px 16px}
+}
