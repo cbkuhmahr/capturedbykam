@@ -14,6 +14,15 @@ const names={WAS:"wsh"};
 const app=document.getElementById("app");
 if(!app)return;
 let live=new Map(),state="loading",updatedAt="",fetching=false,viewFilter="all";
+let compact=(()=>{
+ try{
+  const saved=localStorage.getItem("wt-live-density");
+  if(saved==="compact")return true;
+  if(saved==="expanded")return false;
+ }catch{}
+ return !!(window.matchMedia&&window.matchMedia("(max-width: 720px)").matches);
+})();
+const expandedGames=new Set();
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const logo=t=>"https://a.espncdn.com/i/teamlogos/nfl/500/"+(names[t]||t).toLowerCase()+".png";
 const get=g=>live.get(g.away+"-"+g.home)||null;
@@ -62,7 +71,7 @@ function markup(){
  const picked=details.filter(x=>x.choice).length;
  const order=g=>g&&g.state==="in"?0:g&&g.state==="pre"?1:g&&g.state==="post"?2:1;
  const sorted=details.sort((a,b)=>order(a.result)-order(b.result)||GAMES.indexOf(a.game)-GAMES.indexOf(b.game));
- const shown=sorted.filter(x=>viewFilter==="live"?(x.result&&x.result.state==="in"):viewFilter==="picked"?!!x.choice:true);
+ const shown=sorted.filter(x=>viewFilter==="live"?(x.result&&x.result.state==="in"):viewFilter==="pending"?(!x.result||x.result.state!=="post"):viewFilter==="picked"?!!x.choice:true);
  const counted=right+wrong+ties;
  const displayable=state==="ready"||!!updatedAt;
  let tallyNote="Final: "+counted+" of "+picked+" selected picks";
@@ -78,31 +87,36 @@ function markup(){
  const overall=window.WTSeasonTotals?.();
  const seasonLine=overall?'<div class="wt-live-season-line" aria-label="Overall season results"><div><small>OVERALL · 2026 SEASON</small><strong>'+esc(overall.record)+'</strong></div><div><strong>'+esc(overall.accuracy)+'%</strong><small>ACCURACY</small></div></div>':"";
  const filters='<div class="wt-live-filters" aria-label="Filter scoreboard">'+
-  [["all","All games"],["live","Live now"],["picked","My picks"]].map(([key,name])=>'<button type="button" data-live-filter="'+key+'" class="btn '+(viewFilter===key?"primary":"")+'" aria-pressed="'+(viewFilter===key)+'">'+name+'</button>').join("")+
+  [["all","All"],["live","Live now"],["pending","Not final"],["picked","My picks"]].map(([key,name])=>'<button type="button" data-live-filter="'+key+'" class="btn '+(viewFilter===key?"primary":"")+'" aria-pressed="'+(viewFilter===key)+'">'+name+'</button>').join("")+
+ '</div>';
+ const tools='<div class="wt-live-tools" aria-label="Live view options">'+
+  '<button type="button" class="btn wt-density-btn" data-live-density="1" aria-pressed="'+compact+'">'+(compact?"Compact · On":"Compact · Off")+'</button>'+
+  '<button type="button" class="btn wt-awake-btn" data-awake-toggle="1" aria-pressed="true">Keep awake · On</button>'+
  '</div>';
  const status='<div class="wt-score-meta"><span class="'+(state==="error"?"wt-score-error":"")+'">'+esc(info||(stamp?"Updated "+stamp:"Scores ready"))+'</span>'+
  '<button type="button" class="btn wt-score-refresh" data-score-refresh="1" '+(fetching?"disabled":"")+'>'+(fetching?"Updating…":"↻ Refresh scores")+'</button></div>';
- const board='<div class="wt-score-grid">'+(shown.length?shown.map(({game,result:x,choice,verdict:outcome})=>{
+ const board='<div class="wt-score-grid '+(compact?'is-compact':'')+'">'+(shown.length?shown.map(({game,result:x,choice,verdict:outcome})=>{
   const active=x&&x.state==="in",final=x&&x.state==="post";
   const status=active?label(x):final?"FINAL":game.day+" · "+game.time+" ET";
   const names={ARI:"Cardinals",ATL:"Falcons",BAL:"Ravens",BUF:"Bills",CAR:"Panthers",CHI:"Bears",CIN:"Bengals",CLE:"Browns",DAL:"Cowboys",DEN:"Broncos",DET:"Lions",GB:"Packers",HOU:"Texans",IND:"Colts",JAX:"Jaguars",KC:"Chiefs",LAC:"Chargers",LAR:"Rams",LV:"Raiders",MIA:"Dolphins",MIN:"Vikings",NE:"Patriots",NO:"Saints",NYG:"Giants",NYJ:"Jets",PHI:"Eagles",PIT:"Steelers",SEA:"Seahawks",SF:"49ers",TB:"Buccaneers",TEN:"Titans",WAS:"Commanders"};
   function team(t,side){return '<div class="wt-score-team '+(choice===t?"is-pick":"")+'"><img class="wt-logo" src="'+logo(t)+'" alt="" loading="lazy"><span class="wt-score-team-label"><strong>'+esc(names[t]||t)+'</strong><small>'+esc(t)+(choice===t?' · MY PICK':'')+'</small></span><span class="wt-score-num">'+score(x,side)+'</span></div>';}
   const verdictText={correct:"Correct",incorrect:"Incorrect",tied:"Tied game",ahead:"Ahead",behind:"Behind",even:"Tied",upcoming:"Upcoming",unpicked:"",unknown:""}[outcome]||"";
   const myPlayers=window.WTManualFantasy?.gameRows?.(game,x)||"";
-  return '<article class="wt-score-game '+(active?"is-live":"")+' '+(final?"is-final":"")+'">'+
+  return '<article class="wt-score-game '+(active?"is-live":"")+' '+(final?"is-final":"")+' '+(expandedGames.has(game.id)?"is-expanded":"")+'">'+
     '<div class="wt-score-top"><span class="wt-score-week">NFL · WEEK 6</span><span class="wt-score-status '+(active?"is-live":final?"is-final":"")+'">'+esc(status)+'</span></div>'+
     '<div class="wt-score-teams">'+team(game.away,"away")+team(game.home,"home")+'</div>'+
     (choice?'<div class="wt-score-pick"><span>MY PICK <strong>'+esc(choice)+'</strong></span><span class="wt-pick-verdict wt-v-'+outcome+'">'+esc(verdictText)+'</span></div>':'')+
     (myPlayers?'<div class="wt-score-players">'+myPlayers+'</div>':'')+
+    (myPlayers&&compact?'<button type="button" class="wt-score-expand" data-score-expand="'+game.id+'" aria-expanded="'+expandedGames.has(game.id)+'">'+(expandedGames.has(game.id)?'Hide players':'Show players')+'</button>':'')+
     '</article>';
  }).join(""):'<div class="empty">No games in this view.</div>')+'</div>';
- return summary+seasonLine+status+filters+board;
+ return summary+seasonLine+status+filters+tools+board;
 }
  function ensure(){
  const active=document.querySelector(".tab.active")?.dataset.tab;
  if(active!=="home"&&active!=="picks"&&active!=="live")return;
  let section=document.getElementById("wt-scoreboard");
- if(!section){
+ if(!section&&active==="live"){
   section=document.createElement("section");
   section.className="section";
   section.id="wt-scoreboard";
@@ -123,7 +137,7 @@ function markup(){
   holder.innerHTML=mini(game);
  });
  const board=document.getElementById("wt-live-scoreboard");
- if(board)board.innerHTML=markup();
+ if(board){board.innerHTML=markup();window.WTStayAwake?.sync();}
 }
 const observer=new MutationObserver(()=>ensure());
 observer.observe(app,{childList:true});
@@ -144,8 +158,21 @@ async function refresh(){
 }
 document.addEventListener("click",e=>{
  if(e.target.closest("[data-score-refresh]")){refresh();return;}
+ if(e.target.closest("[data-live-density]")){
+  compact=!compact;
+  try{localStorage.setItem("wt-live-density",compact?"compact":"expanded");}catch{}
+  ensure();
+  return;
+ }
+ const expander=e.target.closest("[data-score-expand]");
+ if(expander){
+  const id=expander.dataset.scoreExpand;
+  if(expandedGames.has(id))expandedGames.delete(id);else expandedGames.add(id);
+  ensure();
+  return;
+ }
  const filter=e.target.closest("[data-live-filter]");
- if(filter&&["all","live","picked"].includes(filter.dataset.liveFilter)){viewFilter=filter.dataset.liveFilter;ensure();}
+ if(filter&&["all","live","pending","picked"].includes(filter.dataset.liveFilter)){viewFilter=filter.dataset.liveFilter;ensure();}
 });
 document.addEventListener("wt-fantasy-change",ensure);
 document.addEventListener("wt-manual-fantasy-change",ensure);
