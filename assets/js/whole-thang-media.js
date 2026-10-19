@@ -109,6 +109,7 @@
     });
     player.replaceChildren();
     loaded = false;
+    window.WTStayAwake?.setRadio(false);
     refreshRadio();
     status.textContent = "Radio stopped.";
   }
@@ -123,6 +124,7 @@
     iframe.setAttribute("loading", "eager");
     player.appendChild(iframe);
     loaded = true;
+    window.WTStayAwake?.setRadio(true);
     refreshRadio();
     status.textContent = "Player loaded from " + STATIONS[selected].provider + ". Use Play in the widget. If unavailable, choose Open at broadcaster. " + STATIONS[selected].description;
   }
