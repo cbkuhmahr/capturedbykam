@@ -75,3 +75,20 @@ body.studio-body{background:#efefeb;color:#141514;font-family:"Space Grotesk",Ar
  .studio-step:last-child{border-bottom:0}
  .shop-hero-grid{grid-template-columns:1fr}
 }
+
+/* Keep existing store functions but reduce presentation bulk. */
+.cbk-game-day{width:calc(100% - clamp(36px,10vw,140px));max-width:none;margin:24px auto 0;gap:18px;padding:22px;border:4px solid #141514;background:#252623}
+.cbk-game-day .studio-kicker{color:#f3693b}
+.cbk-game-day h2{font-family:"Space Grotesk",Arial,sans-serif;font-weight:700;letter-spacing:-.06em;font-size:clamp(1.6rem,3vw,2.8rem)}
+.cbk-game-day .button,.cbk-game-day input{border-radius:0}
+.cbk-gallery-section,.cbk-photo-section{margin-top:0;margin-bottom:0}
+.studio-body .cbk-project-card{min-height:205px}
+.studio-body .cbk-project-cover{min-height:200px}
+.studio-body .cbk-project-copy{padding:18px}
+.studio-body .cbk-project-copy h3{font-size:1.5rem}
+.studio-body .cbk-empty{min-height:100px}
+@media(max-width:600px){
+ .cbk-game-day{width:calc(100% - 30px);margin-top:15px;padding:16px;grid-template-columns:1fr}
+ .studio-body .cbk-project-card{grid-template-columns:1fr}
+ .studio-body .cbk-project-cover{min-height:200px}
+}
