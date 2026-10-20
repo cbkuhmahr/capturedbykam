@@ -1,0 +1,77 @@
+/* CBK unified secondary pages — compact CROX-inspired typography and square panel styling. */
+:root{--studio-ink:#141514;--studio-paper:#efefeb;--studio-warm:#e1e2dd;--studio-line:#141514;--studio-muted:#60625d;--studio-accent:#e65f34;--studio-sans:"Space Grotesk",Arial,sans-serif;--studio-serif:"Space Grotesk",Arial,sans-serif}
+body.studio-body{background:#efefeb;color:#141514;font-family:"Space Grotesk",Arial,sans-serif}
+.studio-shell{width:100%;max-width:none}
+.studio-header{background:#f5f5f1;border-bottom:4px solid #141514;backdrop-filter:none}
+.studio-header-inner{height:66px;padding:0 0 0 clamp(18px,3vw,42px)}
+.studio-brand{font-size:1.65rem;font-weight:700;letter-spacing:-.075em;white-space:nowrap}
+.studio-nav{gap:0;height:100%;font:600 .7rem "IBM Plex Mono",monospace;letter-spacing:0}
+.studio-nav>a{padding:0 clamp(13px,1.8vw,24px);height:100%;display:flex;align-items:center;border-left:1px solid #d9d9d3;opacity:1;white-space:nowrap}
+.studio-nav>a:hover{background:#141514;color:#fff;opacity:1}
+.studio-nav .studio-cta{background:#f3693b;border:0;border-left:4px solid #141514;padding:0 clamp(16px,2vw,28px);font-weight:700}
+.studio-mobile-panel{top:35px;background:#141514;box-shadow:0 15px 30px #0003}
+.studio-page-hero{padding:clamp(28px,4vw,65px) clamp(18px,5vw,70px);background:#f4f4f0;border-bottom:4px solid #141514}
+.studio-page-hero h1{font-family:"Space Grotesk",Arial,sans-serif;font-size:clamp(3rem,6vw,6.2rem);line-height:.92;font-weight:700;letter-spacing:-.085em;text-transform:uppercase}
+.studio-page-hero .studio-kicker{color:#a53b1b}
+.studio-page-hero p{font-size:1rem;line-height:1.5;max-width:58ch}
+.studio-kicker{font:600 .66rem/1.5 "IBM Plex Mono",monospace;letter-spacing:.08em}
+.studio-section{padding:clamp(30px,4vw,60px) clamp(18px,5vw,70px);border-bottom:4px solid #141514}
+.studio-section-head{margin-bottom:24px;gap:25px}
+.studio-section-head h2{font-family:"Space Grotesk",Arial,sans-serif;font-weight:700;letter-spacing:-.065em;line-height:.94;font-size:clamp(2.35rem,4.4vw,4.3rem);text-transform:uppercase}
+.studio-section-head p{line-height:1.5}
+.studio-button{border-radius:0;min-height:48px;font:600 .7rem "IBM Plex Mono",monospace;padding:0 18px;letter-spacing:.02em;transition:background .2s}
+.studio-button:hover{background:#f3693b;color:#151515}
+.studio-service-row{grid-template-columns:55px 1fr minmax(200px,.8fr);padding:18px 0;gap:16px}
+.studio-service-row h3{font-family:"Space Grotesk",Arial,sans-serif;font-size:clamp(1.6rem,2.5vw,2.6rem);font-weight:600;letter-spacing:-.05em}
+.studio-service-row p{line-height:1.5}
+.studio-quote{font-family:"Space Grotesk",Arial,sans-serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:600;letter-spacing:-.06em;line-height:1}
+.studio-copy{line-height:1.55}
+.studio-steps{border:2px solid #141514}
+.studio-step{border-right:4px solid #141514;background:#f4f4f0}
+.studio-step span{font-family:"IBM Plex Mono",monospace}
+.studio-body .booking-form{border:2px solid #141514;background:#f4f4f0;border-radius:0}
+.studio-body .booking-form input,.studio-body .booking-form select,.studio-body .booking-form textarea{border-radius:0}
+.studio-body .accordion-card,.studio-body .retainer-drawer{border:2px solid #141514;border-radius:0}
+.studio-body .cbk-gallery-section,.studio-body .cbk-photo-section{padding:clamp(24px,4vw,56px) clamp(18px,5vw,70px)}
+.studio-body .cbk-section-head h2{font-family:"Space Grotesk",Arial,sans-serif;font-weight:700;letter-spacing:-.065em;text-transform:uppercase}
+.studio-body .cbk-project-card{border:2px solid #141514;background:#f4f4f0;border-radius:0;box-shadow:none}
+.studio-body .cbk-project-copy h3,.studio-body .cbk-order-panel h2,.studio-body .cbk-payment-success h3{font-family:"Space Grotesk",Arial,sans-serif;font-weight:700;letter-spacing:-.05em}
+.studio-body .cbk-selection-bar{top:70px;background:#f4f4f0;border:2px solid #141514;backdrop-filter:none}
+.studio-body .cbk-order-panel{background:#efefeb}
+.studio-body .cbk-checkout-steps span{border-radius:0;background:#deded7}
+.studio-body .cbk-checkout-steps span.is-active{background:#141514;color:white}
+.studio-body .cbk-checkout-steps{margin-top:20px}
+.studio-footer{display:flex;background:#242522;color:#f5f5f1;align-items:flex-start;justify-content:space-between;padding:24px clamp(18px,5vw,70px) 28px;border-top:4px solid #f3693b}
+.studio-footer-brand strong{font-family:"Space Grotesk",Arial,sans-serif;font-size:1.6rem;letter-spacing:-.075em}
+.studio-footer-brand span{color:#d4d4ce;font:500 .63rem/1.5 "IBM Plex Mono",monospace;letter-spacing:0}
+.studio-footer-links{gap:12px 20px;font:600 .67rem/1.5 "IBM Plex Mono",monospace}
+.studio-footer-links a:hover{color:#f3693b}
+.studio-footer-links .studio-admin-link{display:none}
+.shop-compact-hero{padding-top:35px;padding-bottom:36px}
+.shop-compact-hero h1{font-size:clamp(3rem,6vw,5.8rem);max-width:none;line-height:.94}
+.shop-hero-pricing{border-top:4px solid #141514}
+.shop-hero-pricing span{font-family:"IBM Plex Mono",monospace;color:#a53b1b}
+.cbk-game-day{border-radius:0}
+.cbk-game-day h2,.cbk-section-head h2{font-family:"Space Grotesk",Arial,sans-serif;letter-spacing:-.06em}
+.cbk-game-day input,.cbk-game-day button,.cbk-game-day .button{border-radius:0}
+@media(max-width:840px){
+ .studio-header-inner{height:62px;padding:0 16px}
+ .studio-nav{display:none}
+ .studio-mobile-nav{display:block}
+ .studio-mobile-nav summary{font:700 .75rem "IBM Plex Mono",monospace}
+ .studio-section-head,.studio-split,.studio-form-wrap,.studio-retainer{grid-template-columns:1fr;gap:18px}
+ .studio-footer{display:grid;gap:23px}
+}
+@media(max-width:600px){
+ .studio-page-hero{padding:26px 17px}
+ .studio-page-hero h1{font-size:clamp(2.55rem,11vw,4.1rem)}
+ .studio-section{padding:27px 17px}
+ .studio-body .cbk-gallery-section,.studio-body .cbk-photo-section{padding:23px 15px}
+ .studio-service-row{grid-template-columns:36px 1fr;gap:10px}
+ .studio-service-row p{grid-column:2}
+ .studio-footer{padding:24px 16px}
+ .studio-steps{border-width:2px}
+ .studio-step{border-right:0;border-bottom:3px solid #141514}
+ .studio-step:last-child{border-bottom:0}
+ .shop-hero-grid{grid-template-columns:1fr}
+}
