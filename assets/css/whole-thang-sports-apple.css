@@ -234,3 +234,25 @@ main{padding:25px 21px 50px!important}
  .wt-live-filters{gap:5px!important;flex-wrap:wrap!important;margin-bottom:12px!important}
  .wt-live-filters .btn{padding:8px 12px!important;font-size:11px!important;min-height:34px!important}
 }
+
+
+/* Live NFL point spreads and over/under — read-only ESPN lines. */
+.wt-market-help{display:flex;gap:6px 16px;align-items:center;flex-wrap:wrap;margin:0 0 11px;padding:9px 13px;border:1px solid #303138;border-radius:11px;background:#17181c;color:#acaeb7;font-size:10px;line-height:1.45}
+.wt-market-help strong{font-size:10px;letter-spacing:.045em;color:#f0c979}
+.wt-market-line{display:flex;gap:6px 18px;flex-wrap:wrap;align-items:center;justify-content:space-between;border-top:1px solid #2f3036;padding:9px 1px 7px;margin:7px 0 0;color:#e6e7e9}
+.wt-market-item{display:flex;flex-direction:column;gap:4px;min-width:0}
+.wt-market-item small{font-size:9px!important;letter-spacing:.07em;color:#9ea0aa!important;font-weight:760}
+.wt-market-item strong{font-weight:780;font-size:12px!important;line-height:1.2;font-variant-numeric:tabular-nums;color:#f4f4f6;overflow-wrap:anywhere}
+.wt-market-provider{color:#8d9099!important;font-size:9px!important;margin-left:auto;white-space:nowrap}
+.wt-score-grid.is-compact .wt-market-line{margin:5px 0 0;padding:6px 0 3px;gap:4px 12px}
+.wt-score-grid.is-compact .wt-market-item small{font-size:8px!important}
+.wt-score-grid.is-compact .wt-market-item strong{font-size:11px!important}
+.wt-score-grid.is-compact .wt-market-provider{font-size:8px!important}
+.wt-card-score .wt-market-line{border-top:1px solid #35363a;padding:7px 0 0;margin:7px 0 0}
+.wt-card-score .wt-market-item strong{font-size:11px!important}
+@media(max-width:480px){
+ .wt-market-help{gap:5px 9px;padding:8px 10px;font-size:9px}
+ .wt-market-line{gap:6px 10px}
+ .wt-market-item strong{font-size:11px!important}
+ .wt-market-provider{width:100%;margin:0;text-align:left}
+}
