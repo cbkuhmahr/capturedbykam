@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/api/nfl-odds",
+      "destination": "/api/nfl-scores?mode=odds"
+    },
+    {
+      "source": "/api/nfl-fantasy-boxscore",
+      "destination": "/api/nfl-scores?mode=fantasy"
+    },
+    {
       "source": "/whole-thang",
       "destination": "/api/whole-thang"
     },

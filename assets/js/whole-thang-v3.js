@@ -428,7 +428,7 @@ document.addEventListener("click",async function(e){
  state={...EMPTY(),picks:Object.fromEntries(GAMES.filter(g=>[g.away,g.home].includes(v.picks[g.id])).map(g=>[g.id,v.picks[g.id]])),mnfMargin:validMargin(v.mnfMargin),locked:!!v.locked,homeEdge:[0,25,45,65,85].includes(Number(v.homeEdge))?Number(v.homeEdge):45};
  save();render();toast("Picks imported; official history unchanged.");
  }catch{toast("Invalid picks backup.");}break;
- case "reset":if(confirm("Clear Week "+activeWeek+" picks and settings? Verified results will stay.")){state=EMPTY();save();render();toast("Local Week 6 picks reset.");}break;
+ case "reset":if(confirm("Clear Week "+activeWeek+" picks and settings? Verified results will stay.")){state=EMPTY();save();render();toast("Current week picks reset.");}break;
  }
 });
 document.addEventListener("change",e=>{

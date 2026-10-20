@@ -166,7 +166,7 @@ async function refreshMarket() {
  fetchingMarket=true;
  const requestWeek=currentWeek;
  try{
-  const response=await fetch("/api/nfl-odds?week="+requestWeek+"&season=2026",{credentials:"same-origin"});
+  const response=await fetch("/api/nfl-scores?mode=odds&week="+requestWeek+"&season=2026",{credentials:"same-origin"});
   if(!response.ok)throw Error("Betting lines unavailable");
   const json=await response.json();
   if(!json.ok||!Array.isArray(json.games))throw Error("Invalid betting lines");

@@ -21,10 +21,10 @@ panel.innerHTML=[
 '<div class="wt-apple-top"><div><small>APPLE / CONNECT</small><h2>Share & Connect</h2></div><button class="wt-apple-close" data-apple="close" type="button" aria-label="Close sharing panel">×</button></div>',
 '<div class="wt-apple-scroll">',
 '<section class="wt-apple-section"><h3>01 / Messages</h3><p>Send your picks and verified results through the iPhone share sheet. Select Messages, then choose a recipient from your iPhone Contacts. Nothing is sent without your approval.</p>',
-'<div class="wt-apple-actions"><button class="wt-apple-btn primary" data-apple="picks" type="button">Share Week 6 picks</button><button class="wt-apple-btn" data-apple="season" type="button">Share season record</button></div>',
+'<div class="wt-apple-actions"><button class="wt-apple-btn primary" data-apple="picks" type="button">Share current picks</button><button class="wt-apple-btn" data-apple="season" type="button">Share season record</button></div>',
 '<label class="wt-apple-label" for="wt-share-week">Weekly results</label><div class="wt-apple-inline"><select id="wt-share-week"><option value="5">Week 5</option><option value="4">Week 4</option><option value="3">Week 3</option><option value="2">Week 2</option><option value="1">Week 1</option></select><button type="button" class="wt-apple-btn" data-apple="week">Share results</button></div>',
 '<div class="wt-apple-inline wt-apple-secondary"><button class="wt-apple-btn" data-apple="messages" type="button">Open Messages composer</button><button class="wt-apple-btn" data-apple="copy" type="button">Copy current summary</button></div></section>',
-'<section class="wt-apple-section"><h3>02 / Apple Calendar</h3><p>Subscribe to the public Week 6 NFL schedule and official pick deadline. Calendar handles updates to this feed when future schedules are published. Your appointments and private picks are never accessible to this subscription.</p>',
+'<section class="wt-apple-section"><h3>02 / Apple Calendar</h3><p>Subscribe to the current NFL schedule and official pick deadline. Calendar handles updates to this feed when future schedules are published. Your appointments and private picks are never accessible to this subscription.</p>',
 '<div class="wt-apple-actions"><a class="wt-apple-btn primary" href="webcal://www.capturedbykam.com/api/whole-thang-calendar" id="wt-calendar-subscribe">Subscribe in Apple Calendar</a><a class="wt-apple-btn" href="/api/whole-thang-calendar" target="_blank" rel="noopener">Open .ics calendar</a></div>',
 '<small class="wt-apple-tip">On iPhone, tap Subscribe. If the prompt does not appear, copy the calendar URL and use Calendar → Calendars → Add Calendar → Add Subscription Calendar.</small></section>',
 '<section class="wt-apple-section"><h3>03 / Contacts</h3><p>For Messages, your iPhone lets you choose recipients from Contacts directly. To choose someone before opening Messages, use a supported contact picker or import a vCard file on this device.</p>',
@@ -85,7 +85,7 @@ function setOpen(open){
 async function shareCurrent(kind){
  current=kind;
  let text, title;
- try{text=composed();title=kind==="picks"?"Whole Thang Week 6 picks":kind==="week"?"Whole Thang weekly results":"Whole Thang season results";}
+ try{text=composed();title=kind==="picks"?"Whole Thang Week "+snapshot().week+" picks":kind==="week"?"Whole Thang weekly results":"Whole Thang season results";}
  catch(err){note(err.message);return;}
  if(typeof navigator.share==="function"){
   try{await navigator.share({title,text});note("Share sheet opened. Messages controls the recipient and sending.");}

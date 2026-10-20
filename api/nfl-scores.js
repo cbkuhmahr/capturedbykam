@@ -136,7 +136,10 @@ async function weeklyHandler(req,res){
 };
 
 module.exports = async function handler(req,res) {
+  if(req.query?.mode==="odds")return require("../lib/nfl-odds")(req,res);
+  if(req.query?.mode==="fantasy")return require("../lib/nfl-fantasy-boxscore")(req,res);
   if(req.query?.mode==="week")return weeklyHandler(req,res);
+  if(req.query?.mode && req.query.mode!=="scores")return res.status(400).json({ok:false,error:"Invalid sports mode"});
   res.setHeader("X-Content-Type-Options", "nosniff");
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");

@@ -19,7 +19,7 @@ function match(p){
  const t=window.WTScouting?.teams?.[against];
  const rank=Number(p.rank)||0;
  if(rank>=1&&rank<=32){const factor=((16.5-rank)/15.5)*.055;return {against,factor,label:(rank<=10?"Favorable":rank>=24?"Difficult":"Neutral")+" (opponent rank "+rank+"/32)"};}
- if(!against)return {against:"",factor:0,label:"Bye / no scheduled Week 6 game"};
+ if(!against)return {against:"",factor:0,label:"Bye / no game scheduled this week"};
  if(!t?.games)return {against,factor:0,label:"Opponent strength unavailable"};
  const difference=p.pos==="DST"?22-t.pf/t.games:t.pa/t.games-22;
  const factor=Math.max(-.13,Math.min(.13,difference/40));
@@ -128,7 +128,7 @@ async function refreshBox(){
   const id=String(game.id),cached=box.get(id);
   if(busy.has(id)||cached&&Date.now()-cached.at<(game.state==="post"?900000:90000))continue;
   busy.add(id);
-  try{const r=await fetch("/api/nfl-fantasy-boxscore?event="+encodeURIComponent(id),{cache:"no-store"});
+  try{const r=await fetch("/api/nfl-scores?mode=fantasy&event="+encodeURIComponent(id),{cache:"no-store"});
    const result=await r.json();box.set(id,{at:Date.now(),data:result?.ok?result:{players:[]}});
   }catch{box.set(id,{at:Date.now(),data:{players:[]}});}
   finally{busy.delete(id);emit();}
