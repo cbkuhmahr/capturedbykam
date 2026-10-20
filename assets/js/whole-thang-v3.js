@@ -3,7 +3,7 @@
 const NAMES = {ARI:"Cardinals",ATL:"Falcons",BAL:"Ravens",BUF:"Bills",CAR:"Panthers",CHI:"Bears",CIN:"Bengals",CLE:"Browns",DAL:"Cowboys",DEN:"Broncos",DET:"Lions",GB:"Packers",HOU:"Texans",IND:"Colts",JAX:"Jaguars",KC:"Chiefs",LAC:"Chargers",LAR:"Rams",LV:"Raiders",MIA:"Dolphins",MIN:"Vikings",NE:"Patriots",NO:"Saints",NYG:"Giants",NYJ:"Jets",PHI:"Eagles",PIT:"Steelers",SEA:"Seahawks",SF:"49ers",TB:"Buccaneers",TEN:"Titans",WAS:"Commanders"};
 const LOGOS = {WAS:"wsh"};
 const OLD_KEY="whole-thang-v2", KEY="whole-thang-v3";
-const GAMES = [
+const LEGACY_GAMES = [
  ["SEA","DEN","Thursday","Thu · Oct 15","8:15 PM"],
  ["HOU","JAX","London","Sun · Oct 18","9:30 AM"],
  ["TEN","IND","Sunday Early","Sun · Oct 18","1:00 PM"],
@@ -19,6 +19,14 @@ const GAMES = [
  ["DAL","GB","Sunday Night","Sun · Oct 18","8:20 PM"],
  ["WAS","SF","Monday Night","Mon · Oct 19","8:15 PM"]
 ].map((a,i)=>({id:"w6-"+(i+1),away:a[0],home:a[1],group:a[2],day:a[3],time:a[4],neutral:a[2]==="London"}));
+let GAMES=LEGACY_GAMES;
+let activeWeek=6;
+let week6State=null;
+const WEEKLY_PREFIX="whole-thang-v3-2026-";
+const weekScores=new Map();
+const previousWeeks=new Map();
+let activatingWeek=false;
+let lastWeekCheck=0;
 const rawNode=document.getElementById("wt-history");
 if(!rawNode){document.getElementById("app").textContent="Historical data unavailable.";return;}
 const raw=JSON.parse(rawNode.textContent);
@@ -38,6 +46,7 @@ function safeLoad(){
 }
 function validMargin(v){return v===""||v==null?"":Number.isInteger(Number(v))&&Number(v)>=0&&Number(v)<=200?String(v):"";}
 let state=safeLoad(),tab="live",teamSort="rating",intelFilter="all";
+week6State=state;
 let cloudStatus="Connecting cloud…",initialCloudLoad=true,cloudTimer=null,localRevision=0;
 async function cloudRequest(action,payload={}){
  const r=await fetch("/api/whole-thang-sync",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...payload})});
@@ -46,22 +55,24 @@ async function cloudRequest(action,payload={}){
  return data;
 }
 function queueCloudSave(){
- if(initialCloudLoad)return;
+ if(initialCloudLoad||activatingWeek)return;
  if(cloudTimer)clearTimeout(cloudTimer);
  cloudTimer=setTimeout(async()=>{
-  const snapshot=JSON.parse(JSON.stringify(state));
+  const snapshot=JSON.parse(JSON.stringify(state)),week=activeWeek;
   try{
    cloudStatus="Syncing…";
-   await cloudRequest("save",{state:snapshot});
-   if(snapshot.updatedAt===state.updatedAt){cloudStatus="Cloud synced";render();}
-   else queueCloudSave();
+   if(week===6)await cloudRequest("save",{state:snapshot});
+   else await cloudRequest("saveWeek",{season:2026,week,state:snapshot});
+   if(week===activeWeek&&snapshot.updatedAt===state.updatedAt){cloudStatus="Cloud synced";render();}
+   else if(week===activeWeek)queueCloudSave();
   }catch{cloudStatus="Local backup · sync offline";render();}
  },400);
 }
 function save(){
  state.updatedAt=Date.now();
  localRevision++;
- try{localStorage.setItem(KEY,JSON.stringify(state));}catch{toast("Browser storage unavailable.");}
+ try{localStorage.setItem(activeWeek===6?KEY:WEEKLY_PREFIX+activeWeek,JSON.stringify(state));}catch{toast("Browser storage unavailable.");}
+ if(activeWeek===6)week6State=state;
  queueCloudSave();
 }
 async function initCloud(){
@@ -80,7 +91,9 @@ async function initCloud(){
    if(localRevision>started||state.updatedAt||Object.keys(state.picks).length||state.mnfMargin!=="")queueCloudSave();
   }
  }catch{initialCloudLoad=false;cloudStatus="Local backup · sync offline";}
+ week6State=state;
  render();
+ await checkWeek();
 }
 function escape(s){return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
 function logo(a){return "https://a.espncdn.com/i/teamlogos/nfl/500/"+(LOGOS[a]||a).toLowerCase()+".png";}
@@ -91,10 +104,10 @@ const pct=(w,l)=>w+l?(100*w/(w+l)):0;
 function weekStats(w){const a=HISTORY.filter(x=>x.week===w);const won=a.filter(x=>x.status==="W").length, lost=a.filter(x=>x.status==="L").length,tied=a.filter(x=>x.status==="T").length;return {week:w,wins:won,losses:lost,ties:tied,record:won+"–"+lost+(tied?"–"+tied+"T":""),rate:pct(won,lost),games:a};}
 const weeks=[1,2,3,4,5].map(weekStats);
 function weekSixResults(){
- const feed=Array.isArray(window.WTScoreGames)?window.WTScoreGames:[];
+ const feed=weekScores.get(6)||(activeWeek===6&&Array.isArray(window.WTScoreGames)?window.WTScoreGames:[]);
  const finals=new Map(feed.filter(g=>g&&g.state==="post").map(g=>[g.away+"-"+g.home,g]));
- const games=GAMES.map(game=>{
-  const pick=state.picks[game.id],r=finals.get(game.away+"-"+game.home);
+ const games=LEGACY_GAMES.map(game=>{
+  const pick=week6State?.picks?.[game.id],r=finals.get(game.away+"-"+game.home);
   if(!pick||![game.away,game.home].includes(pick)||!r||r.awayScore==null||r.homeScore==null)return null;
   const away=Number(r.awayScore),home=Number(r.homeScore);
   if(!Number.isFinite(away)||!Number.isFinite(home))return null;
@@ -104,9 +117,30 @@ function weekSixResults(){
  const wins=games.filter(g=>g.status==="W").length,losses=games.filter(g=>g.status==="L").length,ties=games.filter(g=>g.status==="T").length;
  return {week:6,games,wins,losses,ties,record:wins+"–"+losses+(ties?"–"+ties+"T":""),rate:pct(wins,losses)};
 }
+function gradeWeek(week,games,picks,scores){
+ const finals=new Map((scores||[]).filter(g=>g&&g.state==="post").map(g=>[g.away+"-"+g.home,g]));
+ const entries=(games||[]).map(game=>{
+  const pick=picks?.[game.id],result=finals.get(game.away+"-"+game.home);
+  if(!pick||![game.away,game.home].includes(pick)||!result||result.awayScore==null||result.homeScore==null)return null;
+  const away=Number(result.awayScore),home=Number(result.homeScore);
+  if(!Number.isFinite(away)||!Number.isFinite(home))return null;
+  const winner=away===home?"T":away>home?game.away:game.home;
+  return {week,away:game.away,home:game.home,pick,awayScore:away,homeScore:home,
+   status:winner==="T"?"T":winner===pick?"W":"L"};
+ }).filter(Boolean);
+ const wins=entries.filter(x=>x.status==="W").length,losses=entries.filter(x=>x.status==="L").length,ties=entries.filter(x=>x.status==="T").length;
+ return {week,games:entries,wins,losses,ties,record:wins+"–"+losses+(ties?"–"+ties+"T":""),rate:pct(wins,losses)};
+}
+function allScoredWeeks(){
+ const w6=weekSixResults();
+ const past=[w6,...[...previousWeeks.values()].sort((a,b)=>a.week-b.week)];
+ if(activeWeek>6)past.push(gradeWeek(activeWeek,GAMES,state.picks,weekScores.get(activeWeek)||[]));
+ return past.filter(x=>x.games.length);
+}
 function seasonTotals(){
- const w6=weekSixResults(),wins=summary.wins+w6.wins,losses=summary.losses+w6.losses,ties=summary.ties+w6.ties;
- return {wins,losses,ties,accuracy:pct(wins,losses).toFixed(2),record:wins+"–"+losses+"–"+ties+"T",week6:w6};
+ const w6=weekSixResults(),scored=allScoredWeeks();
+ const wins=summary.wins+scored.reduce((n,x)=>n+x.wins,0),losses=summary.losses+scored.reduce((n,x)=>n+x.losses,0),ties=summary.ties+scored.reduce((n,x)=>n+x.ties,0);
+ return {wins,losses,ties,accuracy:pct(wins,losses).toFixed(2),record:wins+"–"+losses+"–"+ties+"T",week6:w6,scored};
 }
 window.WTSeasonTotals=seasonTotals;
 function updateSeasonStrip(){
@@ -117,9 +151,9 @@ function updateSeasonStrip(){
 
 /* Current cloud-aware choices are exposed read-only for the optional Apple Share panel. */
 window.WTAppleSnapshot = function () {
- const totals=seasonTotals(),allWeeks=totals.week6.games.length?weeks.concat(totals.week6):weeks;
+ const totals=seasonTotals(),allWeeks=weeks.concat(totals.scored);
  return {
-  week: 6,
+  week: activeWeek,
   picks: GAMES.map(g => ({
    away: g.away, home: g.home, group: g.group, day: g.day,
    time: g.time, choice: state.picks[g.id] || ""
@@ -168,7 +202,8 @@ function teamStats(){
  return ts;
 }
 const TS=teamStats();
-window.WTScouting={teams:Object.fromEntries(Object.entries(TS).map(([id,t])=>[id,{pa:t.pa,pf:t.pf,games:t.games.length,elo:t.elo}])),games:GAMES.map(g=>({away:g.away,home:g.home,id:g.id,state:"pre"}))};
+function updateScouting(){window.WTScouting={teams:Object.fromEntries(Object.entries(TS).map(([id,t])=>[id,{pa:t.pa,pf:t.pf,games:t.games.length,elo:t.elo}])),games:GAMES.map(g=>({away:g.away,home:g.home,id:g.id,state:"pre"}))};}
+updateScouting();
 function forecast(g){
  const away=TS[g.away],home=TS[g.home];
  const advantage=g.neutral?0:state.homeEdge;
@@ -191,14 +226,14 @@ function render(){
  document.body.dataset.wtView=tab;
  document.querySelectorAll(".tab").forEach(b=>{b.classList.toggle("active",b.dataset.tab===tab);b.setAttribute("aria-selected",b.dataset.tab===tab?"true":"false");});
  updateSeasonStrip();
- const pages={home:homePage,live:()=>"",fantasy:()=>'<section class="wt-fantasy-page"><header class="wt-fantasy-page-head"><h2>Fantasy · Week 6</h2></header><div id="wt-manual-fantasy-root">'+(window.WTManualFantasy?.toolbar?.()||'<div class="empty">Loading roster…</div>')+'</div><section class="wt-fantasy-games-section"><h3>My players · NFL games</h3><div id="wt-fantasy-games"></div></section></section>',picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
+ const pages={home:homePage,live:()=>"",fantasy:()=>'<section class="wt-fantasy-page"><header class="wt-fantasy-page-head"><h2>Fantasy · Week ${activeWeek}</h2></header><div id="wt-manual-fantasy-root">'+(window.WTManualFantasy?.toolbar?.()||'<div class="empty">Loading roster…</div>')+'</div><section class="wt-fantasy-games-section"><h3>My players · NFL games</h3><div id="wt-fantasy-games"></div></section></section>',picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
  document.getElementById("app").innerHTML=(pages[tab]||homePage)();
 }
 function section(title,sub,body){return '<section class="section"><div class="section-head"><h2>'+title+'</h2></div>'+body+'</section>';}
 function cardMetric(label,value,foot){return '<div class="summary-item"><small>'+label+'</small><strong>'+value+'</strong></div>';}
 function homePage(){
  const picked=GAMES.filter(g=>state.picks[g.id]).length;
- return section("Week 6","",'<div class="panel focus-row"><div class="focus-copy"><strong>'+picked+' of '+GAMES.length+' picks saved</strong><span>SEA @ DEN · Thu 8:15 PM ET</span></div><div class="counter">'+picked+'/'+GAMES.length+'</div></div>'+
+ return section("Week "+activeWeek,"",'<div class="panel focus-row"><div class="focus-copy"><strong>'+picked+' of '+GAMES.length+' picks saved</strong><span>"+(GAMES[0]?escape(GAMES[0].away+" @ "+GAMES[0].home+" · "+GAMES[0].day+" "+GAMES[0].time+" ET"):"Schedule loading")+" </span></div><div class="counter">'+picked+'/'+GAMES.length+'</div></div>'+
  '<div class="action-row"><button class="btn primary" data-go="picks">Edit picks</button><button class="btn" data-go="fantasy">Fantasy players</button><button class="btn" data-go="intel">Matchups</button></div>');
 }
 function pickCard(f){
@@ -209,14 +244,14 @@ function pickCard(f){
 }
 function picksPage(){
  const forecasts=allForecasts(),groups=[...new Set(forecasts.map(f=>f.group))];
- return section("Week 6 Picks","",
+ return section("Week "+activeWeek+" Picks","",
  '<div class="wt-edit-toolbar" role="group" aria-label="Pick controls">'+
  '<button type="button" class="btn" data-action="edit" '+(!state.locked?'disabled':'')+'>Edit picks</button>'+
  '<button type="button" class="btn primary" data-action="save-lock" '+(state.locked?'disabled':'')+'>Save & Lock</button>'+
  '<button type="button" class="btn" data-action="save">Save picks</button>'+
  '<span class="wt-cloud-status" role="status">'+escape(cloudStatus)+'</span></div>'+
  groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
- section("Monday Night Tiebreaker","",'<div class="tiebreak-grid"><div class="field"><label>Winning margin · WAS @ SF</label><input aria-label="MNF predicted winning margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?'disabled':'')+' placeholder="Margin"></div></div>');
+ section("Monday Night Tiebreaker","",'<div class="tiebreak-grid"><div class="field"><label>Winning margin · "+(GAMES.filter(g=>g.group==="Monday Night").map(g=>g.away+" @ "+g.home).join(" / ")||"Monday Night Football")+"</label><input aria-label="MNF predicted winning margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?'disabled':'')+' placeholder="Margin"></div></div>');
 }
 function intelCard(f){
  const chosen=state.picks[f.id];
@@ -232,7 +267,7 @@ function intelPage(){
  const sorted=allForecasts().sort((a,b)=>b.probability-a.probability);
  const filtered=sorted.filter(f=>intelFilter==="close"?f.probability<.56:intelFilter==="against"?state.picks[f.id]&&state.picks[f.id]!==f.choice:true);
  const close=sorted.filter(f=>f.probability<.56).length,against=sorted.filter(f=>state.picks[f.id]&&state.picks[f.id]!==f.choice).length;
- return section("The Workhorse","Week 6 · data-driven matchup research",
+ return section("The Workhorse","Week "+activeWeek+" · data-driven matchup research",
  '<div class="wt-intro"><span class="wt-model-tag">ELO-STYLE • EXPLAINABLE</span><h3>See the evidence before the pick.</h3><p>79 completed games drive the team ratings. Compare opponent strength, recent performance, personal picks, and model estimates. These probabilities are preliminary, uncalibrated estimates—not guarantees.</p></div>'+
  '<div class="wt-info-bar"><span>'+close+' near-tossups</span><span>'+against+' disagreements with your selections</span></div>'+
  '<div class="wt-controls"><label>Home field rating edge <select id="homeEdge" aria-label="Home-field rating edge">'+[0,25,45,65,85].map(n=>'<option value="'+n+'" '+(state.homeEdge===n?"selected":"")+'>'+n+' Elo points</option>').join("")+'</select></label><label>Scouting view <select id="intelFilter"><option value="all" '+(intelFilter==="all"?"selected":"")+'>All games · strongest first</option><option value="close" '+(intelFilter==="close"?"selected":"")+'>Near-tossups</option><option value="against" '+(intelFilter==="against"?"selected":"")+'>My picks vs model</option></select></label></div>'+
@@ -255,20 +290,20 @@ function teamsPage(){
  '<div class="note"><strong>Definitions:</strong> PD = point differential in the 79 imported results; SOS = average final opponent win percentage; grade is a preliminary rating tier, not an official NFL grade. Personal success picking a team is shown separately from the forecast, to avoid treating your history as proof of future results.</div>';
 }
 function historyPage(){
- const t=seasonTotals(),has6=t.week6.games.length>0,all=has6?weeks.concat(t.week6):weeks;
+ const t=seasonTotals(),all=weeks.concat(t.scored);
  return section("Your Pick History","",
  '<div class="panel summary-grid">'+cardMetric("Wins",String(t.wins),"Correct")+cardMetric("Losses",String(t.losses),"Incorrect")+cardMetric("Ties",String(t.ties),"No winner")+'</div>'+
- '<div class="wt-history-season-line">Overall <strong>'+t.record+'</strong><span>'+t.accuracy+'% accuracy</span><small>'+(79+t.week6.games.length)+' graded picks</small></div>'+
- '<div class="wt-history-weeks">'+all.map(w=>'<details class="wt-week" '+(w.week===(has6?6:5)?"open":"")+'><summary><span><strong>Week '+w.week+'</strong><small>'+w.games.length+(w.week===6?" final results":" selections")+'</small></span><strong>'+w.record+'</strong><span>'+fmt(w.rate)+'%</span></summary><div class="wt-history-table"><table><thead><tr><th>Game</th><th>Pick</th><th>Final</th><th>Grade</th></tr></thead><tbody>'+
+ '<div class="wt-history-season-line">Overall <strong>'+t.record+'</strong><span>'+t.accuracy+'% accuracy</span><small>'+(79+t.scored.reduce((n,w)=>n+w.games.length,0))+' graded picks</small></div>'+
+ '<div class="wt-history-weeks">'+all.map(w=>'<details class="wt-week" '+(w.week===(all.length?all.at(-1).week:5)?"open":"")+'><summary><span><strong>Week '+w.week+'</strong><small>'+w.games.length+(w.week===6?" final results":" selections")+'</small></span><strong>'+w.record+'</strong><span>'+fmt(w.rate)+'%</span></summary><div class="wt-history-table"><table><thead><tr><th>Game</th><th>Pick</th><th>Final</th><th>Grade</th></tr></thead><tbody>'+
  w.games.map(g=>'<tr><td>'+g.away+' @ '+g.home+'</td><td><strong>'+g.pick+'</strong></td><td>'+g.awayScore+'–'+g.homeScore+'</td><td><span class="'+outcomeClass(g)+'">'+(g.status==="W"?"✓ Win":g.status==="L"?"✕ Loss":"T Tie")+'</span></td></tr>').join("")+'</tbody></table></div></details>').join("")+'</div>')+
- '<div class="note"><strong>Weeks 1–5:</strong> 54–24–1T verified. Week 6 completed picks are added from live final scores. Tied games do not count toward accuracy.</div>';
+ '<div class="note"><strong>Weeks 1–5:</strong> 54–24–1T verified. Later completed picks are graded from NFL final scores and your saved selections. Tied games do not count toward accuracy.</div>';
 }
 function dataPage(){
- const json=JSON.stringify({version:3,scope:"browser-picks-only",week:6,...state},null,2);
+ const json=JSON.stringify({version:3,scope:"browser-picks-only",week:activeWeek,...state},null,2);
  return section("Data / Backup","Secure cloud sync and local backup",
- '<div class="note"><strong>Verified history cannot be overwritten by imported backups.</strong> Week 6 picks sync across signed-in devices through the private admin database when online. Current status: '+escape(cloudStatus)+'. A local browser backup and manual JSON export remain available when offline.</div>'+
+ '<div class="note"><strong>Verified history cannot be overwritten by imported backups.</strong> Weekly picks sync across signed-in devices through the private admin database when online. Current status: '+escape(cloudStatus)+'. A local browser backup and manual JSON export remain available when offline.</div>'+
  '<div class="data-grid wt-data-grid"><div class="field"><label>Export local picks</label><textarea readonly id="exportBox">'+escape(json)+'</textarea><div class="action-row"><button class="btn" data-action="copy">Copy backup</button></div></div><div class="field"><label>Import local picks</label><textarea id="importBox" placeholder="Paste WHOLE THANG backup JSON"></textarea><div class="action-row"><button class="btn primary" data-action="import">Import picks</button><button class="btn danger" data-action="reset">Reset local picks</button></div></div></div>')+
- '<div class="note"><strong>Data source:</strong> Supplied Week 1–5 pick log and final scores, last updated October 12, 2026. All 79 selections are preserved as historical data. Week 6 completed picks are graded automatically from final game scores.</div>';
+ '<div class="note"><strong>Data source:</strong> Supplied Week 1–5 pick log and final scores, last updated October 12, 2026. All 79 selections are preserved as historical data. Additional completed picks are graded automatically from final NFL scores.</div>';
 }
 function switchTab(next){if(!["home","live","fantasy","picks","intel","teams","history","data"].includes(next))return;tab=next;render();const m=document.getElementById("wt-more-menu"),b=document.getElementById("wt-more-toggle");if(m)m.hidden=true;if(b)b.setAttribute("aria-expanded","false");window.scrollTo({top:0,behavior:"smooth"});}
 document.querySelectorAll(".tab").forEach(el=>el.addEventListener("click",()=>switchTab(el.dataset.tab)));
@@ -299,7 +334,7 @@ document.addEventListener("click",async function(e){
  state={...EMPTY(),picks:Object.fromEntries(GAMES.filter(g=>[g.away,g.home].includes(v.picks[g.id])).map(g=>[g.id,v.picks[g.id]])),mnfMargin:validMargin(v.mnfMargin),locked:!!v.locked,homeEdge:[0,25,45,65,85].includes(Number(v.homeEdge))?Number(v.homeEdge):45};
  save();render();toast("Picks imported; official history unchanged.");
  }catch{toast("Invalid picks backup.");}break;
- case "reset":if(confirm("Clear Week 6 browser picks and settings? Verified results will stay.")){state=EMPTY();save();render();toast("Local Week 6 picks reset.");}break;
+ case "reset":if(confirm("Clear Week "+activeWeek+" picks and settings? Verified results will stay.")){state=EMPTY();save();render();toast("Local Week 6 picks reset.");}break;
  }
 });
 document.addEventListener("change",e=>{
@@ -318,7 +353,7 @@ document.addEventListener("click",event=>{
  if(!event.target.closest(".wt-more-wrap")){menu.hidden=true;toggle.setAttribute("aria-expanded","false");}
 });
 document.addEventListener("keydown",event=>{if(event.key==="Escape"){const m=document.getElementById("wt-more-menu"),b=document.getElementById("wt-more-toggle");if(m)m.hidden=true;if(b)b.setAttribute("aria-expanded","false");}});
-document.addEventListener("wt-scores-ready",()=>{if(tab==="history")render();else updateSeasonStrip();});
+document.addEventListener("wt-scores-ready",()=>{if(activeWeek===6&&Array.isArray(window.WTScoreGames))weekScores.set(6,window.WTScoreGames);if(activeWeek>6&&Array.isArray(window.WTScoreGames))weekScores.set(activeWeek,window.WTScoreGames);if(tab==="history")render();else updateSeasonStrip();});
 render();
 initCloud();
 })();
