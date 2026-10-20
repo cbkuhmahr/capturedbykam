@@ -116,7 +116,7 @@ function restoreRemoteWeek(remote,games){
 async function historicalWeek(week){
  if(weekScores.has(week)&&week<7)return;
  try{
-  const res=await fetch("/api/nfl-week?week="+week,{credentials:"same-origin"});
+  const res=await fetch("/api/nfl-scores?mode=week&week="+week,{credentials:"same-origin"});
   const data=await res.json();
   if(!res.ok||!data.ok||!Array.isArray(data.games)||data.games.length<10)return;
   weekScores.set(week,data.games);
@@ -135,7 +135,7 @@ async function checkWeek(){
  lastWeekCheck=Date.now();
  let response,feed;
  try{
-  response=await fetch("/api/nfl-week",{cache:"no-store",credentials:"same-origin"});
+  response=await fetch("/api/nfl-scores?mode=week",{cache:"no-store",credentials:"same-origin"});
   feed=await response.json();
   if(!response.ok||!feed.ok||!Number.isInteger(feed.week)||!Array.isArray(feed.games)||feed.games.length<10)return;
  }catch{return;}
