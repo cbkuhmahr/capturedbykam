@@ -173,3 +173,7 @@ body.cbk-grid-page{margin:0;color:var(--cbk-ink);background:var(--cbk-seam);font
 .cbk-footer-info,.cbk-footer-lead{padding:24px 19px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cbk-image-tile img,.cbk-entry-link,.cbk-service,.cbk-nav>a{transition:none}}
+
+/* Type safety: never create a surprise fourth line in the hero. */
+.cbk-hero h1{max-width:none;text-wrap:initial}
+@media(max-width:480px){.cbk-hero h1{font-size:clamp(2.95rem,11vw,4.5rem)}}
