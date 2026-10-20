@@ -14,6 +14,7 @@ const names={WAS:"wsh"};
 const app=document.getElementById("app");
 if(!app)return;
 let live=new Map(),state="loading",updatedAt="",fetching=false,viewFilter="all";
+let market=new Map(),marketState="loading",marketUpdatedAt="",fetchingMarket=false;
 let compact=(()=>{
  try{
   const saved=localStorage.getItem("wt-live-density");
@@ -26,6 +27,23 @@ const expandedGames=new Set();
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const logo=t=>"https://a.espncdn.com/i/teamlogos/nfl/500/"+(names[t]||t).toLowerCase()+".png";
 const get=g=>live.get(g.away+"-"+g.home)||null;
+const getMarket=g=>market.get(g.away+"-"+g.home)||null;
+function displaySpread(value) {
+ if(value===null||value===undefined||!Number.isFinite(value))return "—";
+ if(value===0)return "PK";
+ return (value>0?"+":"")+value.toFixed(1).replace(/\.0$/,"");
+}
+function marketLine(game) {
+ const line=getMarket(game);
+ const spread=line?.awaySpread!==null&&line?.awaySpread!==undefined&&
+  line?.homeSpread!==null&&line?.homeSpread!==undefined
+  ?game.away+" "+displaySpread(line.awaySpread)+" / "+game.home+" "+displaySpread(line.homeSpread):"Unavailable";
+ const total=Number.isFinite(line?.overUnder)?line.overUnder.toFixed(1).replace(/\.0$/,""):"Unavailable";
+ return '<div class="wt-market-line" aria-label="Pregame point spread and over under"><span class="wt-market-item"><small>POINT SPREAD</small><strong>'+esc(spread)+'</strong></span>'+
+ '<span class="wt-market-item"><small>OVER / UNDER</small><strong>'+esc(total)+(total!=="Unavailable"?" pts":"")+'</strong></span>'+
+ (line?.provider?'<small class="wt-market-provider">'+esc(line.provider)+'</small>':"")+'</div>';
+}
+
 function picks(){
  try{
   const raw=JSON.parse(localStorage.getItem("whole-thang-v3")||"{}");
@@ -42,7 +60,8 @@ function label(g){
 function score(g,side){return g&&g.state!=="pre"&&Number.isFinite(g[side+"Score"])?g[side+"Score"]:"—";}
 function mini(game){
  const g=get(game);
- return g&&g.state!=="pre"?'<strong>'+esc(label(g))+'</strong> · '+game.away+' '+score(g,"away")+' – '+game.home+' '+score(g,"home"):"";
+ const scoreText=g&&g.state!=="pre"?'<strong>'+esc(label(g))+'</strong> · '+game.away+' '+score(g,"away")+' – '+game.home+' '+score(g,"home"):"";
+ return (scoreText?'<div>'+scoreText+'</div>':"")+marketLine(game);
 }
 function verdict(game, result, choice) {
  if(!choice)return "unpicked";
@@ -95,6 +114,7 @@ function markup(){
  '</div>';
  const status='<div class="wt-score-meta"><span class="'+(state==="error"?"wt-score-error":"")+'">'+esc(info||(stamp?"Updated "+stamp:"Scores ready"))+'</span>'+
  '<button type="button" class="btn wt-score-refresh" data-score-refresh="1" '+(fetching?"disabled":"")+'>'+(fetching?"Updating…":"↻ Refresh scores")+'</button></div>';
+ const marketHelp='<div class="wt-market-help" aria-label="Betting lines explained"><strong>ODDS GUIDE</strong> <span>−3.5 = favored by 3.5</span><span>+3.5 = underdog by 3.5</span><span>O/U = combined points</span></div>';
  const board='<div class="wt-score-grid '+(compact?'is-compact':'')+'">'+(shown.length?shown.map(({game,result:x,choice,verdict:outcome})=>{
   const active=x&&x.state==="in",final=x&&x.state==="post";
   const status=active?label(x):final?"FINAL":game.day+" · "+game.time+" ET";
@@ -104,13 +124,13 @@ function markup(){
   const myPlayers=window.WTManualFantasy?.gameRows?.(game,x)||"";
   return '<article class="wt-score-game '+(active?"is-live":"")+' '+(final?"is-final":"")+' '+(expandedGames.has(game.id)?"is-expanded":"")+'">'+
     '<div class="wt-score-top"><span class="wt-score-week">NFL · WEEK 6</span><span class="wt-score-status '+(active?"is-live":final?"is-final":"")+'">'+esc(status)+'</span></div>'+
-    '<div class="wt-score-teams">'+team(game.away,"away")+team(game.home,"home")+'</div>'+
+    '<div class="wt-score-teams">'+team(game.away,"away")+team(game.home,"home")+'</div>'+marketLine(game)+
     (choice?'<div class="wt-score-pick"><span>MY PICK <strong>'+esc(choice)+'</strong></span><span class="wt-pick-verdict wt-v-'+outcome+'">'+esc(verdictText)+'</span></div>':'')+
     (myPlayers?'<div class="wt-score-players">'+myPlayers+'</div>':'')+
     (myPlayers&&compact?'<button type="button" class="wt-score-expand" data-score-expand="'+game.id+'" aria-expanded="'+expandedGames.has(game.id)+'">'+(expandedGames.has(game.id)?'Hide players':'Show players')+'</button>':'')+
     '</article>';
  }).join(""):'<div class="empty">No games in this view.</div>')+'</div>';
- return summary+seasonLine+status+filters+tools+board;
+ return summary+seasonLine+status+filters+tools+marketHelp+board;
 }
  function ensure(){
  const active=document.querySelector(".tab.active")?.dataset.tab;
@@ -139,6 +159,19 @@ function markup(){
  const board=document.getElementById("wt-live-scoreboard");
  if(board){board.innerHTML=markup();window.WTStayAwake?.sync();}
 }
+async function refreshMarket() {
+ if(fetchingMarket)return;
+ fetchingMarket=true;
+ try{
+  const response=await fetch("/api/nfl-odds?week=6&season=2026",{credentials:"same-origin"});
+  if(!response.ok)throw Error("Betting lines unavailable");
+  const json=await response.json();
+  if(!json.ok||!Array.isArray(json.games))throw Error("Invalid betting lines");
+  market=new Map(json.games.filter(g=>g&&g.away&&g.home).map(g=>[g.away+"-"+g.home,g.odds||null]));
+  marketUpdatedAt=json.updatedAt||"";
+  marketState="ready";
+ }catch{marketState="error";}finally{fetchingMarket=false;ensure();}
+}
 const observer=new MutationObserver(()=>ensure());
 observer.observe(app,{childList:true});
 async function refresh(){
@@ -157,7 +190,7 @@ async function refresh(){
  finally{fetching=false;ensure();}
 }
 document.addEventListener("click",e=>{
- if(e.target.closest("[data-score-refresh]")){refresh();return;}
+ if(e.target.closest("[data-score-refresh]")){refresh();refreshMarket();return;}
  if(e.target.closest("[data-live-density]")){
   compact=!compact;
   try{localStorage.setItem("wt-live-density",compact?"compact":"expanded");}catch{}
@@ -176,7 +209,8 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("wt-fantasy-change",ensure);
 document.addEventListener("wt-manual-fantasy-change",ensure);
-document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh();});
-ensure();refresh();
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){refresh();refreshMarket();}});
+ensure();refresh();refreshMarket();
 setInterval(()=>{if(!document.hidden)refresh();},45000);
+setInterval(()=>{if(!document.hidden)refreshMarket();},180000);
 })();
