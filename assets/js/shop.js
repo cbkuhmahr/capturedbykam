@@ -75,7 +75,6 @@
             <h3>${escapeHtml(project.title)}</h3>
             <p>${escapeHtml(project.description || "View the gallery and choose your favorites.")}</p>
             <div class="cbk-project-bottom">
-              <strong>$${(Number(project.package_price) / Math.max(Number(project.package_size) - 1, 1)).toFixed(2)} each · ${project.package_size} for $${Number(project.package_price).toFixed(0)} · +$${Number(project.extra_photo_price || 0).toFixed(0)} each after ${project.package_size}</strong>
               <span class="cbk-gallery-links"><a href="gallery.html?project=${encodeURIComponent(project.slug)}">View Photos →</a><a href="qr.html?project=${encodeURIComponent(project.slug)}&label=${encodeURIComponent(project.title)}" aria-label="Open printable QR code for ${escapeHtml(project.title)}">Event QR ↗</a><button type="button" class="cbk-native-share" data-share-gallery="${escapeHtml(project.slug)}">Share in Messages</button></span>
             </div>
           </div>
