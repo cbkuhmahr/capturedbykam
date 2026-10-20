@@ -7,7 +7,8 @@ const WEEK_MS=7*86400000;
 const ALIASES={WSH:"WAS",JAC:"JAX",LA:"LAR",STL:"LAR",OAK:"LV",SD:"LAC"};
 const fix=v=>ALIASES[String(v||"").toUpperCase()]||String(v||"").toUpperCase();
 const W6=["SEA-DEN","HOU-JAX","TEN-IND","CAR-PHI","PIT-TB","BAL-CLE","NO-NYG","CHI-ATL","NYJ-NE","ARI-LAR","LAC-KC","BUF-LV","DAL-GB","WAS-SF"];
-const et=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true});
+const dateET=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",weekday:"short",month:"short",day:"numeric"});
+const timeET=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",hour:"numeric",minute:"2-digit",hour12:true});
 const dayET=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",weekday:"long",hour:"numeric",hourCycle:"h23"});
 function groupFor(date,neutral){
  const parts=dayET.formatToParts(date),day=parts.find(p=>p.type==="weekday")?.value||"Sunday";
@@ -38,10 +39,8 @@ function game(event,week){
  const id=week===6?"w6-"+(W6.indexOf(a+"-"+h)+1):"w"+week+"-"+String(event.id||"");
  if(week===6&&W6.indexOf(a+"-"+h)===-1)return null;
  if(week!==6&&!/^w\d{1,2}-\d{5,15}$/.test(id))return null;
- const display=et.format(date);
- const split=display.match(/^(\w+),?\s+(\w+\s+\d+)\s+at\s+(.+)$/);
- const day=split?split[1]+" · "+split[2]:display;
- const time=split?split[3]:display.split(" at ").at(-1);
+ const day=dateET.format(date).replace(",", " ·").replace(",", "");
+ const time=timeET.format(date);
  return {id,away:a,home:h,group:groupFor(date,!!c.neutralSite),day,time,neutral:!!c.neutralSite,
   kickoff:date.toISOString(),state,completed:!!type.completed,
   awayScore:state==="pre"?null:cleanScore(away.score),
