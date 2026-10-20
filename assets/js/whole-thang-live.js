@@ -1,7 +1,7 @@
 (() => {
 "use strict";
 // Read-only live-score layer: it never changes WholeThang's saved picks or game history.
-const GAMES=[
+let GAMES=[
 ["SEA","DEN","Thu · Oct 15","8:15 PM"],["HOU","JAX","Sun · Oct 18","9:30 AM"],
 ["TEN","IND","Sun · Oct 18","1:00 PM"],["CAR","PHI","Sun · Oct 18","1:00 PM"],
 ["PIT","TB","Sun · Oct 18","1:00 PM"],["BAL","CLE","Sun · Oct 18","1:00 PM"],
@@ -10,6 +10,7 @@ const GAMES=[
 ["LAC","KC","Sun · Oct 18","4:25 PM"],["BUF","LV","Sun · Oct 18","4:25 PM"],
 ["DAL","GB","Sun · Oct 18","8:20 PM"],["WAS","SF","Mon · Oct 19","8:15 PM"]
 ].map((g,i)=>({id:"w6-"+(i+1),away:g[0],home:g[1],day:g[2],time:g[3]}));
+let currentWeek=6;
 const names={WAS:"wsh"};
 const app=document.getElementById("app");
 if(!app)return;
@@ -46,7 +47,7 @@ function marketLine(game) {
 
 function picks(){
  try{
-  const raw=JSON.parse(localStorage.getItem("whole-thang-v3")||"{}");
+  const raw=JSON.parse(localStorage.getItem(currentWeek===6?"whole-thang-v3":"whole-thang-v3-2026-"+currentWeek)||"{}");
   return raw&&typeof raw.picks==="object"?raw.picks:{};
  }catch{return {};}
 }
@@ -98,8 +99,8 @@ function markup(){
  if(liveAhead||liveBehind)tallyNote+=" · In play: "+liveAhead+" ahead, "+liveBehind+" behind";
  if(state==="loading"&&!updatedAt)tallyNote="Loading scores…";
  if(state==="error")tallyNote=updatedAt?"Last available · "+tallyNote:"Scores temporarily unavailable";
- const summary='<section class="wt-score-summary" aria-label="Week 6 running pick tally">'+
-  '<div class="wt-score-summary-title"><span>WEEK 6 · LIVE TALLY</span><strong>Your results</strong></div>'+
+ const summary='<section class="wt-score-summary" aria-label="Week '+currentWeek+' running pick tally">'+
+  '<div class="wt-score-summary-title"><span>WEEK '+currentWeek+' · LIVE TALLY</span><strong>Your results</strong></div>'+
   '<div class="wt-score-tally wt-score-tally-right"><small>✓ CORRECT</small><strong>'+(displayable?right:"—")+'</strong></div>'+
   '<div class="wt-score-tally wt-score-tally-wrong"><small>✕ WRONG</small><strong>'+(displayable?wrong:"—")+'</strong></div>'+
   '<div class="wt-score-summary-note" role="status" aria-live="polite">'+esc(tallyNote)+'</div></section>';
@@ -123,7 +124,7 @@ function markup(){
   const verdictText={correct:"Correct",incorrect:"Incorrect",tied:"Tied game",ahead:"Ahead",behind:"Behind",even:"Tied",upcoming:"Upcoming",unpicked:"",unknown:""}[outcome]||"";
   const myPlayers=window.WTManualFantasy?.gameRows?.(game,x)||"";
   return '<article class="wt-score-game '+(active?"is-live":"")+' '+(final?"is-final":"")+' '+(expandedGames.has(game.id)?"is-expanded":"")+'">'+
-    '<div class="wt-score-top"><span class="wt-score-week">NFL · WEEK 6</span><span class="wt-score-status '+(active?"is-live":final?"is-final":"")+'">'+esc(status)+'</span></div>'+
+    '<div class="wt-score-top"><span class="wt-score-week">NFL · WEEK '+currentWeek+'</span><span class="wt-score-status '+(active?"is-live":final?"is-final":"")+'">'+esc(status)+'</span></div>'+
     '<div class="wt-score-teams">'+team(game.away,"away")+team(game.home,"home")+'</div>'+marketLine(game)+
     (choice?'<div class="wt-score-pick"><span>MY PICK <strong>'+esc(choice)+'</strong></span><span class="wt-pick-verdict wt-v-'+outcome+'">'+esc(verdictText)+'</span></div>':'')+
     (myPlayers?'<div class="wt-score-players">'+myPlayers+'</div>':'')+
@@ -145,7 +146,8 @@ function markup(){
  }
  const cards=app.querySelectorAll(".wt-game-card");
  cards.forEach((card,i)=>{
-  const game=GAMES[i];
+  const id=card.querySelector("[data-pick]")?.dataset.pick;
+  const game=GAMES.find(g=>g.id===id)||GAMES[i];
   if(!game)return;
   let holder=card.querySelector(".wt-card-score");
   if(!holder){
@@ -162,11 +164,13 @@ function markup(){
 async function refreshMarket() {
  if(fetchingMarket)return;
  fetchingMarket=true;
+ const requestWeek=currentWeek;
  try{
-  const response=await fetch("/api/nfl-odds?week=6&season=2026",{credentials:"same-origin"});
+  const response=await fetch("/api/nfl-odds?week="+requestWeek+"&season=2026",{credentials:"same-origin"});
   if(!response.ok)throw Error("Betting lines unavailable");
   const json=await response.json();
   if(!json.ok||!Array.isArray(json.games))throw Error("Invalid betting lines");
+  if(requestWeek!==currentWeek)return;
   market=new Map(json.games.filter(g=>g&&g.away&&g.home).map(g=>[g.away+"-"+g.home,g.odds||null]));
   marketUpdatedAt=json.updatedAt||"";
   marketState="ready";
@@ -177,13 +181,15 @@ observer.observe(app,{childList:true});
 async function refresh(){
  if(fetching)return;
  fetching=true;ensure();
+ const requestWeek=currentWeek;
  try{
-  const response=await fetch("/api/nfl-scores?week=6&season=2026",{cache:"no-store",credentials:"same-origin"});
+  const response=await fetch("/api/nfl-scores?week="+requestWeek+"&season=2026",{cache:"no-store",credentials:"same-origin"});
   if(!response.ok)throw Error("Score request failed");
   const json=await response.json();
   if(!json.ok||!Array.isArray(json.games))throw Error("Invalid score format");
   const next=new Map(json.games.filter(g=>g&&typeof g.away==="string"&&typeof g.home==="string").map(g=>[g.away+"-"+g.home,g]));
   if(!GAMES.some(g=>next.has(g.away+"-"+g.home)))throw Error("No matching matchups");
+  if(requestWeek!==currentWeek)return;
   live=next;updatedAt=json.updatedAt||new Date().toISOString();state="ready";
   window.WTScoreGames=json.games;document.dispatchEvent(new Event("wt-scores-ready"));
  }catch{state="error";}
@@ -206,6 +212,16 @@ document.addEventListener("click",e=>{
  }
  const filter=e.target.closest("[data-live-filter]");
  if(filter&&["all","live","pending","picked"].includes(filter.dataset.liveFilter)){viewFilter=filter.dataset.liveFilter;ensure();}
+});
+document.addEventListener("wt-week-changed",()=>{
+ const data=window.WTActiveWeekData;
+ if(!data||!Number.isInteger(data.week)||!Array.isArray(data.games))return;
+ if(data.week===currentWeek)return;
+ currentWeek=data.week;
+ GAMES=data.games.map(g=>({id:g.id,away:g.away,home:g.home,day:g.day,time:g.time,group:g.group,neutral:g.neutral}));
+ live=new Map();market=new Map();state="loading";updatedAt="";viewFilter="all";
+ expandedGames.clear();
+ ensure();refresh();refreshMarket();
 });
 document.addEventListener("wt-fantasy-change",ensure);
 document.addEventListener("wt-manual-fantasy-change",ensure);
