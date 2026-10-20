@@ -95,6 +95,100 @@ async function initCloud(){
  render();
  await checkWeek();
 }
+
+// Weekly rollover: only the authenticated picks sync changes. Historical weeks
+// are never overwritten when a new schedule becomes active.
+function readWeekState(week,games) {
+ let raw=null;
+ try{raw=JSON.parse(localStorage.getItem(WEEKLY_PREFIX+week)||"null");}catch{}
+ const initial=raw&&typeof raw==="object"?raw:{};
+ return {...EMPTY(),picks:Object.fromEntries(games.filter(g=>[g.away,g.home].includes(initial.picks?.[g.id])).map(g=>[g.id,initial.picks[g.id]])),
+  mnfMargin:validMargin(initial.mnfMargin),locked:initial.locked===true,
+  homeEdge:[0,25,45,65,85].includes(Number(initial.homeEdge))?Number(initial.homeEdge):45,
+  updatedAt:Number(initial.updatedAt)||0};
+}
+function restoreRemoteWeek(remote,games){
+ return {...EMPTY(),picks:Object.fromEntries(games.filter(g=>[g.away,g.home].includes(remote?.picks?.[g.id])).map(g=>[g.id,remote.picks[g.id]])),
+  mnfMargin:validMargin(remote?.mnf_margin),locked:remote?.locked===true,
+  homeEdge:[0,25,45,65,85].includes(Number(remote?.home_edge))?Number(remote.home_edge):45,
+  updatedAt:Date.parse(remote?.updated_at)||0};
+}
+async function historicalWeek(week){
+ if(weekScores.has(week)&&week<7)return;
+ try{
+  const res=await fetch("/api/nfl-week?week="+week,{credentials:"same-origin"});
+  const data=await res.json();
+  if(!res.ok||!data.ok||!Array.isArray(data.games)||data.games.length<10)return;
+  weekScores.set(week,data.games);
+  if(week>=7){
+   let archive=readWeekState(week,data.games);
+   try{
+    const cloud=await cloudRequest("loadWeek",{season:2026,week});
+    if(cloud.state){const saved=restoreRemoteWeek(cloud.state,data.games);if(saved.updatedAt>=archive.updatedAt)archive=saved;}
+   }catch{}
+   previousWeeks.set(week,gradeWeek(week,data.games,archive.picks,data.games));
+  }
+ }catch{}
+}
+async function checkWeek(){
+ if(activatingWeek)return;
+ lastWeekCheck=Date.now();
+ let response,feed;
+ try{
+  response=await fetch("/api/nfl-week",{cache:"no-store",credentials:"same-origin"});
+  feed=await response.json();
+  if(!response.ok||!feed.ok||!Number.isInteger(feed.week)||!Array.isArray(feed.games)||feed.games.length<10)return;
+ }catch{return;}
+ if(feed.week<activeWeek)return;
+ if(feed.week===activeWeek){
+  if(feed.week===6){weekScores.set(6,feed.games);}
+  return;
+ }
+ activatingWeek=true;
+ try{
+  if(activeWeek===6)week6State=state;
+  const latestWeek=feed.week;
+  const newGames=feed.games.map(g=>({id:g.id,away:g.away,home:g.home,group:g.group,day:g.day,time:g.time,
+   neutral:!!g.neutral,kickoff:g.kickoff}));
+  if(!newGames.every(g=>NAMES[g.home]&&NAMES[g.away]&&g.id.startsWith("w"+latestWeek+"-")))return;
+  if(feed.previousWeek>=6&&feed.previousGames?.length>=10)
+   weekScores.set(feed.previousWeek,feed.previousGames);
+  GAMES=newGames;
+  activeWeek=latestWeek;
+  state=readWeekState(activeWeek,GAMES);
+  updateScouting();
+  cloudStatus="Connecting weekly cloud…";
+  render();
+  const started=localRevision;
+  try{
+   const cloud=await cloudRequest("loadWeek",{season:2026,week:activeWeek});
+   if(cloud.state&&started===localRevision){
+    const remote=restoreRemoteWeek(cloud.state,GAMES);
+    if(remote.updatedAt>=state.updatedAt){
+     state=remote;
+     try{localStorage.setItem(WEEKLY_PREFIX+activeWeek,JSON.stringify(state));}catch{}
+    }
+   }
+   cloudStatus="Cloud connected";
+  }catch{cloudStatus="Local backup · sync offline";}
+  if(localRevision>started||(state.updatedAt&&!cloudStatus.includes("offline")))queueCloudSave();
+  window.WTActiveWeekData={week:activeWeek,games:GAMES};
+  document.dispatchEvent(new Event("wt-week-changed"));
+  render();
+ }finally{activatingWeek=false;}
+ // Load existing final results and older selections without blocking the week switch.
+ for(let wk=6;wk<activeWeek;wk++){
+  if(wk===6&&weekScores.has(6))continue;
+  if(wk>=7&&previousWeeks.has(wk))continue;
+  await historicalWeek(wk);
+ }
+ updateSeasonStrip();
+ if(tab==="history")render();
+}
+window.WTActiveWeekData={week:activeWeek,games:GAMES};
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkWeek();});
+setInterval(()=>{if(!document.hidden)checkWeek();},60000);
+
 function escape(s){return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
 function logo(a){return "https://a.espncdn.com/i/teamlogos/nfl/500/"+(LOGOS[a]||a).toLowerCase()+".png";}
 function fmt(n){return Number(n).toFixed(1);}
@@ -226,14 +320,14 @@ function render(){
  document.body.dataset.wtView=tab;
  document.querySelectorAll(".tab").forEach(b=>{b.classList.toggle("active",b.dataset.tab===tab);b.setAttribute("aria-selected",b.dataset.tab===tab?"true":"false");});
  updateSeasonStrip();
- const pages={home:homePage,live:()=>"",fantasy:()=>'<section class="wt-fantasy-page"><header class="wt-fantasy-page-head"><h2>Fantasy · Week ${activeWeek}</h2></header><div id="wt-manual-fantasy-root">'+(window.WTManualFantasy?.toolbar?.()||'<div class="empty">Loading roster…</div>')+'</div><section class="wt-fantasy-games-section"><h3>My players · NFL games</h3><div id="wt-fantasy-games"></div></section></section>',picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
+ const pages={home:homePage,live:()=>"",fantasy:()=>'<section class="wt-fantasy-page"><header class="wt-fantasy-page-head"><h2>Fantasy · Week '+activeWeek+'</h2></header><div id="wt-manual-fantasy-root">'+(window.WTManualFantasy?.toolbar?.()||'<div class="empty">Loading roster…</div>')+'</div><section class="wt-fantasy-games-section"><h3>My players · NFL games</h3><div id="wt-fantasy-games"></div></section></section>',picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
  document.getElementById("app").innerHTML=(pages[tab]||homePage)();
 }
 function section(title,sub,body){return '<section class="section"><div class="section-head"><h2>'+title+'</h2></div>'+body+'</section>';}
 function cardMetric(label,value,foot){return '<div class="summary-item"><small>'+label+'</small><strong>'+value+'</strong></div>';}
 function homePage(){
  const picked=GAMES.filter(g=>state.picks[g.id]).length;
- return section("Week "+activeWeek,"",'<div class="panel focus-row"><div class="focus-copy"><strong>'+picked+' of '+GAMES.length+' picks saved</strong><span>"+(GAMES[0]?escape(GAMES[0].away+" @ "+GAMES[0].home+" · "+GAMES[0].day+" "+GAMES[0].time+" ET"):"Schedule loading")+" </span></div><div class="counter">'+picked+'/'+GAMES.length+'</div></div>'+
+ return section("Week "+activeWeek,"",'<div class="panel focus-row"><div class="focus-copy"><strong>'+picked+' of '+GAMES.length+' picks saved</strong><span>'+(GAMES[0]?escape(GAMES[0].away+" @ "+GAMES[0].home+" · "+GAMES[0].day+" "+GAMES[0].time+" ET"):"Schedule loading")+'</span></div><div class="counter">'+picked+'/'+GAMES.length+'</div></div>'+
  '<div class="action-row"><button class="btn primary" data-go="picks">Edit picks</button><button class="btn" data-go="fantasy">Fantasy players</button><button class="btn" data-go="intel">Matchups</button></div>');
 }
 function pickCard(f){
@@ -251,7 +345,7 @@ function picksPage(){
  '<button type="button" class="btn" data-action="save">Save picks</button>'+
  '<span class="wt-cloud-status" role="status">'+escape(cloudStatus)+'</span></div>'+
  groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
- section("Monday Night Tiebreaker","",'<div class="tiebreak-grid"><div class="field"><label>Winning margin · "+(GAMES.filter(g=>g.group==="Monday Night").map(g=>g.away+" @ "+g.home).join(" / ")||"Monday Night Football")+"</label><input aria-label="MNF predicted winning margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?'disabled':'')+' placeholder="Margin"></div></div>');
+ section("Monday Night Tiebreaker","",'<div class="tiebreak-grid"><div class="field"><label>Winning margin · '+(GAMES.filter(g=>g.group==="Monday Night").map(g=>g.away+" @ "+g.home).join(" / ")||"Monday Night Football")+'</label><input aria-label="MNF predicted winning margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?'disabled':'')+' placeholder="Margin"></div></div>');
 }
 function intelCard(f){
  const chosen=state.picks[f.id];
