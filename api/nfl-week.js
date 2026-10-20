@@ -63,6 +63,17 @@ async function fetchWeek(season,week){
 module.exports=async function handler(req,res){
  res.setHeader("X-Content-Type-Options","nosniff");
  if(req.method!=="GET"){res.setHeader("Allow","GET");return res.status(405).json({ok:false,error:"Method not allowed"});}
+ const requested=req.query?.week;
+ if(requested!==undefined){
+  const selected=Number(requested);
+  if(!Number.isInteger(selected)||selected<6||selected>18)return res.status(400).json({ok:false,error:"Invalid week"});
+  try{
+   const rows=await fetchWeek(2026,selected);
+   if(rows.length<10)throw Error("Incomplete schedule");
+   res.setHeader("Cache-Control","public, s-maxage=30, stale-while-revalidate=30");
+   return res.status(200).json({ok:true,season:2026,week:selected,games:rows,source:"ESPN"});
+  }catch{return res.status(502).json({ok:false,error:"NFL schedule unavailable"});}
+ }
  const season=2026,now=Date.now();
  let baseWeek=Math.max(6,Math.min(18,Math.floor((now-START)/WEEK_MS)+1));
  try{
