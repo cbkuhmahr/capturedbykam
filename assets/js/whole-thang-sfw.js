@@ -5,7 +5,54 @@
   const openButton = document.querySelector("[data-wt-private]");
   if (!app || !openButton) return;
 
-  const sourceNames = ["amateurwifehub","AnythingPanties","athletic_ladies","BootyDaily","deepbuttcrack","FuckworthyWifeshare","FullBackPanties","hornypanties","Moms_In_Thongs","PantiesByBrandName1","panty_lines","PantyCake","SwimmerBabes","SwimmingSuits","Wife_Getting_Ready_GW","Wife_In_Panties"];
+
+  function makeFlirt() {
+    const st={mode:"playful",state:"",name:"",previous:[]};
+    const bank={
+      playful:{hey:["Hey, trouble. You here to be charming or cause mischief?","Well look who made the day more interesting.","There you are. What's on your mind?"],flirt:["You think you can keep up with me? Bold claim.","You're awfully confident. I like it.","Oh, so you want to flirt? Interesting."],thanks:["Careful. Flattery might earn you a smile.","Smooth. I see what you did there.","Now that's how you get someone's attention."],other:["You have my attention. Tell me more.","You're making this conversation difficult to leave.","Okay, what are you really thinking?","Interesting. I want to hear the rest."]},
+      sweet:{hey:["Hi. I'm glad you're here.","Hey there. How's your day?","There you are. Tell me something good."],flirt:["I like the sound of gentle flirting.","Aw, that's a sweet thing to say.","You make it easy to smile."],thanks:["That's lovely to hear.","What a kind thing to say.","You have a sweet way with words."],other:["I'm listening. Tell me more.","I like getting to know you.","No rush. We can just talk.","That sounds like something worth exploring."]},
+      bold:{hey:["Oh, you showed up. Now this could get interesting.","Hey. Let's skip the small talk.","Look at you making an entrance."],flirt:["Is that your best line, or are you warming up?","Confidence looks good on you. Can you back it up?","I like a challenge. Impress me."],thanks:["I see your charm offensive. Not bad.","You know exactly what you're doing.","That's a strong opening. Keep going."],other:["All right, make me curious.","You're up. Make your next line memorable.","Interesting. Don't stop there.","I see the confidence. I like it."]}
+    };
+    function pick(xs){const fresh=xs.filter(x=>!st.previous.includes(x)),pool=fresh.length?fresh:xs;const x=pool[Math.floor(Math.random()*pool.length)];st.previous.push(x);if(st.previous.length>5)st.previous.shift();return x;}
+    function done(text,choices){return {text,choices:choices||["Flirt with me","Ask me something","Surprise me"]};}
+    function tone(v){if(bank[v])st.mode=v;st.state="";return done(st.mode==="bold"?"Bold it is. Can you keep up?":st.mode==="sweet"?"Sweet and gentle. I'm listening.":"Playful it is. I like your style.",["Give me a compliment","Truth or dare?","Plan a date"]);}
+    function reset(){st.name="";st.state="";st.previous=[];return done("Hey, you. Ready for a little flirting? Choose a vibe or say what's on your mind.",["Flirt with me","Truth or dare?","Plan a date","Surprise me"]);}
+    function answer(value){
+      const t=String(value||"").trim().toLowerCase().replace(/[’‘]/g,"'").slice(0,700);
+      const b=bank[st.mode];
+      if(!t)return done("I'm here. Say something.");
+      if(/\b(stop|don't flirt|leave me alone|not comfortable)\b/.test(t))return done("Understood. We can keep it friendly. You set the pace.",["Tell me a joke","How are you?"]);
+      if(/\b(sad|depressed|lonely|stressed|anxious|rough day|bad day)\b/.test(t))return done("I'm sorry it's been a tough day. Want to talk, or would a little distraction help?",["Distract me","Tell me a joke"]);
+      if(/\b(are you real|are you ai|are you a bot|how do you work)\b/.test(t))return done("I'm a fictional, scripted chat character, not a person or a live AI model. But we can still have fun with banter.",["Flirt with me","Truth or dare?"]);
+      const name=/\b(?:my name is|call me|i am called) ([a-z][a-z'-]{1,18})\b/.exec(t);
+      if(name){st.name=name[1][0].toUpperCase()+name[1].slice(1);return done(st.name+". I like it. Tell me something about yourself.",["Plan a date","Flirt with me"]);}
+      if(/\b(what's my name|remember my name)\b/.test(t))return done(st.name?"I remember, "+st.name+". I was paying attention.":"You haven't told me your name yet.",["Flirt with me"]);
+      if(/\b(truth or dare|another round|play a game)\b/.test(t)){st.state="game";return done("Let's play. Truth or dare?",["Truth","Dare"]);}
+      if(/\b(plan a date|first date|date night|take you out|describe our date)\b/.test(t)){st.state="date";return done("Our first date: coffee, dinner, a walk, or should I choose?",["Coffee","Dinner","You choose"]);}
+      if(st.state==="game"&&/\btruth\b/.test(t)){st.state="truth";return done("Truth: what's one little thing that makes someone attractive to you?",["Great smile","Eye contact","Good humor"]);}
+      if(st.state==="game"&&/\bdare\b/.test(t)){st.state="dare";return done("Dare: give me your smoothest one-line pickup line. I'll rate it.",["You're trouble, aren't you?","I love your smile"]);}
+      if(st.state==="date"&&/\b(coffee|dinner|walk|concert|music|movie|tea)\b/.test(t)){st.state="";const a=/\b(coffee|dinner|walk|concert|music|movie|tea)\b/.exec(t)[0];return done("A "+a+" date? I like that. How would you make it unforgettable?",["Good conversation","Make you laugh","Hold hands"]);}
+      if(st.state==="date"&&/\b(you choose|surprise|your choice)\b/.test(t)){st.state="";return done("I'm choosing a rooftop, music in the background, and a conversation we don't want to end.",["And then?","That sounds romantic"]);}
+      if(st.state==="dare"&&t.length>4&&!/\b(your turn|skip)\b/.test(t)){st.state="";return done("An 8 out of 10 for confidence. The other two points? Earn them.",["Another round","Flirt with me"]);}
+      if(st.state==="truth"&&t.length>3){st.state="";return done("I like that answer. The little things can make the biggest impression.",["Another round","Your turn"]);}
+      if(/\b(surprise me|distract me)\b/.test(t))return done(pick(["We're the only two people laughing at a serious party. Do we stay or leave for late-night food?","Would you choose an unexpected love note or a call from someone you like?","You have 30 seconds to charm me. What's your line?"]),["Stay and flirt","Sneak out","Your turn"]);
+      if(/\b(tell me a joke|make me laugh|another joke)\b/.test(t))return done(pick(["I was going to play it cool, but apparently I don't have that setting.","My flirting is like Wi-Fi. Better when you're close.","I had a great pickup line, but you distracted me."]),["That was corny","Another joke"]);
+      if(/\b(give me a compliment|compliment me|say something nice)\b/.test(t))return done(pick(["There's something attractive about someone who can laugh at themselves.","You have the kind of confidence that makes a conversation interesting.","You make it easy to be curious. That's rare."]),["Keep going","Your turn"]);
+      if(/\b(hi|hey|hello|good morning|good evening|what's up)\b/.test(t)&&t.length<60)return done(pick(b.hey),["Flirt with me","Truth or dare?","Plan a date"]);
+      if(/\b(flirt|tease me|pickup line|charm me)\b/.test(t))return done(pick(b.flirt),["Your turn","Plan a date","Truth or dare?"]);
+      if(/\b(beautiful|cute|gorgeous|pretty|handsome|lovely|hot|attractive|sweet|i like you)\b/.test(t))return done(pick(b.thanks),["Your turn","Flirt with me"]);
+      if(/\b(kiss|cuddle|hug|hold hands)\b/.test(t))return done("A little chemistry, an unhurried conversation, and a sweet moment? That's romantic.",["And then?","Plan a date"]);
+      if(/\b(photo|picture|send a pic)\b/.test(t))return done("No picture service in this version—just our conversation.",["Describe our date","Flirt with me"]);
+      if(/\b(who are you|what's your name)\b/.test(t))return done("I'm SFW, a fictional companion with a playful streak.",["Flirt with me","Ask me something"]);
+      if(/\b(how are you|how's your day|what are you doing)\b/.test(t))return done("I'm right here in this little conversation. What's made you smile today?",["You did","Long day"]);
+      if(/\b(coffee|music|dinner|movie|weekend)\b/.test(t))return done("I could get into that. Would it be part of your ideal date?",["Plan a date","Surprise me"]);
+      if(/\b(sweet|bold|playful)\b/.test(t)&&t.length<30)return tone(/\bsweet\b/.test(t)?"sweet":/\bbold\b/.test(t)?"bold":"playful");
+      if(t.endsWith("?"))return done(pick(["That's a fun question. What would your answer be?","I'm curious what made you ask. Tell me.","I like your curiosity. What are you hoping I'll say?"]),["Flirt with me","Your turn"]);
+      return done(pick(b.other),["Flirt with me","Truth or dare?","Plan a date"]);
+    }
+    return {answer,reset,tone};
+  }
+
   const style = document.createElement("style");
   style.textContent = [
     ".wt-sfw[hidden]{display:none!important}",
@@ -27,257 +74,61 @@
     ".wt-sfw-compose{border-top:1px solid #303138;padding:12px;display:flex;gap:8px;align-items:center}",
     ".wt-sfw-compose textarea{resize:none;flex:1 1 auto;min-width:0;min-height:45px;max-height:135px;background:#202126!important;border:1px solid #404148!important;border-radius:12px!important;padding:11px!important;font-size:15px!important;line-height:1.4!important;color:#fff!important}",
     ".wt-sfw-send{background:#edc66c;border:0;border-radius:12px;padding:12px 15px;min-height:45px;flex-shrink:0;font-size:13px;font-weight:800;color:#151515;cursor:pointer}",
-    ".wt-sfw-photo-btn{white-space:nowrap;min-height:45px;flex-shrink:0;padding:10px 12px;background:#303036;border:1px solid #585862;color:#f5f5f7}",
-    "@media(max-width:640px){.wt-sfw-compose{padding:10px 8px;gap:6px}.wt-sfw-photo-btn{padding:10px 8px;font-size:12px}.wt-sfw-send{padding:10px 12px}}",
     ".wt-sfw-send:disabled{opacity:.5;cursor:wait}",
-    ".wt-sfw-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid #303138}",
-    ".wt-sfw-source-area[hidden]{display:none!important}",
-    ".wt-sfw-source-area{padding:13px 14px;border-bottom:1px solid #303138;background:#18191d}",
-    ".wt-sfw-source-area p{margin:0 0 10px;color:#a4a4b2;font-size:12px;line-height:1.5}",
-    ".wt-sfw-source-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}",
-    ".wt-sfw-source-grid label{display:flex;gap:7px;align-items:center;overflow-wrap:anywhere;font-size:12px;color:#dedee6}",
-    ".wt-sfw-source-grid input{accent-color:#edc66c}",
-    ".wt-sfw-photo{max-width:85%;align-self:flex-start;background:#222328;padding:10px;border-radius:14px;min-width:0}",
-    ".wt-sfw-photo img{display:block;width:100%;max-width:340px;height:auto;max-height:460px;object-fit:contain;border-radius:9px}",
-    ".wt-sfw-photo a{display:block;margin-top:8px;font-size:12px;color:#edc66c;overflow-wrap:anywhere}",
-    ".wt-sfw-photo figcaption{margin-top:8px;font-size:11px;color:#a3a3ad}",
-    "@media(max-width:640px){.wt-sfw-source-grid{grid-template-columns:1fr}}",
     ".wt-sfw-foot{padding:0 15px 15px;color:#a1a1aa;font-size:11px;line-height:1.6}",
     "@media(max-width:640px){.wt-sfw{padding:12px 10px 30px}.wt-sfw-head{padding:14px}.wt-sfw-messages{min-height:45vh;max-height:58vh}.wt-sfw-message{max-width:92%}}"
   ].join("\n");
   document.head.append(style);
+
+
+  style.textContent += [
+    ".wt-sfw-vibe{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #303138;background:#18161d}",
+    ".wt-sfw-vibe label{font-size:12px;color:#bcb6c0;font-weight:750}",
+    ".wt-sfw-vibe select{background:#27232b;color:#fff;border:1px solid #554b5c;border-radius:8px;padding:8px 12px;font-size:13px}",
+    ".wt-sfw-prompts{display:flex;gap:7px;flex-wrap:wrap;padding:6px 13px 14px}",
+    ".wt-sfw-prompt{border-radius:999px!important;background:#24212a!important;border:1px solid #5e4e63!important;color:#f0d5e6!important;padding:8px 12px!important;font-size:12px!important;cursor:pointer}",
+    ".wt-sfw-message.typing{opacity:.6;font-style:italic}",
+    ".wt-sfw-prompt:disabled{opacity:.4}"
+  ].join("\n");
 
   const panel = document.createElement("section");
   panel.className = "wt-sfw";
   panel.id = "wt-sfw";
   panel.hidden = true;
   panel.setAttribute("aria-label", "Private SFW chat");
+
   panel.innerHTML = [
     '<div class="wt-sfw-shell">',
-    '<div class="wt-sfw-head">',
-    '<div><div class="wt-sfw-name">SFW</div><div class="wt-sfw-status">Private companion · fictional AI</div></div>',
-    '<div class="wt-sfw-actions"><button type="button" class="wt-sfw-btn" id="wt-sfw-clear">Clear</button><button type="button" class="wt-sfw-btn" id="wt-sfw-close">Close</button></div>',
-    '</div>',
-    '<div class="wt-sfw-toolbar"><button type="button" id="wt-sfw-source-toggle" class="wt-sfw-btn" aria-expanded="false">Picture sources (16)</button></div>',
-    '<div class="wt-sfw-source-area" id="wt-sfw-source-area" hidden><p>Only approved Reddit API results from these communities are eligible. Pictures open the original Reddit post. Sources are not connected until Reddit authorizes the app.</p><div class="wt-sfw-source-grid" id="wt-sfw-source-grid"></div></div>',
+    '<div class="wt-sfw-head"><div><div class="wt-sfw-name">SFW ✦</div><div class="wt-sfw-status">Private flirt chat · fictional character</div></div><div class="wt-sfw-actions"><button type="button" class="wt-sfw-btn" id="wt-sfw-clear">Clear</button><button type="button" class="wt-sfw-btn" id="wt-sfw-close">Close</button></div></div>',
+    '<div class="wt-sfw-vibe"><label for="wt-sfw-mode">Vibe</label><select id="wt-sfw-mode"><option value="playful">Playful</option><option value="sweet">Sweet</option><option value="bold">Bold</option></select></div>',
     '<div class="wt-sfw-messages" id="wt-sfw-messages" role="log" aria-live="polite" aria-relevant="additions text"></div>',
-    '<form class="wt-sfw-compose" id="wt-sfw-form">',
-    '<textarea id="wt-sfw-input" rows="1" maxlength="1000" aria-label="Message SFW" placeholder="Message SFW…" required></textarea>',
-    '<button type="button" id="wt-sfw-photo-btn" class="wt-sfw-btn wt-sfw-photo-btn" aria-label="Send a picture from Reddit">Send Pic</button>',
-    '<button class="wt-sfw-send" type="submit">Send</button>',
-    '</form>',
-    '<div class="wt-sfw-foot">Chats aren\'t saved in your sports history. Messages go to your AI provider for replies. Reddit pictures require separate approval.</div>',
+    '<div class="wt-sfw-prompts" id="wt-sfw-prompts" aria-label="Suggested replies"></div>',
+    '<form id="wt-sfw-form" class="wt-sfw-compose"><textarea id="wt-sfw-input" aria-label="Message SFW" rows="1" maxlength="700" placeholder="Say something…" required></textarea><button type="submit" class="wt-sfw-send">Send</button></form>',
+    '<div class="wt-sfw-foot">Interactive scripted chat, not generative AI. No external connection or saved chat history. Clear or reload resets the conversation.</div>',
     '</div>'
   ].join("");
   app.after(panel);
 
-  const messagesNode = panel.querySelector("#wt-sfw-messages");
-  const form = panel.querySelector("#wt-sfw-form");
-  const input = panel.querySelector("#wt-sfw-input");
-  const send = panel.querySelector(".wt-sfw-send");
-  let chat = [];
-  let busy = false;
 
-  const sourceArea = panel.querySelector("#wt-sfw-source-area");
-  const sourceGrid = panel.querySelector("#wt-sfw-source-grid");
-  const photoButton = panel.querySelector("#wt-sfw-photo-btn");
-  const sourceToggle = panel.querySelector("#wt-sfw-source-toggle");
-  const enabledSources = new Set(sourceNames);
-  sourceNames.forEach(name => {
-    const label = document.createElement("label");
-    const check = document.createElement("input");
-    check.type = "checkbox";
-    check.checked = true;
-    check.addEventListener("change", () => {
-      if (check.checked) enabledSources.add(name);
-      else enabledSources.delete(name);
-    });
-    label.append(check, document.createTextNode("r/" + name));
-    sourceGrid.append(label);
-  });
-  sourceToggle.addEventListener("click", () => {
-    sourceArea.hidden = !sourceArea.hidden;
-    sourceToggle.setAttribute("aria-expanded", String(!sourceArea.hidden));
-  });
-
-  async function showPhoto() {
-    if (busy) return;
-    if (!enabledSources.size) {
-      addMessage("assistant", "Choose at least one picture source first.");
-      sourceArea.hidden = false;
-      sourceToggle.setAttribute("aria-expanded", "true");
-      return;
-    }
-    busy = true;
-    send.disabled = true;
-    photoButton.disabled = true;
-    const pending = addMessage("assistant", "Looking for a photo…");
-    try {
-      const response = await fetch("/api/whole-thang-reddit", {
-        method:"POST",
-        credentials:"same-origin",
-        cache:"no-store",
-        headers:{"Content-Type":"application/json","X-WT-Companion":"1"},
-        body:JSON.stringify({subreddits:[...enabledSources]})
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok || !data.photo || typeof data.photo.image !== "string" ||
-          typeof data.photo.link !== "string") {
-        const issue = new Error(data.error || "No picture could be retrieved.");
-        issue.setupUrl = data.setupUrl;
-        throw issue;
-      }
-      pending.remove();
-      const photo = data.photo;
-      const figure = document.createElement("figure");
-      figure.className = "wt-sfw-photo";
-      const image = document.createElement("img");
-      image.src = photo.image;
-      image.alt = "Image from r/" + photo.subreddit + ": " + (photo.title || "Reddit photo");
-      image.loading = "lazy";
-      image.referrerPolicy = "no-referrer";
-      const caption = document.createElement("figcaption");
-      caption.textContent = "From r/" + photo.subreddit;
-      const link = document.createElement("a");
-      link.href = photo.link;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.textContent = "View original post on Reddit";
-      figure.append(image, caption, link);
-      messagesNode.append(figure);
-      messagesNode.scrollTop = messagesNode.scrollHeight;
-    } catch (error) {
-      pending.remove();
-      addConnectionNotice(error.message || "Reddit is unavailable.", error.setupUrl, "Reddit access information");
-    } finally {
-      busy = false;
-      send.disabled = false;
-      photoButton.disabled = false;
-    }
-  }
-  photoButton.addEventListener("click", showPhoto);
-
-
-  function addMessage(role, content) {
-    const bubble = document.createElement("div");
-    bubble.className = "wt-sfw-message " + (role === "user" ? "user" : "bot");
-    bubble.textContent = content;
-    messagesNode.append(bubble);
-    messagesNode.scrollTop = messagesNode.scrollHeight;
-    return bubble;
-  }
-  function addConnectionNotice(message, setupUrl, label) {
-    const notice = document.createElement("div");
-    notice.className = "wt-sfw-notice";
-    notice.setAttribute("role", "status");
-    const description = document.createElement("div");
-    description.textContent = message;
-    notice.append(description);
-    if (typeof setupUrl === "string") {
-      try {
-        const url = new URL(setupUrl);
-        if (url.protocol === "https:" &&
-          (url.hostname === "vercel.com" || url.hostname === "support.reddithelp.com")) {
-          const link = document.createElement("a");
-          link.href = url.href;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = label || "Open connection settings";
-          notice.append(link);
-        }
-      } catch {}
-    }
-    messagesNode.append(notice);
-    messagesNode.scrollTop = messagesNode.scrollHeight;
-  }
-  function reset() {
-    chat = [];
-    messagesNode.replaceChildren();
-    addMessage("assistant", "Hey. You're in SFW — your private companion space. What kind of conversation would you like?");
-    input.value = "";
-  }
-  function hide() {
-    panel.hidden = true;
-    app.hidden = false;
-    openButton.setAttribute("aria-current", "false");
-    document.querySelector(".tabs")?.classList.remove("wt-sfw-open");
-    document.getElementById("wt-more-toggle")?.removeAttribute("aria-current");
-  }
-  function show() {
-    const menu = document.getElementById("wt-more-menu");
-    const toggle = document.getElementById("wt-more-toggle");
-    if (menu) menu.hidden = true;
-    if (toggle) toggle.setAttribute("aria-expanded", "false");
-    app.hidden = true;
-    panel.hidden = false;
-    openButton.setAttribute("aria-current", "page");
-    document.querySelector(".tabs")?.classList.add("wt-sfw-open");
-    if (toggle) toggle.setAttribute("aria-current","page");
-    input.focus();
-  }
-
-  openButton.addEventListener("click", event => {
-    event.preventDefault();
-    event.stopPropagation();
-    show();
-  });
-  panel.querySelector("#wt-sfw-close").addEventListener("click", hide);
-  panel.querySelector("#wt-sfw-clear").addEventListener("click", reset);
-  document.addEventListener("click", event => {
-    if (!panel.hidden && event.target.closest(".tabs [data-tab], .wt-more-menu [data-go], .wt-more-menu [data-wt-open]")) hide();
-  }, true);
-  input.addEventListener("keydown", event => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      if (!busy) form.requestSubmit();
-    }
-  });
-
-  form.addEventListener("submit", async event => {
-    event.preventDefault();
-    if (busy) return;
-    const message = input.value.trim();
-    if (!message) return;
-    // A direct request for a picture goes to approved Reddit sources, never to the AI model.
-    if (/\b(send|show|get|share)\b.{0,45}\b(pic|pics|photo|photos|picture|pictures)\b/i.test(message)) {
-      addMessage("user", message);
-      input.value = "";
-      await showPhoto();
-      return;
-    }
-    chat.push({role:"user",content:message});
-    addMessage("user", message);
-    input.value = "";
-    busy = true;
-    send.disabled = true;
-    const pending = addMessage("assistant", "Typing…");
-    try {
-      const response = await fetch("/api/whole-thang-companion", {
-        method:"POST",
-        credentials:"same-origin",
-        cache:"no-store",
-        headers:{"Content-Type":"application/json","X-WT-Companion":"1"},
-        body:JSON.stringify({messages:chat.slice(-12)})
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok || typeof data.reply !== "string") {
-        const issue = new Error(data.error || "SFW is unavailable.");
-        issue.setupUrl = data.setupUrl;
-        throw issue;
-      }
-      pending.textContent = data.reply;
-      chat.push({role:"assistant",content:data.reply});
-      chat = chat.slice(-16);
-    } catch (error) {
-      pending.remove();
-      addConnectionNotice(error.message || "Connection unavailable.", error.setupUrl, "Open AI connection settings");
-    } finally {
-      busy = false;
-      send.disabled = false;
-      if (!panel.hidden) input.focus();
-      messagesNode.scrollTop = messagesNode.scrollHeight;
-    }
-  });
-
-  reset();
+  const brain=makeFlirt();
+  const messages=panel.querySelector("#wt-sfw-messages"),prompts=panel.querySelector("#wt-sfw-prompts");
+  const input=panel.querySelector("#wt-sfw-input"),form=panel.querySelector("#wt-sfw-form"),send=panel.querySelector(".wt-sfw-send");
+  let busy=false,timer=null;
+  function bubble(type,text){const node=document.createElement("div");node.className="wt-sfw-message "+type;node.textContent=text;messages.append(node);messages.scrollTop=messages.scrollHeight;return node;}
+  function setBusy(value){busy=value;send.disabled=value;prompts.querySelectorAll("button").forEach(b=>b.disabled=value);}
+  function showChoices(xs){prompts.replaceChildren();xs.slice(0,4).forEach(x=>{const b=document.createElement("button");b.type="button";b.className="wt-sfw-prompt";b.textContent=x;b.addEventListener("click",()=>chat(x));prompts.append(b);});}
+  function respond(x){bubble("bot",x.text);showChoices(x.choices);}
+  function cancel(){if(timer!==null){clearTimeout(timer);timer=null;}setBusy(false);}
+  function clear(){cancel();messages.replaceChildren();respond(brain.reset());input.value="";}
+  function chat(value){if(busy)return;const x=String(value||"").trim().slice(0,700);if(!x)return;bubble("user",x);input.value="";const answer=brain.answer(x);setBusy(true);const typing=bubble("bot typing","Typing…");timer=setTimeout(()=>{timer=null;typing.remove();respond(answer);setBusy(false);},Math.min(700,320+x.length*8));}
+  form.addEventListener("submit",ev=>{ev.preventDefault();chat(input.value);});
+  input.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&!ev.shiftKey){ev.preventDefault();chat(input.value);}});
+  panel.querySelector("#wt-sfw-mode").addEventListener("change",ev=>{cancel();respond(brain.tone(ev.target.value));});
+  panel.querySelector("#wt-sfw-clear").addEventListener("click",clear);
+  function hide(){panel.hidden=true;app.hidden=false;openButton.setAttribute("aria-current","false");document.querySelector(".tabs")?.classList.remove("wt-sfw-open");document.getElementById("wt-more-toggle")?.removeAttribute("aria-current");}
+  function show(){const menu=document.getElementById("wt-more-menu"),toggle=document.getElementById("wt-more-toggle");if(menu)menu.hidden=true;if(toggle)toggle.setAttribute("aria-expanded","false");app.hidden=true;panel.hidden=false;openButton.setAttribute("aria-current","page");document.querySelector(".tabs")?.classList.add("wt-sfw-open");if(toggle)toggle.setAttribute("aria-current","page");input.focus();}
+  openButton.addEventListener("click",ev=>{ev.preventDefault();ev.stopPropagation();show();});
+  panel.querySelector("#wt-sfw-close").addEventListener("click",hide);
+  document.addEventListener("click",ev=>{if(!panel.hidden&&ev.target.closest(".tabs [data-tab], .wt-more-menu [data-go], .wt-more-menu [data-wt-open]"))hide();},true);
+  clear();
 })();
