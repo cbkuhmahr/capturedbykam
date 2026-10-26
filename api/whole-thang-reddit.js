@@ -12,6 +12,7 @@ const COMMUNITY_NAMES = [
 ];
 const COMMUNITIES = new Map(COMMUNITY_NAMES.map(name => [name.toLowerCase(), name]));
 const ALLOWED_HOSTS = new Set(["www.capturedbykam.com", "capturedbykam.com", "capturedbykam.vercel.app"]);
+const REDDIT_ACCESS_GUIDE = "https://support.reddithelp.com/hc/en-us/articles/14945211791892-Developer-Platform-Accessing-Reddit-Data";
 let credentialToken = null;
 let credentialExpires = 0;
 
@@ -94,7 +95,7 @@ module.exports = async function handler(req,res) {
 
   if (process.env.REDDIT_DATA_API_APPROVED !== "true" ||
       !process.env.REDDIT_CLIENT_ID || !process.env.REDDIT_CLIENT_SECRET || !process.env.REDDIT_USER_AGENT) {
-    return failure(res,503,"Reddit photos aren't connected yet. The app needs approved Reddit API access.");
+    return res.status(503).json({code:"REDDIT_APPROVAL_REQUIRED", error:"Reddit picture access requires an approved Reddit app and server credentials. Your 16 picture sources are saved, but the site cannot retrieve photos yet.", setupUrl:REDDIT_ACCESS_GUIDE});
   }
   try {
     const oauth = await redditToken();

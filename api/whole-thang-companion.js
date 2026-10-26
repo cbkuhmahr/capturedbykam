@@ -10,6 +10,10 @@ const HOSTS = new Set([
   "capturedbykam-git-main-kamar-m-mosleys-projects.vercel.app"
 ]);
 const MAX_MESSAGE_LENGTH = 1000;
+const VERCEL_AI_SETUP = "https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fai-gateway&title=AI+Gateway";
+function needsSetup(res, code, error, setupUrl = VERCEL_AI_SETUP) {
+  return res.status(503).json({error, code, setupUrl});
+}
 const PERSONA = [
   "You are SFW, a fictional adult AI chat companion inside a private sports dashboard.",
   "Keep the chat casual, warm, witty, and conversational, like short natural text messages.",
@@ -92,7 +96,7 @@ module.exports = async function handler(req, res) {
     process.env.VERCEL_OIDC_TOKEN;
   const viaGateway = !directKey && !!gatewayToken;
   if (!directKey && !gatewayToken) {
-    return forbidden(res, 503, "AI Gateway is not enabled for this Vercel project. In Vercel project Settings > Security, enable OIDC Federation.");
+    return needsSetup(res, "AI_AUTH_MISSING", "SFW needs AI Gateway access. Check this Vercel project's OIDC and AI Gateway settings.");
   }
 
   try {
@@ -117,10 +121,29 @@ module.exports = async function handler(req, res) {
       signal: AbortSignal.timeout(18000)
     });
     if (!response.ok) {
-      if (viaGateway && response.status === 401) return forbidden(res, 503, "Vercel AI Gateway rejected this project’s OIDC token. Check AI Gateway access in Vercel.");
-      if (viaGateway && response.status === 402) return forbidden(res, 503, "Vercel AI Gateway needs credits or a higher spending limit");
-      if (viaGateway && response.status === 403) return forbidden(res, 503, "Vercel AI Gateway needs account verification or access approval");
-      return forbidden(res, 502, "Chat provider temporarily unavailable");
+      // The gateway's HTTP status alone cannot distinguish payment verification
+      // from an account-level access restriction; inspect its documented error type.
+      const failureBody = await response.json().catch(() => ({}));
+      const providerError = failureBody && typeof failureBody === "object" ? failureBody.error : null;
+      const kind = typeof providerError?.type === "string" ? providerError.type : "";
+      if (viaGateway && kind === "customer_verification_required")
+        return needsSetup(res, "AI_PAYMENT_VERIFICATION",
+          "Vercel requires account/payment verification to enable AI Gateway. Open your AI Gateway dashboard and add a valid payment method.");
+      if (viaGateway && response.status === 401)
+        return needsSetup(res, "AI_AUTH_REJECTED",
+          "Vercel rejected the AI Gateway credential. Check your project and team AI Gateway permissions.");
+      if (viaGateway && response.status === 402)
+        return needsSetup(res, "AI_CREDITS_REQUIRED",
+          "Vercel AI Gateway has no available credits or its budget limit has been reached.");
+      if (viaGateway && response.status === 403)
+        return needsSetup(res, "AI_ACCESS_DENIED",
+          "Vercel denied AI Gateway access (403). Check your payment method and team permissions in Vercel. If both are active, contact Vercel Support.");
+      if (viaGateway && response.status === 429)
+        return forbidden(res, 429, "AI Gateway is rate limited right now. Try again later.");
+      if (!viaGateway && response.status === 401)
+        return needsSetup(res, "OPENAI_KEY_INVALID",
+          "The configured OpenAI API key was rejected. Update OPENAI_API_KEY in Vercel.");
+      return forbidden(res, 502, "AI provider is unavailable (HTTP " + response.status + ").");
     }
     const json = await response.json();
     const reply = json?.choices?.[0]?.message?.content;
