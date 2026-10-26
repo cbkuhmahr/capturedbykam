@@ -20,6 +20,10 @@
     ".wt-sfw-message{max-width:85%;padding:12px 14px;border-radius:17px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px}",
     ".wt-sfw-message.bot{align-self:flex-start;background:#26272c;color:#f5f5f7;border-bottom-left-radius:5px}",
     ".wt-sfw-message.user{align-self:flex-end;background:#edc66c;color:#181818;border-bottom-right-radius:5px}",
+    ".wt-sfw-notice{align-self:stretch;border-top:1px solid #44454b;padding:12px 3px;color:#d0d0da;line-height:1.55;font-size:13px}",
+    ".wt-sfw-notice a{display:inline-block;margin-top:9px;padding:9px 13px;background:#28292e;border:1px solid #55565f;border-radius:9px;color:#efcb80;text-decoration:none;font-size:13px;font-weight:750}",
+    ".tabs.wt-sfw-open .tab.active:after{display:none!important}",
+    ".tabs.wt-sfw-open .tab.active{color:#9799a1!important}",
     ".wt-sfw-compose{border-top:1px solid #303138;padding:12px;display:flex;gap:8px;align-items:center}",
     ".wt-sfw-compose textarea{resize:none;flex:1 1 auto;min-width:0;min-height:45px;max-height:135px;background:#202126!important;border:1px solid #404148!important;border-radius:12px!important;padding:11px!important;font-size:15px!important;line-height:1.4!important;color:#fff!important}",
     ".wt-sfw-send{background:#edc66c;border:0;border-radius:12px;padding:12px 15px;min-height:45px;flex-shrink:0;font-size:13px;font-weight:800;color:#151515;cursor:pointer}",
@@ -62,7 +66,7 @@
     '<button type="button" id="wt-sfw-photo-btn" class="wt-sfw-btn wt-sfw-photo-btn" aria-label="Send a picture from Reddit">Send Pic</button>',
     '<button class="wt-sfw-send" type="submit">Send</button>',
     '</form>',
-    '<div class="wt-sfw-foot">Messages stay in this open page, not your saved picks or site database. AI replies are processed by the configured AI provider. Reddit photos require approved API access. Images come from the selected communities when connected.</div>',
+    '<div class="wt-sfw-foot">Chats aren\'t saved in your sports history. Messages go to your AI provider for replies. Reddit pictures require separate approval.</div>',
     '</div>'
   ].join("");
   app.after(panel);
@@ -119,7 +123,9 @@
       const data = await response.json().catch(() => ({}));
       if (!response.ok || !data.photo || typeof data.photo.image !== "string" ||
           typeof data.photo.link !== "string") {
-        throw new Error(data.error || "No picture could be retrieved.");
+        const issue = new Error(data.error || "No picture could be retrieved.");
+        issue.setupUrl = data.setupUrl;
+        throw issue;
       }
       pending.remove();
       const photo = data.photo;
@@ -141,7 +147,8 @@
       messagesNode.append(figure);
       messagesNode.scrollTop = messagesNode.scrollHeight;
     } catch (error) {
-      pending.textContent = error.message || "Reddit is unavailable.";
+      pending.remove();
+      addConnectionNotice(error.message || "Reddit is unavailable.", error.setupUrl, "Reddit access information");
     } finally {
       busy = false;
       send.disabled = false;
@@ -159,6 +166,30 @@
     messagesNode.scrollTop = messagesNode.scrollHeight;
     return bubble;
   }
+  function addConnectionNotice(message, setupUrl, label) {
+    const notice = document.createElement("div");
+    notice.className = "wt-sfw-notice";
+    notice.setAttribute("role", "status");
+    const description = document.createElement("div");
+    description.textContent = message;
+    notice.append(description);
+    if (typeof setupUrl === "string") {
+      try {
+        const url = new URL(setupUrl);
+        if (url.protocol === "https:" &&
+          (url.hostname === "vercel.com" || url.hostname === "support.reddithelp.com")) {
+          const link = document.createElement("a");
+          link.href = url.href;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = label || "Open connection settings";
+          notice.append(link);
+        }
+      } catch {}
+    }
+    messagesNode.append(notice);
+    messagesNode.scrollTop = messagesNode.scrollHeight;
+  }
   function reset() {
     chat = [];
     messagesNode.replaceChildren();
@@ -169,6 +200,8 @@
     panel.hidden = true;
     app.hidden = false;
     openButton.setAttribute("aria-current", "false");
+    document.querySelector(".tabs")?.classList.remove("wt-sfw-open");
+    document.getElementById("wt-more-toggle")?.removeAttribute("aria-current");
   }
   function show() {
     const menu = document.getElementById("wt-more-menu");
@@ -178,6 +211,8 @@
     app.hidden = true;
     panel.hidden = false;
     openButton.setAttribute("aria-current", "page");
+    document.querySelector(".tabs")?.classList.add("wt-sfw-open");
+    if (toggle) toggle.setAttribute("aria-current","page");
     input.focus();
   }
 
@@ -225,12 +260,17 @@
         body:JSON.stringify({messages:chat.slice(-12)})
       });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok || typeof data.reply !== "string") throw new Error(data.error || "SFW is unavailable.");
+      if (!response.ok || typeof data.reply !== "string") {
+        const issue = new Error(data.error || "SFW is unavailable.");
+        issue.setupUrl = data.setupUrl;
+        throw issue;
+      }
       pending.textContent = data.reply;
       chat.push({role:"assistant",content:data.reply});
       chat = chat.slice(-16);
     } catch (error) {
-      pending.textContent = error.message || "Connection unavailable.";
+      pending.remove();
+      addConnectionNotice(error.message || "Connection unavailable.", error.setupUrl, "Open AI connection settings");
     } finally {
       busy = false;
       send.disabled = false;
