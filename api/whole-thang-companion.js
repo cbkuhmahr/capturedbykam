@@ -81,19 +81,27 @@ module.exports = async function handler(req, res) {
     return forbidden(res, 503, "Unable to verify session");
   }
 
-  if (!process.env.OPENAI_API_KEY) {
-    return forbidden(res, 503, "SFW chat needs an AI API key configured by the site owner");
+  // Prefer a directly configured OpenAI key, then Vercel's automatic OIDC token.
+  // This lets Vercel-hosted SFW work without copying provider credentials to the project.
+  const directKey = process.env.OPENAI_API_KEY;
+  const gatewayToken = process.env.VERCEL_OIDC_TOKEN || process.env.AI_GATEWAY_API_KEY;
+  const viaGateway = !directKey && !!gatewayToken;
+  if (!directKey && !gatewayToken) {
+    return forbidden(res, 503, "SFW needs Vercel AI Gateway access or an OpenAI API key");
   }
 
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch(viaGateway
+      ? "https://ai-gateway.vercel.sh/v1/chat/completions"
+      : "https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": "Bearer " + process.env.OPENAI_API_KEY,
+        "Authorization": "Bearer " + (viaGateway ? gatewayToken : directKey),
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: process.env.SFW_OPENAI_MODEL || "gpt-4o-mini",
+        model: viaGateway ? (process.env.SFW_GATEWAY_MODEL || "openai/gpt-4o-mini")
+          : (process.env.SFW_OPENAI_MODEL || "gpt-4o-mini"),
         store: false,
         max_completion_tokens: 240,
         messages: [
@@ -104,6 +112,8 @@ module.exports = async function handler(req, res) {
       signal: AbortSignal.timeout(18000)
     });
     if (!response.ok) {
+      if (viaGateway && response.status === 402) return forbidden(res, 503, "Vercel AI Gateway needs credits or a higher spending limit");
+      if (viaGateway && response.status === 403) return forbidden(res, 503, "Vercel AI Gateway needs account verification or access approval");
       return forbidden(res, 502, "Chat provider temporarily unavailable");
     }
     const json = await response.json();
