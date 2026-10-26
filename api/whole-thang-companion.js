@@ -84,10 +84,15 @@ module.exports = async function handler(req, res) {
   // Prefer a directly configured OpenAI key, then Vercel's automatic OIDC token.
   // This lets Vercel-hosted SFW work without copying provider credentials to the project.
   const directKey = process.env.OPENAI_API_KEY;
-  const gatewayToken = process.env.VERCEL_OIDC_TOKEN || process.env.AI_GATEWAY_API_KEY;
+  // Vercel Functions receive fresh OIDC credentials on the request header,
+  // not necessarily in process.env. This request has already passed admin auth.
+  const oidcHeader = req.headers["x-vercel-oidc-token"];
+  const gatewayToken = process.env.AI_GATEWAY_API_KEY ||
+    (typeof oidcHeader === "string" ? oidcHeader : "") ||
+    process.env.VERCEL_OIDC_TOKEN;
   const viaGateway = !directKey && !!gatewayToken;
   if (!directKey && !gatewayToken) {
-    return forbidden(res, 503, "SFW needs Vercel AI Gateway access or an OpenAI API key");
+    return forbidden(res, 503, "AI Gateway is not enabled for this Vercel project. In Vercel project Settings > Security, enable OIDC Federation.");
   }
 
   try {
