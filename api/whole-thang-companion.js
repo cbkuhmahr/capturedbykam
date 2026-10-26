@@ -117,6 +117,7 @@ module.exports = async function handler(req, res) {
       signal: AbortSignal.timeout(18000)
     });
     if (!response.ok) {
+      if (viaGateway && response.status === 401) return forbidden(res, 503, "Vercel AI Gateway rejected this project’s OIDC token. Check AI Gateway access in Vercel.");
       if (viaGateway && response.status === 402) return forbidden(res, 503, "Vercel AI Gateway needs credits or a higher spending limit");
       if (viaGateway && response.status === 403) return forbidden(res, 503, "Vercel AI Gateway needs account verification or access approval");
       return forbidden(res, 502, "Chat provider temporarily unavailable");
