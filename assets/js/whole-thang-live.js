@@ -188,9 +188,10 @@ function renderGameSheet(){
  }else if(detailView==="odds"){
   const awaySp=Number.isFinite(line?.awaySpread)?displaySpread(line.awaySpread):"—",homeSp=Number.isFinite(line?.homeSpread)?displaySpread(line.homeSpread):"—";
   const total=Number.isFinite(line?.overUnder)?String(line.overUnder):"—";
-  section='<div class="sp-odds-grid"><span>Team</span><span>Spread</span><span>Total</span>'+
-   '<strong>'+esc(game.away)+'</strong><strong>'+esc(awaySp)+'</strong><strong>'+esc(total)+'</strong>'+
-   '<strong>'+esc(game.home)+'</strong><strong>'+esc(homeSp)+'</strong><strong>'+esc(total)+'</strong></div>'+
+  const money=v=>Number.isFinite(v)?(v>0?"+":"")+String(v):"—";
+  section='<div class="sp-odds-grid"><span>Team</span><span>Spread</span><span>Total</span><span>Moneyline</span>'+
+   '<strong>'+esc(game.away)+'</strong><strong>'+esc(awaySp)+'</strong><strong>'+esc(total)+'</strong><strong>'+esc(money(line?.awayMoneyline))+'</strong>'+
+   '<strong>'+esc(game.home)+'</strong><strong>'+esc(homeSp)+'</strong><strong>'+esc(total)+'</strong><strong>'+esc(money(line?.homeMoneyline))+'</strong></div>'+
    '<p class="sp-no-data">'+esc(line?.provider||"Pregame lines unavailable")+' · O/U is the combined-game point total.</p>';
  }else if(detailView==="players"){
   const rows=window.WTManualFantasy?.gameRows?.(game,scoreResult)||"";
@@ -385,6 +386,23 @@ document.addEventListener("wt-week-changed",()=>{
  ensure();refresh();refreshMarket();
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&openedGame)closeSportsGame();});
+let spSwipeStart=null;
+document.addEventListener("touchstart",e=>{
+ if(!openedGame || !e.target.closest(".sp-sheet-score"))return;
+ const t=e.touches?.[0];if(t)spSwipeStart={x:t.clientX,y:t.clientY};
+},{passive:true});
+document.addEventListener("touchend",e=>{
+ if(!spSwipeStart||!openedGame)return;
+ const t=e.changedTouches?.[0],start=spSwipeStart;spSwipeStart=null;
+ if(!t)return;
+ const dx=t.clientX-start.x,dy=t.clientY-start.y;
+ if(Math.abs(dx)<65||Math.abs(dx)<Math.abs(dy)*1.3)return;
+ const ix=GAMES.findIndex(g=>g.id===openedGame);
+ if(ix<0||GAMES.length<2)return;
+ const next=GAMES[(ix+(dx<0?1:-1)+GAMES.length)%GAMES.length];
+ openSportsGame(next.id);
+},{passive:true});
+
 document.addEventListener("wt-fantasy-change",ensure);
 document.addEventListener("wt-manual-fantasy-change",ensure);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){refresh();refreshMarket();}});
