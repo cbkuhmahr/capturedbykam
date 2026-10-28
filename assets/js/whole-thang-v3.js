@@ -357,7 +357,7 @@ function picksPage(){
  '<button type="button" class="btn" data-action="edit" '+(!state.locked?'disabled':'')+'>Edit picks</button>'+
  '<button type="button" class="btn primary" data-action="save-lock" '+(state.locked?'disabled':'')+'>Save & Lock</button>'+
  '<button type="button" class="btn" data-action="save">Save picks</button>'+
- '<button type="button" class="btn" data-action="sync-device" '+(syncingDevice?'disabled':'')+'>Sync & Verify</button>'+
+ '<button type="button" class="btn" data-action="sync-device" '+(syncingDevice||initialCloudLoad||activatingWeek?'disabled':'')+'>Sync & Verify</button>'+
  '<span class="wt-cloud-status" role="status">'+escape(cloudStatus)+'</span></div>'+
  groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
  section("Monday Night Tiebreaker","",'<div class="tiebreak-grid"><div class="field"><label>Winning margin · '+(GAMES.filter(g=>g.group==="Monday Night").map(g=>g.away+" @ "+g.home).join(" / ")||"Monday Night Football")+'</label><input aria-label="MNF predicted winning margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?'disabled':'')+' placeholder="Margin"></div></div>');
@@ -410,7 +410,7 @@ function historyPage(){
 function dataPage(){
  const json=JSON.stringify({version:3,scope:"browser-picks-only",week:activeWeek,...state},null,2);
  return section("Data / Backup","Secure cloud sync and local backup",
- '<div class="note"><strong>Device sync</strong> · '+escape(cloudStatus)+'. <button class="btn" type="button" data-action="sync-device" '+(syncingDevice?'disabled':'')+'>Sync & Verify this device</button>'+(lastDeviceSync?'<p>'+escape(lastDeviceSync)+'</p>':'')+'<p>Open this from the iPhone home-screen app that holds your original picks. Safari may keep separate local data.</p></div>'+
+ '<div class="note"><strong>Device sync</strong> · '+escape(cloudStatus)+'. <button class="btn" type="button" data-action="sync-device" '+(syncingDevice||initialCloudLoad||activatingWeek?'disabled':'')+'>Sync & Verify this device</button>'+(lastDeviceSync?'<p>'+escape(lastDeviceSync)+'</p>':'')+'<p>Open this from the iPhone home-screen app that holds your original picks. Safari may keep separate local data.</p></div>'+
  '<div class="note"><strong>Verified history cannot be overwritten by imported backups.</strong> Weekly picks can sync through the private admin database when online. You can also export or import a local JSON backup.</div>'+
  '<div class="data-grid wt-data-grid"><div class="field"><label>Export local picks</label><textarea readonly id="exportBox">'+escape(json)+'</textarea><div class="action-row"><button class="btn" data-action="copy">Copy backup</button></div></div><div class="field"><label>Import local picks</label><textarea id="importBox" placeholder="Paste WHOLE THANG backup JSON"></textarea><div class="action-row"><button class="btn primary" data-action="import">Import picks</button><button class="btn danger" data-action="reset">Reset local picks</button></div></div></div>')+
  '<div class="note"><strong>Data source:</strong> Supplied Week 1–5 pick log and final scores, last updated October 12, 2026. All 79 selections are preserved as historical data. Additional completed picks are graded automatically from final NFL scores.</div>';
