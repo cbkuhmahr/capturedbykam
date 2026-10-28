@@ -80,6 +80,7 @@ function verdict(game, result, choice) {
 /* Apple Sports-inspired presentation, retaining independent $billi-type branding. */
 let sportsDay="auto",sportsScope="all",openedGame=null,detailView="stats",detailRequest=0;
 const detailCache=new Map();
+let standingsCache=null,standingsLoading=false;
 let favorites=new Set();
 try{favorites=new Set(JSON.parse(localStorage.getItem("wt-sports-favorites")||"[]").filter(x=>/^[A-Z]{2,3}$/.test(x)));}catch{}
 const fullNames={ARI:"Cardinals",ATL:"Falcons",BAL:"Ravens",BUF:"Bills",CAR:"Panthers",CHI:"Bears",CIN:"Bengals",CLE:"Browns",DAL:"Cowboys",DEN:"Broncos",DET:"Lions",GB:"Packers",HOU:"Texans",IND:"Colts",JAX:"Jaguars",KC:"Chiefs",LAC:"Chargers",LAR:"Rams",LV:"Raiders",MIA:"Dolphins",MIN:"Vikings",NE:"Patriots",NO:"Saints",NYG:"Giants",NYJ:"Jets",PHI:"Eagles",PIT:"Steelers",SEA:"Seahawks",SF:"49ers",TB:"Buccaneers",TEN:"Titans",WAS:"Commanders"};
@@ -147,6 +148,16 @@ function sportsGameCard(item){
   '<button type="button" class="sp-star '+(favorites.has(game.home)?"is-on":"")+'" data-sp-fave="'+esc(game.home)+'" aria-label="'+(favorites.has(game.home)?"Remove favorite ":"Favorite ")+esc(fullNames[game.home])+'" aria-pressed="'+favorites.has(game.home)+'">★</button></div>'+
   '</article>';
 }
+async function loadSportsStandings(){
+ if(standingsCache || standingsLoading)return;
+ standingsLoading=true;
+ try{
+  const response=await fetch("/api/nfl-standings",{credentials:"same-origin"});
+  const data=await response.json();
+  standingsCache=response.ok&&data.ok&&Array.isArray(data.groups)?data.groups:[];
+ }catch{standingsCache=[];}
+ finally{standingsLoading=false;if(openedGame&&detailView==="standings")renderGameSheet();}
+}
 function renderGameSheet(){
  let host=document.getElementById("sp-game-sheet");
  if(!openedGame){if(host)host.remove();document.body.classList.remove("sp-modal-open");return;}
@@ -162,7 +173,7 @@ function renderGameSheet(){
  function teamScore(side,t){
   return '<div class="sp-sheet-team"><img alt="" src="'+logo(t)+'"><strong>'+esc(hasScores?score(scoreResult,side):"—")+'</strong><span>'+esc(fullNames[t]||t)+'</span></div>';
  }
- const statTab='<div class="sp-sheet-tabs">'+[["stats","Stats"],["plays","Scoring"],["odds","Odds"],["players","My players"]].map(([id,label])=>
+ const statTab='<div class="sp-sheet-tabs">'+[["stats","Stats"],["plays","Scoring"],["standings","Standings"],["odds","Odds"],["players","My players"]].map(([id,label])=>
   '<button type="button" data-sp-panel="'+id+'" class="'+(detailView===id?"selected":"")+'">'+label+'</button>').join("")+'</div>';
  let section="";
  if(detailView==="stats"){
@@ -191,6 +202,24 @@ function renderGameSheet(){
    '<strong>'+esc(game.away)+'</strong><strong>'+esc(awaySp)+'</strong><strong>'+esc(total)+'</strong><strong>'+esc(money(line?.awayMoneyline))+'</strong>'+
    '<strong>'+esc(game.home)+'</strong><strong>'+esc(homeSp)+'</strong><strong>'+esc(total)+'</strong><strong>'+esc(money(line?.homeMoneyline))+'</strong></div>'+
    '<p class="sp-no-data">'+esc(line?.provider||"Pregame lines unavailable")+' · O/U is the combined-game point total.</p>';
+ }else if(detailView==="standings"){
+  if(standingsCache===null)section='<p class="sp-no-data">Loading NFL division standings…</p>';
+  else{
+   const groups=standingsCache.slice().sort((a,b)=>{
+    const af=a.teams?.some(t=>t.team===game.away||t.team===game.home)?1:0;
+    const bf=b.teams?.some(t=>t.team===game.away||t.team===game.home)?1:0;
+    return bf-af;
+   });
+   section=groups.length?'<div class="sp-standings">'+groups.map(g=>
+    '<div class="sp-standing-division"><h3>'+esc(g.name)+'</h3>'+
+    '<table><thead><tr><th>Team</th><th>W</th><th>L</th><th>T</th><th>PCT</th></tr></thead><tbody>'+
+    g.teams.map((t,i)=>'<tr class="'+((t.team===game.home||t.team===game.away)?"is-matchup":"")+'"><td>'+
+      '<span class="sp-standings-team"><span>'+(i+1)+'</span><img loading="lazy" src="'+logo(t.team)+'" alt=""><strong>'+esc(fullNames[t.team]||t.name||t.team)+'</strong></span></td>'+
+      '<td>'+esc(t.wins??"—")+'</td><td>'+esc(t.losses??"—")+'</td><td>'+esc(t.ties??"—")+'</td>'+
+      '<td>'+esc(t.pct===null?"—":Number(t.pct).toFixed(3).replace(/^0/,""))+'</td></tr>').join("")+
+    '</tbody></table></div>').join("")+'</div>':
+    '<p class="sp-no-data">Standings are temporarily unavailable.</p>';
+  }
  }else if(detailView==="players"){
   const rows=window.WTManualFantasy?.gameRows?.(game,scoreResult)||"";
   section=rows||'<p class="sp-no-data">No tracked fantasy players in this matchup.</p>';
@@ -353,7 +382,7 @@ document.addEventListener("click",e=>{
  if(e.target.closest("[data-sp-close]")){closeSportsGame();return;}
  const prev=e.target.closest("[data-sp-prev]");if(prev){openSportsGame(prev.dataset.spPrev);return;}
  const next=e.target.closest("[data-sp-next]");if(next){openSportsGame(next.dataset.spNext);return;}
- const panel=e.target.closest("[data-sp-panel]");if(panel){detailView=panel.dataset.spPanel;renderGameSheet();return;}
+ const panel=e.target.closest("[data-sp-panel]");if(panel){detailView=panel.dataset.spPanel;renderGameSheet();if(detailView==="standings")loadSportsStandings();return;}
  const open=e.target.closest("[data-sp-open]");if(open){openSportsGame(open.dataset.spOpen);return;}
  if(e.target.closest("[data-score-refresh]")){refresh();refreshMarket();return;}
  if(e.target.closest("[data-live-density]")){
