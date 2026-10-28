@@ -183,3 +183,44 @@ main{max-width:1120px;margin:0 auto}
 .sp-sheet-faves{display:flex;gap:6px}
 .sp-sheet-faves button{width:31px;height:31px;font-size:18px}
 .sp-sheet-faves button[aria-pressed=true]{color:#f9e3a5;background:#31566d}
+
+/* Picks retain their existing selection, editing, lock, and sync behavior.
+   Only the visual composition changes to a two-sided game matchup. */
+.wt-game-card{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;overflow:hidden}
+.wt-game-card>.wt-card-head,.wt-game-card>.wt-card-foot,.wt-game-card>.wt-card-score{grid-column:1/-1;min-width:0}
+.wt-game-card>.wt-card-head{min-height:49px;align-items:center;padding:13px 15px!important;background:rgba(11,37,61,.58);border-color:#315069!important;color:#abc6d9!important}
+.wt-game-card>.wt-card-head strong{color:#e4f0f9;font-size:12px}
+.wt-game-card>.wt-card-head span{font-size:11px}
+.wt-game-card>.wt-team-option{position:relative;display:flex!important;flex-direction:column;justify-content:center;align-items:center;gap:6px!important;
+ min-height:159px!important;padding:20px 9px 17px!important;background:transparent!important;color:#eef8ff!important;border:0!important;
+ text-align:center!important;box-shadow:none!important;transition:background .16s ease}
+.wt-game-card>.wt-team-option+.wt-team-option{border-left:1px solid #28455e!important}
+.wt-game-card>.wt-team-option.is-selected{background:radial-gradient(circle at 50% 45%,#195b77,#123952 76%)!important;box-shadow:inset 0 -3px #b3e9ff!important}
+.wt-game-card>.wt-team-option:hover{background:#123750!important}
+.wt-game-card>.wt-team-option img.wt-logo{width:49px!important;height:49px!important;object-fit:contain;flex:0 0 auto}
+.wt-game-card>.wt-team-option span{font-size:16px!important;line-height:1.2;font-weight:770;letter-spacing:-.025em;color:#f4fbff}
+.wt-game-card>.wt-team-option small{font-size:11px!important;font-weight:610;color:#a4bacb}
+.wt-game-card>.wt-team-option i{position:absolute;right:12px;top:11px;font-style:normal;font-weight:850;font-size:19px!important;color:#66839b!important}
+.wt-game-card>.wt-team-option.is-selected i{color:#bcecff!important}
+.wt-game-card>.wt-card-score{padding:7px 14px 8px;background:#0b2940}
+.wt-game-card>.wt-card-score>div:first-child{font-size:11px;color:#e8f4fc}
+.wt-game-card .wt-market-line{display:flex!important;align-items:center;gap:10px!important;justify-content:space-between;padding:7px 0 0!important;margin:5px 0 0!important}
+.wt-game-card .wt-market-provider{font-size:9px}
+.wt-game-card>.wt-card-foot{padding:11px 15px!important;background:#0a2840;border-color:#294861!important}
+.wt-game-card>.wt-card-foot strong{color:#c2e9fc!important}
+.wt-edit-toolbar{gap:8px!important;border-radius:18px!important;padding:12px!important}
+.wt-edit-toolbar .btn{border-radius:12px!important}
+.wt-match-grid{gap:14px!important}
+.wt-group>.group-label{border:0;background:none;color:#a9cadf!important;font-size:11px;padding:10px 3px!important}
+.wt-fantasy-page .wt-manual-intro{background:#12304c!important}
+.wt-fantasy-game-card{background:radial-gradient(circle at 80% 0%,#143b58,#0b2138 76%)!important}
+.wt-fantasy-game-score strong{color:#ecf8ff!important}
+.wt-intel-card{background:#0b2339!important}
+.wt-intel-card .wt-intel-match{color:#edf8ff}
+@media(max-width:740px){
+ .wt-game-card>.wt-team-option{min-height:137px!important;padding:17px 7px 13px!important}
+ .wt-game-card>.wt-team-option img.wt-logo{width:43px!important;height:43px!important}
+ .wt-game-card>.wt-team-option span{font-size:15px!important}
+ .wt-game-card>.wt-card-head{padding:11px 13px!important}
+ .wt-edit-toolbar .btn{min-height:38px}
+}
