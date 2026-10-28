@@ -63,8 +63,8 @@ module.exports = async function handler(req, res) {
     let response;
 
     if (action === "confirmAndDeliver") {
-      const host = String(req.headers.host || "www.capturedbykam.com");
-      response = await fetch("https://" + host + "/api/cbk-deliver", {
+      // Never forward the admin session token to a client-supplied Host.
+      response = await fetch("https://www.capturedbykam.com/api/cbk-deliver", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
