@@ -260,3 +260,11 @@ main{max-width:1120px;margin:0 auto}
 .sp-sync-panel .btn{display:inline-block;margin:10px 0 7px;min-height:41px}
 .sp-sync-panel p{margin:9px 0 0;font-size:12px;color:#9fc0d7}
 .sp-sync-panel .btn:disabled{opacity:.48}
+
+/* Apple Sports-style market prices and a true odds visibility preference. */
+.sp-odds-value{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;line-height:1.2}
+.sp-odds-value small{font-size:11px!important;font-weight:610;color:#8fbbd1;letter-spacing:0}
+.sp-hide-odds .wt-market-line,.sp-hide-odds .wt-market-help{display:none!important}
+.sp-score-tools .sp-odds-toggle[aria-pressed="true"]{border-color:#5e9d94!important;color:#c9f6e5!important}
+.sp-score-tools .sp-odds-toggle[aria-pressed="false"]{border-color:#35566a!important;color:#a8bac8!important}
+@media(max-width:390px){.sp-odds-grid>*{padding:11px 3px!important;font-size:12px!important}.sp-odds-value small{font-size:10px!important}}
