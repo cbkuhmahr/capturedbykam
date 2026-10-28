@@ -176,3 +176,10 @@ main{max-width:1120px;margin:0 auto}
 }
 @media(max-width:350px){.sp-points{font-size:34px}.sp-daytabs button{font-size:11px}.sp-team img{width:35px;height:35px}}
 @media(prefers-reduced-motion:reduce){.sp-overlay *{scroll-behavior:auto!important}}
+
+.sp-star-pair{position:absolute;right:10px;top:10px;display:flex;align-items:center;gap:4px}
+.sp-star-pair .sp-star{position:static;width:30px;height:30px;font-size:17px;background:rgba(4,19,36,.62)}
+.sp-fixture-top{padding-right:91px}
+.sp-sheet-faves{display:flex;gap:6px}
+.sp-sheet-faves button{width:31px;height:31px;font-size:18px}
+.sp-sheet-faves button[aria-pressed=true]{color:#f9e3a5;background:#31566d}
