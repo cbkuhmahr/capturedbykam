@@ -68,3 +68,18 @@ body{background:#ece6dc;color:#141414}.cbk-admin-shell{width:min(1180px,calc(100
   .cbk-admin-business-actions{display:grid;width:100%}
   .cbk-admin-business-actions .button{width:100%}
 }
+
+
+/* Actionable studio admin status and shortcuts */
+.cbk-admin-data-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:14px 0 4px;padding:10px 14px;background:#f8f4ec;border:1px solid rgba(20,20,20,.14)}
+.cbk-admin-data-bar [role="status"]{font-size:.8rem;color:#444;font-weight:650}
+.cbk-admin-data-bar .button{min-height:36px;padding:0 14px}
+.cbk-admin-data-bar .button:disabled{opacity:.55;cursor:wait}
+.cbk-admin-shortcuts{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 22px}
+.cbk-admin-shortcuts .button{min-height:42px}
+@media(max-width:520px){
+  .cbk-admin-data-bar{align-items:stretch}
+  .cbk-admin-data-bar [role="status"]{flex:1 1 100%}
+  .cbk-admin-data-bar .button{width:100%}
+  .cbk-admin-shortcuts{display:grid;grid-template-columns:1fr}
+}
