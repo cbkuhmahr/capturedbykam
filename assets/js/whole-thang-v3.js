@@ -124,7 +124,14 @@ async function historicalWeek(week){
    let archive=readWeekState(week,data.games);
    try{
     const cloud=await cloudRequest("loadWeek",{season:2026,week});
-    if(cloud.state){const saved=restoreRemoteWeek(cloud.state,data.games);if(saved.updatedAt>=archive.updatedAt)archive=saved;}
+    if(cloud.state){
+     const saved=restoreRemoteWeek(cloud.state,data.games);
+     if(saved.updatedAt>=archive.updatedAt)archive=saved;
+    }else if(archive.updatedAt>0 && (Object.keys(archive.picks).length>0 || archive.mnfMargin!=="")){
+     // Restore an older week's locally saved selections to the cloud once,
+     // but never overwrite an existing cloud record during historical import.
+     await cloudRequest("saveWeek",{season:2026,week,state:archive});
+    }
    }catch{}
    previousWeeks.set(week,gradeWeek(week,data.games,archive.picks,data.games));
   }
@@ -145,6 +152,7 @@ async function checkWeek(){
   return;
  }
  activatingWeek=true;
+ let saveAfterActivation=false;
  try{
   if(activeWeek===6)week6State=state;
   const latestWeek=feed.week;
@@ -171,11 +179,16 @@ async function checkWeek(){
    }
    cloudStatus="Cloud connected";
   }catch{cloudStatus="Local backup · sync offline";}
-  if(localRevision>started||(state.updatedAt&&!cloudStatus.includes("offline")))queueCloudSave();
+  // queueCloudSave is suppressed during activation. Defer it until the
+  // new week has finished loading so edits made mid-transition are preserved.
+  saveAfterActivation=Boolean(localRevision>started||(state.updatedAt&&!cloudStatus.includes("offline")));
   window.WTActiveWeekData={week:activeWeek,games:GAMES};
   document.dispatchEvent(new Event("wt-week-changed"));
   render();
- }finally{activatingWeek=false;}
+ }finally{
+  activatingWeek=false;
+  if(saveAfterActivation)queueCloudSave();
+ }
  // Load existing final results and older selections without blocking the week switch.
  for(let wk=6;wk<activeWeek;wk++){
   if(wk===6&&weekScores.has(6))continue;
