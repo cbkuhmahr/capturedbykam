@@ -12,6 +12,8 @@
   const openCbkBusinessButton = document.getElementById("openCbkBusinessButton");
   const adminHomeButton = document.getElementById("adminHomeButton");
   const businessHeaderActions = document.getElementById("businessHeaderActions");
+  const refreshDashboardButton = document.getElementById("refreshDashboardButton");
+  const adminRefreshStatus = document.getElementById("adminRefreshStatus");
   const businessTabs = [...document.querySelectorAll("[data-admin-view-target]")];
   const businessViews = [...document.querySelectorAll("[data-admin-view]")];
   const loginForm = document.getElementById("loginForm");
@@ -303,6 +305,12 @@
     await showBusinessView(button.dataset.adminViewTarget);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }));
+  document.querySelectorAll("[data-admin-shortcut]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      await showBusinessView(button.dataset.adminShortcut);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
 
   async function openDashboard() {
     loginPanel.hidden = true;
@@ -704,23 +712,39 @@
     });
   }
 
+  let refreshPromise = null;
   async function refreshAll() {
-    try {
-      const data = await api("dashboard");
-      projects = data.projects || [];
-      photos = data.photos || [];
-      orders = data.orders || [];
-      bookings = data.bookings || [];
-      bookingsAvailable = data.bookings_available !== false;
-      renderStats();
-      renderProjectSelect();
-      renderProjects();
-      renderOrders();
-      renderBookings();
-    } catch (error) {
-      if (!dashboard.hidden) console.error(error);
+    if (refreshPromise) return refreshPromise;
+    refreshDashboardButton.disabled = true;
+    adminRefreshStatus.textContent = "Updating data…";
+    refreshPromise = (async () => {
+      try {
+        const data = await api("dashboard");
+        projects = data.projects || [];
+        photos = data.photos || [];
+        orders = data.orders || [];
+        bookings = data.bookings || [];
+        bookingsAvailable = data.bookings_available !== false;
+        renderStats();
+        renderProjectSelect();
+        renderProjects();
+        renderOrders();
+        renderBookings();
+        adminRefreshStatus.textContent = "Updated " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+        return true;
+      } catch (error) {
+        adminRefreshStatus.textContent = "Update failed — tap Refresh data to retry";
+        if (!dashboard.hidden) console.error(error);
+        return false;
+      }
+    })();
+    try { return await refreshPromise; }
+    finally {
+      refreshPromise = null;
+      refreshDashboardButton.disabled = false;
     }
   }
+  refreshDashboardButton.addEventListener("click", refreshAll);
 
   function renderStats() {
     document.getElementById("statProjects").textContent = projects.length;
