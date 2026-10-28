@@ -250,3 +250,13 @@ main{max-width:1120px;margin:0 auto}
  .sp-standings-team strong{font-size:11px}
  .sp-sheet-tabs button{padding:11px 10px!important;font-size:12px!important}
 }
+
+
+/* Device cloud sync must remain visible even when optional explanatory notes are hidden. */
+.sp-sync-panel{display:block!important;padding:17px 18px;margin:0 0 16px;border:1px solid rgba(158,207,239,.23);
+ border-radius:18px;background:linear-gradient(135deg,rgba(26,72,94,.62),rgba(8,34,55,.87));
+ color:#cfdfed;font-size:13px;line-height:1.5}
+.sp-sync-panel strong{color:#f7fcff;font-size:16px}
+.sp-sync-panel .btn{display:inline-block;margin:10px 0 7px;min-height:41px}
+.sp-sync-panel p{margin:9px 0 0;font-size:12px;color:#9fc0d7}
+.sp-sync-panel .btn:disabled{opacity:.48}
