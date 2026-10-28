@@ -79,6 +79,8 @@ function verdict(game, result, choice) {
 
 /* Apple Sports-inspired presentation, retaining independent $billi-type branding. */
 let sportsDay="auto",sportsScope="all",openedGame=null,detailView="stats",detailRequest=0;
+let showOdds=true;
+try{showOdds=localStorage.getItem("wt-sports-odds-visible")!=="off";}catch{}
 const detailCache=new Map();
 let standingsCache=null,standingsLoading=false;
 let favorites=new Set();
@@ -173,7 +175,9 @@ function renderGameSheet(){
  function teamScore(side,t){
   return '<div class="sp-sheet-team"><img alt="" src="'+logo(t)+'"><strong>'+esc(hasScores?score(scoreResult,side):"—")+'</strong><span>'+esc(fullNames[t]||t)+'</span></div>';
  }
- const statTab='<div class="sp-sheet-tabs">'+[["stats","Stats"],["plays","Scoring"],["standings","Standings"],["odds","Odds"],["players","My players"]].map(([id,label])=>
+ if(!showOdds&&detailView==="odds")detailView="stats";
+ const statViews=[["stats","Stats"],["plays","Scoring"],["standings","Standings"],...(showOdds?[["odds","Odds"]]:[]),["players","My players"]];
+ const statTab='<div class="sp-sheet-tabs">'+statViews.map(([id,label])=>
   '<button type="button" data-sp-panel="'+id+'" class="'+(detailView===id?"selected":"")+'">'+label+'</button>').join("")+'</div>';
  let section="";
  if(detailView==="stats"){
@@ -197,10 +201,11 @@ function renderGameSheet(){
  }else if(detailView==="odds"){
   const awaySp=Number.isFinite(line?.awaySpread)?displaySpread(line.awaySpread):"—",homeSp=Number.isFinite(line?.homeSpread)?displaySpread(line.homeSpread):"—";
   const total=Number.isFinite(line?.overUnder)?String(line.overUnder):"—";
-  const money=v=>Number.isFinite(v)?(v>0?"+":"")+String(v):"—";
+  const money=v=>Number.isFinite(v)&&Math.abs(v)>=100?(v>0?"+":"")+String(v):"—";
+  const offer=(value,price)=>'<strong class="sp-odds-value">'+esc(value)+'<small>'+esc(money(price))+'</small></strong>';
   section='<div class="sp-odds-grid"><span>Team</span><span>Spread</span><span>Total</span><span>Moneyline</span>'+
-   '<strong>'+esc(game.away)+'</strong><strong>'+esc(awaySp)+'</strong><strong>'+esc(total)+'</strong><strong>'+esc(money(line?.awayMoneyline))+'</strong>'+
-   '<strong>'+esc(game.home)+'</strong><strong>'+esc(homeSp)+'</strong><strong>'+esc(total)+'</strong><strong>'+esc(money(line?.homeMoneyline))+'</strong></div>'+
+   '<strong>'+esc(game.away)+'</strong>'+offer(awaySp,line?.awaySpreadOdds)+offer('O '+total,line?.overOdds)+'<strong>'+esc(money(line?.awayMoneyline))+'</strong>'+
+   '<strong>'+esc(game.home)+'</strong>'+offer(homeSp,line?.homeSpreadOdds)+offer('U '+total,line?.underOdds)+'<strong>'+esc(money(line?.homeMoneyline))+'</strong></div>'+
    '<p class="sp-no-data">'+esc(line?.provider||"Pregame lines unavailable")+' · O/U is the combined-game point total.</p>';
  }else if(detailView==="standings"){
   if(standingsCache===null)section='<p class="sp-no-data">Loading NFL division standings…</p>';
@@ -286,6 +291,7 @@ function markup(){
  const tools='<div class="wt-live-tools" aria-label="Live view options">'+
   '<button type="button" class="btn wt-density-btn" data-live-density="1" aria-pressed="'+compact+'">'+(compact?"Compact · On":"Compact · Off")+'</button>'+
   '<button type="button" class="btn wt-awake-btn" data-awake-toggle="1" aria-pressed="true">Keep awake · On</button>'+
+  '<button type="button" class="btn sp-odds-toggle" data-sp-odds="1" aria-pressed="'+showOdds+'">Betting odds · '+(showOdds?"On":"Off")+'</button>'+
  '</div>';
  const status='<div class="wt-score-meta"><span class="'+(state==="error"?"wt-score-error":"")+'">'+esc(info||(stamp?"Updated "+stamp:"Scores ready"))+'</span>'+
  '<button type="button" class="btn wt-score-refresh" data-score-refresh="1" '+(fetching?"disabled":"")+'>'+(fetching?"Updating…":"↻ Refresh scores")+'</button></div>';
@@ -313,6 +319,7 @@ function markup(){
 
 }
  function ensure(){
+ document.body.classList.toggle("sp-hide-odds",!showOdds);
  const active=document.querySelector(".tab.active")?.dataset.tab;
  if(active!=="home"&&active!=="picks"&&active!=="live")return;
  let section=document.getElementById("wt-scoreboard");
@@ -377,6 +384,11 @@ async function refresh(){
 document.addEventListener("click",e=>{
  const day=e.target.closest("[data-sp-day]");
  if(day){sportsDay=day.dataset.spDay;ensure();return;}
+ if(e.target.closest("[data-sp-odds]")){
+  showOdds=!showOdds;
+  try{localStorage.setItem("wt-sports-odds-visible",showOdds?"on":"off");}catch{}
+  ensure();if(openedGame)renderGameSheet();return;
+ }
  if(e.target.closest("[data-sp-scope]")){sportsScope=sportsScope==="all"?"favorites":"all";ensure();return;}
  const star=e.target.closest("[data-sp-fave]");if(star){toggleFavorite(star.dataset.spFave);return;}
  if(e.target.closest("[data-sp-close]")){closeSportsGame();return;}
