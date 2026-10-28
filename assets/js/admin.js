@@ -558,20 +558,23 @@
         const blob = await makeWatermarkedPreview(file);
         const prepared = await api("prepareUpload", { project_id: projectId, photo_code: code, original_name: file.name });
 
-        const { error: previewUploadError } = await client.storage
-          .from(cfg.bucket)
-          .uploadToSignedUrl(prepared.preview.path, prepared.preview.token, blob, {
-            contentType: "image/jpeg"
-          });
-        if (previewUploadError) throw previewUploadError;
-
+        // Transfer the public preview and private original together.
+        // Keep registerPhoto sequential so gallery order and cover selection stay stable.
         const originalType = file.type || "application/octet-stream";
-        const { error: originalUploadError } = await client.storage
-          .from("cbk-gallery-originals")
-          .uploadToSignedUrl(prepared.original.path, prepared.original.token, file, {
-            contentType: originalType
-          });
-        if (originalUploadError) throw originalUploadError;
+        const [previewResult, originalResult] = await Promise.all([
+          client.storage
+            .from(cfg.bucket)
+            .uploadToSignedUrl(prepared.preview.path, prepared.preview.token, blob, {
+              contentType: "image/jpeg"
+            }),
+          client.storage
+            .from("cbk-gallery-originals")
+            .uploadToSignedUrl(prepared.original.path, prepared.original.token, file, {
+              contentType: originalType
+            })
+        ]);
+        if (previewResult.error) throw previewResult.error;
+        if (originalResult.error) throw originalResult.error;
 
         await api("registerPhoto", {
           project_id: projectId,
