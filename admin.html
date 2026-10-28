@@ -72,6 +72,10 @@
           <button class="cbk-admin-tab" type="button" data-admin-view-target="orders">Orders</button>
           <button class="cbk-admin-tab" type="button" data-admin-view-target="security">Security</button>
         </nav>
+        <div class="cbk-admin-data-bar">
+          <span id="adminRefreshStatus" role="status" aria-live="polite">Data not loaded yet</span>
+          <button id="refreshDashboardButton" class="button" type="button">Refresh data</button>
+        </div>
 
         <section class="cbk-admin-view" data-admin-view="overview">
           <div class="cbk-admin-stats" aria-label="Studio summary">
@@ -80,9 +84,10 @@
             <div><span>Photos</span><strong id="statPhotos">0</strong></div>
             <div><span>New Orders</span><strong id="statOrders">0</strong></div>
           </div>
-          <div class="cbk-overview-grid">
-            <div class="cbk-overview-note"><p class="eyebrow">Studio</p><h2>Operate without the clutter.</h2><p>Use Galleries for project creation and uploads, Bookings for new inquiries, Orders for customer delivery, and Security only when you need it.</p></div>
-            <div class="cbk-overview-note"><p class="eyebrow">Private</p><h2>Admin is locked down.</h2><p>Passkey / Face ID is primary, with PIN + Microsoft Authenticator as backup. The console also auto-locks after inactivity.</p></div>
+          <div class="cbk-admin-shortcuts" aria-label="Studio quick actions">
+            <button class="button" type="button" data-admin-shortcut="galleries">Manage galleries</button>
+            <button class="button" type="button" data-admin-shortcut="bookings">View bookings</button>
+            <button class="button" type="button" data-admin-shortcut="orders">Manage orders</button>
           </div>
         </section>
 
