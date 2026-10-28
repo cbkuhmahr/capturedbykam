@@ -25,7 +25,15 @@ module.exports=async function handler(req,res){
  if(!/^[a-f0-9]{64}$/i.test(token))return res.status(401).json({error:"Unlock admin first"});
  let body=req.body||{};
  if(typeof body==="string"){try{body=JSON.parse(body);}catch{return res.status(400).json({error:"Invalid JSON"});}}
- if(!body||!["load","save"].includes(body.action))return res.status(400).json({error:"Invalid sync action"});
+ // Every weekly browser action must be forwarded to the authenticated Edge function.
+// Previously only "load"/"save" were allowed, so Weeks 7-18 could never sync.
+const actions=new Set(["load","save","loadWeek","saveWeek"]);
+if(!body||typeof body!=="object"||Array.isArray(body)||!actions.has(body.action))
+ return res.status(400).json({error:"Invalid sync action"});
+if(body.action==="loadWeek"||body.action==="saveWeek"){
+ if(body.season!==2026||!Number.isInteger(body.week)||body.week<7||body.week>18)
+  return res.status(400).json({error:"Invalid NFL week"});
+}
  try{
   const response=await fetch(EDGE,{method:"POST",headers:{"Content-Type":"application/json","Origin":"https://www.capturedbykam.com","x-cbk-admin-token":token},body:JSON.stringify(body),signal:AbortSignal.timeout(12000)});
   const data=await response.json().catch(()=>({error:"Sync service unavailable"}));
