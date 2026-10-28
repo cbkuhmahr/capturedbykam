@@ -438,23 +438,6 @@ document.addEventListener("touchend",e=>{
  sportsTouchStart=null;
  if(Math.abs(dx)>72&&Math.abs(dx)>Math.abs(dy)*1.5)adjacentGame(dx<0?1:-1);
 },{passive:true});
-let spSwipeStart=null;
-document.addEventListener("touchstart",e=>{
- if(!openedGame || !e.target.closest(".sp-sheet-score"))return;
- const t=e.touches?.[0];if(t)spSwipeStart={x:t.clientX,y:t.clientY};
-},{passive:true});
-document.addEventListener("touchend",e=>{
- if(!spSwipeStart||!openedGame)return;
- const t=e.changedTouches?.[0],start=spSwipeStart;spSwipeStart=null;
- if(!t)return;
- const dx=t.clientX-start.x,dy=t.clientY-start.y;
- if(Math.abs(dx)<65||Math.abs(dx)<Math.abs(dy)*1.3)return;
- const ix=GAMES.findIndex(g=>g.id===openedGame);
- if(ix<0||GAMES.length<2)return;
- const next=GAMES[(ix+(dx<0?1:-1)+GAMES.length)%GAMES.length];
- openSportsGame(next.id);
-},{passive:true});
-
 document.addEventListener("wt-fantasy-change",ensure);
 document.addEventListener("wt-manual-fantasy-change",ensure);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){refresh();refreshMarket();}});
