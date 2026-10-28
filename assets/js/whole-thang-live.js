@@ -143,7 +143,8 @@ function sportsGameCard(item){
     team(game.home,"home",homeWon)+'</div>'+
    '<div class="sp-fixture-footer"><span>'+choose+(verdictText?'<span class="sp-verdict sp-v-'+outcome+'">'+esc(verdictText)+'</span>':"")+'</span><span>Game details ›</span></div>'+
   '</button>'+
-  '<button type="button" class="sp-star '+(favorite?"is-on":"")+'" data-sp-fave="'+esc(game.home)+'" aria-label="'+(favorites.has(game.home)?"Remove ":"Favorite ")+esc(fullNames[game.home])+'" aria-pressed="'+favorites.has(game.home)+'">★</button>'+
+  '<div class="sp-star-pair"><button type="button" class="sp-star '+(favorites.has(game.away)?"is-on":"")+'" data-sp-fave="'+esc(game.away)+'" aria-label="'+(favorites.has(game.away)?"Remove favorite ":"Favorite ")+esc(fullNames[game.away])+'" aria-pressed="'+favorites.has(game.away)+'">★</button>'+
+  '<button type="button" class="sp-star '+(favorites.has(game.home)?"is-on":"")+'" data-sp-fave="'+esc(game.home)+'" aria-label="'+(favorites.has(game.home)?"Remove favorite ":"Favorite ")+esc(fullNames[game.home])+'" aria-pressed="'+favorites.has(game.home)+'">★</button></div>'+
   '</article>';
 }
 function renderGameSheet(){
@@ -196,7 +197,7 @@ function renderGameSheet(){
  host.innerHTML='<div class="sp-scrim" data-sp-close="1"></div>'+
  '<section class="sp-sheet" role="dialog" aria-modal="true" aria-label="'+esc(game.away)+' at '+esc(game.home)+' game details">'+
  '<div class="sp-sheet-handle" aria-hidden="true"></div>'+
- '<div class="sp-sheet-heading"><button type="button" data-sp-close="1" aria-label="Close details">✕</button><span>WEEK '+currentWeek+' · NFL</span><button type="button" data-sp-fave="'+esc(game.home)+'" aria-label="Favorite home team" aria-pressed="'+favorites.has(game.home)+'">'+(favorites.has(game.home)?"★":"☆")+'</button></div>'+
+ '<div class="sp-sheet-heading"><button type="button" data-sp-close="1" aria-label="Close details">✕</button><span>WEEK '+currentWeek+' · NFL</span><div class="sp-sheet-faves"><button type="button" data-sp-fave="'+esc(game.away)+'" aria-label="Favorite away team" aria-pressed="'+favorites.has(game.away)+'">'+(favorites.has(game.away)?"★":"☆")+'</button><button type="button" data-sp-fave="'+esc(game.home)+'" aria-label="Favorite home team" aria-pressed="'+favorites.has(game.home)+'">'+(favorites.has(game.home)?"★":"☆")+'</button></div></div>'+
  '<p class="sp-sheet-status">'+esc(label(scoreResult))+'</p>'+
  '<div class="sp-sheet-score" style="--sp-accent:'+matchupAccent(game)+'">'+teamScore("away",game.away)+
  '<span class="sp-sheet-mid">'+(hasScores?"–":"@")+'</span>'+teamScore("home",game.home)+'</div>'+
@@ -277,7 +278,7 @@ function markup(){
       '<button type="button" data-sp-day="week">Show full week</button>'+
       (sportsScope==="favorites"?'<button type="button" data-sp-scope="1">All teams</button>':"")+'</div>')+
  '</div>';
- return banner+dayTabs+weekHead+board+summary+seasonLine+
+ return banner+dayTabs+summary+weekHead+board+seasonLine+
   '<div class="sp-score-tools">'+status+filters+tools+'</div>';
 
 }
