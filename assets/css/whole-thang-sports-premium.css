@@ -129,7 +129,7 @@ main{max-width:1120px;margin:0 auto}
 .sp-play small{font-size:11px;color:#94b4c9}
 .sp-play span{font-size:12px;line-height:1.5}
 .sp-play strong{white-space:nowrap;font-size:12px}
-.sp-odds-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;align-items:center;text-align:center}
+.sp-odds-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;align-items:center;text-align:center;font-variant-numeric:tabular-nums}
 .sp-odds-grid>*{padding:13px 5px;border-bottom:1px solid #2f5370;font-size:13px}
 .sp-odds-grid span{color:#a9c1d3;font-size:11px}
 .sp-no-data{font-size:13px;line-height:1.6;color:#9eb9ce;padding:12px 8px}
