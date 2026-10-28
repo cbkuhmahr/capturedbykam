@@ -412,7 +412,32 @@ document.addEventListener("wt-week-changed",()=>{
  closeSportsGame();sportsDay="auto";
  ensure();refresh();refreshMarket();
 });
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&openedGame)closeSportsGame();});
+function adjacentGame(direction){
+ if(!openedGame||!GAMES.length)return;
+ const index=GAMES.findIndex(g=>g.id===openedGame);
+ if(index<0)return;
+ const target=GAMES[(index+direction+GAMES.length)%GAMES.length];
+ if(target)openSportsGame(target.id);
+}
+document.addEventListener("keydown",e=>{
+ if(!openedGame)return;
+ if(e.key==="Escape"){closeSportsGame();return;}
+ if(e.target?.matches?.("input,textarea,select"))return;
+ if(e.key==="ArrowLeft"){adjacentGame(1);}
+ if(e.key==="ArrowRight"){adjacentGame(-1);}
+});
+let sportsTouchStart=null;
+document.addEventListener("touchstart",e=>{
+ if(!openedGame||!e.target?.closest?.(".sp-sheet-score")||e.touches?.length!==1)return;
+ sportsTouchStart={x:e.touches[0].clientX,y:e.touches[0].clientY};
+},{passive:true});
+document.addEventListener("touchend",e=>{
+ if(!sportsTouchStart||!openedGame||!e.changedTouches?.length)return;
+ const dx=e.changedTouches[0].clientX-sportsTouchStart.x;
+ const dy=e.changedTouches[0].clientY-sportsTouchStart.y;
+ sportsTouchStart=null;
+ if(Math.abs(dx)>72&&Math.abs(dx)>Math.abs(dy)*1.5)adjacentGame(dx<0?1:-1);
+},{passive:true});
 let spSwipeStart=null;
 document.addEventListener("touchstart",e=>{
  if(!openedGame || !e.target.closest(".sp-sheet-score"))return;
