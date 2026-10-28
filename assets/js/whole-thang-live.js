@@ -160,9 +160,7 @@ function renderGameSheet(){
  const detail=detailCache.get(String(scoreResult?.id||""));
  const numbers=detail?.teams||[];
  function teamScore(side,t){
-  return '<div class="sp-sheet-team"><img alt="" src="'+logo(t)+'"><strong>'+esc(hasScores?score(scoreResult,side):"—")+'</strong>'+
-   '<span>'+esc(fullNames[t]||t)+'</span>'+
-   '<button type="button" data-sp-fave="'+esc(t)+'" aria-pressed="'+favorites.has(t)+'" aria-label="'+(favorites.has(t)?"Remove favorite ":"Favorite ")+esc(fullNames[t]||t)+'">'+(favorites.has(t)?"★ Following":"☆ Follow")+'</button></div>';
+  return '<div class="sp-sheet-team"><img alt="" src="'+logo(t)+'"><strong>'+esc(hasScores?score(scoreResult,side):"—")+'</strong><span>'+esc(fullNames[t]||t)+'</span></div>';
  }
  const statTab='<div class="sp-sheet-tabs">'+[["stats","Stats"],["plays","Scoring"],["odds","Odds"],["players","My players"]].map(([id,label])=>
   '<button type="button" data-sp-panel="'+id+'" class="'+(detailView===id?"selected":"")+'">'+label+'</button>').join("")+'</div>';
