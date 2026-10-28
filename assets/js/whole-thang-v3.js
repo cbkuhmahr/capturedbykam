@@ -48,6 +48,7 @@ function validMargin(v){return v===""||v==null?"":Number.isInteger(Number(v))&&N
 let state=safeLoad(),tab="live",teamSort="rating",intelFilter="all";
 week6State=state;
 let cloudStatus="Connecting cloud…",initialCloudLoad=true,cloudTimer=null,localRevision=0;
+let syncingDevice=false,lastDeviceSync="";
 async function cloudRequest(action,payload={}){
  const r=await fetch("/api/whole-thang-sync",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...payload})});
  const data=await r.json().catch(()=>({}));
@@ -356,6 +357,7 @@ function picksPage(){
  '<button type="button" class="btn" data-action="edit" '+(!state.locked?'disabled':'')+'>Edit picks</button>'+
  '<button type="button" class="btn primary" data-action="save-lock" '+(state.locked?'disabled':'')+'>Save & Lock</button>'+
  '<button type="button" class="btn" data-action="save">Save picks</button>'+
+ '<button type="button" class="btn" data-action="sync-device" '+(syncingDevice?'disabled':'')+'>Sync & Verify</button>'+
  '<span class="wt-cloud-status" role="status">'+escape(cloudStatus)+'</span></div>'+
  groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
  section("Monday Night Tiebreaker","",'<div class="tiebreak-grid"><div class="field"><label>Winning margin · '+(GAMES.filter(g=>g.group==="Monday Night").map(g=>g.away+" @ "+g.home).join(" / ")||"Monday Night Football")+'</label><input aria-label="MNF predicted winning margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?'disabled':'')+' placeholder="Margin"></div></div>');
@@ -408,9 +410,123 @@ function historyPage(){
 function dataPage(){
  const json=JSON.stringify({version:3,scope:"browser-picks-only",week:activeWeek,...state},null,2);
  return section("Data / Backup","Secure cloud sync and local backup",
- '<div class="note"><strong>Verified history cannot be overwritten by imported backups.</strong> Weekly picks sync across signed-in devices through the private admin database when online. Current status: '+escape(cloudStatus)+'. A local browser backup and manual JSON export remain available when offline.</div>'+
+ '<div class="note"><strong>Device sync</strong> · '+escape(cloudStatus)+'. <button class="btn" type="button" data-action="sync-device" '+(syncingDevice?'disabled':'')+'>Sync & Verify this device</button>'+(lastDeviceSync?'<p>'+escape(lastDeviceSync)+'</p>':'')+'<p>Open this from the iPhone home-screen app that holds your original picks. Safari may keep separate local data.</p></div>'+
+ '<div class="note"><strong>Verified history cannot be overwritten by imported backups.</strong> Weekly picks can sync through the private admin database when online. You can also export or import a local JSON backup.</div>'+
  '<div class="data-grid wt-data-grid"><div class="field"><label>Export local picks</label><textarea readonly id="exportBox">'+escape(json)+'</textarea><div class="action-row"><button class="btn" data-action="copy">Copy backup</button></div></div><div class="field"><label>Import local picks</label><textarea id="importBox" placeholder="Paste WHOLE THANG backup JSON"></textarea><div class="action-row"><button class="btn primary" data-action="import">Import picks</button><button class="btn danger" data-action="reset">Reset local picks</button></div></div></div>')+
  '<div class="note"><strong>Data source:</strong> Supplied Week 1–5 pick log and final scores, last updated October 12, 2026. All 79 selections are preserved as historical data. Additional completed picks are graded automatically from final NFL scores.</div>';
+}
+
+function weekHasSavedData(candidate) {
+ return !!candidate && (
+  Object.keys(candidate.picks || {}).length > 0 ||
+  candidate.mnfMargin !== "" && candidate.mnfMargin != null ||
+  candidate.locked === true
+ );
+}
+function normalizedCloudWeek(remote, week, games) {
+ if(week !== 6) return restoreRemoteWeek(remote, games);
+ return {...EMPTY(),
+  picks: Object.fromEntries(games.filter(g => [g.away,g.home].includes(remote?.picks?.[g.id])).map(g => [g.id,remote.picks[g.id]])),
+  mnfMargin: validMargin(remote?.mnf_margin), locked: remote?.locked === true,
+  homeEdge: [0,25,45,65,85].includes(Number(remote?.home_edge)) ? Number(remote.home_edge) : 45,
+  updatedAt: Date.parse(remote?.updated_at) || 0
+ };
+}
+function sameSavedChoices(a,b) {
+ return JSON.stringify(a?.picks || {}) === JSON.stringify(b?.picks || {}) &&
+  String(a?.mnfMargin ?? "") === String(b?.mnfMargin ?? "") &&
+  !!a?.locked === !!b?.locked &&
+  Number(a?.homeEdge ?? 45) === Number(b?.homeEdge ?? 45);
+}
+function storeCloudWeek(week, recovered) {
+ if(week === activeWeek) {
+  state = recovered;
+  localRevision++;
+  render();
+ }
+ if(week === 6) week6State = recovered;
+ try {
+  localStorage.setItem(week === 6 ? KEY : WEEKLY_PREFIX+week, JSON.stringify(recovered));
+ } catch { /* The cloud copy remains available even when device storage is disabled. */ }
+}
+async function syncDevice() {
+ if(syncingDevice || initialCloudLoad || activatingWeek) return;
+ syncingDevice = true;
+ let transferred=0, confirmed=0, skipped=0, conflicts=0;
+ cloudStatus="Checking this device…";
+ lastDeviceSync="";
+ render();
+ try {
+  // The currently opened standalone iPhone app has its own local picks.
+  // Check archived device data as well as this week's active selections.
+  const stopWeek=activeWeek;
+  for(let wk=6;wk<=stopWeek;wk++){
+   let games,local;
+   if(wk===6){games=LEGACY_GAMES;local=wk===activeWeek?state:week6State;}
+   else if(wk===activeWeek){games=GAMES;local=state;}
+   else{
+    let oldState=null;
+    try{oldState=JSON.parse(localStorage.getItem(WEEKLY_PREFIX+wk)||"null");}catch{}
+    if(!weekHasSavedData(oldState)){skipped++;continue;}
+    const res=await fetch("/api/nfl-scores?mode=week&week="+wk,{credentials:"same-origin"});
+    const schedule=await res.json().catch(()=>({}));
+    if(!res.ok||!schedule.ok||!Array.isArray(schedule.games)||schedule.games.length<10)
+     throw Error("Could not verify Week "+wk+" matchups.");
+    games=schedule.games;
+    local=readWeekState(wk,games);
+   }
+   const isCurrent=wk===activeWeek;
+   const revision=localRevision;
+   const params=wk===6?{}:{season:2026,week:wk};
+   const remoteResponse=await cloudRequest(wk===6?"load":"loadWeek",params);
+   const remote=remoteResponse.state;
+   if(isCurrent && revision!==localRevision)throw Error("Picks changed while syncing. Tap Sync & Verify again.");
+   if(remote){
+    const remoteCopy=normalizedCloudWeek(remote,wk,games);
+    if(isCurrent && remoteCopy.updatedAt > Number(local?.updatedAt||0)){
+     // A newer server record takes precedence. Never overwrite it with a stale device.
+     storeCloudWeek(wk,remoteCopy);
+     confirmed++;
+    }else if(isCurrent && !sameSavedChoices(local,remoteCopy) && Number(local?.updatedAt||0)>remoteCopy.updatedAt){
+     // User-initiated save of edits from this device, then read back for verification.
+     await cloudRequest(wk===6?"save":"saveWeek",{...params,state:local});
+     const check=await cloudRequest(wk===6?"load":"loadWeek",params);
+     if(!check.state||!sameSavedChoices(local,normalizedCloudWeek(check.state,wk,games)))
+      throw Error("Week "+wk+" could not be verified after saving.");
+     confirmed++;transferred++;
+    }else if(!isCurrent && !sameSavedChoices(local,remoteCopy) && weekHasSavedData(local)){
+     // Keep divergent archived histories intact. Do not replace existing cloud choices.
+     conflicts++;
+    }else{
+     if(isCurrent && !sameSavedChoices(local,remoteCopy))storeCloudWeek(wk,remoteCopy);
+     confirmed++;
+    }
+    continue;
+   }
+   if(!weekHasSavedData(local)){skipped++;continue;}
+   if(isCurrent && revision!==localRevision)throw Error("Picks changed while syncing. Tap Sync & Verify again.");
+   // Nothing yet saved on the server: recover this device's original selections.
+   await cloudRequest(wk===6?"save":"saveWeek",{...params,state:local});
+   const check=await cloudRequest(wk===6?"load":"loadWeek",params);
+   if(!check.state||!sameSavedChoices(local,normalizedCloudWeek(check.state,wk,games)))
+    throw Error("Week "+wk+" could not be verified after uploading.");
+   transferred++;confirmed++;
+   if(!isCurrent && wk>=7)previousWeeks.set(wk,gradeWeek(wk,games,local.picks,games));
+  }
+  cloudStatus=confirmed ? "Cloud verified" : "No picks on this device";
+  lastDeviceSync=confirmed+" week"+(confirmed===1?"":"s")+" verified"+(transferred?", "+transferred+" uploaded":"")+
+   (conflicts?", "+conflicts+" archived conflict"+(conflicts===1?"":"s")+" preserved":"")+
+   (skipped?", "+skipped+" empty":"")+".";
+  if(conflicts)cloudStatus="Review archived differences";
+  toast(conflicts?"Cloud kept existing older picks; local copies preserved.":"Device sync check complete.");
+ }catch(error){
+  cloudStatus="Sync needs attention";
+  lastDeviceSync=String(error?.message||"Connection unavailable.");
+  toast("Device sync: "+lastDeviceSync);
+ }finally{
+  syncingDevice=false;
+  render();
+ }
 }
 function switchTab(next){if(!["home","live","fantasy","picks","intel","teams","history","data"].includes(next))return;tab=next;render();const m=document.getElementById("wt-more-menu"),b=document.getElementById("wt-more-toggle");if(m)m.hidden=true;if(b)b.setAttribute("aria-expanded","false");window.scrollTo({top:0,behavior:"smooth"});}
 document.querySelectorAll(".tab").forEach(el=>el.addEventListener("click",()=>switchTab(el.dataset.tab)));
@@ -422,6 +538,7 @@ document.addEventListener("click",async function(e){
  const action=e.target.closest("[data-action]");if(!action)return;
  switch(action.dataset.action){
  case "save":save();toast("Saved locally; cloud sync requested.");break;
+ case "sync-device":await syncDevice();break;
  case "edit":
   if(state.locked){state.locked=false;save();render();toast("Editing enabled. Tap a team to update its pick.");}
   else toast("Your picks are already editable. Tap any team to change it.");
