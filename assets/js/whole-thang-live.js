@@ -85,7 +85,7 @@ try{favorites=new Set(JSON.parse(localStorage.getItem("wt-sports-favorites")||"[
 const fullNames={ARI:"Cardinals",ATL:"Falcons",BAL:"Ravens",BUF:"Bills",CAR:"Panthers",CHI:"Bears",CIN:"Bengals",CLE:"Browns",DAL:"Cowboys",DEN:"Broncos",DET:"Lions",GB:"Packers",HOU:"Texans",IND:"Colts",JAX:"Jaguars",KC:"Chiefs",LAC:"Chargers",LAR:"Rams",LV:"Raiders",MIA:"Dolphins",MIN:"Vikings",NE:"Patriots",NO:"Saints",NYG:"Giants",NYJ:"Jets",PHI:"Eagles",PIT:"Steelers",SEA:"Seahawks",SF:"49ers",TB:"Buccaneers",TEN:"Titans",WAS:"Commanders"};
 const teamColors={ARI:"#972c3e",ATL:"#a6192e",BAL:"#523a84",BUF:"#134c9c",CAR:"#1576aa",CHI:"#af541b",CIN:"#ab411a",CLE:"#a24e1c",DAL:"#234e82",DEN:"#bc531b",DET:"#137b9e",GB:"#285733",HOU:"#184f60",IND:"#20558d",JAX:"#18675e",KC:"#a52632",LAC:"#147aa6",LAR:"#20529f",LV:"#5e6269",MIA:"#117e87",MIN:"#60418b",NE:"#284b75",NO:"#9d854c",NYG:"#174c94",NYJ:"#276044",PHI:"#155d60",PIT:"#b99623",SEA:"#286b69",SF:"#a42b31",TB:"#ac4930",TEN:"#2b5b90",WAS:"#813b43"};
 const dateFormatter=new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"});
-function dateStamp(date){return dateFormatter.format(date);}
+function dateStamp(date){const p=Object.fromEntries(dateFormatter.formatToParts(date).map(q=>[q.type,q.value]));return p.year+"-"+p.month+"-"+p.day;}
 function nflKickoff(game){
  if(game.kickoff){const d=new Date(game.kickoff);if(Number.isFinite(d.getTime()))return d;}
  const match=String(game.day||"").match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})/i);
@@ -121,9 +121,9 @@ function toggleFavorite(team){
 function sportsGameCard(item){
  const {game,result:x,choice,verdict:outcome}=item;
  const inPlay=x?.state==="in",final=x?.state==="post",hasScores=x&&x.state!=="pre";
- const away=Number(x?.awayScore),home=Number(x?.homeScore);
- const awayWon=final&&Number.isFinite(away)&&Number.isFinite(home)&&away>home;
- const homeWon=final&&Number.isFinite(away)&&Number.isFinite(home)&&home>away;
+ const away=x?.awayScore==null?null:Number(x.awayScore),home=x?.homeScore==null?null:Number(x.homeScore);
+ const awayWon=final&&away!==null&&home!==null&&Number.isFinite(away)&&Number.isFinite(home)&&away>home;
+ const homeWon=final&&away!==null&&home!==null&&Number.isFinite(away)&&Number.isFinite(home)&&home>away;
  const status=inPlay?label(x):final?"Final":game.day+" · "+game.time+" ET";
  const choose=choice?"<span class=\"sp-picked\">My pick: "+esc(choice)+"</span>":"";
  const verdictText={correct:"Correct",incorrect:"Incorrect",tied:"Tie",ahead:"Ahead",behind:"Behind",even:"Even",upcoming:"Pending"}[outcome]||"";
@@ -160,7 +160,9 @@ function renderGameSheet(){
  const detail=detailCache.get(String(scoreResult?.id||""));
  const numbers=detail?.teams||[];
  function teamScore(side,t){
-  return '<div class="sp-sheet-team"><img alt="" src="'+logo(t)+'"><strong>'+esc(hasScores?score(scoreResult,side):"—")+'</strong><span>'+esc(fullNames[t]||t)+'</span></div>';
+  return '<div class="sp-sheet-team"><img alt="" src="'+logo(t)+'"><strong>'+esc(hasScores?score(scoreResult,side):"—")+'</strong>'+
+   '<span>'+esc(fullNames[t]||t)+'</span>'+
+   '<button type="button" data-sp-fave="'+esc(t)+'" aria-pressed="'+favorites.has(t)+'" aria-label="'+(favorites.has(t)?"Remove favorite ":"Favorite ")+esc(fullNames[t]||t)+'">'+(favorites.has(t)?"★ Following":"☆ Follow")+'</button></div>';
  }
  const statTab='<div class="sp-sheet-tabs">'+[["stats","Stats"],["plays","Scoring"],["odds","Odds"],["players","My players"]].map(([id,label])=>
   '<button type="button" data-sp-panel="'+id+'" class="'+(detailView===id?"selected":"")+'">'+label+'</button>').join("")+'</div>';
@@ -376,7 +378,7 @@ document.addEventListener("wt-week-changed",()=>{
  if(!data||!Number.isInteger(data.week)||!Array.isArray(data.games))return;
  if(data.week===currentWeek)return;
  currentWeek=data.week;
- GAMES=data.games.map(g=>({id:g.id,away:g.away,home:g.home,day:g.day,time:g.time,group:g.group,neutral:g.neutral}));
+ GAMES=data.games.map(g=>({id:g.id,away:g.away,home:g.home,day:g.day,time:g.time,group:g.group,neutral:g.neutral,kickoff:g.kickoff}));
  live=new Map();market=new Map();state="loading";updatedAt="";viewFilter="all";
  expandedGames.clear();
  closeSportsGame();sportsDay="auto";
