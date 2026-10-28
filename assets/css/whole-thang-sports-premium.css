@@ -224,3 +224,29 @@ main{max-width:1120px;margin:0 auto}
  .wt-game-card>.wt-card-head{padding:11px 13px!important}
  .wt-edit-toolbar .btn{min-height:38px}
 }
+
+
+/* Live NFL division standings, loaded only when the game-sheet tab is opened. */
+.sp-standings{display:grid;gap:20px}
+.sp-standing-division{border:1px solid rgba(163,207,239,.16);border-radius:15px;background:rgba(4,24,43,.45);overflow:hidden}
+.sp-standing-division h3{margin:0;padding:14px 13px 9px;color:#f0f9ff;font-size:15px;font-weight:790;letter-spacing:-.025em}
+.sp-standing-division table{width:100%;border-collapse:collapse;table-layout:fixed}
+.sp-standing-division th,.sp-standing-division td{
+ padding:12px 5px;text-align:center;border-bottom:1px solid rgba(162,203,237,.13);
+ background:transparent!important;font-variant-numeric:tabular-nums;color:#dce9f5;font-size:12px}
+.sp-standing-division th{color:#8facbf;font-size:10px;font-weight:740}
+.sp-standing-division th:first-child,.sp-standing-division td:first-child{width:51%;text-align:left;padding-left:12px}
+.sp-standing-division tbody tr:last-child td{border-bottom:0}
+.sp-standing-division .is-matchup td{background:rgba(77,137,170,.16)!important}
+.sp-standings-team{display:flex;gap:8px;align-items:center;min-width:0}
+.sp-standings-team>span{color:#96aec1;font-size:12px;flex:0 0 10px}
+.sp-standings-team img{width:22px;height:22px;object-fit:contain;flex:0 0 22px}
+.sp-standings-team strong{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:730}
+.sp-sheet-tabs{scrollbar-width:none}
+.sp-sheet-tabs::-webkit-scrollbar{display:none}
+@media(max-width:390px){
+ .sp-standing-division th:first-child,.sp-standing-division td:first-child{width:45%}
+ .sp-standings-team{gap:5px}
+ .sp-standings-team strong{font-size:11px}
+ .sp-sheet-tabs button{padding:11px 10px!important;font-size:12px!important}
+}
