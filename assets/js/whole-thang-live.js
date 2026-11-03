@@ -78,11 +78,12 @@ function verdict(game, result, choice) {
 }
 
 /* Apple Sports-inspired presentation, retaining independent $billi-type branding. */
-let sportsDay="auto",sportsScope="all",openedGame=null,detailView="stats",detailRequest=0;
+let sportsDay="auto",sportsScope="all",openedGame=null,detailView="stats",detailRequest=0,gameSearch="";
 let showOdds=true;
 try{showOdds=localStorage.getItem("wt-sports-odds-visible")!=="off";}catch{}
 const detailCache=new Map();
-let standingsCache=null,standingsLoading=false;
+const detailTimes=new Map();
+let standingsCache=null,standingsLoading=false,standingsUpdatedAt=0;
 let favorites=new Set();
 try{favorites=new Set(JSON.parse(localStorage.getItem("wt-sports-favorites")||"[]").filter(x=>/^[A-Z]{2,3}$/.test(x)));}catch{}
 const fullNames={ARI:"Cardinals",ATL:"Falcons",BAL:"Ravens",BUF:"Bills",CAR:"Panthers",CHI:"Bears",CIN:"Bengals",CLE:"Browns",DAL:"Cowboys",DEN:"Broncos",DET:"Lions",GB:"Packers",HOU:"Texans",IND:"Colts",JAX:"Jaguars",KC:"Chiefs",LAC:"Chargers",LAR:"Rams",LV:"Raiders",MIA:"Dolphins",MIN:"Vikings",NE:"Patriots",NO:"Saints",NYG:"Giants",NYJ:"Jets",PHI:"Eagles",PIT:"Steelers",SEA:"Seahawks",SF:"49ers",TB:"Buccaneers",TEN:"Titans",WAS:"Commanders"};
@@ -150,14 +151,14 @@ function sportsGameCard(item){
   '<button type="button" class="sp-star '+(favorites.has(game.home)?"is-on":"")+'" data-sp-fave="'+esc(game.home)+'" aria-label="'+(favorites.has(game.home)?"Remove favorite ":"Favorite ")+esc(fullNames[game.home])+'" aria-pressed="'+favorites.has(game.home)+'">★</button></div>'+
   '</article>';
 }
-async function loadSportsStandings(){
- if(standingsCache || standingsLoading)return;
+async function loadSportsStandings(force=false){
+ if(standingsLoading || (!force && standingsCache && Date.now()-standingsUpdatedAt<600000))return;
  standingsLoading=true;
  try{
-  const response=await fetch("/api/nfl-standings",{credentials:"same-origin"});
-  const data=await response.json();
-  standingsCache=response.ok&&data.ok&&Array.isArray(data.groups)?data.groups:[];
- }catch{standingsCache=[];}
+  const data=await window.WTUI.publicJSON("/api/nfl-standings",force?0:600000);
+  if(!Array.isArray(data.groups)||!data.groups.length)throw Error("Standings unavailable");
+  standingsCache=data.groups;standingsUpdatedAt=Date.now();
+ }catch{if(!standingsCache)standingsCache=[];}
  finally{standingsLoading=false;if(openedGame&&detailView==="standings")renderGameSheet();}
 }
 function renderGameSheet(){
@@ -178,15 +179,15 @@ function renderGameSheet(){
  if(!showOdds&&detailView==="odds")detailView="stats";
  const statViews=[["stats","Stats"],["plays","Scoring"],["standings","Standings"],...(showOdds?[["odds","Odds"]]:[]),["players","My players"]];
  const statTab='<div class="sp-sheet-tabs">'+statViews.map(([id,label])=>
-  '<button type="button" data-sp-panel="'+id+'" class="'+(detailView===id?"selected":"")+'">'+label+'</button>').join("")+'</div>';
+  '<button type="button" data-sp-panel="'+id+'" aria-pressed="'+(detailView===id)+'" class="'+(detailView===id?"selected":"")+'">'+label+'</button>').join("")+'</div>';
  let section="";
  if(detailView==="stats"){
   if(detail===null||detail===undefined)section='<p class="sp-no-data">'+(scoreResult?.id?"Loading team statistics…":"Detailed statistics are unavailable for this game.")+'</p>';
   else{
    const quarters=detail.quarters||[];
-   section=quarters.some(q=>q.scores.length)?'<div class="sp-sheet-table-wrap"><table class="sp-quarter-table"><thead><tr><th>Team</th>'+
-    Array.from({length:Math.max(...quarters.map(q=>q.scores.length),4)},(_,i)=>'<th>'+(i===4?"OT":i+1)+'</th>').join("")+'</tr></thead><tbody>'+
-    quarters.map(q=>'<tr><th>'+esc(q.team)+'</th>'+Array.from({length:Math.max(...quarters.map(x=>x.scores.length),4)},(_,i)=>'<td>'+esc(q.scores[i]??"—")+'</td>').join("")+'</tr>').join("")+'</tbody></table></div>':"";
+   section=quarters.some(q=>q.scores.length)?'<div class="sp-sheet-table-wrap"><table class="sp-quarter-table"><thead><tr><th scope="col">Team</th>'+
+    Array.from({length:Math.max(...quarters.map(q=>q.scores.length),4)},(_,i)=>'<th scope="col">'+(i===4?"OT":i+1)+'</th>').join("")+'</tr></thead><tbody>'+
+    quarters.map(q=>'<tr><th scope="row">'+esc(q.team)+'</th>'+Array.from({length:Math.max(...quarters.map(x=>x.scores.length),4)},(_,i)=>'<td>'+esc(q.scores[i]??"—")+'</td>').join("")+'</tr>').join("")+'</tbody></table></div>':"";
    const keys=["totalYards","netPassingYards","rushingYards","firstDowns","thirdDownEff","turnovers","possessionTime"];
    const map=Object.fromEntries(numbers.map(t=>[t.team,Object.fromEntries(t.stats.map(s=>[s.key,s]))]));
    const awayMap=map[game.away]||{},homeMap=map[game.home]||{};
@@ -217,19 +218,19 @@ function renderGameSheet(){
    });
    section=groups.length?'<div class="sp-standings">'+groups.map(g=>
     '<div class="sp-standing-division"><h3>'+esc(g.name)+'</h3>'+
-    '<table><thead><tr><th>Team</th><th>W</th><th>L</th><th>T</th><th>PCT</th></tr></thead><tbody>'+
+    '<table><thead><tr><th scope="col">Team</th><th scope="col">W</th><th scope="col">L</th><th scope="col">T</th><th scope="col">PCT</th></tr></thead><tbody>'+
     g.teams.map((t,i)=>'<tr class="'+((t.team===game.home||t.team===game.away)?"is-matchup":"")+'"><td>'+
       '<span class="sp-standings-team"><span>'+(i+1)+'</span><img loading="lazy" src="'+logo(t.team)+'" alt=""><strong>'+esc(fullNames[t.team]||t.name||t.team)+'</strong></span></td>'+
       '<td>'+esc(t.wins??"—")+'</td><td>'+esc(t.losses??"—")+'</td><td>'+esc(t.ties??"—")+'</td>'+
       '<td>'+esc(t.pct===null?"—":Number(t.pct).toFixed(3).replace(/^0/,""))+'</td></tr>').join("")+
     '</tbody></table></div>').join("")+'</div>':
-    '<p class="sp-no-data">Standings are temporarily unavailable.</p>';
+    '<p class="sp-no-data">Standings are temporarily unavailable.</p><button class="btn" type="button" data-sp-retry-standings="1">Retry standings</button>';
   }
  }else if(detailView==="players"){
   const rows=window.WTManualFantasy?.gameRows?.(game,scoreResult)||"";
   section=rows||'<p class="sp-no-data">No tracked fantasy players in this matchup.</p>';
  }
- host.innerHTML='<div class="sp-scrim" data-sp-close="1"></div>'+
+ const markup='<div class="sp-scrim" data-sp-close="1"></div>'+
  '<section class="sp-sheet" role="dialog" aria-modal="true" aria-label="'+esc(game.away)+' at '+esc(game.home)+' game details">'+
  '<div class="sp-sheet-handle" aria-hidden="true"></div>'+
  '<div class="sp-sheet-heading"><button type="button" data-sp-close="1" aria-label="Close details">✕</button><span>WEEK '+currentWeek+' · NFL</span><div class="sp-sheet-faves"><button type="button" data-sp-fave="'+esc(game.away)+'" aria-label="Favorite away team" aria-pressed="'+favorites.has(game.away)+'">'+(favorites.has(game.away)?"★":"☆")+'</button><button type="button" data-sp-fave="'+esc(game.home)+'" aria-label="Favorite home team" aria-pressed="'+favorites.has(game.home)+'">'+(favorites.has(game.home)?"★":"☆")+'</button></div></div>'+
@@ -237,21 +238,26 @@ function renderGameSheet(){
  '<div class="sp-sheet-score" style="--sp-accent:'+matchupAccent(game)+'">'+teamScore("away",game.away)+
  '<span class="sp-sheet-mid">'+(hasScores?"–":"@")+'</span>'+teamScore("home",game.home)+'</div>'+
  (choice?'<p class="sp-sheet-pick">My pick · <strong>'+esc(choice)+'</strong></p>':"")+
- statTab+'<div class="sp-sheet-body">'+section+'</div>'+
+ statTab+'<div class="sp-sheet-body" data-wt-scroll="detail-'+esc(game.id)+'-'+detailView+'">'+section+'</div>'+
  '<div class="sp-sheet-nav"><button type="button" data-sp-prev="'+esc(prev.id)+'">‹ Previous game</button><button type="button" data-sp-next="'+esc(next.id)+'">Next game ›</button></div></section>';
+ window.WTUI.replace(host,markup);
 }
 async function openSportsGame(id){
  const game=GAMES.find(g=>g.id===id);if(!game)return;
  openedGame=id;detailView="stats";renderGameSheet();
+ await loadSportsGameDetails(game);
+}
+async function loadSportsGameDetails(game){
  const eventId=String(get(game)?.id||"");
- if(!/^\d{6,12}$/.test(eventId)||detailCache.has(eventId))return;
+ const age=get(game)?.state==="post"?900000:30000;
+ if(!/^\d{6,12}$/.test(eventId)||(detailCache.has(eventId)&&Date.now()-(detailTimes.get(eventId)||0)<age))return;
  const request=++detailRequest;
  try{
-  const response=await fetch("/api/nfl-game?event="+encodeURIComponent(eventId),{credentials:"same-origin"});
-  const data=await response.json();
-  detailCache.set(eventId,response.ok&&data.ok?data:{teams:[],quarters:[],scoring:[]});
- }catch{detailCache.set(eventId,{teams:[],quarters:[],scoring:[]});}
- if(request===detailRequest&&openedGame===id)renderGameSheet();
+  const data=await window.WTUI.publicJSON("/api/nfl-game?event="+encodeURIComponent(eventId),age);
+  detailCache.set(eventId,data);detailTimes.set(eventId,Date.now());
+ }catch{if(!detailCache.has(eventId))detailCache.set(eventId,{teams:[],quarters:[],scoring:[]});}
+ if(detailCache.size>60){const first=detailCache.keys().next().value;detailCache.delete(first);detailTimes.delete(first);}
+ if(request===detailRequest&&openedGame===game.id)renderGameSheet();
 }
 function closeSportsGame(){openedGame=null;detailRequest++;renderGameSheet();}
 
@@ -282,6 +288,7 @@ function markup(){
   '<div class="wt-score-summary-title"><span>WEEK '+currentWeek+' · LIVE TALLY</span><strong>Your results</strong></div>'+
   '<div class="wt-score-tally wt-score-tally-right"><small>✓ CORRECT</small><strong>'+(displayable?right:"—")+'</strong></div>'+
   '<div class="wt-score-tally wt-score-tally-wrong"><small>✕ WRONG</small><strong>'+(displayable?wrong:"—")+'</strong></div>'+
+  '<div class="wt-score-tally wt-score-tally-pending"><small>PENDING</small><strong>'+(displayable?Math.max(0,picked-counted):"—")+'</strong></div>'+
   '<div class="wt-score-summary-note" role="status" aria-live="polite">'+esc(tallyNote)+'</div></section>';
  const overall=window.WTSeasonTotals?.();
  const seasonLine=overall?'<div class="wt-live-season-line" aria-label="Overall season results"><div><small>OVERALL · 2026 SEASON</small><strong>'+esc(overall.record)+'</strong></div><div><strong>'+esc(overall.accuracy)+'%</strong><small>ACCURACY</small></div></div>':"";
@@ -293,34 +300,39 @@ function markup(){
   '<button type="button" class="btn wt-awake-btn" data-awake-toggle="1" aria-pressed="true">Keep awake · On</button>'+
   '<button type="button" class="btn sp-odds-toggle" data-sp-odds="1" aria-pressed="'+showOdds+'">Betting odds · '+(showOdds?"On":"Off")+'</button>'+
  '</div>';
- const status='<div class="wt-score-meta"><span class="'+(state==="error"?"wt-score-error":"")+'">'+esc(info||(stamp?"Updated "+stamp:"Scores ready"))+'</span>'+
- '<button type="button" class="btn wt-score-refresh" data-score-refresh="1" '+(fetching?"disabled":"")+'>'+(fetching?"Updating…":"↻ Refresh scores")+'</button></div>';
+ const status='<div class="wt-score-meta"><span class="'+(state==="error"?"wt-score-error":"")+'">'+esc(info||(stamp?"Updated "+stamp:"Scores ready"))+'</span></div>';
+ const refreshButton='<button type="button" class="btn wt-score-refresh" aria-label="Refresh scores" title="Refresh scores" data-score-refresh="1" '+(fetching?"disabled":"")+'>'+(fetching?"…":"↻")+'</button>';
  const marketHelp='<div class="wt-market-help" aria-label="Betting lines explained"><strong>ODDS GUIDE</strong> <span>−3.5 = favored by 3.5</span><span>+3.5 = underdog by 3.5</span><span>O/U = combined points</span></div>';
 
  const todayView=resolvedDay();
  const visible=shown.filter(x=>(todayView==="week"||sportsDateClass(x.game)===todayView)&&
-   (sportsScope==="all"||favorites.has(x.game.home)||favorites.has(x.game.away)));
+   (sportsScope==="all"||favorites.has(x.game.home)||favorites.has(x.game.away))&&
+   [x.game.home,x.game.away,fullNames[x.game.home],fullNames[x.game.away]].join(" ").toLowerCase().includes(gameSearch.trim().toLowerCase()));
  const banner='<div class="sp-head"><div><small>NFL · 2026 SEASON</small><h1>Scores</h1></div>'+
   '<button type="button" data-sp-scope="1" class="sp-scope" aria-pressed="'+(sportsScope==="favorites")+'">'+
   (sportsScope==="favorites"?"★ My Teams":"☆ My Teams")+'</button></div>';
  const dayTabs='<div class="sp-daytabs" role="group" aria-label="Games by date">'+
   [["yesterday","Yesterday"],["today","Today"],["upcoming","Upcoming"],["week","Full week"]].map(([k,name])=>
   '<button type="button" data-sp-day="'+k+'" class="'+(todayView===k?"selected":"")+'" aria-pressed="'+(todayView===k)+'">'+name+'</button>').join("")+'</div>';
- const weekHead='<div class="sp-league-label"><span>🏈 NFL</span><span>WEEK '+currentWeek+'</span></div>';
- const board='<div class="sp-score-board" aria-label="NFL game scores">'+
+ const weekHead='<div class="sp-league-label"><span>NFL matchups</span><span>WEEK '+currentWeek+' · '+visible.length+' GAME'+(visible.length===1?'':'S')+'</span></div>';
+ const board='<div class="sp-score-board '+(compact?'is-compact':'')+'" aria-label="NFL game scores">'+
   (visible.length?visible.map(sportsGameCard).join(""):
-    '<div class="sp-empty"><strong>No games '+(todayView==="week"?"this week":todayView==="upcoming"?"upcoming":todayView==="today"?"today": "yesterday")+'</strong>'+
-      '<span>'+(sportsScope==="favorites"?"Favorite a team with ★ or switch to All teams.":"Choose Full week to see every matchup.")+'</span>'+
+    '<div class="sp-empty"><strong>'+(gameSearch||viewFilter!=="all"?"No matching games":"No games "+(todayView==="week"?"this week":todayView==="upcoming"?"upcoming":todayView==="today"?"today": "yesterday"))+'</strong>'+
+      '<span>'+(gameSearch||viewFilter!=="all"?"Try another team or reset the view to see all matchups.":sportsScope==="favorites"?"Favorite a team with ★ or switch to All teams.":"Choose Full week to see every matchup.")+'</span>'+
+      (gameSearch||viewFilter!=="all"?'<button type="button" data-sp-reset="1">Reset filters</button>':"")+
       '<button type="button" data-sp-day="week">Show full week</button>'+
       (sportsScope==="favorites"?'<button type="button" data-sp-scope="1">All teams</button>':"")+'</div>')+
  '</div>';
- return banner+dayTabs+summary+weekHead+board+seasonLine+
-  '<div class="sp-score-tools">'+status+filters+tools+'</div>';
+ const search='<label class="wt-game-search"><span class="wt-sr-only">Find an NFL matchup</span><input type="search" id="wt-game-search" value="'+esc(gameSearch)+'" placeholder="Find a team or matchup"></label>';
+ const feedNotice=state==="error"?'<p class="note wt-score-error" role="status">'+(updatedAt?'Showing the last available scores. Refresh to retry.':'Scores are temporarily unavailable. Refresh to retry.')+'</p>':"";
+ return banner+'<div class="wt-performance-grid">'+summary+seasonLine+'</div>'+dayTabs+
+  '<div class="sp-score-tools">'+filters+'<div class="wt-score-search-row">'+search+refreshButton+'</div></div>'+feedNotice+weekHead+board+
+  '<details class="wt-view-options" data-wt-key="view-options"><summary>View options</summary>'+status+tools+'</details>';
 
 }
  function ensure(){
  document.body.classList.toggle("sp-hide-odds",!showOdds);
- const active=document.querySelector(".tab.active")?.dataset.tab;
+ const active=document.body.dataset.wtView;
  if(active!=="home"&&active!=="picks"&&active!=="live")return;
  let section=document.getElementById("wt-scoreboard");
  if(!section&&active==="live"){
@@ -342,10 +354,10 @@ function markup(){
    const head=card.querySelector(".wt-card-head");
    if(head)head.insertAdjacentElement("afterend",holder);
   }
-  holder.innerHTML=mini(game);
+  window.WTUI.replace(holder,mini(game));
  });
  const board=document.getElementById("wt-live-scoreboard");
- if(board){board.innerHTML=markup();window.WTStayAwake?.sync();if(openedGame)renderGameSheet();}
+ if(board){window.WTUI.replace(board,markup());window.WTStayAwake?.sync();if(openedGame)renderGameSheet();}
 }
 async function refreshMarket() {
  if(fetchingMarket)return;
@@ -362,8 +374,7 @@ async function refreshMarket() {
   marketState="ready";
  }catch{marketState="error";}finally{fetchingMarket=false;ensure();}
 }
-const observer=new MutationObserver(()=>ensure());
-observer.observe(app,{childList:true});
+document.addEventListener("wt-view-rendered",ensure);
 async function refresh(){
  if(fetching)return;
  fetching=true;ensure();
@@ -378,10 +389,13 @@ async function refresh(){
   if(requestWeek!==currentWeek)return;
   live=next;updatedAt=json.updatedAt||new Date().toISOString();state="ready";
   window.WTScoreGames=json.games;document.dispatchEvent(new Event("wt-scores-ready"));
+  if(openedGame){const game=GAMES.find(g=>g.id===openedGame);if(game)void loadSportsGameDetails(game);}
  }catch{state="error";}
  finally{fetching=false;ensure();}
 }
 document.addEventListener("click",e=>{
+ if(e.target.closest("[data-sp-reset]")){sportsDay="week";sportsScope="all";viewFilter="all";gameSearch="";ensure();return;}
+ if(e.target.closest("[data-sp-retry-standings]")){void loadSportsStandings(true);return;}
  const day=e.target.closest("[data-sp-day]");
  if(day){sportsDay=day.dataset.spDay;ensure();return;}
  if(e.target.closest("[data-sp-odds]")){
@@ -413,6 +427,7 @@ document.addEventListener("click",e=>{
  const filter=e.target.closest("[data-live-filter]");
  if(filter&&["all","live","pending","picked"].includes(filter.dataset.liveFilter)){viewFilter=filter.dataset.liveFilter;ensure();}
 });
+document.addEventListener("input",event=>{if(event.target.id==="wt-game-search"){gameSearch=event.target.value;ensure();}});
 document.addEventListener("wt-week-changed",()=>{
  const data=window.WTActiveWeekData;
  if(!data||!Number.isInteger(data.week)||!Array.isArray(data.games))return;
@@ -435,8 +450,8 @@ document.addEventListener("keydown",e=>{
  if(!openedGame)return;
  if(e.key==="Escape"){closeSportsGame();return;}
  if(e.target?.matches?.("input,textarea,select"))return;
- if(e.key==="ArrowLeft"){adjacentGame(1);}
- if(e.key==="ArrowRight"){adjacentGame(-1);}
+ if(e.key==="ArrowLeft"){e.preventDefault();adjacentGame(-1);}
+ if(e.key==="ArrowRight"){e.preventDefault();adjacentGame(1);}
 });
 let sportsTouchStart=null;
 document.addEventListener("touchstart",e=>{
@@ -457,3 +472,4 @@ ensure();refresh();refreshMarket();
 setInterval(()=>{if(!document.hidden)refresh();},45000);
 setInterval(()=>{if(!document.hidden)refreshMarket();},180000);
 })();
+

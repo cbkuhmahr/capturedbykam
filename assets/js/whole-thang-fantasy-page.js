@@ -31,13 +31,13 @@ function render(){
   if(players)cards.push({priority:result.state==="in"?0:result.state==="pre"?1:2,markup:gameCard(game,result,players,"")});
  }
  cards.sort((a,b)=>a.priority-b.priority);
- root.innerHTML=cards.length?'<div class="wt-fantasy-game-grid">'+cards.map(x=>x.markup).join("")+'</div>':
- '<p class="wt-fantasy-quiet">No assigned players for this week. Select Manage roster.</p>';
+ window.WTUI.replace(root,cards.length?'<div class="wt-fantasy-game-grid">'+cards.map(x=>x.markup).join("")+'</div>':
+ '<p class="wt-fantasy-quiet">No assigned players for this week. Select Manage roster.</p>');
 }
-const observer=new MutationObserver(render);
-observer.observe(app,{childList:true});
+document.addEventListener("wt-view-rendered",render);
 for(const name of ["wt-manual-fantasy-change","wt-scores-ready"]){
   document.addEventListener(name,render);
 }
 render();
 })();
+

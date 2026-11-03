@@ -45,10 +45,17 @@ function safeLoad(){
  return {picks:allow,mnfMargin:validMargin(source.mnfMargin),locked:!!source.locked,homeEdge:[0,25,45,65,85].includes(Number(source.homeEdge))?Number(source.homeEdge):45,updatedAt:Number(source.updatedAt)||0};
 }
 function validMargin(v){return v===""||v==null?"":Number.isInteger(Number(v))&&Number(v)>=0&&Number(v)<=200?String(v):"";}
-let state=safeLoad(),tab="live",teamSort="rating",intelFilter="all";
+let state=safeLoad(),tab="live",teamSort="rating",teamDirection="desc",teamSearch="",intelFilter="all";
 week6State=state;
 let cloudStatus="Connecting cloud…",initialCloudLoad=true,cloudTimer=null,localRevision=0;
 let syncingDevice=false,lastDeviceSync="";
+function updateCloudIndicators(){
+ document.querySelectorAll("[data-wt-cloud],.wt-cloud-status").forEach(el=>{
+  el.textContent=cloudStatus;
+  el.dataset.state=/offline|attention|conflict|differences/i.test(cloudStatus)?"offline":"connected";
+ });
+ document.querySelectorAll('[data-action="sync-device"]').forEach(el=>{el.disabled=syncingDevice||initialCloudLoad||activatingWeek;});
+}
 async function cloudRequest(action,payload={}){
  const r=await fetch("/api/whole-thang-sync",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...payload})});
  const data=await r.json().catch(()=>({}));
@@ -61,12 +68,12 @@ function queueCloudSave(){
  cloudTimer=setTimeout(async()=>{
   const snapshot=JSON.parse(JSON.stringify(state)),week=activeWeek;
   try{
-   cloudStatus="Syncing…";
+   cloudStatus="Syncing…";updateCloudIndicators();
    if(week===6)await cloudRequest("save",{state:snapshot});
    else await cloudRequest("saveWeek",{season:2026,week,state:snapshot});
-   if(week===activeWeek&&snapshot.updatedAt===state.updatedAt){cloudStatus="Cloud synced";render();}
+   if(week===activeWeek&&snapshot.updatedAt===state.updatedAt){cloudStatus="Cloud synced";updateCloudIndicators();}
    else if(week===activeWeek)queueCloudSave();
-  }catch{cloudStatus="Local backup · sync offline";render();}
+  }catch{cloudStatus="Local backup · sync offline";updateCloudIndicators();}
  },400);
 }
 function save(){
@@ -138,7 +145,14 @@ async function historicalWeek(week){
   }
  }catch{}
 }
-async function checkWeek(){
+let weekCheckRequest=null;
+function checkWeek(){
+ if(weekCheckRequest)return weekCheckRequest;
+ if(Date.now()-lastWeekCheck<15000)return Promise.resolve();
+ weekCheckRequest=refreshWeek().finally(()=>{weekCheckRequest=null;});
+ return weekCheckRequest;
+}
+async function refreshWeek(){
  if(activatingWeek)return;
  lastWeekCheck=Date.now();
  let response,feed;
@@ -253,7 +267,7 @@ function seasonTotals(){
 window.WTSeasonTotals=seasonTotals;
 function updateSeasonStrip(){
  const x=seasonTotals(),r=document.querySelector(".season-strip .record"),a=document.querySelector(".season-strip .metric strong");
- if(r)r.innerHTML=x.record+" <span>2026</span>";
+ if(r)r.innerHTML=x.record+" <span>2026 SEASON</span>";
  if(a)a.textContent=x.accuracy+"%";
 }
 
@@ -329,25 +343,37 @@ function recordText(x){return x.w+"–"+x.l+(x.t?"–"+x.t+"T":"");}
 function pickRecord(t){return t.chosen?t.right+"–"+t.wrong+(t.drawn?"–"+t.drawn+"T":""):"—";}
 function tinyLogo(team){return '<img class="wt-logo" src="'+logo(team)+'" alt="" loading="lazy">';}
 function outcomeClass(g){return g.status==="W"?"wt-win":g.status==="L"?"wt-loss":"wt-tie";}
-function toast(msg){const el=document.createElement("div");el.className="toast";el.textContent=msg;document.body.appendChild(el);setTimeout(()=>el.remove(),2200);}
+function toast(msg){const el=document.createElement("div");el.className="toast";el.setAttribute("role","status");el.textContent=msg;document.body.appendChild(el);setTimeout(()=>el.remove(),3500);}
 function render(){
  document.body.dataset.wtView=tab;
- document.querySelectorAll(".tab").forEach(b=>{b.classList.toggle("active",b.dataset.tab===tab);b.setAttribute("aria-selected",b.dataset.tab===tab?"true":"false");});
+ document.querySelectorAll(".tab").forEach(b=>{b.classList.toggle("active",b.dataset.tab===tab);if(b.dataset.tab===tab)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+ document.getElementById("wt-more-toggle")?.classList.toggle("is-secondary-active",["home","teams","history","data"].includes(tab));
  updateSeasonStrip();
+ updateCloudIndicators();
+ const labels={home:"Overview",live:"Live scores",fantasy:"Fantasy",picks:"Weekly picks",intel:"Intelligence",teams:"Team rankings",history:"Pick history",data:"Data & backup"};
+ const context={home:"Your week at a glance.",fantasy:"Your roster, lineup and live player performance.",picks:"Week "+activeWeek+" · "+GAMES.filter(g=>state.picks[g.id]).length+" of "+GAMES.length+" selected",intel:"Week "+activeWeek+" matchup research",teams:"Model data through Week 5",history:"Weekly results and your complete season record.",data:"Device sync, saved picks and local backups."};
+ const label=document.getElementById("wt-view-label");if(label)label.textContent=labels[tab];
  const pages={home:homePage,live:()=>"",fantasy:()=>'<section class="wt-fantasy-page"><header class="wt-fantasy-page-head"><h2>Fantasy · Week '+activeWeek+'</h2></header><div id="wt-manual-fantasy-root">'+(window.WTManualFantasy?.toolbar?.()||'<div class="empty">Loading roster…</div>')+'</div><section class="wt-fantasy-games-section"><h3>My players · NFL games</h3><div id="wt-fantasy-games"></div></section></section>',picks:picksPage,intel:intelPage,teams:teamsPage,history:historyPage,data:dataPage};
- document.getElementById("app").innerHTML=(pages[tab]||homePage)();
+ const heading=tab==="live"?"":'<div class="wt-page-heading"><div><small>2026 SEASON · WEEK '+activeWeek+'</small><h1>'+labels[tab]+'</h1><p>'+context[tab]+'</p></div></div>';
+ const app=document.getElementById("app");
+ app.setAttribute("aria-label",labels[tab]);
+ window.WTUI.replace(app,heading+(pages[tab]||homePage)());
+ document.dispatchEvent(new Event("wt-view-rendered"));
 }
-function section(title,sub,body){return '<section class="section"><div class="section-head"><h2>'+title+'</h2></div>'+body+'</section>';}
-function cardMetric(label,value,foot){return '<div class="summary-item"><small>'+label+'</small><strong>'+value+'</strong></div>';}
+function section(title,sub,body){return '<section class="section"><div class="section-head"><h2>'+title+'</h2>'+(sub?'<span>'+sub+'</span>':"")+'</div>'+body+'</section>';}
+function cardMetric(label,value,foot){return '<div class="summary-item"><small>'+label+'</small><strong>'+value+'</strong>'+(foot?'<em>'+foot+'</em>':"")+'</div>';}
 function homePage(){
  const picked=GAMES.filter(g=>state.picks[g.id]).length;
- return section("Week "+activeWeek,"",'<div class="panel focus-row"><div class="focus-copy"><strong>'+picked+' of '+GAMES.length+' picks saved</strong><span>'+(GAMES[0]?escape(GAMES[0].away+" @ "+GAMES[0].home+" · "+GAMES[0].day+" "+GAMES[0].time+" ET"):"Schedule loading")+'</span></div><div class="counter">'+picked+'/'+GAMES.length+'</div></div>'+
- '<div class="action-row"><button class="btn primary" data-go="picks">Edit picks</button><button class="btn" data-go="fantasy">Fantasy players</button><button class="btn" data-go="intel">Matchups</button></div>');
+ const totals=seasonTotals();
+ return '<div class="panel summary-grid wt-overview-metrics">'+cardMetric("Season record",totals.record,"2026 · graded picks")+cardMetric("Accuracy",totals.accuracy+"%","Ties excluded")+cardMetric("Picks saved",picked+" / "+GAMES.length,state.locked?"Locked · editing available":"Week "+activeWeek)+'</div>'+
+ section("Week "+activeWeek,"Your selections",'<div class="panel focus-row"><div class="focus-copy"><small>'+(state.locked?"SAVED & LOCKED":"PICKS IN PROGRESS")+'</small><strong>'+picked+' of '+GAMES.length+' picks saved</strong><span>'+(GAMES[0]?escape(GAMES[0].away+" @ "+GAMES[0].home+" · "+GAMES[0].day+" "+GAMES[0].time+" ET"):"Schedule loading")+'</span></div><div class="counter">'+picked+'/'+GAMES.length+'</div></div>'+
+ '<div class="action-row"><button class="btn primary" data-go="picks">Edit picks</button><button class="btn" data-go="live">Live scores</button><button class="btn" data-go="fantasy">Fantasy players</button><button class="btn" data-go="intel">Matchups</button></div>')+
+ section("Recent results","",'<div class="wt-week-grid">'+weeks.concat(totals.scored).slice(-5).map(w=>'<button class="wt-week" type="button" data-go="history" aria-label="View Week '+w.week+' results"><small>Week '+w.week+'</small><strong>'+w.record+'</strong><span>'+fmt(w.rate)+'% accuracy</span></button>').join("")+'</div>');
 }
 function pickCard(f){
  const chosen=state.picks[f.id]||"",canPick=!state.locked;
  return '<article class="wt-game-card"><div class="wt-card-head"><strong>'+f.day+' · '+f.time+' ET</strong><span>'+f.group+(f.neutral?" · Neutral":"")+'</span></div>'+
- [f.away,f.home].map(t=>'<button type="button" class="wt-team-option '+(chosen===t?"is-selected":"")+'" data-pick="'+f.id+'" data-team="'+t+'" '+(canPick?"":"disabled")+'>'+tinyLogo(t)+'<span>'+NAMES[t]+'</span><small>'+t+' · '+recordText(TS[t])+'</small><i>'+(chosen===t?"✓":"○")+'</i></button>').join("")+
+ [f.away,f.home].map(t=>'<button type="button" class="wt-team-option '+(chosen===t?"is-selected":"")+'" data-pick="'+f.id+'" data-team="'+t+'" aria-pressed="'+(chosen===t)+'" aria-label="Pick '+NAMES[t]+' for '+f.away+' at '+f.home+'" '+(canPick?"":"disabled")+'>'+tinyLogo(t)+'<span>'+NAMES[t]+'</span><small>'+t+' · '+recordText(TS[t])+'</small><i aria-hidden="true">'+(chosen===t?"✓":"○")+'</i></button>').join("")+
  '<div class="wt-card-foot"><span>MODEL: <strong>'+f.choice+'</strong> · '+Math.round(f.probability*100)+'%</span><span class="'+(chosen&&chosen!==f.choice?"wt-red":"wt-muted")+'">'+(chosen?(chosen===f.choice?"Agrees with model":"Against model"):"Not picked")+'</span></div></article>';
 }
 function picksPage(){
@@ -360,7 +386,7 @@ function picksPage(){
  '<button type="button" class="btn" data-action="sync-device" '+(syncingDevice||initialCloudLoad||activatingWeek?'disabled':'')+'>Sync & Verify</button>'+
  '<span class="wt-cloud-status" role="status">'+escape(cloudStatus)+'</span></div>'+
  groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
- section("Monday Night Tiebreaker","",'<div class="tiebreak-grid"><div class="field"><label>Winning margin · '+(GAMES.filter(g=>g.group==="Monday Night").map(g=>g.away+" @ "+g.home).join(" / ")||"Monday Night Football")+'</label><input aria-label="MNF predicted winning margin" type="number" min="0" max="200" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?'disabled':'')+' placeholder="Margin"></div></div>');
+ section("Monday Night Tiebreaker","",'<div class="tiebreak-grid"><div class="field"><label for="wt-mnf-margin">Winning margin · '+(GAMES.filter(g=>g.group==="Monday Night").map(g=>g.away+" @ "+g.home).join(" / ")||"Monday Night Football")+'</label><input id="wt-mnf-margin" aria-label="MNF predicted winning margin" aria-describedby="wt-margin-error" type="number" min="0" max="200" step="1" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?'disabled':'')+' placeholder="Margin"><span id="wt-margin-error" class="wt-field-error" role="status"></span></div></div>');
 }
 function intelCard(f){
  const chosen=state.picks[f.id];
@@ -385,17 +411,20 @@ function intelPage(){
 }
 function teamsPage(){
  const opts={rating:"Model rating",record:"Win percentage",sos:"Schedule strength",diff:"Point differential",picks:"Your picking accuracy"};
- const arr=Object.values(TS).sort((a,b)=>{
- if(teamSort==="record")return b.rate-a.rate||b.elo-a.elo;
- if(teamSort==="sos")return b.sos-a.sos;
- if(teamSort==="diff")return b.diff-a.diff;
- if(teamSort==="picks")return b.pickRate-a.pickRate||b.chosen-a.chosen;
- return b.elo-a.elo;
+ const arr=Object.values(TS).filter(t=>(NAMES[t.abbr]+" "+t.abbr).toLowerCase().includes(teamSearch.toLowerCase())).sort((a,b)=>{
+ let order;
+ if(teamSort==="record")order=b.rate-a.rate||b.elo-a.elo;
+ else if(teamSort==="sos")order=b.sos-a.sos;
+ else if(teamSort==="diff")order=b.diff-a.diff;
+ else if(teamSort==="picks")order=b.pickRate-a.pickRate||b.chosen-a.chosen;
+ else order=b.elo-a.elo;
+ return teamDirection==="asc"?-order:order;
  });
+ function column(label,key){return '<th scope="col"'+(teamSort===key?' aria-sort="'+(teamDirection==="asc"?'ascending':'descending')+'"':'')+'><button class="wt-sort-button" type="button" data-team-sort="'+key+'" aria-label="Sort by '+opts[key]+'">'+label+' <span aria-hidden="true">'+(teamSort===key?(teamDirection==="asc"?'↑':'↓'):'↕')+'</span></button></th>';}
  return section("32-Team Intelligence","Through Week 5 · all imported results",
- '<div class="wt-controls"><label>Rank by <select id="teamSort">'+Object.entries(opts).map(([v,t])=>'<option value="'+v+'" '+(teamSort===v?"selected":"")+'>'+t+'</option>').join("")+'</select></label></div>'+
- '<div class="table-wrap wt-overflow"><table><thead><tr><th>Team</th><th>Record</th><th>Grade</th><th>Elo</th><th>PD</th><th>SOS</th><th>My picks</th></tr></thead><tbody>'+
- arr.map(t=>'<tr><td class="wt-name">'+tinyLogo(t.abbr)+'<span><strong>'+NAMES[t.abbr]+'</strong><small>'+t.abbr+' · #'+t.rank+'</small></span></td><td>'+recordText(t)+'</td><td><b class="wt-grade">'+t.grade+'</b></td><td>'+Math.round(t.elo)+'</td><td class="'+(t.diff>=0?"good":"wt-red")+'">'+(t.diff>0?"+":"")+t.diff+'</td><td>'+fmt(t.sos)+'%</td><td>'+pickRecord(t)+'<small class="wt-table-sub">'+(t.chosen?fmt(t.pickRate)+"%":"No picks")+'</small></td></tr>').join("")+'</tbody></table></div>')+
+ '<div class="wt-controls"><label>Rank by <select id="teamSort">'+Object.entries(opts).map(([v,t])=>'<option value="'+v+'" '+(teamSort===v?"selected":"")+'>'+t+'</option>').join("")+'</select></label><label for="wt-team-search">Find a team<input id="wt-team-search" type="search" value="'+escape(teamSearch)+'" placeholder="Team name or abbreviation"></label></div>'+
+ '<div class="table-wrap wt-overflow" data-wt-scroll="rankings" role="region" aria-label="Team rankings table" tabindex="0"><table><caption class="wt-sr-only">Team ratings through Week 5. Activate a column heading to change its sort direction.</caption><thead><tr><th scope="col">Team</th>'+column("Record","record")+'<th scope="col">Grade</th>'+column("Elo","rating")+column("PD","diff")+column("SOS","sos")+column("My picks","picks")+'</tr></thead><tbody>'+
+ (arr.length?arr.map(t=>'<tr><td class="wt-name"><div>'+tinyLogo(t.abbr)+'<span><strong>'+NAMES[t.abbr]+'</strong><small>'+t.abbr+' · #'+t.rank+'</small></span></div></td><td>'+recordText(t)+'</td><td><b class="wt-grade">'+t.grade+'</b></td><td>'+Math.round(t.elo)+'</td><td class="'+(t.diff>=0?"good":"wt-red")+'">'+(t.diff>0?"+":"")+t.diff+'</td><td>'+fmt(t.sos)+'%</td><td>'+pickRecord(t)+'<small class="wt-table-sub">'+(t.chosen?fmt(t.pickRate)+"%":"No picks")+'</small></td></tr>').join(""):'<tr><td colspan="7" class="empty">No teams match your search.</td></tr>')+'</tbody></table></div>')+
  '<div class="note"><strong>Definitions:</strong> PD = point differential in the 79 imported results; SOS = average final opponent win percentage; grade is a preliminary rating tier, not an official NFL grade. Personal success picking a team is shown separately from the forecast, to avoid treating your history as proof of future results.</div>';
 }
 function historyPage(){
@@ -403,7 +432,7 @@ function historyPage(){
  return section("Your Pick History","",
  '<div class="panel summary-grid">'+cardMetric("Wins",String(t.wins),"Correct")+cardMetric("Losses",String(t.losses),"Incorrect")+cardMetric("Ties",String(t.ties),"No winner")+'</div>'+
  '<div class="wt-history-season-line">Overall <strong>'+t.record+'</strong><span>'+t.accuracy+'% accuracy</span><small>'+(79+t.scored.reduce((n,w)=>n+w.games.length,0))+' graded picks</small></div>'+
- '<div class="wt-history-weeks">'+all.map(w=>'<details class="wt-week" '+(w.week===(all.length?all.at(-1).week:5)?"open":"")+'><summary><span><strong>Week '+w.week+'</strong><small>'+w.games.length+(w.week===6?" final results":" selections")+'</small></span><strong>'+w.record+'</strong><span>'+fmt(w.rate)+'%</span></summary><div class="wt-history-table"><table><thead><tr><th>Game</th><th>Pick</th><th>Final</th><th>Grade</th></tr></thead><tbody>'+
+ '<div class="wt-history-weeks">'+all.map(w=>'<details class="wt-week" data-wt-key="history-'+w.week+'" '+(w.week===(all.length?all.at(-1).week:5)?"open":"")+'><summary><span><strong>Week '+w.week+'</strong><small>'+w.games.length+(w.week===6?" final results":" selections")+'</small></span><strong>'+w.record+'</strong><span>'+fmt(w.rate)+'%</span></summary><div class="wt-history-table" data-wt-scroll="history-'+w.week+'"><table><thead><tr><th scope="col">Game</th><th scope="col">Pick</th><th scope="col">Final</th><th scope="col">Grade</th></tr></thead><tbody>'+
  w.games.map(g=>'<tr><td>'+g.away+' @ '+g.home+'</td><td><strong>'+g.pick+'</strong></td><td>'+g.awayScore+'–'+g.homeScore+'</td><td><span class="'+outcomeClass(g)+'">'+(g.status==="W"?"✓ Win":g.status==="L"?"✕ Loss":"T Tie")+'</span></td></tr>').join("")+'</tbody></table></div></details>').join("")+'</div>')+
  '<div class="note"><strong>Weeks 1–5:</strong> 54–24–1T verified. Later completed picks are graded from NFL final scores and your saved selections. Tied games do not count toward accuracy.</div>';
 }
@@ -412,7 +441,7 @@ function dataPage(){
  return section("Data / Backup","Secure cloud sync and local backup",
  '<div class="sp-sync-panel"><strong>Device sync</strong> · '+escape(cloudStatus)+'. <button class="btn" type="button" data-action="sync-device" '+(syncingDevice||initialCloudLoad||activatingWeek?'disabled':'')+'>Sync & Verify this device</button>'+(lastDeviceSync?'<p>'+escape(lastDeviceSync)+'</p>':'')+'<p>Open this from the iPhone home-screen app that holds your original picks. Safari may keep separate local data.</p></div>'+
  '<div class="note"><strong>Verified history cannot be overwritten by imported backups.</strong> Weekly picks can sync through the private admin database when online. You can also export or import a local JSON backup.</div>'+
- '<div class="data-grid wt-data-grid"><div class="field"><label>Export local picks</label><textarea readonly id="exportBox">'+escape(json)+'</textarea><div class="action-row"><button class="btn" data-action="copy">Copy backup</button></div></div><div class="field"><label>Import local picks</label><textarea id="importBox" placeholder="Paste WHOLE THANG backup JSON"></textarea><div class="action-row"><button class="btn primary" data-action="import">Import picks</button><button class="btn danger" data-action="reset">Reset local picks</button></div></div></div>')+
+ '<div class="data-grid wt-data-grid"><div class="field"><label for="exportBox">Export local picks</label><textarea readonly id="exportBox">'+escape(json)+'</textarea><div class="action-row"><button class="btn" data-action="copy">Copy backup</button></div></div><div class="field"><label for="importBox">Import local picks</label><textarea id="importBox" aria-describedby="wt-import-error" placeholder="Paste WHOLE THANG backup JSON"></textarea><span id="wt-import-error" class="wt-field-error" role="status"></span><div class="action-row"><button class="btn primary" data-action="import">Import picks</button><button class="btn danger" data-action="reset">Reset local picks</button></div></div></div>')+
  '<div class="note"><strong>Data source:</strong> Supplied Week 1–5 pick log and final scores, last updated October 12, 2026. All 79 selections are preserved as historical data. Additional completed picks are graded automatically from final NFL scores.</div>';
 }
 
@@ -528,10 +557,11 @@ async function syncDevice() {
   render();
  }
 }
-function switchTab(next){if(!["home","live","fantasy","picks","intel","teams","history","data"].includes(next))return;tab=next;render();const m=document.getElementById("wt-more-menu"),b=document.getElementById("wt-more-toggle");if(m)m.hidden=true;if(b)b.setAttribute("aria-expanded","false");window.scrollTo({top:0,behavior:"smooth"});}
+function switchTab(next){if(!["home","live","fantasy","picks","intel","teams","history","data"].includes(next))return;tab=next;render();const m=document.getElementById("wt-more-menu"),b=document.getElementById("wt-more-toggle");if(m)m.hidden=true;if(b)b.setAttribute("aria-expanded","false");document.getElementById("app").focus({preventScroll:true});window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});}
 document.querySelectorAll(".tab").forEach(el=>el.addEventListener("click",()=>switchTab(el.dataset.tab)));
 document.addEventListener("click",async function(e){
  const nav=e.target.closest("[data-go]");if(nav){switchTab(nav.dataset.go);return;}
+ const sort=e.target.closest("[data-team-sort]");if(sort){teamDirection=teamSort===sort.dataset.teamSort&&teamDirection==="desc"?"asc":"desc";teamSort=sort.dataset.teamSort;render();return;}
  const target=e.target.closest("[data-pick]");
  if(target){if(state.locked)return;const g=GAMES.find(g=>g.id===target.dataset.pick);if(!g||![g.away,g.home].includes(target.dataset.team))return;
  state.picks[g.id]=target.dataset.team;save();render();return;}
@@ -557,15 +587,19 @@ document.addEventListener("click",async function(e){
  if(!v||typeof v!=="object"||!v.picks||typeof v.picks!=="object")throw Error("Invalid picks backup");
  state={...EMPTY(),picks:Object.fromEntries(GAMES.filter(g=>[g.away,g.home].includes(v.picks[g.id])).map(g=>[g.id,v.picks[g.id]])),mnfMargin:validMargin(v.mnfMargin),locked:!!v.locked,homeEdge:[0,25,45,65,85].includes(Number(v.homeEdge))?Number(v.homeEdge):45};
  save();render();toast("Picks imported; official history unchanged.");
- }catch{toast("Invalid picks backup.");}break;
+ }catch{const input=document.getElementById("importBox"),message=document.getElementById("wt-import-error");if(input){input.setAttribute("aria-invalid","true");input.focus();}if(message)message.textContent="Enter a valid picks backup in JSON format.";toast("Invalid picks backup.");}break;
  case "reset":if(confirm("Clear Week "+activeWeek+" picks and settings? Verified results will stay.")){state=EMPTY();save();render();toast("Current week picks reset.");}break;
  }
 });
 document.addEventListener("change",e=>{
  if(e.target.id==="homeEdge"){state.homeEdge=Number(e.target.value);save();render();}
- if(e.target.id==="teamSort"){teamSort=e.target.value;render();}
+ if(e.target.id==="teamSort"){teamSort=e.target.value;teamDirection="desc";render();}
  if(e.target.id==="intelFilter"){intelFilter=e.target.value;render();}
- if(e.target.matches("[data-margin]")){state[e.target.dataset.margin]=validMargin(e.target.value);save();}
+ if(e.target.matches("[data-margin]")){const value=validMargin(e.target.value),invalid=e.target.value!==""&&value==="";e.target.setAttribute("aria-invalid",String(invalid));const message=document.getElementById("wt-margin-error");if(message)message.textContent=invalid?"Use a whole-number margin from 0 to 200.":"";state[e.target.dataset.margin]=value;save();}
+});
+document.addEventListener("input",e=>{
+ if(e.target.id==="wt-team-search"){teamSearch=e.target.value;render();}
+ if(e.target.id==="importBox"){e.target.removeAttribute("aria-invalid");const message=document.getElementById("wt-import-error");if(message)message.textContent="";}
 });
 document.addEventListener("click",event=>{
  const trigger=event.target.closest("[data-wt-menu]");
@@ -576,7 +610,13 @@ document.addEventListener("click",event=>{
  if(action){document.getElementById(action.dataset.wtOpen==="apple"?"wt-apple-open":"wt-media-launch")?.click();menu.hidden=true;toggle.setAttribute("aria-expanded","false");return;}
  if(!event.target.closest(".wt-more-wrap")){menu.hidden=true;toggle.setAttribute("aria-expanded","false");}
 });
-document.addEventListener("keydown",event=>{if(event.key==="Escape"){const m=document.getElementById("wt-more-menu"),b=document.getElementById("wt-more-toggle");if(m)m.hidden=true;if(b)b.setAttribute("aria-expanded","false");}});
+document.addEventListener("keydown",event=>{
+ const menu=document.getElementById("wt-more-menu"),toggle=document.getElementById("wt-more-toggle");if(!menu||!toggle)return;
+ if(event.target===toggle&&["ArrowDown","ArrowUp"].includes(event.key)){event.preventDefault();menu.hidden=false;toggle.setAttribute("aria-expanded","true");const choices=menu.querySelectorAll("button,a");(event.key==="ArrowDown"?choices[0]:choices[choices.length-1])?.focus();return;}
+ if(menu.hidden)return;
+ if(event.key==="Escape"){event.preventDefault();menu.hidden=true;toggle.setAttribute("aria-expanded","false");toggle.focus();return;}
+ if(menu.contains(event.target)&&["ArrowDown","ArrowUp","Home","End"].includes(event.key)){event.preventDefault();const choices=[...menu.querySelectorAll("button,a")],index=choices.indexOf(document.activeElement);const next=event.key==="Home"?0:event.key==="End"?choices.length-1:(index+(event.key==="ArrowDown"?1:-1)+choices.length)%choices.length;choices[next]?.focus();}
+});
 document.addEventListener("wt-scores-ready",()=>{if(activeWeek===6&&Array.isArray(window.WTScoreGames))weekScores.set(6,window.WTScoreGames);if(activeWeek>6&&Array.isArray(window.WTScoreGames))weekScores.set(activeWeek,window.WTScoreGames);if(tab==="history")render();else updateSeasonStrip();});
 render();
 initCloud();

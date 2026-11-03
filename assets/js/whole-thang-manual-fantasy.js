@@ -10,8 +10,21 @@ const html=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"
 const norm=s=>String(s||"").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]/g,"").replace(/(jr|sr|ii|iii|iv)$/,"");
 const validAvg=v=>v===""||v==null?null:Number.isFinite(+v)?Math.max(0,Math.min(75,+v)):null;
 let state={players:screenshotRoster(),scoring:"half"},editor=false,note="",gameList=[],box=new Map(),busy=new Set();
-function emit(){const root=document.getElementById("wt-manual-fantasy-root");if(root)root.innerHTML=toolbar();document.dispatchEvent(new Event("wt-manual-fantasy-change"));}
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch{note="Browser storage may be unavailable.";}emit();}
+function emit(keepEditor=false){
+ const root=document.getElementById("wt-manual-fantasy-root");
+ if(root){
+  if(keepEditor&&editor&&root.querySelector(".wt-manual-editor")){
+   // Keep the actual form nodes mounted while editing or refreshing stats.
+   const next=document.createElement("div");next.innerHTML=toolbar();
+   for(const selector of [".wt-manual-intro",".wt-quick-lineup"]){const current=root.querySelector(selector),fresh=next.querySelector(selector);if(current&&fresh)window.WTUI.replace(current,fresh.innerHTML);}
+   let message=root.querySelector(".wt-manual-note");
+   if(note&&!message){message=document.createElement("p");message.className="wt-manual-note";root.querySelector(".wt-manual-edit-list").before(message);}
+   if(message){message.textContent=note;message.setAttribute("role","status");}
+  }else window.WTUI.replace(root,toolbar());
+ }
+ document.dispatchEvent(new Event("wt-manual-fantasy-change"));
+}
+function persist(keepEditor=false){try{localStorage.setItem(KEY,JSON.stringify(state));}catch{note="Browser storage may be unavailable.";}emit(keepEditor);}
 function load(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&Array.isArray(x.players)){state.players=(x.players.length?x.players:screenshotRoster()).filter(p=>p&&typeof p.name==="string").slice(0,80).map(p=>({id:String(p.id||""),name:p.name.slice(0,75),team:TEAMS.includes(p.team)?p.team:"",pos:POSITIONS.includes(p.pos)?p.pos:"",avg:validAvg(p.avg),rank:Math.max(0,Math.min(32,Number(p.rank)||0)),source:p.source==="yahoo-week6"?"yahoo-week6":"manual",tier:Math.max(1,Math.min(5,+p.tier||3)),slot:p.slot==="START"?"START":"BN",availability:["active","Q","OUT"].includes(p.availability)?p.availability:"active"}));state.scoring=["standard","half","ppr"].includes(x.scoring)?x.scoring:"half";}}catch{}}
 function games(){return window.WTScoreGames?.length?window.WTScoreGames:(window.WTScouting?.games||gameList);}
 function match(p){
@@ -121,18 +134,33 @@ function importPlayers(raw){
  }
  note=added?added+" player(s) added.":"No new players detected.";persist();
 }
-async function refreshBox(){
+let boxRefreshPromise=null;
+function refreshBox(){
+ if(boxRefreshPromise)return boxRefreshPromise;
+ boxRefreshPromise=refreshAssignedGames().finally(()=>{boxRefreshPromise=null;});
+ return boxRefreshPromise;
+}
+async function refreshAssignedGames(){
  const all=games(),assigned=new Set(state.players.map(p=>p.team).filter(Boolean));
+ const pending=[];
  for(const game of all){
   if(!game.id||game.state==="pre"||!(assigned.has(game.away)||assigned.has(game.home)))continue;
   const id=String(game.id),cached=box.get(id);
   if(busy.has(id)||cached&&Date.now()-cached.at<(game.state==="post"?900000:90000))continue;
   busy.add(id);
-  try{const r=await fetch("/api/nfl-scores?mode=fantasy&event="+encodeURIComponent(id),{cache:"no-store"});
-   const result=await r.json();box.set(id,{at:Date.now(),data:result?.ok?result:{players:[]}});
-  }catch{box.set(id,{at:Date.now(),data:{players:[]}});}
-  finally{busy.delete(id);emit();}
+  pending.push({id,game});
  }
+ let index=0;
+ await Promise.all(Array.from({length:Math.min(3,pending.length)},async()=>{
+  while(index<pending.length){
+   const {id}=pending[index++];
+   try{const result=await window.WTUI.publicJSON("/api/nfl-scores?mode=fantasy&event="+encodeURIComponent(id));
+   box.set(id,{at:Date.now(),data:result?.ok?result:{players:[]}});
+  }catch{box.set(id,{at:Date.now(),data:{players:[]}});}
+   finally{busy.delete(id);}
+  }
+ }));
+ if(pending.length)emit(true);
 }
 document.addEventListener("click",e=>{
  if(e.target.closest("[data-m-toggle]")){editor=!editor;emit();return;}
@@ -144,7 +172,7 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("change",e=>{
  const s=e.target.closest("[data-m-scoring]");
- if(s){state.scoring=s.value;note="Confirm averages are for the selected scoring format.";persist();return;}
+ if(s){state.scoring=s.value;note="Confirm averages are for the selected scoring format.";persist(true);return;}
  const input=e.target.closest("[data-m-field]");if(!input)return;
  const row=input.closest("[data-m-id]"),p=state.players.find(p=>p.id===row?.dataset.mId);if(!p)return;
  const f=input.dataset.mField,v=input.value;
@@ -156,7 +184,7 @@ document.addEventListener("change",e=>{
  if(f==="tier")p.tier=Math.max(1,Math.min(5,Number(v)||3));
  if(f==="slot")p.slot=v==="START"?"START":"BN";
  if(f==="availability")p.availability=["active","Q","OUT"].includes(v)?v:"active";
- persist();refreshBox();
+ persist(true);refreshBox();
 });
 document.addEventListener("wt-scores-ready",()=>{gameList=window.WTScoreGames||[];refreshBox();});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshBox();});

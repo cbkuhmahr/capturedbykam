@@ -28,35 +28,7 @@
   let oldOverflow = "";
   let selections = {};
 
-  const style = document.createElement("style");
-  style.textContent = [
-    ".wt-shifts-overlay[hidden]{display:none!important}",
-    ".wt-shifts-overlay{position:fixed;inset:0;z-index:1000;overflow-y:auto;background:#090c10;color:#f5f6f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overscroll-behavior:contain}",
-    ".wt-shifts-shell{width:min(760px,100%);margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 14px calc(112px + env(safe-area-inset-bottom))}",
-    ".wt-shifts-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:3px 0 19px}",
-    ".wt-shifts-kicker{color:#e8bb5a;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}",
-    ".wt-shifts-head h2{margin:5px 0 7px;font-size:26px;letter-spacing:-.035em}",
-    ".wt-shifts-head p{color:#a6b1bd;font-size:13px;line-height:1.5;margin:0}",
-    ".wt-shifts-close{flex-shrink:0;min-height:42px;padding:9px 12px;border:1px solid #47505d;border-radius:11px;background:#151c25;color:#fff;font-weight:750}",
-    ".wt-shifts-panel{border:1px solid #323b45;border-radius:14px;overflow:hidden;background:#11161d}",
-    ".wt-shifts-controls{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;padding:15px}",
-    ".wt-shifts-controls label{display:block;color:#a6b1bd;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}",
-    ".wt-shifts-controls select,.wt-shifts-controls input{font:inherit;font-size:16px;color:#fff;border:1px solid #414955;border-radius:10px;background:#1a202b;padding:9px 10px;min-height:44px}",
-    ".wt-shifts-controls select{min-width:154px}.wt-shifts-controls input{width:96px}",
-    ".wt-shifts-columns,.wt-shifts-row{display:grid;grid-template-columns:minmax(115px,1fr) minmax(152px,1.2fr);gap:12px;align-items:center;padding:10px 13px}",
-    ".wt-shifts-columns{color:#adb5c0;font-weight:750;font-size:11px;letter-spacing:.09em;text-transform:uppercase;border-block:1px solid #333c47;background:#181f29}",
-    ".wt-shifts-row{border-bottom:1px solid #2d353e;min-height:59px}.wt-shifts-row:last-child{border-bottom:0}",
-    ".wt-shifts-row.weekend{background:#171c24}.wt-shifts-date{font-weight:750;font-size:14px}.wt-shifts-sub{display:block;color:#929eab;font-size:11px;font-weight:500;margin-top:3px}",
-    ".wt-shifts-row select{min-height:44px;width:100%;color:#f5f6f8;background:#1d2530;border:1px solid #434d59;border-radius:10px;padding:8px;font:inherit;font-size:14px}",
-    ".wt-shifts-row select.selected{border-color:#e8bb5a;background:#2c281f;color:#ffe4a8}",
-    ".wt-shifts-actions{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:12px;color:#a6b1bd;font-size:12px}",
-    ".wt-shifts-clear{min-height:40px;padding:8px 11px;border:1px solid #414955;border-radius:10px;color:#e7eaf0;background:#151c25;font-weight:700}",
-    ".wt-shifts-help{margin:18px 3px 0;color:#a6b1bd;font-size:12px;line-height:1.6}",
-    ".wt-shifts-bar{position:fixed;bottom:0;left:0;right:0;z-index:2;padding:12px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #303944;background:#090c10f5;backdrop-filter:blur(15px)}",
-    ".wt-shifts-barinner{width:min(760px,100%);margin:auto}.wt-shifts-export{width:100%;min-height:52px;padding:12px;border:0;border-radius:12px;color:#14110b;background:#e8bb5a;font-size:15px;font-weight:850}",
-    ".wt-shifts-export:disabled{background:#50555a;color:#c7c9ce}.wt-shifts-status{min-height:16px;text-align:center;color:#b1b9c4;font-size:12px;margin:7px 0 0}"
-  ].join("");
-  document.head.appendChild(style);
+  // Visual rules are shared in whole-thang-workspace.css.
 
   const dialog = document.createElement("section");
   dialog.id = "wt-shifts-overlay";
@@ -249,3 +221,4 @@
     byId("wt-shifts-status").textContent = "File generated. Open the .ics download on your iPhone.";
   });
 })();
+

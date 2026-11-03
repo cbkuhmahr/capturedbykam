@@ -6,14 +6,11 @@
   <title>Admin | Capturedby_Kam</title>
   <meta name="robots" content="noindex,nofollow,noarchive">
   <link rel="icon" type="image/svg+xml" href="assets/img/cbk-camera.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css">
-  <link rel="stylesheet" href="assets/css/cbk-admin.css?v=20261027-admin-refresh">
-  <link rel="stylesheet" href="assets/css/cbk-admin-v2.css">
+  <link rel="stylesheet" href="assets/css/workspace-foundation.css?v=20261103">
+  <link rel="stylesheet" href="assets/css/cbk-admin-workspace.css?v=20261103">
 </head>
 <body>
+  <a class="wt-skip-link" id="adminSkip" href="#loginPanel">Skip to content</a>
   <div class="cbk-admin-shell">
     <header class="cbk-admin-header">
       <div><p class="eyebrow">Capturedby_Kam</p><h1 id="adminTitle">Admin</h1></div>
@@ -27,7 +24,7 @@
       </div>
     </header>
 
-    <section id="loginPanel" class="cbk-admin-card cbk-login-card">
+    <section id="loginPanel" tabindex="-1" class="cbk-admin-card cbk-login-card">
       <p class="eyebrow">Private access</p>
       <h2>Admin</h2>
       <p id="loginIntro">Use your passkey for the fastest sign-in. PIN remains available as backup.</p>
@@ -47,7 +44,7 @@
       </form>
     </section>
 
-    <main id="adminDashboard" hidden>
+    <main id="adminDashboard" tabindex="-1" hidden>
       <section id="adminChoice" class="cbk-admin-launchpad">
         <p class="eyebrow">Private workspace</p>
         <h2>Where are you going?</h2>
@@ -88,6 +85,18 @@
             <button class="button" type="button" data-admin-shortcut="galleries">Manage galleries</button>
             <button class="button" type="button" data-admin-shortcut="bookings">View bookings</button>
             <button class="button" type="button" data-admin-shortcut="orders">Manage orders</button>
+          </div>
+          <div class="cbk-overview-grid">
+            <section class="cbk-admin-card">
+              <p class="eyebrow">Work queue</p><h2>Keep things moving.</h2>
+              <div class="cbk-queue-row"><div><strong id="statAwaitingDelivery">0</strong><span>Orders awaiting delivery</span></div><button class="button" type="button" data-admin-shortcut="orders" data-admin-order-status="all">Review orders</button></div>
+              <div class="cbk-queue-row"><div><strong id="statInquiries">0</strong><span>Booking inquiries</span></div><button class="button" type="button" data-admin-shortcut="bookings">View inquiries</button></div>
+            </section>
+            <section class="cbk-admin-card">
+              <p class="eyebrow">Latest gallery</p><h2 id="latestGalleryTitle">No gallery yet</h2>
+              <p class="cbk-admin-help" id="latestGallerySummary">Create a project to get started.</p>
+              <button class="button" type="button" data-admin-shortcut="galleries">Manage galleries</button>
+            </section>
           </div>
         </section>
 
@@ -139,6 +148,7 @@
 
           <section class="cbk-admin-card">
             <div class="cbk-admin-section-head"><div><p class="eyebrow">Projects</p><h2>Manage galleries.</h2></div><button id="refreshButton" class="button" type="button">Refresh</button></div>
+            <div class="cbk-admin-discovery"><label for="adminProjectSearch">Find a gallery<input id="adminProjectSearch" type="search" placeholder="Gallery name or event" maxlength="120"></label><label class="cbk-status-select" for="adminProjectStatus">Visibility<select id="adminProjectStatus"><option value="all">All galleries</option><option value="open">Open</option><option value="draft">Draft</option><option value="closed">Closed</option></select></label><span class="cbk-result-count" id="adminProjectCount" role="status"></span></div>
             <div id="adminProjects" class="cbk-admin-project-list"></div>
           </section>
         </section>
@@ -147,6 +157,7 @@
           <section class="cbk-admin-card">
             <div class="cbk-admin-section-head"><div><p class="eyebrow">Bookings</p><h2>New inquiries.</h2></div></div>
             <p class="cbk-admin-help">Website booking requests appear here.</p>
+            <div class="cbk-admin-discovery"><label for="adminBookingSearch">Find an inquiry<input id="adminBookingSearch" type="search" placeholder="Name, project or contact" maxlength="120"></label><span class="cbk-result-count" id="adminBookingCount" role="status"></span></div>
             <div id="adminBookings" class="cbk-order-list" aria-live="polite"></div>
           </section>
         </section>
@@ -154,12 +165,13 @@
         <section class="cbk-admin-view" data-admin-view="orders" hidden>
           <section class="cbk-admin-card">
             <div class="cbk-admin-section-head"><div><p class="eyebrow">Orders</p><h2>Customer delivery.</h2></div></div>
-            <div class="cbk-order-filters" role="tablist" aria-label="Order status">
+            <div class="cbk-order-filters" role="group" aria-label="Order status">
               <button class="button is-active" type="button" data-order-filter="new">NEW</button>
               <button class="button" type="button" data-order-filter="paid">PAID</button>
               <button class="button" type="button" data-order-filter="sent">SENT</button>
               <button class="button" type="button" data-order-filter="all">ALL</button>
             </div>
+            <div class="cbk-admin-discovery"><label for="adminOrderSearch">Find an order<input id="adminOrderSearch" type="search" placeholder="Order, customer or photo ID" maxlength="120"></label><span class="cbk-result-count" id="adminOrderCount" role="status"></span></div>
             <div id="adminOrders" class="cbk-order-list"></div>
           </section>
         </section>
@@ -195,9 +207,9 @@
     </main>
   </div>
 
-  <dialog id="editProjectDialog" class="cbk-admin-dialog">
+  <dialog id="editProjectDialog" class="cbk-admin-dialog" aria-labelledby="editProjectTitle">
     <form id="editProjectForm" class="cbk-admin-form">
-      <div class="cbk-dialog-head"><div><p class="eyebrow">Edit project</p><h2>Update gallery details.</h2></div><button id="closeEditProject" class="cbk-close-dialog" type="button" aria-label="Close">×</button></div>
+      <div class="cbk-dialog-head"><div><p class="eyebrow">Edit project</p><h2 id="editProjectTitle">Update gallery details.</h2></div><button id="closeEditProject" class="cbk-close-dialog" type="button" aria-label="Close">×</button></div>
       <input type="hidden" name="project_id">
       <label><span>Project / Event Name</span><input name="title" required></label>
       <label><span>Event Date</span><input name="event_date" type="date"></label>
@@ -216,6 +228,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@13.3.0/dist/bundle/index.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.min.js"></script>
   <script src="assets/js/cbk-supabase.js"></script>
-  <script src="assets/js/admin.js?v=20261027-parallel-uploads" defer></script>
+  <script src="assets/js/admin.js?v=20261103" defer></script>
 </body>
 </html>
