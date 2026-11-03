@@ -6,7 +6,7 @@ const launch=document.createElement("button");
 launch.id="wt-apple-open";
 launch.type="button";
 launch.className="admin-link wt-apple-launch";
-launch.textContent="↗ Apple";
+launch.textContent="Share & Calendar";
 header.insertBefore(launch,header.querySelector("a"));
 const shade=document.createElement("div");
 shade.className="wt-apple-shade";
@@ -79,7 +79,14 @@ function setOpen(open){
  shade.hidden=!isOpen;
  panel.hidden=!isOpen;
  document.body.classList.toggle("wt-apple-open",isOpen);
- if(isOpen){note("Ready to share.");panel.querySelector(".wt-apple-close").focus();}
+ if(isOpen){
+  note("Ready to share.");
+  const saved=weekSelect.value;
+  const weeks=snapshot().weeks.slice().sort((a,b)=>b.week-a.week);
+  weekSelect.replaceChildren(...weeks.map(week=>{const option=document.createElement("option");option.value=String(week.week);option.textContent="Week "+week.week;return option;}));
+  if(weeks.some(w=>String(w.week)===saved))weekSelect.value=saved;
+  panel.querySelector(".wt-apple-close").focus();
+ }
  else launch.focus();
 }
 async function shareCurrent(kind){

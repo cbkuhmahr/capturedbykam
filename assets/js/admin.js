@@ -100,6 +100,16 @@
   let bookings = [];
   let bookingsAvailable = true;
   let orderFilter = "new";
+  let photoCounts = new Map();
+  const projectSearch = document.getElementById("adminProjectSearch");
+  const projectStatus = document.getElementById("adminProjectStatus");
+  const orderSearch = document.getElementById("adminOrderSearch");
+  const bookingSearch = document.getElementById("adminBookingSearch");
+  const includesQuery = (values, query) => values.filter(value => value != null).join(" ").toLocaleLowerCase().includes(query.trim().toLocaleLowerCase());
+  function resultCount(id, visible, total, noun) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = visible + " of " + total + " " + noun;
+  }
 
   async function requestJson(url, action, payload = {}) {
     const response = await fetch(url, {
@@ -286,7 +296,11 @@
   }
 
   async function showBusinessView(name) {
-    businessTabs.forEach((button) => button.classList.toggle("is-active", button.dataset.adminViewTarget === name));
+    businessTabs.forEach((button) => {
+      const active = button.dataset.adminViewTarget === name;
+      button.classList.toggle("is-active", active);
+      if (active) button.setAttribute("aria-current", "page"); else button.removeAttribute("aria-current");
+    });
     businessViews.forEach((view) => { view.hidden = view.dataset.adminView !== name; });
     if (name === "security") await refreshSecurity();
   }
@@ -307,6 +321,11 @@
   }));
   document.querySelectorAll("[data-admin-shortcut]").forEach((button) => {
     button.addEventListener("click", async () => {
+      if (button.dataset.adminOrderStatus === "all") {
+        orderFilter = "all";
+        document.querySelectorAll("[data-order-filter]").forEach(item => item.classList.toggle("is-active", item.dataset.orderFilter === "all"));
+        renderOrders();
+      }
       await showBusinessView(button.dataset.adminShortcut);
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
@@ -314,6 +333,7 @@
 
   async function openDashboard() {
     loginPanel.hidden = true;
+    document.getElementById("adminSkip").href = "#adminDashboard";
     dashboard.hidden = false;
     signOutButton.hidden = false;
     loginMessage.textContent = "";
@@ -338,6 +358,7 @@
   function showLogin(message = "") {
     clearTimeout(idleTimer);
     loginPanel.hidden = false;
+    document.getElementById("adminSkip").href = "#loginPanel";
     dashboard.hidden = true;
     signOutButton.hidden = true;
     businessHeaderActions.hidden = true;
@@ -482,6 +503,10 @@
 
   projectForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const button = projectForm.querySelector('button[type="submit"]');
+    if (button.disabled) return;
+    button.disabled = true;
+    projectForm.setAttribute("aria-busy", "true");
     const fd = new FormData(projectForm);
     const message = document.getElementById("projectMessage");
     message.textContent = "Creating project…";
@@ -504,6 +529,9 @@
       await refreshAll();
     } catch (error) {
       message.textContent = error.message;
+    } finally {
+      button.disabled = false;
+      projectForm.removeAttribute("aria-busy");
     }
   });
 
@@ -725,6 +753,8 @@
         const data = await api("dashboard");
         projects = data.projects || [];
         photos = data.photos || [];
+        photoCounts = new Map();
+        for (const photo of photos) photoCounts.set(photo.project_id, (photoCounts.get(photo.project_id) || 0) + 1);
         orders = data.orders || [];
         bookings = data.bookings || [];
         bookingsAvailable = data.bookings_available !== false;
@@ -754,6 +784,13 @@
     document.getElementById("statOpen").textContent = projects.filter((p) => p.status === "open").length;
     document.getElementById("statPhotos").textContent = photos.length;
     document.getElementById("statOrders").textContent = orders.filter((o) => o.fulfillment_status === "new").length;
+    document.getElementById("statAwaitingDelivery").textContent = orders.filter(order => order.fulfillment_status !== "sent").length;
+    document.getElementById("statInquiries").textContent = bookingsAvailable ? String(bookings.length) : "—";
+    const latest = projects[0];
+    document.getElementById("latestGalleryTitle").textContent = latest?.title || "No gallery yet";
+    document.getElementById("latestGallerySummary").textContent = latest
+      ? (photoCounts.get(latest.id) || 0) + " photos · " + latest.status + (latest.event_date ? " · " + latest.event_date : "")
+      : "Create a project to get started.";
   }
 
   function renderProjectSelect() {
@@ -769,13 +806,21 @@
   }
 
   function renderProjects() {
+    const visibleProjects = projects.filter(project =>
+      (projectStatus.value === "all" || project.status === projectStatus.value) &&
+      includesQuery([project.title, project.slug, project.description, project.event_date], projectSearch.value));
+    resultCount("adminProjectCount", visibleProjects.length, projects.length, "galleries");
     if (!projects.length) {
       projectList.innerHTML = '<div class="cbk-admin-empty">No projects yet. Create your first gallery above.</div>';
       return;
     }
 
-    projectList.innerHTML = projects.map((p) => {
-      const count = photos.filter((photo) => photo.project_id === p.id).length;
+    if (!visibleProjects.length) {
+      projectList.innerHTML = '<div class="cbk-admin-empty">No galleries match your search and visibility filter.</div>';
+      return;
+    }
+    projectList.innerHTML = visibleProjects.map((p) => {
+      const count = photoCounts.get(p.id) || 0;
       return `<article class="cbk-admin-project">
         <div>
           <span class="cbk-status cbk-status-${p.status}">${p.status}</span>
@@ -822,6 +867,8 @@
 
   function renderBookings() {
     if (!bookingList) return;
+    const visibleBookings = bookings.filter(booking => includesQuery([booking.name, booking.email, booking.phone, booking.shoot_type, booking.message, booking.preferred_date], bookingSearch.value));
+    resultCount("adminBookingCount", visibleBookings.length, bookings.length, "inquiries");
     if (!bookingsAvailable) {
       bookingList.innerHTML = '<div class="cbk-admin-empty">Booking inquiries are currently unavailable. Refresh to retry.</div>';
       return;
@@ -831,7 +878,11 @@
       return;
     }
 
-    bookingList.innerHTML = bookings.map((booking) => {
+    if (!visibleBookings.length) {
+      bookingList.innerHTML = '<div class="cbk-admin-empty">No inquiries match your search.</div>';
+      return;
+    }
+    bookingList.innerHTML = visibleBookings.map((booking) => {
       const when = new Date(booking.created_at);
       const date = Number.isNaN(when.getTime()) ? "" : when.toLocaleString();
       const contact = booking.email ? '<a href="mailto:' + encodeURIComponent(booking.email) + '">' + escapeHtml(booking.email) + '</a>' : "No email";
@@ -856,9 +907,17 @@
   }
 
   function renderOrders() {
-    const visibleOrders = orderFilter === "all" ? orders : orders.filter((o) => orderStage(o) === orderFilter);
+    const statusOrders = orderFilter === "all" ? orders : orders.filter((o) => orderStage(o) === orderFilter);
+    const visibleOrders = statusOrders.filter(order => includesQuery([order.order_code, order.customer_name, order.customer_email, order.customer_phone, order.cbk_shop_projects?.title, ...(order.selected_photo_codes || [])], orderSearch.value));
+    resultCount("adminOrderCount", visibleOrders.length, statusOrders.length, "orders");
+    document.querySelectorAll("[data-order-filter]").forEach(button => {
+      const status = button.dataset.orderFilter;
+      const count = status === "all" ? orders.length : orders.filter(order => orderStage(order) === status).length;
+      button.textContent = status.toUpperCase() + " · " + count;
+      button.setAttribute("aria-pressed", String(status === orderFilter));
+    });
     if (!visibleOrders.length) {
-      orderList.innerHTML = '<div class="cbk-admin-empty">No orders in this status.</div>';
+      orderList.innerHTML = '<div class="cbk-admin-empty">' + (orderSearch.value ? 'No orders match your search in this status.' : 'No orders in this status.') + '</div>';
       return;
     }
 
@@ -986,6 +1045,10 @@
   }));
 
   document.getElementById("refreshButton").addEventListener("click", refreshAll);
+  projectSearch.addEventListener("input", renderProjects);
+  projectStatus.addEventListener("change", renderProjects);
+  orderSearch.addEventListener("input", renderOrders);
+  bookingSearch.addEventListener("input", renderBookings);
 
   function filenameCode(name) {
     return String(name).replace(/\.[^.]+$/, "").trim().replace(/\s+/g, "-").slice(0, 80) || "CBK-PHOTO";
