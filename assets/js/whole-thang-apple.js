@@ -52,14 +52,14 @@ function pickText(){
  for(const g of s.picks)lines.push(g.away+" @ "+g.home+": "+(g.choice||"Not selected"));
  lines.push("","Selected: "+s.picks.filter(g=>g.choice).length+" / "+s.picks.length);
  if(s.mnfMargin!=="" && s.mnfMargin!==null)lines.push("MNF predicted margin: "+s.mnfMargin);
- lines.push("","Unofficial copy — the family's Microsoft Form is still the official submission.");
+ lines.push("","Personal picks summary.");
  return lines.join("\n");
 }
 function seasonText(){
  const s=snapshot(),r=s.season;
  const lines=["$billi-type uh’day. | Whole Thang | 2026 NFL Pick'em",
-  "Season through Week "+Math.max(...s.weeks.map(w=>Number(w.week)))+": "+r.wins+"–"+r.losses+"–"+r.ties+"T",
-  "Winning percentage: "+r.accuracy+"%",""];
+  "Season through Week "+Math.max(...s.weeks.map(w=>Number(w.week)))+": "+(r.ready?r.wins+"–"+r.losses+"–"+r.ties+"T":"Verifying results"),
+  "Winning percentage: "+(r.ready?r.accuracy+"%":"Pending verification"),""];
  for(const w of s.weeks)lines.push("Week "+w.week+": "+w.record+" ("+Number(w.rate).toFixed(2)+"%)");
  return lines.join("\n");
 }
