@@ -1,16 +1,9 @@
 (() => {
 "use strict";
 // Read-only live-score layer: it never changes WholeThang's saved picks or game history.
-let GAMES=[
-["SEA","DEN","Thu · Oct 15","8:15 PM"],["HOU","JAX","Sun · Oct 18","9:30 AM"],
-["TEN","IND","Sun · Oct 18","1:00 PM"],["CAR","PHI","Sun · Oct 18","1:00 PM"],
-["PIT","TB","Sun · Oct 18","1:00 PM"],["BAL","CLE","Sun · Oct 18","1:00 PM"],
-["NO","NYG","Sun · Oct 18","1:00 PM"],["CHI","ATL","Sun · Oct 18","1:00 PM"],
-["NYJ","NE","Sun · Oct 18","1:00 PM"],["ARI","LAR","Sun · Oct 18","4:05 PM"],
-["LAC","KC","Sun · Oct 18","4:25 PM"],["BUF","LV","Sun · Oct 18","4:25 PM"],
-["DAL","GB","Sun · Oct 18","8:20 PM"],["WAS","SF","Mon · Oct 19","8:15 PM"]
-].map((g,i)=>({id:"w6-"+(i+1),away:g[0],home:g[1],day:g[2],time:g[3]}));
-let currentWeek=6;
+// Matchups are owned by the season controller; never show a hard-coded old week.
+let GAMES=[];
+let currentWeek=Number(window.WTActiveWeekData?.week)||6;
 const names={WAS:"wsh"};
 const app=document.getElementById("app");
 if(!app)return;
@@ -431,13 +424,26 @@ document.addEventListener("input",event=>{if(event.target.id==="wt-game-search")
 document.addEventListener("wt-week-changed",()=>{
  const data=window.WTActiveWeekData;
  if(!data||!Number.isInteger(data.week)||!Array.isArray(data.games))return;
- if(data.week===currentWeek)return;
+ if(data.week===currentWeek&&GAMES.length&&data.games.length&&
+  data.games.every(g=>GAMES.some(old=>old.id===g.id)))return;
  currentWeek=data.week;
  GAMES=data.games.map(g=>({id:g.id,away:g.away,home:g.home,day:g.day,time:g.time,group:g.group,neutral:g.neutral,kickoff:g.kickoff}));
- live=new Map();market=new Map();state="loading";updatedAt="";viewFilter="all";
+ const cached=Array.isArray(window.WTScoreGames)?window.WTScoreGames:[];
+ live=new Map(cached.filter(g=>g&&g.away&&g.home).map(g=>[g.away+"-"+g.home,g]));
+ market=new Map();state=cached.length?"ready":"loading";
+ updatedAt=cached.length?"Cached results":"";viewFilter="all";
  expandedGames.clear();
  closeSportsGame();sportsDay="auto";
- ensure();refresh();refreshMarket();
+ const seeded=window.WTActiveWeekData;
+if(seeded&&Array.isArray(seeded.games)&&seeded.games.length){
+ currentWeek=seeded.week;
+ GAMES=seeded.games.map(g=>({id:g.id,away:g.away,home:g.home,day:g.day,time:g.time,group:g.group,neutral:g.neutral,kickoff:g.kickoff}));
+ const cached=Array.isArray(window.WTScoreGames)?window.WTScoreGames:[];
+ live=new Map(cached.filter(g=>g&&g.away&&g.home).map(g=>[g.away+"-"+g.home,g]));
+ if(cached.length){state="ready";updatedAt="Cached results";}
+}
+ensure();
+if(GAMES.length){refresh();refreshMarket();}
 });
 function adjacentGame(direction){
  if(!openedGame||!GAMES.length)return;
@@ -467,9 +473,11 @@ document.addEventListener("touchend",e=>{
 },{passive:true});
 document.addEventListener("wt-fantasy-change",ensure);
 document.addEventListener("wt-manual-fantasy-change",ensure);
-document.addEventListener("visibilitychange",()=>{if(!document.hidden){refresh();refreshMarket();}});
+document.addEventListener("wt-picks-changed",ensure);
+document.addEventListener("wt-history-updated",ensure);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&GAMES.length){refresh();refreshMarket();}});
 ensure();refresh();refreshMarket();
-setInterval(()=>{if(!document.hidden)refresh();},45000);
-setInterval(()=>{if(!document.hidden)refreshMarket();},180000);
+setInterval(()=>{if(!document.hidden&&GAMES.length)refresh();},45000);
+setInterval(()=>{if(!document.hidden&&GAMES.length)refreshMarket();},180000);
 })();
 
