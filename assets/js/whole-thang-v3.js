@@ -496,7 +496,7 @@ function cardMetric(label,value,foot){return '<div class="summary-item"><small>'
 function homePage(){
  const picked=GAMES.filter(g=>state.picks[g.id]).length;
  const totals=seasonTotals();
- return '<div class="panel summary-grid wt-overview-metrics">'+cardMetric("Season record",totals.record,"2026 · graded picks")+cardMetric("Accuracy",totals.accuracy+"%","Ties excluded")+cardMetric("Picks saved",picked+" / "+GAMES.length,state.locked?"Locked · editing available":"Week "+activeWeek)+'</div>'+
+ return '<div class="panel summary-grid wt-overview-metrics">'+cardMetric("Season record",totals.ready?totals.record:"—","2026 · graded picks")+cardMetric("Accuracy",totals.ready?totals.accuracy+"%":"—","Ties excluded")+cardMetric("Picks saved",picked+" / "+GAMES.length,state.locked?"Locked · editing available":"Week "+activeWeek)+'</div>'+
  section("Week "+activeWeek,"Your selections",'<div class="panel focus-row"><div class="focus-copy"><small>'+(state.locked?"SAVED & LOCKED":"PICKS IN PROGRESS")+'</small><strong>'+picked+' of '+GAMES.length+' picks saved</strong><span>'+(GAMES[0]?escape(GAMES[0].away+" @ "+GAMES[0].home+" · "+GAMES[0].day+" "+GAMES[0].time+" ET"):"Schedule loading")+'</span></div><div class="counter">'+picked+'/'+GAMES.length+'</div></div>'+
  '<div class="action-row"><button class="btn primary" data-go="picks">Edit picks</button><button class="btn" data-go="live">Live scores</button><button class="btn" data-go="fantasy">Fantasy players</button><button class="btn" data-go="intel">Matchups</button></div>')+
  section("Recent results","",'<div class="wt-week-grid">'+weeks.concat(totals.scored).slice(-5).map(w=>'<button class="wt-week" type="button" data-go="history" aria-label="View Week '+w.week+' results"><small>Week '+w.week+'</small><strong>'+w.record+'</strong><span>'+fmt(w.rate)+'% accuracy</span></button>').join("")+'</div>');
@@ -507,17 +507,35 @@ function pickCard(f){
  [f.away,f.home].map(t=>'<button type="button" class="wt-team-option '+(chosen===t?"is-selected":"")+'" data-pick="'+f.id+'" data-team="'+t+'" aria-pressed="'+(chosen===t)+'" aria-label="Pick '+NAMES[t]+' for '+f.away+' at '+f.home+'" '+(canPick?"":"disabled")+'>'+tinyLogo(t)+'<span>'+NAMES[t]+'</span><small>'+t+' · '+recordText(TS[t])+'</small><i aria-hidden="true">'+(chosen===t?"✓":"○")+'</i></button>').join("")+
  '<div class="wt-card-foot"><span>MODEL: <strong>'+f.choice+'</strong> · '+Math.round(f.probability*100)+'%</span><span class="'+(chosen&&chosen!==f.choice?"wt-red":"wt-muted")+'">'+(chosen?(chosen===f.choice?"Agrees with model":"Against model"):"Not picked")+'</span></div></article>';
 }
+function weekNavigator(){
+ const options=Array.from({length:LAST_WEEK-FIRST_EDITABLE_WEEK+1},(_,i)=>{
+  const w=i+FIRST_EDITABLE_WEEK;
+  return '<option value="'+w+'" '+(w===activeWeek?'selected':'')+'>Week '+w+(w===seasonWeek?' · Current':'')+'</option>';
+ }).join("");
+ return '<div class="wt-season-nav" role="group" aria-label="2026 NFL season weeks">'+
+ '<label for="wt-season-week">Season week</label><select id="wt-season-week" aria-label="View or make picks for a week">'+options+'</select>'+
+ '<button type="button" class="btn" data-action="current-week" '+(activeWeek===seasonWeek?'disabled':'')+'>Current week</button>'+
+ '<span class="wt-season-nav-status">Weeks 1–5 in Pick history · Weeks 6–18 available</span></div>';
+}
 function picksPage(){
+ const nav=weekNavigator();
+ if(!GAMES.length)return section("Week "+activeWeek+" Picks","",nav+
+  '<div class="panel wt-schedule-loading" role="status">Loading this week’s matchups. Your previous selections are preserved.</div>');
  const forecasts=allForecasts(),groups=[...new Set(forecasts.map(f=>f.group))];
- return section("Week "+activeWeek+" Picks","",
- '<div class="wt-edit-toolbar" role="group" aria-label="Pick controls">'+
- '<button type="button" class="btn" data-action="edit" '+(!state.locked?'disabled':'')+'>Edit picks</button>'+
- '<button type="button" class="btn primary" data-action="save-lock" '+(state.locked?'disabled':'')+'>Save & Lock</button>'+
- '<button type="button" class="btn" data-action="save">Save picks</button>'+
- '<button type="button" class="btn" data-action="sync-device" '+(syncingDevice||initialCloudLoad||activatingWeek?'disabled':'')+'>Sync & Verify</button>'+
- '<span class="wt-cloud-status" role="status">'+escape(cloudStatus)+'</span></div>'+
- groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
- section("Monday Night Tiebreaker","",'<div class="tiebreak-grid"><div class="field"><label for="wt-mnf-margin">Winning margin · '+(GAMES.filter(g=>g.group==="Monday Night").map(g=>g.away+" @ "+g.home).join(" / ")||"Monday Night Football")+'</label><input id="wt-mnf-margin" aria-label="MNF predicted winning margin" aria-describedby="wt-margin-error" type="number" min="0" max="200" step="1" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+(state.locked?'disabled':'')+' placeholder="Margin"><span id="wt-margin-error" class="wt-field-error" role="status"></span></div></div>');
+ const toolbar='<div class="wt-edit-toolbar" role="group" aria-label="Pick controls">'+
+  '<button type="button" class="btn" data-action="edit" '+(!state.locked?'disabled':'')+'>Edit picks</button>'+
+  '<button type="button" class="btn primary" data-action="save-lock" '+(state.locked?'disabled':'')+'>Save & Lock</button>'+
+  '<button type="button" class="btn" data-action="save">Save picks</button>'+
+  '<button type="button" class="btn" data-action="sync-device" '+(syncingDevice||initialCloudLoad||activatingWeek?'disabled':'')+'>Sync & Verify</button>'+
+  '<span class="wt-cloud-status" role="status">'+escape(cloudStatus)+'</span></div>';
+ const games=groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+
+  forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join("");
+ const tiebreak=section("Monday Night Tiebreaker","",
+  '<div class="tiebreak-grid"><div class="field"><label for="wt-mnf-margin">Winning margin · '+
+  (GAMES.filter(g=>g.group==="Monday Night").map(g=>g.away+" @ "+g.home).join(" / ")||"Monday Night Football")+
+  '</label><input id="wt-mnf-margin" aria-label="MNF predicted winning margin" aria-describedby="wt-margin-error" type="number" min="0" max="200" step="1" data-margin="mnfMargin" value="'+escape(state.mnfMargin)+'" '+
+  (state.locked?'disabled':'')+' placeholder="Margin"><span id="wt-margin-error" class="wt-field-error" role="status"></span></div></div>');
+ return section("Week "+activeWeek+" Picks","",nav+toolbar+games)+tiebreak;
 }
 function intelCard(f){
  const chosen=state.picks[f.id];
@@ -562,7 +580,7 @@ function historyPage(){
  const t=seasonTotals(),all=weeks.concat(t.scored);
  return section("Your Pick History","",
  '<div class="panel summary-grid">'+cardMetric("Wins",String(t.wins),"Correct")+cardMetric("Losses",String(t.losses),"Incorrect")+cardMetric("Ties",String(t.ties),"No winner")+'</div>'+
- '<div class="wt-history-season-line">Overall <strong>'+t.record+'</strong><span>'+t.accuracy+'% accuracy</span><small>'+(79+t.scored.reduce((n,w)=>n+w.games.length,0))+' graded picks</small></div>'+
+ '<div class="wt-history-season-line">Overall <strong>'+(t.ready?t.record:"Verifying…")+'</strong><span>'+(t.ready?t.accuracy+"%":"—")+" accuracy"+'</span><small>'+(79+t.scored.reduce((n,w)=>n+w.games.length,0))+' graded picks</small></div>'+
  '<div class="wt-history-weeks">'+all.map(w=>'<details class="wt-week" data-wt-key="history-'+w.week+'" '+(w.week===(all.length?all.at(-1).week:5)?"open":"")+'><summary><span><strong>Week '+w.week+'</strong><small>'+w.games.length+(w.week===6?" final results":" selections")+'</small></span><strong>'+w.record+'</strong><span>'+fmt(w.rate)+'%</span></summary><div class="wt-history-table" data-wt-scroll="history-'+w.week+'"><table><thead><tr><th scope="col">Game</th><th scope="col">Pick</th><th scope="col">Final</th><th scope="col">Grade</th></tr></thead><tbody>'+
  w.games.map(g=>'<tr><td>'+g.away+' @ '+g.home+'</td><td><strong>'+g.pick+'</strong></td><td>'+g.awayScore+'–'+g.homeScore+'</td><td><span class="'+outcomeClass(g)+'">'+(g.status==="W"?"✓ Win":g.status==="L"?"✕ Loss":"T Tie")+'</span></td></tr>').join("")+'</tbody></table></div></details>').join("")+'</div>')+
  '<div class="note"><strong>Weeks 1–5:</strong> 54–24–1T verified. Later completed picks are graded from NFL final scores and your saved selections. Tied games do not count toward accuracy.</div>';
@@ -700,6 +718,7 @@ document.addEventListener("click",async function(e){
  switch(action.dataset.action){
  case "save":save();toast("Saved locally; cloud sync requested.");break;
  case "sync-device":await syncDevice();break;
+ case "current-week":void selectWeek(seasonWeek);break;
  case "edit":
   if(state.locked){state.locked=false;save();render();toast("Editing enabled. Tap a team to update its pick.");}
   else toast("Your picks are already editable. Tap any team to change it.");
@@ -724,6 +743,7 @@ document.addEventListener("click",async function(e){
 });
 document.addEventListener("change",e=>{
  if(e.target.id==="homeEdge"){state.homeEdge=Number(e.target.value);save();render();}
+ if(e.target.id==="wt-season-week"){void selectWeek(Number(e.target.value));return;}
  if(e.target.id==="teamSort"){teamSort=e.target.value;teamDirection="desc";render();}
  if(e.target.id==="intelFilter"){intelFilter=e.target.value;render();}
  if(e.target.matches("[data-margin]")){const value=validMargin(e.target.value),invalid=e.target.value!==""&&value==="";e.target.setAttribute("aria-invalid",String(invalid));const message=document.getElementById("wt-margin-error");if(message)message.textContent=invalid?"Use a whole-number margin from 0 to 200.":"";state[e.target.dataset.margin]=value;save();}
