@@ -255,6 +255,7 @@ async function loadSportsGameDetails(game){
 function closeSportsGame(){openedGame=null;detailRequest++;renderGameSheet();}
 
 function markup(){
+ if(!GAMES.length)return '<div class="wt-schedule-loading" role="status">Preparing current NFL week and live results…</div>';
  const selected=picks();
  const info=state==="error"?"Scores unavailable":state==="loading"?"Loading scores…":"";
  const stamp=updatedAt?new Date(updatedAt).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/New_York"})+" ET":"";
