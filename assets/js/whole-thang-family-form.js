@@ -154,7 +154,7 @@
         const sample=answerValue(value);
         const team=teamFromAnswer(sample.value);
         if(!team){
-          if(sample.kind==="math"||/^\\d{1,3}$/.test(sample.value))numeric.push([key,value]);
+          if(sample.kind==="math"||/^\d{1,3}$/.test(sample.value))numeric.push([key,value]);
           continue;
         }
         const matching=s.picks.filter(g=>g.away===team||g.home===team);
