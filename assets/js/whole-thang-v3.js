@@ -19,14 +19,24 @@ const LEGACY_GAMES = [
  ["DAL","GB","Sunday Night","Sun · Oct 18","8:20 PM"],
  ["WAS","SF","Monday Night","Mon · Oct 19","8:15 PM"]
 ].map((a,i)=>({id:"w6-"+(i+1),away:a[0],home:a[1],group:a[2],day:a[3],time:a[4],neutral:a[2]==="London"}));
-let GAMES=LEGACY_GAMES;
-let activeWeek=6;
-let week6State=null;
+const SEASON=2026, FIRST_EDITABLE_WEEK=6, LAST_WEEK=18;
 const WEEKLY_PREFIX="whole-thang-v3-2026-";
+const SCHEDULE_PREFIX="wt-nfl-schedule-2026-w";
+const SCORES_PREFIX="wt-nfl-results-2026-w";
+const GRADE_PREFIX="wt-nfl-grade-2026-w";
+const WEEK_MS=7*86400000;
+const SEASON_START=Date.parse("2026-09-10T00:00:00Z");
+function calendarWeek(){
+ // The next NFL pick window begins on Tuesday after Monday Night Football.
+ return Math.max(FIRST_EDITABLE_WEEK,Math.min(LAST_WEEK,
+  Math.floor((Date.now()-SEASON_START+2*86400000)/WEEK_MS)+1));
+}
+let seasonWeek=calendarWeek(),activeWeek=seasonWeek,preferredWeek=null;
+let GAMES=[],week6State=null;
 const weekScores=new Map();
 const previousWeeks=new Map();
-let activatingWeek=false;
-let lastWeekCheck=0;
+let activatingWeek=false,seasonRecordReady=false,lastWeekCheck=0;
+let currentCloudToken=0,historyRefreshPromise=null,seasonPrefetchStarted=false;
 const rawNode=document.getElementById("wt-history");
 if(!rawNode){document.getElementById("app").textContent="Historical data unavailable.";return;}
 const raw=JSON.parse(rawNode.textContent);
@@ -36,17 +46,72 @@ const HISTORY=raw.trim().split(/\n+/).map((line,i)=>{
  return {id:"history-"+(i+1),week:Number(wk),away,home,pick,winner,tie,awayScore:tie?w:winner===away?w:l,homeScore:tie?w:winner===home?w:l,status:tie?"T":pick===winner?"W":"L"};
 });
 const EMPTY=()=>({picks:{},mnfMargin:"",locked:false,homeEdge:45,updatedAt:0});
-function safeLoad(){
+function validMargin(v){return v===""||v==null?"":Number.isInteger(Number(v))&&Number(v)>=0&&Number(v)<=200?String(v):"";}
+function safeLoad(games=LEGACY_GAMES){
  let existing=null,old=null;
  try{existing=JSON.parse(localStorage.getItem(KEY)||"null");}catch{}
  try{old=JSON.parse(localStorage.getItem(OLD_KEY)||localStorage.getItem("whole-thang-v1")||"null");}catch{}
  const source=existing||old||{};
- const allow=Object.fromEntries(GAMES.filter(g=>source.picks&&[g.away,g.home].includes(source.picks[g.id])).map(g=>[g.id,source.picks[g.id]]));
+ const allow=Object.fromEntries(games.filter(g=>source.picks&&[g.away,g.home].includes(source.picks[g.id])).map(g=>[g.id,source.picks[g.id]]));
  return {picks:allow,mnfMargin:validMargin(source.mnfMargin),locked:!!source.locked,homeEdge:[0,25,45,65,85].includes(Number(source.homeEdge))?Number(source.homeEdge):45,updatedAt:Number(source.updatedAt)||0};
 }
-function validMargin(v){return v===""||v==null?"":Number.isInteger(Number(v))&&Number(v)>=0&&Number(v)<=200?String(v):"";}
-let state=safeLoad(),tab="live",teamSort="rating",teamDirection="desc",teamSearch="",intelFilter="all";
-week6State=state;
+function usableGames(week,games){
+ return Array.isArray(games)&&games.length>=10&&games.length<=18&&games.every(g=>
+  g&&typeof g.id==="string"&&g.id.startsWith("w"+week+"-")&&
+  NAMES[g.away]&&NAMES[g.home]&&g.away!==g.home&&
+  typeof g.day==="string"&&typeof g.time==="string");
+}
+function readCachedWeek(week){
+ try{
+  const item=JSON.parse(localStorage.getItem(SCHEDULE_PREFIX+week)||"null");
+  return usableGames(week,item?.games)?item.games:null;
+ }catch{return null;}
+}
+function saveCachedWeek(week,games){
+ if(!usableGames(week,games))return;
+ try{localStorage.setItem(SCHEDULE_PREFIX+week,JSON.stringify({games,updatedAt:Date.now()}));}catch{}
+}
+function saveScoreCache(week,games){
+ if(!Array.isArray(games)||games.length<10)return;
+ weekScores.set(week,games);
+ try{localStorage.setItem(SCORES_PREFIX+week,JSON.stringify({games,updatedAt:Date.now()}));}catch{}
+}
+function readScoreCache(week){
+ try{
+  const item=JSON.parse(localStorage.getItem(SCORES_PREFIX+week)||"null");
+  return Array.isArray(item?.games)&&item.games.length>=10?item.games:null;
+ }catch{return null;}
+}
+function cacheGrade(week,grade){
+ previousWeeks.set(week,grade);
+ try{localStorage.setItem(GRADE_PREFIX+week,JSON.stringify({grade,updatedAt:Date.now()}));}catch{}
+}
+function primeCachedHistory(){
+ for(let wk=FIRST_EDITABLE_WEEK;wk<seasonWeek;wk++){
+  if(wk===6){
+   const scores=readScoreCache(wk);
+   if(scores)weekScores.set(wk,scores);
+  }else{
+   try{
+    const item=JSON.parse(localStorage.getItem(GRADE_PREFIX+wk)||"null");
+    if(item?.grade?.week===wk&&Array.isArray(item.grade.games))previousWeeks.set(wk,item.grade);
+   }catch{}
+  }
+ }
+ const recent=readScoreCache(seasonWeek);
+ if(recent)weekScores.set(seasonWeek,recent);
+ seasonRecordReady=historyIsReady();
+}
+function historyIsReady(){
+ if(seasonWeek===6)return weekScores.has(6);
+ for(let wk=6;wk<seasonWeek;wk++){
+  if(wk===6&&!weekScores.has(6))return false;
+  if(wk>=7&&!previousWeeks.has(wk))return false;
+ }
+ return true;
+}
+let state=EMPTY(),tab="live",teamSort="rating",teamDirection="desc",teamSearch="",intelFilter="all";
+week6State=safeLoad();
 let cloudStatus="Connecting cloud…",initialCloudLoad=true,cloudTimer=null,localRevision=0;
 let syncingDevice=false,lastDeviceSync="";
 function updateCloudIndicators(){
@@ -70,7 +135,7 @@ function queueCloudSave(){
   try{
    cloudStatus="Syncing…";updateCloudIndicators();
    if(week===6)await cloudRequest("save",{state:snapshot});
-   else await cloudRequest("saveWeek",{season:2026,week,state:snapshot});
+   else await cloudRequest("saveWeek",{season:SEASON,week,state:snapshot});
    if(week===activeWeek&&snapshot.updatedAt===state.updatedAt){cloudStatus="Cloud synced";updateCloudIndicators();}
    else if(week===activeWeek)queueCloudSave();
   }catch{cloudStatus="Local backup · sync offline";updateCloudIndicators();}
@@ -82,31 +147,11 @@ function save(){
  try{localStorage.setItem(activeWeek===6?KEY:WEEKLY_PREFIX+activeWeek,JSON.stringify(state));}catch{toast("Browser storage unavailable.");}
  if(activeWeek===6)week6State=state;
  queueCloudSave();
+ updateSeasonStrip();
+ document.dispatchEvent(new Event("wt-picks-changed"));
 }
-async function initCloud(){
- const started=localRevision;
- try{
-  const response=await cloudRequest("load");
-  const remote=response.state;
-  const remoteTime=remote?Date.parse(remote.updated_at)||0:0;
-  const localTime=Number(state.updatedAt)||0;
-  if(remote&&started===localRevision&&remoteTime>=localTime){
-   state={...EMPTY(),picks:Object.fromEntries(GAMES.filter(g=>remote.picks&&[g.away,g.home].includes(remote.picks[g.id])).map(g=>[g.id,remote.picks[g.id]])),mnfMargin:validMargin(remote.mnf_margin),locked:!!remote.locked,homeEdge:[0,25,45,65,85].includes(Number(remote.home_edge))?Number(remote.home_edge):45,updatedAt:remoteTime};
-   try{localStorage.setItem(KEY,JSON.stringify(state));}catch{}
-   initialCloudLoad=false;cloudStatus="Cloud synced";
-  }else{
-   initialCloudLoad=false;cloudStatus="Cloud connected";
-   if(localRevision>started||state.updatedAt||Object.keys(state.picks).length||state.mnfMargin!=="")queueCloudSave();
-  }
- }catch{initialCloudLoad=false;cloudStatus="Local backup · sync offline";}
- week6State=state;
- render();
- await checkWeek();
-}
-
-// Weekly rollover: only the authenticated picks sync changes. Historical weeks
-// are never overwritten when a new schedule becomes active.
-function readWeekState(week,games) {
+function readWeekState(week,games){
+ if(week===6)return safeLoad(games);
  let raw=null;
  try{raw=JSON.parse(localStorage.getItem(WEEKLY_PREFIX+week)||"null");}catch{}
  const initial=raw&&typeof raw==="object"?raw:{};
@@ -121,29 +166,146 @@ function restoreRemoteWeek(remote,games){
   homeEdge:[0,25,45,65,85].includes(Number(remote?.home_edge))?Number(remote.home_edge):45,
   updatedAt:Date.parse(remote?.updated_at)||0};
 }
+function setCurrentWeek(week,games,scores){
+ if(!usableGames(week,games))return false;
+ if(activeWeek===6&&GAMES.length)week6State=state;
+ activeWeek=week;
+ GAMES=games.map(g=>({id:g.id,away:g.away,home:g.home,group:g.group,day:g.day,time:g.time,neutral:!!g.neutral,kickoff:g.kickoff}));
+ saveCachedWeek(week,GAMES);
+ state=readWeekState(week,GAMES);
+ if(week===6)week6State=state;
+ if(Array.isArray(scores)&&scores.length>=10)saveScoreCache(week,scores);
+ updateScouting();
+ window.WTActiveWeekData={week,games:GAMES};
+ window.WTScoreGames=weekScores.get(week)||readScoreCache(week)||[];
+ cloudStatus="Connecting weekly cloud…";
+ initialCloudLoad=true;
+ render();
+ document.dispatchEvent(new Event("wt-week-changed"));
+ void hydrateCurrentCloud(week);
+ return true;
+}
+async function hydrateCurrentCloud(week){
+ const token=++currentCloudToken,started=localRevision;
+ try{
+  const response=await cloudRequest(week===6?"load":"loadWeek",week===6?{}:{season:SEASON,week});
+  if(token!==currentCloudToken||week!==activeWeek)return;
+  const remote=response.state;
+  if(remote&&started===localRevision){
+   const normalized=restoreRemoteWeek(remote,GAMES);
+   if(normalized.updatedAt>=state.updatedAt){
+    state=normalized;
+    if(week===6)week6State=state;
+    try{localStorage.setItem(week===6?KEY:WEEKLY_PREFIX+week,JSON.stringify(state));}catch{}
+    document.dispatchEvent(new Event("wt-picks-changed"));
+   }
+  }else if(!remote&&state.updatedAt>0){queueCloudSave();}
+  cloudStatus="Cloud connected";
+ }catch{
+  if(token!==currentCloudToken||week!==activeWeek)return;
+  cloudStatus="Local backup · sync offline";
+ }finally{
+  if(token===currentCloudToken&&week===activeWeek){
+   initialCloudLoad=false;
+   if(state.updatedAt&&cloudStatus==="Cloud connected")queueCloudSave();
+   render();
+  }
+ }
+}
 async function historicalWeek(week){
- if(weekScores.has(week)&&week<7)return;
+ if(week<6||week>=seasonWeek)return;
+ const cached=weekScores.get(week)||readScoreCache(week);
+ if(cached)weekScores.set(week,cached);
+ let games=cached||[];
  try{
   const res=await fetch("/api/nfl-scores?mode=week&week="+week,{credentials:"same-origin"});
   const data=await res.json();
-  if(!res.ok||!data.ok||!Array.isArray(data.games)||data.games.length<10)return;
-  weekScores.set(week,data.games);
-  if(week>=7){
-   let archive=readWeekState(week,data.games);
-   try{
-    const cloud=await cloudRequest("loadWeek",{season:2026,week});
-    if(cloud.state){
-     const saved=restoreRemoteWeek(cloud.state,data.games);
-     if(saved.updatedAt>=archive.updatedAt)archive=saved;
-    }else if(archive.updatedAt>0 && (Object.keys(archive.picks).length>0 || archive.mnfMargin!=="")){
-     // Restore an older week's locally saved selections to the cloud once,
-     // but never overwrite an existing cloud record during historical import.
-     await cloudRequest("saveWeek",{season:2026,week,state:archive});
-    }
-   }catch{}
-   previousWeeks.set(week,gradeWeek(week,data.games,archive.picks,data.games));
+  if(res.ok&&data.ok&&Array.isArray(data.games)&&data.games.length>=10){
+   games=data.games;
+   saveScoreCache(week,games);
+   saveCachedWeek(week,games);
   }
  }catch{}
+ if(games.length<10)return;
+ const local=week===6?week6State:readWeekState(week,games);
+ let archive=local;
+ try{
+  const cloud=await cloudRequest(week===6?"load":"loadWeek",week===6?{}:{season:SEASON,week});
+  if(cloud.state){
+   const remote=restoreRemoteWeek(cloud.state,week===6?LEGACY_GAMES:games);
+   if(remote.updatedAt>=Number(local?.updatedAt||0))archive=remote;
+  }else if(local.updatedAt>0&&(Object.keys(local.picks).length||local.mnfMargin!=="")){
+   await cloudRequest(week===6?"save":"saveWeek",week===6?{state:local}:{season:SEASON,week,state:local});
+  }
+ }catch{}
+ if(week===6){
+  week6State=archive;
+  try{localStorage.setItem(KEY,JSON.stringify(archive));}catch{}
+ }else{
+  cacheGrade(week,gradeWeek(week,games,archive.picks,games));
+ }
+ seasonRecordReady=historyIsReady();
+ updateSeasonStrip();
+ if(tab==="history"||tab==="home")render();
+ document.dispatchEvent(new Event("wt-history-updated"));
+}
+async function hydrateHistory(){
+ if(historyRefreshPromise)return historyRefreshPromise;
+ const items=[];
+ for(let week=6;week<seasonWeek;week++)items.push(week);
+ historyRefreshPromise=Promise.allSettled(items.map(historicalWeek)).finally(()=>{
+  historyRefreshPromise=null;
+  seasonRecordReady=historyIsReady();
+  updateSeasonStrip();
+  if(tab==="history"||tab==="home")render();
+  document.dispatchEvent(new Event("wt-history-updated"));
+ });
+ return historyRefreshPromise;
+}
+async function fetchExplicitWeek(week){
+ const res=await fetch("/api/nfl-scores?mode=week&week="+week,{credentials:"same-origin"});
+ const feed=await res.json();
+ if(!res.ok||!feed.ok||!usableGames(week,feed.games))throw Error("Week "+week+" schedule unavailable");
+ saveCachedWeek(week,feed.games);
+ saveScoreCache(week,feed.games);
+ return feed.games;
+}
+async function selectWeek(week){
+ if(!Number.isInteger(week)||week<FIRST_EDITABLE_WEEK||week>LAST_WEEK)return;
+ preferredWeek=week===seasonWeek?null:week;
+ if(week===activeWeek&&GAMES.length)return;
+ const stored=readCachedWeek(week);
+ if(stored)setCurrentWeek(week,stored,readScoreCache(week));
+ else{
+  if(activeWeek===6&&GAMES.length)week6State=state;
+  activeWeek=week;GAMES=[];state=EMPTY();
+  window.WTActiveWeekData={week,games:[]};window.WTScoreGames=[];
+  render();document.dispatchEvent(new Event("wt-week-changed"));
+ }
+ try{
+  const games=await fetchExplicitWeek(week);
+  if(activeWeek!==week)return;
+  if(!GAMES.length)setCurrentWeek(week,games,games);
+  else{
+   GAMES=games.map(g=>({id:g.id,away:g.away,home:g.home,group:g.group,day:g.day,time:g.time,neutral:!!g.neutral,kickoff:g.kickoff}));
+   saveScoreCache(week,games);
+   window.WTActiveWeekData={week,games:GAMES};
+   window.WTScoreGames=games;
+   render();document.dispatchEvent(new Event("wt-week-changed"));
+  }
+ }catch{
+  if(activeWeek===week&&!GAMES.length){cloudStatus="Schedule unavailable · retry";render();}
+ }
+}
+async function prefetchSeasonSchedules(){
+ if(seasonPrefetchStarted)return;
+ seasonPrefetchStarted=true;
+ const weeksToFetch=[];
+ for(let w=FIRST_EDITABLE_WEEK;w<=LAST_WEEK;w++)if(!readCachedWeek(w)&&w!==activeWeek)weeksToFetch.push(w);
+ // Cache the entire remaining season without slowing the initial week and record.
+ for(let i=0;i<weeksToFetch.length;i+=3){
+  await Promise.allSettled(weeksToFetch.slice(i,i+3).map(fetchExplicitWeek));
+ }
 }
 let weekCheckRequest=null;
 function checkWeek(){
@@ -153,70 +315,51 @@ function checkWeek(){
  return weekCheckRequest;
 }
 async function refreshWeek(){
- if(activatingWeek)return;
  lastWeekCheck=Date.now();
- let response,feed;
+ let feed;
  try{
-  response=await fetch("/api/nfl-scores?mode=week",{cache:"no-store",credentials:"same-origin"});
+  const response=await fetch("/api/nfl-scores?mode=week",{cache:"no-store",credentials:"same-origin"});
   feed=await response.json();
-  if(!response.ok||!feed.ok||!Number.isInteger(feed.week)||!Array.isArray(feed.games)||feed.games.length<10)return;
+  if(!response.ok||!feed.ok||!Number.isInteger(feed.week)||!usableGames(feed.week,feed.games))return;
  }catch{return;}
- if(feed.week<activeWeek)return;
- if(feed.week===activeWeek){
-  if(feed.week===6){weekScores.set(6,feed.games);}
-  return;
+ const priorSeasonWeek=seasonWeek;
+ seasonWeek=Math.max(seasonWeek,feed.week);
+ saveCachedWeek(feed.week,feed.games);
+ saveScoreCache(feed.week,feed.games);
+ if(feed.previousWeek>=6&&Array.isArray(feed.previousGames)&&feed.previousGames.length>=10)
+  saveScoreCache(feed.previousWeek,feed.previousGames);
+ if(seasonWeek!==priorSeasonWeek){
+  primeCachedHistory();
+  void hydrateHistory();
  }
- activatingWeek=true;
- let saveAfterActivation=false;
- try{
-  if(activeWeek===6)week6State=state;
-  const latestWeek=feed.week;
-  const newGames=feed.games.map(g=>({id:g.id,away:g.away,home:g.home,group:g.group,day:g.day,time:g.time,
-   neutral:!!g.neutral,kickoff:g.kickoff}));
-  if(!newGames.every(g=>NAMES[g.home]&&NAMES[g.away]&&g.id.startsWith("w"+latestWeek+"-")))return;
-  if(feed.previousWeek>=6&&feed.previousGames?.length>=10)
-   weekScores.set(feed.previousWeek,feed.previousGames);
-  GAMES=newGames;
-  activeWeek=latestWeek;
-  state=readWeekState(activeWeek,GAMES);
-  updateScouting();
-  cloudStatus="Connecting weekly cloud…";
-  render();
-  const started=localRevision;
-  try{
-   const cloud=await cloudRequest("loadWeek",{season:2026,week:activeWeek});
-   if(cloud.state&&started===localRevision){
-    const remote=restoreRemoteWeek(cloud.state,GAMES);
-    if(remote.updatedAt>=state.updatedAt){
-     state=remote;
-     try{localStorage.setItem(WEEKLY_PREFIX+activeWeek,JSON.stringify(state));}catch{}
-    }
-   }
-   cloudStatus="Cloud connected";
-  }catch{cloudStatus="Local backup · sync offline";}
-  // queueCloudSave is suppressed during activation. Defer it until the
-  // new week has finished loading so edits made mid-transition are preserved.
-  saveAfterActivation=Boolean(localRevision>started||(state.updatedAt&&!cloudStatus.includes("offline")));
-  window.WTActiveWeekData={week:activeWeek,games:GAMES};
-  document.dispatchEvent(new Event("wt-week-changed"));
-  render();
- }finally{
-  activatingWeek=false;
-  if(saveAfterActivation)queueCloudSave();
+ if(preferredWeek!==null)return;
+ if(!GAMES.length||activeWeek!==feed.week){
+  setCurrentWeek(feed.week,feed.games,feed.games);
+  void hydrateHistory();
+ }else{
+  // Scores can refresh without replacing the user's selected/locked picks.
+  window.WTScoreGames=feed.games;
+  document.dispatchEvent(new Event("wt-scores-ready"));
+  updateSeasonStrip();
  }
- // Load existing final results and older selections without blocking the week switch.
- for(let wk=6;wk<activeWeek;wk++){
-  if(wk===6&&weekScores.has(6))continue;
-  if(wk>=7&&previousWeeks.has(wk))continue;
-  await historicalWeek(wk);
- }
- updateSeasonStrip();
- if(tab==="history")render();
 }
-window.WTActiveWeekData={week:activeWeek,games:GAMES};
+window.WTActiveWeekData={week:activeWeek,games:[]};
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkWeek();});
 setInterval(()=>{if(!document.hidden)checkWeek();},60000);
-
+async function bootstrap(){
+ primeCachedHistory();
+ const cached=readCachedWeek(activeWeek);
+ if(cached)setCurrentWeek(activeWeek,cached,readScoreCache(activeWeek));
+ else render();
+ await checkWeek();
+ if(!GAMES.length){
+  const fallback=readCachedWeek(activeWeek);
+  if(fallback)setCurrentWeek(activeWeek,fallback,readScoreCache(activeWeek));
+ }
+ if(!GAMES.length){cloudStatus="Schedule temporarily unavailable";render();}
+ void hydrateHistory();
+ void prefetchSeasonSchedules();
+}
 function escape(s){return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
 function logo(a){return "https://a.espncdn.com/i/teamlogos/nfl/500/"+(LOGOS[a]||a).toLowerCase()+".png";}
 function fmt(n){return Number(n).toFixed(1);}
