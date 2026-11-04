@@ -112,10 +112,13 @@ test('preserves complete cloud-sync week identity across delayed submissions',()
  const source=read('assets/js/whole-thang-v3.js');
  const start=source.indexOf('function queueCloudSave(){');
  const capture=source.indexOf('const snapshot=JSON.parse(JSON.stringify(state)),week=activeWeek;',start);
- const delay=source.indexOf('cloudTimer=setTimeout(async()=>{',start);
+ const delay=source.indexOf('const timer=setTimeout(()=>{',start);
  const end=source.indexOf('function save(){',start);
  assert.ok(start>=0&&capture>start&&delay>capture&&delay<end);
  assert.ok(source.slice(delay,end).includes('cloudRequest("saveWeek",{season:SEASON,week,state:snapshot})'));
+ assert.ok(source.slice(start,end).includes('cloudTimers.set(week,timer)'));
+ assert.ok(source.slice(start,end).includes('cloudWriteChains.set(week,write)'));
+ assert.ok(source.slice(start,end).includes('cloudTimers.get(week)'));
 });
 
 test('retains all live pick verdicts and spread formatting',()=>{
