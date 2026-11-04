@@ -431,6 +431,23 @@ function updateSeasonStrip(){
  if(a)a.textContent=x.ready?x.accuracy+"%":"—";
 }
 
+/* Read-only current-week snapshot for Share & Calendar tools. */
+window.WTAppleSnapshot=function(){
+ const totals=seasonTotals(),allWeeks=weeks.concat(totals.scored);
+ return {
+  week:activeWeek,
+  picks:GAMES.map(g=>({away:g.away,home:g.home,group:g.group,
+   day:g.day,time:g.time,choice:state.picks[g.id]||""})),
+  mnfMargin:state.mnfMargin,
+  season:{wins:totals.wins,losses:totals.losses,ties:totals.ties,
+   accuracy:totals.accuracy,ready:totals.ready},
+  weeks:allWeeks.map(w=>({week:w.week,wins:w.wins,losses:w.losses,
+   ties:w.ties,record:w.record,rate:w.rate.toFixed(2),
+   games:w.games.map(g=>({away:g.away,home:g.home,pick:g.pick,
+    awayScore:g.awayScore,homeScore:g.homeScore,status:g.status}))}))
+ };
+};
+
 function teamStats(){
  const ts=Object.fromEntries(Object.keys(NAMES).map(abbr=>[abbr,{abbr,w:0,l:0,t:0,pf:0,pa:0,elo:1500,games:[],chosen:0,right:0,wrong:0,drawn:0,opp:[]}]));
  // Sequential Elo with a capped margin factor and home field adjustment.
