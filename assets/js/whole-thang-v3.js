@@ -239,7 +239,10 @@ async function historicalWeek(week){
   }
  }catch{}
  if(week===6){
+  // A foreground Week 6 edit always wins over an older background fetch.
+  if(activeWeek===6&&Number(state.updatedAt)>Number(archive.updatedAt))archive=state;
   week6State=archive;
+  if(activeWeek===6&&Number(archive.updatedAt)>Number(state.updatedAt))state=archive;
   try{localStorage.setItem(KEY,JSON.stringify(archive));}catch{}
  }else{
   cacheGrade(week,gradeWeek(week,games,archive.picks,games));
@@ -323,7 +326,7 @@ async function refreshWeek(){
   if(!response.ok||!feed.ok||!Number.isInteger(feed.week)||!usableGames(feed.week,feed.games))return;
  }catch{return;}
  const priorSeasonWeek=seasonWeek;
- seasonWeek=Math.max(seasonWeek,feed.week);
+ seasonWeek=feed.week;
  saveCachedWeek(feed.week,feed.games);
  saveScoreCache(feed.week,feed.games);
  if(feed.previousWeek>=6&&Array.isArray(feed.previousGames)&&feed.previousGames.length>=10)
@@ -768,7 +771,7 @@ document.addEventListener("keydown",event=>{
  if(event.key==="Escape"){event.preventDefault();menu.hidden=true;toggle.setAttribute("aria-expanded","false");toggle.focus();return;}
  if(menu.contains(event.target)&&["ArrowDown","ArrowUp","Home","End"].includes(event.key)){event.preventDefault();const choices=[...menu.querySelectorAll("button,a")],index=choices.indexOf(document.activeElement);const next=event.key==="Home"?0:event.key==="End"?choices.length-1:(index+(event.key==="ArrowDown"?1:-1)+choices.length)%choices.length;choices[next]?.focus();}
 });
-document.addEventListener("wt-scores-ready",()=>{if(activeWeek===6&&Array.isArray(window.WTScoreGames))weekScores.set(6,window.WTScoreGames);if(activeWeek>6&&Array.isArray(window.WTScoreGames))weekScores.set(activeWeek,window.WTScoreGames);if(tab==="history")render();else updateSeasonStrip();});
+document.addEventListener("wt-scores-ready",()=>{if(Array.isArray(window.WTScoreGames)&&window.WTScoreGames.length>=10)saveScoreCache(activeWeek,window.WTScoreGames);if(tab==="history"||tab==="home")render();else updateSeasonStrip();});
 render();
 void bootstrap();
 })();
