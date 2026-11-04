@@ -43,7 +43,7 @@ module.exports=async function handler(req,res){
   const first=games[0].start;
   parts.push(...event({id:"scott-pickem-w"+week+"-deadline",summary:"Family NFL Pick'em - Week "+week+" picks due",
    start:first-15*60000,end:first,alarm:true,
-   description:"Submit the official Microsoft Form before first kickoff. Private dashboard picks do not count as official submission."}));
+   description:"Family NFL Pick’em selections are due before the first kickoff."}));
   parts.push("END:VCALENDAR");
   const fold=line=>line.match(/.{1,70}/g)?.join("\r\n ")||"";
   res.setHeader("Content-Type","text/calendar; charset=utf-8");
