@@ -355,6 +355,8 @@ window.WTActiveWeekData={week:activeWeek,games:[]};
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkWeek();});
 setInterval(()=>{if(!document.hidden)checkWeek();},60000);
 async function bootstrap(){
+ // Retire only the rejected Microsoft Forms setup data; never touch saved picks.
+ try{for(let week=6;week<=18;week++)localStorage.removeItem("wt-family-form-url-2026-w"+week);}catch{}
  primeCachedHistory();
  const cached=readCachedWeek(activeWeek);
  if(cached)setCurrentWeek(activeWeek,cached,readScoreCache(activeWeek));
