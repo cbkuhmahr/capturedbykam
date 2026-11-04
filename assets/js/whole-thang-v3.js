@@ -383,7 +383,6 @@ function picksPage(){
  '<button type="button" class="btn" data-action="edit" '+(!state.locked?'disabled':'')+'>Edit picks</button>'+
  '<button type="button" class="btn primary" data-action="save-lock" '+(state.locked?'disabled':'')+'>Save & Lock</button>'+
  '<button type="button" class="btn" data-action="save">Save picks</button>'+
- '<button type="button" class="btn primary" data-family-launch="1">Review &amp; Submit Family Picks</button>'+
  '<button type="button" class="btn" data-action="sync-device" '+(syncingDevice||initialCloudLoad||activatingWeek?'disabled':'')+'>Sync & Verify</button>'+
  '<span class="wt-cloud-status" role="status">'+escape(cloudStatus)+'</span></div>'+
  groups.map(group=>'<div class="wt-group"><div class="group-label">'+group+'</div><div class="wt-match-grid">'+forecasts.filter(f=>f.group===group).map(pickCard).join("")+'</div></div>').join(""))+
