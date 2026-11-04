@@ -289,6 +289,14 @@
       }
     });
   }
+  document.addEventListener("click",event=>{
+    if(!event.target.closest("[data-family-launch]"))return;
+    open=true;
+    note="";
+    render();
+    const panel=document.getElementById("wt-family-form");
+    panel?.scrollIntoView({behavior:window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?"auto":"smooth",block:"start"});
+  });
   document.addEventListener("wt-view-rendered",render);
   document.addEventListener("DOMContentLoaded",render);
 })();
