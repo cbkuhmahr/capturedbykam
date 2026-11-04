@@ -112,7 +112,8 @@ function historyIsReady(){
 }
 let state=EMPTY(),tab="live",teamSort="rating",teamDirection="desc",teamSearch="",intelFilter="all";
 week6State=safeLoad();
-let cloudStatus="Connecting cloud…",initialCloudLoad=true,cloudTimer=null,localRevision=0;
+let cloudStatus="Connecting cloud…",initialCloudLoad=true,localRevision=0;
+const cloudTimers=new Map(),cloudWriteChains=new Map();
 let syncingDevice=false,lastDeviceSync="";
 function updateCloudIndicators(){
  document.querySelectorAll("[data-wt-cloud],.wt-cloud-status").forEach(el=>{
@@ -129,22 +130,28 @@ async function cloudRequest(action,payload={}){
 }
 function queueCloudSave(){
  if(initialCloudLoad||activatingWeek)return;
- // Capture the edited week NOW. Navigation must not redirect an unsent save
- // to whichever season week happens to be open 400 ms later.
  const snapshot=JSON.parse(JSON.stringify(state)),week=activeWeek;
- if(cloudTimer)clearTimeout(cloudTimer);
- cloudTimer=setTimeout(async()=>{
-  try{
-   if(week===activeWeek){cloudStatus="Syncing…";updateCloudIndicators();}
-   if(week===6)await cloudRequest("save",{state:snapshot});
-   else await cloudRequest("saveWeek",{season:SEASON,week,state:snapshot});
-   if(week===activeWeek&&snapshot.updatedAt===state.updatedAt){
-    cloudStatus="Cloud synced";updateCloudIndicators();
-   }else if(week===activeWeek){queueCloudSave();}
-  }catch{
-   if(week===activeWeek){cloudStatus="Local backup · sync offline";updateCloudIndicators();}
-  }
+ // Each season week gets its own debounce and serial write chain. A quick
+ // switch to another week cannot cancel or overwrite this week's picks.
+ if(cloudTimers.has(week))clearTimeout(cloudTimers.get(week));
+ const timer=setTimeout(()=>{
+  cloudTimers.delete(week);
+  const pending=cloudWriteChains.get(week)||Promise.resolve();
+  const write=pending.catch(()=>{}).then(async()=>{
+   try{
+    if(week===activeWeek){cloudStatus="Syncing…";updateCloudIndicators();}
+    if(week===6)await cloudRequest("save",{state:snapshot});
+    else await cloudRequest("saveWeek",{season:SEASON,week,state:snapshot});
+    if(week===activeWeek&&snapshot.updatedAt===state.updatedAt){
+     cloudStatus="Cloud synced";updateCloudIndicators();
+    }else if(week===activeWeek){queueCloudSave();}
+   }catch{
+    if(week===activeWeek){cloudStatus="Local backup · sync offline";updateCloudIndicators();}
+   }
+  });
+  cloudWriteChains.set(week,write);
  },400);
+ cloudTimers.set(week,timer);
 }
 function save(){
  state.updatedAt=Date.now();
