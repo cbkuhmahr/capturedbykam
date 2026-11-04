@@ -23,6 +23,52 @@
     SF:["San Francisco 49ers","49ers"],TB:["Tampa Bay Buccaneers","Buccaneers"],
     TEN:["Tennessee Titans","Titans"],WAS:["Washington Commanders","Commanders"]
   };
+
+  // Exact Week 9 question mapping provided in the generated respondent URL.
+  // Each ID belongs to the game containing the original sample team's code.
+  // Never carry this mapping into a different week: form questions may be edited.
+  const VERIFIED_WEEK=9;
+  const WEEK9_FIELDS=[
+    ["r87eef637e97d472d864c7834ccc91ca8","JAX"],
+    ["rd132418a70ab4568aca9d9b4314b1c06","CIN"],
+    ["rbe3f982ff22240799d790d4b37c82356","DAL"],
+    ["rfe626835f14340d99731f0db401a889e","WAS"],
+    ["r087b5dd04ef34fe591cdab3f57bd8bf0","NO"],
+    ["rd62afba580bd477d9f36b55d810a5d8f","KC"],
+    ["r2708651cb762456093091147ab1ec73f","DET"],
+    ["rbb509a49c74345f9b5f58691fe7cc91b","DEN"],
+    ["r3ec352ab06e24f569d6c0c1e843ad103","NYG"],
+    ["r040ea05c04aa4e11abaa90aa06c8b3b1","SF"],
+    ["re4a05968543c4cc1b3701d753cbb5c02","HOU"],
+    ["r23f7f9d8dd1345f7a51a5f26d7fd7af0","NE"],
+    ["r80762aa5b73d45c7ab9fffe9e3422695","SEA"],
+    ["r69255fc6061f443bb802083e399c0391","CHI"],
+    ["rdabcd12adc9143159e3c08b6e09d09ed","BUF"]
+  ];
+  const PARTICIPANT_FIELD="r54249e8358f541a09cf212b19f53ca24";
+  const PAYMENT_FIELD="ra0713c85c5e94dd7b0703eba742ea550";
+  const MARGIN_FIELD="r722dbc84561e44b9b28c5ab55823d5c4";
+  const PAYMENT_VALUE=JSON.stringify(JSON.stringify(["Upon Winning — Paid Out Cash / Cash App"]));
+  function answerValue(value){
+    // Choice values arrive as JSON strings, not raw team names.
+    try{
+      const decoded=JSON.parse(value);
+      if(typeof decoded==="string"){
+        try{
+          const nested=JSON.parse(decoded);
+          if(nested&&typeof nested==="object"&&nested.IsMath===true&&"Answer" in nested)
+            return {kind:"math",value:String(nested.Answer)};
+        }catch{}
+        return {kind:"choice",value:decoded};
+      }
+    }catch{}
+    return {kind:"text",value:String(value)};
+  }
+  function marginValue(v,example){
+    const parsed=answerValue(example);
+    return parsed.kind==="math"?
+      JSON.stringify(JSON.stringify({Answer:String(v),IsMath:true})):String(v);
+  }
   let open=false;
   let note="";
   const $=(tag,cls,txt)=>{
@@ -53,58 +99,91 @@
       [abbr,...names].some(v=>normalized(v)===n))?.[0]||null;
   }
   function formatChoice(abbr,example){
-    // The example answer tells us if this form uses team codes, mascots or full names.
-    const sample=String(example||"");
-    const old=teamFromAnswer(sample);
+    const source=answerValue(example);
+    const old=teamFromAnswer(source.value);
     if(!old||!TEAMS[abbr])return null;
     const oldNames=TEAMS[old];
-    const type=normalized(sample)===normalized(old)?"code":
-      normalized(sample)===normalized(oldNames[0])?"full":"mascot";
-    return type==="code"?abbr:type==="full"?TEAMS[abbr][0]:TEAMS[abbr][1];
+    const sample=normalized(source.value);
+    const type=sample===normalized(old)?"code":
+      sample===normalized(oldNames[0])?"full":"mascot";
+    const choice=type==="code"?abbr:type==="full"?TEAMS[abbr][0]:TEAMS[abbr][1];
+    return source.kind==="choice"?JSON.stringify(choice):choice;
   }
   function current(){try{
     const s=window.WTAppleSnapshot?.();
     return s&&Number.isInteger(s.week)&&Array.isArray(s.picks)?s:null;
   }catch{return null;}}
   function sourceLink(week){
-    try{return safeUrl(localStorage.getItem(STORAGE+week))||new URL(FORM_URL);}
-    catch{return new URL(FORM_URL);}
+    try{
+      const saved=safeUrl(localStorage.getItem(STORAGE+week));
+      if(saved)return {url:saved,custom:true};
+    }catch{}
+    return {url:new URL(FORM_URL),custom:false};
   }
   function prepared(s){
-    const u=sourceLink(s.week);
-    const mappings=new Map();
-    const byGame=new Map(s.picks.map(g=>[[g.away,g.home].sort().join("-"),g]));
-    const entries=[...u.searchParams.entries()].filter(([k])=>/^r[a-f0-9]{32}$/i.test(k));
-    const usedGames=new Set();
-    const numeric=[];
-    for(const [key,value]of entries){
-      const team=teamFromAnswer(value);
-      if(!team){
-        if(/^\d{1,3}$/.test(value))numeric.push(key);
-        continue;
+    const selected=sourceLink(s.week);
+    const u=selected.url;
+    const mappings=new Map(),usedGames=new Set();
+    let totalQuestions=0,marginKey=null,marginExample=null;
+    if(s.week===VERIFIED_WEEK&&!selected.custom){
+      // A complete and independently checked 2026 Week 9 field-to-fixture map.
+      // This mapping remains correct when the user selects the other team.
+      for(const [key,originalTeam] of WEEK9_FIELDS){
+        const matching=s.picks.filter(g=>g.away===originalTeam||g.home===originalTeam);
+        if(matching.length!==1)continue;
+        const game=matching[0],id=[game.away,game.home].sort().join("-");
+        if(usedGames.has(id))continue;
+        usedGames.add(id);
+        mappings.set(key,{game,example:JSON.stringify(TEAMS[originalTeam][1])});
       }
-      const game=s.picks.find(g=>g.away===team||g.home===team);
-      if(!game)continue;
-      const identity=[game.away,game.home].sort().join("-");
-      if(usedGames.has(identity))continue;
-      usedGames.add(identity);
-      mappings.set(key,{game,example:value});
+      if(mappings.size===WEEK9_FIELDS.length&&s.picks.length===WEEK9_FIELDS.length){
+        u.searchParams.set(PARTICIPANT_FIELD,"WHOLETHANGER");
+        u.searchParams.set(PAYMENT_FIELD,PAYMENT_VALUE);
+        marginKey=MARGIN_FIELD;
+        marginExample=JSON.stringify(JSON.stringify({Answer:"3",IsMath:true}));
+        totalQuestions=WEEK9_FIELDS.length+3;
+      }else{
+        // Never generate partial, potentially mismatched picks silently.
+        mappings.clear();
+      }
+    }else if(selected.custom){
+      const numeric=[];
+      const entries=[...u.searchParams.entries()].filter(([key])=>/^r[a-f0-9]{32}$/i.test(key));
+      totalQuestions=entries.length;
+      for(const [key,value] of entries){
+        const sample=answerValue(value);
+        const team=teamFromAnswer(sample.value);
+        if(!team){
+          if(sample.kind==="math"||/^\\d{1,3}$/.test(sample.value))numeric.push([key,value]);
+          continue;
+        }
+        const matching=s.picks.filter(g=>g.away===team||g.home===team);
+        if(matching.length!==1)continue;
+        const game=matching[0],id=[game.away,game.home].sort().join("-");
+        if(usedGames.has(id))continue;
+        usedGames.add(id);
+        mappings.set(key,{game,example:value});
+      }
+      if(numeric.length===1){[marginKey,marginExample]=numeric[0];}
     }
-    let count=0;
-    for(const [key,{game,example}]of mappings){
+    let mapped=0;
+    for(const [key,{game,example}] of mappings){
       if(!game.choice){u.searchParams.delete(key);continue;}
-      const replacement=formatChoice(game.choice,example);
-      if(replacement){u.searchParams.set(key,replacement);count++;}
+      const value=formatChoice(game.choice,example);
+      if(value!==null){u.searchParams.set(key,value);mapped++;}
     }
-    // Only infer an MNF-margin question if the sample has exactly one numerical
-    // prefilled response; otherwise leave such questions unchanged for review.
     let marginMapped=false;
-    if(numeric.length===1 && s.mnfMargin!=="" && s.mnfMargin!==null){
-      u.searchParams.set(numeric[0],String(s.mnfMargin));
-      marginMapped=true;
+    if(marginKey){
+      if(s.mnfMargin!==""&&s.mnfMargin!==null){
+        u.searchParams.set(marginKey,marginValue(s.mnfMargin,marginExample));
+        marginMapped=true;
+      }else{
+        u.searchParams.delete(marginKey);
+      }
     }
-    return {url:u.href, mapped:count, questions:mappings.size,
-      marginMapped, total:s.picks.length, sampleCount:entries.length};
+    return {url:u.href,mapped,questions:mappings.size,
+      marginMapped,total:s.picks.length,sampleCount:totalQuestions,
+      autoConfigured:s.week===VERIFIED_WEEK&&!selected.custom&&mappings.size===WEEK9_FIELDS.length};
   }
   function summary(s){
     const lines=["WHOLETHANGER — SCOTT FAMILY NFL PICK'EM","WEEK "+s.week,""];
@@ -130,10 +209,10 @@
       $("h2","","Official submission · Week "+s.week),
       $("p","",ready+" of "+s.picks.length+" picks selected · MNF margin "+(s.mnfMargin===""?"not set":s.mnfMargin)));
     head.append(intro,$("span","wt-family-chip",link.mapped?
-      link.mapped+" pre-filled": "Microsoft Forms"));
+      link.mapped+" picks ready": "Microsoft Forms"));
     panel.append(head);
     const actions=$("div","wt-family-actions");
-    const reveal=button(open?"Hide Microsoft Form":"Open Microsoft Form","toggle",true);
+    const reveal=button(open?"Hide Microsoft Form":"Review & Submit Family Picks","toggle",true);
     reveal.setAttribute("aria-expanded",String(open));
     const external=$("a","btn wt-family-extern","Open in browser ↗");
     external.href=link.url;external.target="_blank";external.rel="noopener noreferrer";
@@ -144,11 +223,11 @@
     }
     if(link.sampleCount){
       panel.append($("p","wt-family-small",link.mapped+" of "+s.picks.length+
-        " matchups matched from the pre-filled link. Verify all answers inside Microsoft Forms before submitting."+
-        (link.marginMapped?" MNF margin mapped from a numeric field.":"")));
+        " matchups prepared for Microsoft Forms. Review answers before submitting."+
+        (link.marginMapped?" Monday Night margin is included.":"")));
     }else{
       panel.append($("p","wt-family-small",
-        "This is the official form. For automatic pre-filling, add a generated pre-filled response URL below."));
+        "This week has no verified matchup mapping yet. Open the official form or add this week’s generated pre-filled response URL below."));
     }
     const preview=$("details","wt-family-details");
     preview.append($("summary","","Review my picks"));
@@ -170,7 +249,7 @@
     formRow.append(input,button("Save link","save-url"),button("Restore default","reset-url"));
     config.append(formRow,
       $("p","wt-family-small",
-        "In Microsoft Forms, choose Get pre-filled URL, enter one team answer for each game, then copy the generated respondent link. The designer URL will not work here. The link is saved for this week on this device."));
+        s.week===VERIFIED_WEEK?"Week 9 is already connected. Leave this blank to use the verified mapping.":"Only use a pre-filled respondent link for THIS week. If the form questions change, do not reuse an earlier link. Form links are saved on this device."));
     panel.append(config);
     if(note){const status=$("p","wt-family-message",note);status.setAttribute("role","status");panel.append(status);}
     if(open){
