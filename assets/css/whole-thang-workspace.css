@@ -628,3 +628,13 @@ tbody tr:hover { background:#ffffff04; }
   .wt-team-option { color:#111; }
   .wt-team-option.is-selected { background:#f5eedc; }
 }
+
+
+/* Season-native picks: schedule is ready to browse before a new week begins. */
+.wt-season-nav{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:13px 15px;margin:0 0 18px;background:var(--panel,#141f2f);border:1px solid var(--line,#27364a);border-radius:12px}
+.wt-season-nav label{font-size:12px;font-weight:650;color:var(--text,#edf1f7)}
+.wt-season-nav select{min-height:42px;min-width:180px;padding:8px 11px;border:1px solid var(--line,#27364a);border-radius:9px;background:#0d1726;color:var(--text,#edf1f7);font:inherit;font-size:13px}
+.wt-season-nav .btn{min-height:42px}
+.wt-season-nav-status{font-size:11px;color:var(--muted,#9aa8ba);margin-left:auto}
+.wt-schedule-loading{padding:30px 22px;color:var(--muted,#9aa8ba);font-size:13px;min-height:104px}
+@media(max-width:640px){.wt-season-nav{align-items:stretch;gap:9px}.wt-season-nav label{width:100%}.wt-season-nav select{min-width:0;flex:1}.wt-season-nav-status{flex:1 0 100%;margin-left:0}}
