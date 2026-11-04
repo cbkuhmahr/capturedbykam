@@ -397,43 +397,31 @@ function gradeWeek(week,games,picks,scores){
  return {week,games:entries,wins,losses,ties,record:wins+"–"+losses+(ties?"–"+ties+"T":""),rate:pct(wins,losses)};
 }
 function allScoredWeeks(){
- const w6=weekSixResults();
- const past=[w6,...[...previousWeeks.values()].sort((a,b)=>a.week-b.week)];
- if(activeWeek>6)past.push(gradeWeek(activeWeek,GAMES,state.picks,weekScores.get(activeWeek)||[]));
+ const past=[weekSixResults(),...[...previousWeeks.values()].filter(x=>x.week<seasonWeek).sort((a,b)=>a.week-b.week)];
+ if(seasonWeek>6){
+  const scores=weekScores.get(seasonWeek)||readScoreCache(seasonWeek)||[];
+  const games=readCachedWeek(seasonWeek)||scores;
+  const picks=activeWeek===seasonWeek?state.picks:readWeekState(seasonWeek,games).picks;
+  if(games.length>=10)past.push(gradeWeek(seasonWeek,games,picks,scores));
+ }
  return past.filter(x=>x.games.length);
 }
 function seasonTotals(){
- const w6=weekSixResults(),scored=allScoredWeeks();
- const wins=summary.wins+scored.reduce((n,x)=>n+x.wins,0),losses=summary.losses+scored.reduce((n,x)=>n+x.losses,0),ties=summary.ties+scored.reduce((n,x)=>n+x.ties,0);
- return {wins,losses,ties,accuracy:pct(wins,losses).toFixed(2),record:wins+"–"+losses+"–"+ties+"T",week6:w6,scored};
+ const scored=allScoredWeeks();
+ const wins=summary.wins+scored.reduce((n,x)=>n+x.wins,0);
+ const losses=summary.losses+scored.reduce((n,x)=>n+x.losses,0);
+ const ties=summary.ties+scored.reduce((n,x)=>n+x.ties,0);
+ return {wins,losses,ties,ready:seasonRecordReady,
+  accuracy:pct(wins,losses).toFixed(2),
+  record:wins+"–"+losses+"–"+ties+"T",week6:weekSixResults(),scored};
 }
 window.WTSeasonTotals=seasonTotals;
 function updateSeasonStrip(){
  const x=seasonTotals(),r=document.querySelector(".season-strip .record"),a=document.querySelector(".season-strip .metric strong");
- if(r)r.innerHTML=x.record+" <span>2026 SEASON</span>";
- if(a)a.textContent=x.accuracy+"%";
+ if(r)r.innerHTML=x.ready?x.record+" <span>2026 SEASON</span>":
+  '— <span>2026 SEASON · verifying record</span>';
+ if(a)a.textContent=x.ready?x.accuracy+"%":"—";
 }
-
-/* Current cloud-aware choices are exposed read-only for the optional Apple Share panel. */
-window.WTAppleSnapshot = function () {
- const totals=seasonTotals(),allWeeks=weeks.concat(totals.scored);
- return {
-  week: activeWeek,
-  picks: GAMES.map(g => ({
-   away: g.away, home: g.home, group: g.group, day: g.day,
-   time: g.time, choice: state.picks[g.id] || ""
-  })),
-  mnfMargin: state.mnfMargin,
-  season: { wins: totals.wins, losses: totals.losses, ties: totals.ties,
-   accuracy: totals.accuracy },
-  weeks: allWeeks.map(w => ({ week: w.week, wins: w.wins, losses: w.losses,
-    ties: w.ties, record: w.record, rate: w.rate.toFixed(2),
-    games: w.games.map(g => ({
-      away: g.away, home: g.home, pick: g.pick,
-      awayScore: g.awayScore, homeScore: g.homeScore, status: g.status
-    })) }))
- };
-};
 
 function teamStats(){
  const ts=Object.fromEntries(Object.keys(NAMES).map(abbr=>[abbr,{abbr,w:0,l:0,t:0,pf:0,pa:0,elo:1500,games:[],chosen:0,right:0,wrong:0,drawn:0,opp:[]}]));
@@ -762,5 +750,5 @@ document.addEventListener("keydown",event=>{
 });
 document.addEventListener("wt-scores-ready",()=>{if(activeWeek===6&&Array.isArray(window.WTScoreGames))weekScores.set(6,window.WTScoreGames);if(activeWeek>6&&Array.isArray(window.WTScoreGames))weekScores.set(activeWeek,window.WTScoreGames);if(tab==="history")render();else updateSeasonStrip();});
 render();
-initCloud();
+void bootstrap();
 })();
