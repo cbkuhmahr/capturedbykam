@@ -31,9 +31,9 @@ function harness(file, expose, prepare = source => source, storage = {}) {
   vm.runInNewContext(source,context,{filename:file});
   return {api:context.window.__test,context,values};
 }
-function core(){return harness('assets/js/whole-thang-v3.js','HISTORY,summary,TS,forecast,gradeWeek,seasonTotals,validMargin,sameSavedChoices,setState(next){state=next;week6State=next;}',s=>s.replace('render();\ninitCloud();',''));}
+function core(){return harness('assets/js/whole-thang-v3.js','HISTORY,summary,TS,forecast,gradeWeek,seasonTotals,validMargin,sameSavedChoices,calendarWeek,GAMES,activeWeek,weekNavigator,readWeekState,historyIsReady,setState(next){state=next;week6State=next;}',s=>s.replace('render();\nvoid bootstrap();',''));}
 function fantasy(){return harness('assets/js/whole-thang-manual-fantasy.js','fantasyPoints,recommended,setScoring(value){state.scoring=value;}',s=>s.replace('load();emit();','load();'));}
-function live(){return harness('assets/js/whole-thang-live.js','verdict,displaySpread',s=>s.replace('ensure();refresh();refreshMarket();',''));}
+function live(){return harness('assets/js/whole-thang-live.js','verdict,displaySpread,GAMES',s=>s.replace('ensure();\nif(GAMES.length){refresh();refreshMarket();}',''));}
 
 test('preserves the verified 79-pick baseline and excludes ties from accuracy',()=>{
   const {api}=core();
@@ -74,6 +74,48 @@ test('retains the MNF margin range and cloud choice verification',()=>{
   for(const value of ['-1','201','1.5','abc'])assert.equal(api.validMargin(value),'');
   assert.equal(api.sameSavedChoices({picks:{a:'CHI'},mnfMargin:'7',locked:true,homeEdge:45},{picks:{a:'CHI'},mnfMargin:7,locked:true,homeEdge:45}),true);
   assert.equal(api.sameSavedChoices({picks:{a:'CHI'}},{picks:{a:'GB'}}),false);
+});
+
+
+test('opens without showing legacy Week 6 matchups or an invented updated record',()=>{
+ const {api}=core();
+ assert.equal(api.GAMES.length,0);
+ assert.ok(api.activeWeek>=6&&api.activeWeek<=18);
+ assert.equal(api.historyIsReady(),false);
+ assert.equal(api.seasonTotals().ready,false);
+ assert.equal(api.seasonTotals().record,'54–24–1T'); // canonical baseline, not presented as current
+ const source=read('lib/whole-thang-page.js');
+ assert.ok(source.includes('2026 SEASON · verifying record'));
+ assert.ok(!source.includes('54–24–1T <span>2026 SEASON'));
+});
+
+test('has all remaining regular-season weeks ready for browsing and future picks',()=>{
+ const {api}=core();
+ const html=api.weekNavigator();
+ for(let wk=6;wk<=18;wk++)assert.ok(html.includes('value="'+wk+'"'),'Week '+wk);
+ assert.ok(html.includes('Current week'));
+ assert.ok(read('api/whole-thang-sync.js').includes('week>18'));
+});
+
+test('removes all form integration assets and action buttons',()=>{
+ const page=read('lib/whole-thang-page.js');
+ const picks=read('assets/js/whole-thang-v3.js');
+ const share=read('assets/js/whole-thang-apple.js');
+ assert.ok(!page.includes('whole-thang-family-form'));
+ assert.ok(!picks.includes('family-launch'));
+ assert.ok(!share.includes('Microsoft Form'));
+ assert.ok(!fs.existsSync(path.join(root,'assets/js/whole-thang-family-form.js')));
+ assert.ok(!fs.existsSync(path.join(root,'assets/css/whole-thang-family-form.css')));
+});
+
+test('preserves complete cloud-sync week identity across delayed submissions',()=>{
+ const source=read('assets/js/whole-thang-v3.js');
+ const start=source.indexOf('function queueCloudSave(){');
+ const capture=source.indexOf('const snapshot=JSON.parse(JSON.stringify(state)),week=activeWeek;',start);
+ const delay=source.indexOf('cloudTimer=setTimeout(async()=>{',start);
+ const end=source.indexOf('function save(){',start);
+ assert.ok(start>=0&&capture>start&&delay>capture&&delay<end);
+ assert.ok(source.slice(delay,end).includes('cloudRequest("saveWeek",{season:SEASON,week,state:snapshot})'));
 });
 
 test('retains all live pick verdicts and spread formatting',()=>{
