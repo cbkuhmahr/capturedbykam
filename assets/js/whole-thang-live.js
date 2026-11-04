@@ -434,16 +434,8 @@ document.addEventListener("wt-week-changed",()=>{
  updatedAt=cached.length?"Cached results":"";viewFilter="all";
  expandedGames.clear();
  closeSportsGame();sportsDay="auto";
- const seeded=window.WTActiveWeekData;
-if(seeded&&Array.isArray(seeded.games)&&seeded.games.length){
- currentWeek=seeded.week;
- GAMES=seeded.games.map(g=>({id:g.id,away:g.away,home:g.home,day:g.day,time:g.time,group:g.group,neutral:g.neutral,kickoff:g.kickoff}));
- const cached=Array.isArray(window.WTScoreGames)?window.WTScoreGames:[];
- live=new Map(cached.filter(g=>g&&g.away&&g.home).map(g=>[g.away+"-"+g.home,g]));
- if(cached.length){state="ready";updatedAt="Cached results";}
-}
-ensure();
-if(GAMES.length){refresh();refreshMarket();}
+ ensure();
+ if(GAMES.length){refresh();refreshMarket();}
 });
 function adjacentGame(direction){
  if(!openedGame||!GAMES.length)return;
@@ -476,7 +468,16 @@ document.addEventListener("wt-manual-fantasy-change",ensure);
 document.addEventListener("wt-picks-changed",ensure);
 document.addEventListener("wt-history-updated",ensure);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&GAMES.length){refresh();refreshMarket();}});
-ensure();refresh();refreshMarket();
+const seeded=window.WTActiveWeekData;
+if(seeded&&Array.isArray(seeded.games)&&seeded.games.length){
+ currentWeek=seeded.week;
+ GAMES=seeded.games.map(g=>({id:g.id,away:g.away,home:g.home,day:g.day,time:g.time,group:g.group,neutral:g.neutral,kickoff:g.kickoff}));
+ const cached=Array.isArray(window.WTScoreGames)?window.WTScoreGames:[];
+ live=new Map(cached.filter(g=>g&&g.away&&g.home).map(g=>[g.away+"-"+g.home,g]));
+ if(cached.length){state="ready";updatedAt="Cached results";}
+}
+ensure();
+if(GAMES.length){refresh();refreshMarket();}
 setInterval(()=>{if(!document.hidden&&GAMES.length)refresh();},45000);
 setInterval(()=>{if(!document.hidden&&GAMES.length)refreshMarket();},180000);
 })();
