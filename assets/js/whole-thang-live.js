@@ -285,7 +285,7 @@ function markup(){
   '<div class="wt-score-tally wt-score-tally-pending"><small>PENDING</small><strong>'+(displayable?Math.max(0,picked-counted):"—")+'</strong></div>'+
   '<div class="wt-score-summary-note" role="status" aria-live="polite">'+esc(tallyNote)+'</div></section>';
  const overall=window.WTSeasonTotals?.();
- const seasonLine=overall?'<div class="wt-live-season-line" aria-label="Overall season results"><div><small>OVERALL · 2026 SEASON</small><strong>'+esc(overall.record)+'</strong></div><div><strong>'+esc(overall.accuracy)+'%</strong><small>ACCURACY</small></div></div>':"";
+ const seasonLine=overall?'<div class="wt-live-season-line" aria-label="Overall season results"><div><small>OVERALL · 2026 SEASON</small><strong>'+esc(overall.ready?overall.record:'Verifying…')+'</strong></div><div><strong>'+esc(overall.ready?overall.accuracy+'%':'—')+'</strong><small>ACCURACY</small></div></div>':"";
  const filters='<div class="wt-live-filters" aria-label="Filter scoreboard">'+
   [["all","All"],["live","Live now"],["pending","Not final"],["picked","My picks"]].map(([key,name])=>'<button type="button" data-live-filter="'+key+'" class="btn '+(viewFilter===key?"primary":"")+'" aria-pressed="'+(viewFilter===key)+'">'+name+'</button>').join("")+
  '</div>';
