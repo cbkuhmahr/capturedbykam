@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/api/whole-thang-work-calendar",
+      "destination": "/api/whole-thang-calendar?work=1"
+    },
+    {
       "source": "/api/nfl-odds",
       "destination": "/api/nfl-scores?mode=odds"
     },

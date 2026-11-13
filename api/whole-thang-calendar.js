@@ -28,6 +28,8 @@ async function gamesFor(week){
  return games;
 }
 module.exports=async function handler(req,res){
+ // Keep the existing work-calendar URL while sharing this single deployed function.
+ if(req.query?.work==="1")return require("../lib/whole-thang-work-calendar")(req,res);
  if(!["GET","HEAD"].includes(req.method))return res.status(405).end("Method not allowed");
  try{
   const base=Math.max(6,Math.min(18,Math.floor((Date.now()-START)/(7*DAY))+1));
