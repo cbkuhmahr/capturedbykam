@@ -1,0 +1,53 @@
+
+/* Calendar Center: scoped to the private sports workspace. */
+.wt-cc-overlay[hidden] { display:none!important; }
+.wt-cc-overlay { position:fixed; inset:0; z-index:220; background:#040912e8; backdrop-filter:blur(10px); overflow:auto; padding:24px 14px; color:#eaf0f8; }
+.wt-cc-shell { max-width:900px; margin:12px auto 42px; border:1px solid #44546b; background:#111e2e; border-radius:17px; box-shadow:0 28px 90px #0009; overflow:hidden; }
+.wt-cc-head { padding:22px 24px; display:flex; justify-content:space-between; align-items:start; gap:12px; border-bottom:1px solid #35465c; }
+.wt-cc-head small,.wt-cc-kicker { display:block; color:#bba16c; letter-spacing:.12em; font-size:10px; font-weight:700; text-transform:uppercase; }
+.wt-cc-head h2 { margin:5px 0 0; font-size:28px; letter-spacing:-.04em; }
+.wt-cc-body { padding:22px 24px 30px; }
+.wt-cc-lead { margin:0 0 18px; color:#b2c0d3; line-height:1.6; font-size:13px; }
+.wt-cc-cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.wt-cc-card { background:#1b2b3e; border:1px solid #44566d; padding:20px; border-radius:13px; min-width:0; }
+.wt-cc-card h3 { font-size:19px; margin:10px 0; letter-spacing:-.03em; }
+.wt-cc-card p { color:#b1c0d4; font-size:12px; line-height:1.6; min-height:54px; }
+.wt-cc-button,.wt-cc-link { cursor:pointer; display:inline-flex; text-decoration:none; justify-content:center; align-items:center; padding:10px 13px; min-height:43px; border:1px solid #5a6e86; border-radius:9px; background:#26374d; color:#f0f4fb; font-weight:650; font-size:13px; }
+.wt-cc-button:hover,.wt-cc-link:hover { background:#34475e; color:#fff; }
+.wt-cc-button.primary,.wt-cc-link.primary { background:#e8bd74; border-color:#e8bd74; color:#1b1b1b; }
+.wt-cc-button:disabled,.wt-cc-link[aria-disabled=true] { opacity:.5; cursor:not-allowed; pointer-events:none; }
+.wt-cc-card .wt-cc-button { width:100%; margin-top:8px; }
+.wt-cc-panel[hidden],.wt-cc-editor[hidden] { display:none!important; }
+.wt-cc-topline { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:15px; }
+.wt-cc-topline h3 { margin:0; font-size:19px; }
+.wt-cc-actions { display:flex; flex-wrap:wrap; gap:8px; margin:13px 0 20px; }
+.wt-cc-status { display:block; color:#d7e4ef; font-size:12px; min-height:20px; margin:12px 0; line-height:1.5; }
+.wt-cc-status.error { color:#ffacac; }
+.wt-cc-help { color:#abbcd0; font-size:12px; line-height:1.6; margin:12px 0; }
+.wt-cc-alert { background:#29291f; border:1px solid #68583c; color:#e7d6a1; padding:12px; border-radius:9px; font-size:12px; line-height:1.5; margin:12px 0; }
+.wt-cc-games { display:grid; gap:7px; margin-top:15px; }
+.wt-cc-game { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; background:#1a2a3b; border:1px solid #39495e; border-radius:10px; padding:12px 13px; }
+.wt-cc-game div { min-width:190px; flex:1; }
+.wt-cc-game strong { display:block; font-size:13px; }
+.wt-cc-game small { color:#aebcd0; font-size:11px; display:block; padding-top:5px; }
+.wt-cc-game .wt-cc-button { min-height:38px; font-size:12px; }
+.wt-cc-form { padding:17px; background:#19283a; border:1px solid #58718b; border-radius:12px; margin-bottom:18px; }
+.wt-cc-form h4 { margin:0 0 16px; font-size:18px; }
+.wt-cc-fields { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.wt-cc-field { min-width:0; display:flex; flex-direction:column; gap:6px; font-size:12px; color:#d7e2ef; }
+.wt-cc-field.wide { grid-column:1/-1; }
+.wt-cc-field input,.wt-cc-field select,.wt-cc-field textarea { width:100%; padding:11px; border:1px solid #596b82; border-radius:8px; background:#0e1a29; color:#fff; font-size:15px; color-scheme:dark; }
+.wt-cc-field textarea { min-height:70px; resize:vertical; }
+.wt-cc-fields+div { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+.wt-cc-footer { border-top:1px solid #35465c; padding-top:14px; font-size:11px; color:#9fb2c8; }
+@media(max-width:600px) {
+ .wt-cc-overlay { padding:0; }
+ .wt-cc-shell { margin:0; border-radius:0; min-height:100dvh; }
+ .wt-cc-head { padding:17px 16px; }
+ .wt-cc-body { padding:17px 16px 30px; }
+ .wt-cc-cards,.wt-cc-fields { grid-template-columns:1fr; }
+ .wt-cc-field.wide { grid-column:auto; }
+ .wt-cc-card p { min-height:0; }
+ .wt-cc-game { align-items:start; }
+ .wt-cc-game div { min-width:0; }
+}
