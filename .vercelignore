@@ -1,0 +1,20 @@
+# Keep original portfolio files in GitHub, but omit unused photos from Vercel deployments.
+# The live homepage currently uses only images.01.JPG, images.09.JPG and images.011.JPG.
+# Do not exclude those three or the Toledo bridge hero.
+# Reduces each static deployment by approximately 61 MB without deleting originals.
+images/images.010.JPG
+images/images.012.JPG
+images/images.013.JPG
+images/images.02.JPG
+images/images.03.JPG
+images/images.05.JPG
+images/images.06.JPG
+images/images.07.JPG
+images/images.08.JPG
+images/images.14.JPG
+images/images.15.JPG
+
+# Project-only reference materials are not required in production.
+docs/
+tests/
+font-preview.html
