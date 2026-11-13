@@ -4,11 +4,13 @@
   if (!opener) return;
 
   const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  // These five shifts mirror the original Excel workbook's _Lists!C1:C5.
+  // Five Excel dropdown shifts, plus two custom shift options.
   const SHIFTS = {
     morning: { label: "7 AM – 3 PM", start: "070000", end: "150000", overnight: false },
+    shortMorning: { label: "7 AM – 11 AM", start: "070000", end: "110000", overnight: false },
     shortEvening: { label: "3 PM – 7 PM", start: "150000", end: "190000", overnight: false },
     evening: { label: "3 PM – 11 PM", start: "150000", end: "230000", overnight: false },
+    longOvernight: { label: "7 PM – 7 AM", start: "190000", end: "070000", overnight: true },
     overnight: { label: "11 PM – 7 AM", start: "230000", end: "070000", overnight: true },
     earlyMorning: { label: "3 AM – 7 AM", start: "030000", end: "070000", overnight: false }
   };
@@ -110,7 +112,7 @@
       const select = document.createElement("select");
       select.setAttribute("aria-label", "Shift for " + MONTHS[month - 1] + " " + day + ", " + year);
       select.dataset.date = ymd;
-      [["", "Off / No shift"], ["morning", SHIFTS.morning.label], ["shortEvening", SHIFTS.shortEvening.label], ["evening", SHIFTS.evening.label], ["overnight", SHIFTS.overnight.label], ["earlyMorning", SHIFTS.earlyMorning.label]].forEach(([value, label]) => {
+      [["", "Off / No shift"], ["morning", SHIFTS.morning.label], ["shortMorning", SHIFTS.shortMorning.label], ["shortEvening", SHIFTS.shortEvening.label], ["evening", SHIFTS.evening.label], ["longOvernight", SHIFTS.longOvernight.label], ["overnight", SHIFTS.overnight.label], ["earlyMorning", SHIFTS.earlyMorning.label]].forEach(([value, label]) => {
         const option = document.createElement("option");
         option.value = value;
         option.textContent = label;
