@@ -84,6 +84,8 @@
   }
   function showHome() {
     if (dirty && !window.confirm("Discard unsaved basketball changes?")) return false;
+    dirty = false;
+    setDirty(false);
     el("wt-cc-home").hidden = false;
     el("wt-cc-games-panel").hidden = true;
     el("wt-cc-editor").hidden = true;
@@ -140,7 +142,7 @@
   }
   async function loadGames() {
     if (dirty && !window.confirm("Discard unsaved edits and reload?")) return;
-    loaded=false; dirty=false; setDirty(false); setLinks();
+    loaded=false; dirty=false; games=[]; setDirty(false); render();
     status("Loading game schedule…");
     el("wt-cc-reload").disabled=true;
     try {
