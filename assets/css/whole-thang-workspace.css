@@ -638,3 +638,46 @@ tbody tr:hover { background:#ffffff04; }
 .wt-season-nav-status{font-size:11px;color:var(--muted,#9aa8ba);margin-left:auto}
 .wt-schedule-loading{padding:30px 22px;color:var(--muted,#9aa8ba);font-size:13px;min-height:104px}
 @media(max-width:640px){.wt-season-nav{align-items:stretch;gap:9px}.wt-season-nav label{width:100%}.wt-season-nav select{min-width:0;flex:1}.wt-season-nav-status{flex:1 0 100%;margin-left:0}}
+
+
+/* Work calendar: custom shifts and iPhone handoff */
+.wt-shifts-entry { min-width:0; }
+.wt-shifts-entry>select { width:100%; min-height:44px; }
+.wt-shifts-custom { margin-top:10px; display:grid; gap:10px; padding:13px;
+  border:1px solid #52647b; border-radius:10px; background:#1e2e43; }
+.wt-shifts-custom[hidden], .wt-shifts-retry[hidden] { display:none!important; }
+.wt-shifts-custom-heading { font-size:12px; font-weight:650; color:#e2eaf5; }
+.wt-shifts-custom>input[type=text] { min-height:44px; width:100%;
+  border:1px solid #566880; border-radius:8px; padding:10px 12px;
+  background:#0f1b2a; color:#f2f5fa; font-size:13px; }
+.wt-shifts-time-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.wt-shifts-time-fields label { min-width:0; display:grid; gap:5px; font-size:11px; color:#c6d2e3; }
+.wt-shifts-time-fields input { width:100%; max-width:100%; min-width:0; min-height:44px;
+  border:1px solid #566880; border-radius:8px; padding:7px;
+  background:#0f1b2a; color:#f2f5fa; color-scheme:dark; font-size:14px; }
+.wt-shifts-custom-actions { display:grid; gap:6px; }
+.wt-shifts-custom-save { min-height:42px; border:1px solid #92784c;
+  border-radius:8px; background:#4b3f2a; color:#ffe4a6; font-weight:650; font-size:12px; }
+.wt-shifts-custom-note { color:#a8b9cc; font-size:11px; }
+.wt-shifts-custom-note.is-error,.wt-shifts-status.is-error { color:#f5a7b4; }
+.wt-shifts-privacy { margin-top:10px; color:#a8b9cc; font-size:10px; line-height:1.6; }
+.wt-shifts-bar { z-index:1001; }
+.wt-shifts-shell { padding-bottom:calc(200px + env(safe-area-inset-bottom)); }
+.wt-shifts-calendar { display:flex; align-items:center; justify-content:center;
+  text-decoration:none; text-align:center; }
+.wt-shifts-calendar.is-disabled { opacity:.48; cursor:not-allowed; }
+.wt-shifts-download { display:block; margin:9px auto 0; border:0; background:none;
+  min-height:36px; padding:6px 12px; color:#c5d3e6; font-size:12px; text-decoration:underline; }
+.wt-shifts-retry { display:block; margin:8px auto 0; border:1px solid #ad6a73;
+  background:#312330; color:#ffe7eb; border-radius:8px; min-height:36px; padding:6px 14px; }
+@media(max-width:599px) {
+  .wt-shifts-shell { padding:20px 13px calc(210px + env(safe-area-inset-bottom)); }
+  .wt-shifts-head { align-items:start; gap:10px; }
+  .wt-shifts-head h2 { font-size:23px; }
+  .wt-shifts-close { padding-inline:12px; }
+  .wt-shifts-columns,.wt-shifts-row { grid-template-columns:minmax(98px,.9fr) minmax(160px,1.5fr); gap:9px; padding:11px 10px; }
+  .wt-shifts-custom { padding:9px; }
+  .wt-shifts-time-fields { grid-template-columns:1fr; }
+  .wt-shifts-bar { padding-inline:13px; }
+  .wt-shifts-controls { padding:14px; }
+}
