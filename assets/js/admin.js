@@ -783,8 +783,8 @@
     document.getElementById("statProjects").textContent = projects.length;
     document.getElementById("statOpen").textContent = projects.filter((p) => p.status === "open").length;
     document.getElementById("statPhotos").textContent = photos.length;
-    document.getElementById("statOrders").textContent = orders.filter((o) => o.fulfillment_status === "new").length;
-    document.getElementById("statAwaitingDelivery").textContent = orders.filter(order => order.fulfillment_status !== "sent").length;
+    document.getElementById("statOrders").textContent = orders.filter((o) => !o.is_test && o.fulfillment_status === "new").length;
+    document.getElementById("statAwaitingDelivery").textContent = orders.filter(order => !order.is_test && order.fulfillment_status !== "sent").length;
     document.getElementById("statInquiries").textContent = bookingsAvailable ? String(bookings.length) : "—";
     const latest = projects[0];
     document.getElementById("latestGalleryTitle").textContent = latest?.title || "No gallery yet";
@@ -805,6 +805,16 @@
     if (projects.some((p) => p.id === currentRepair)) repairProject.value = currentRepair;
   }
 
+  // Display eligibility locally; the authenticated server rechecks before deleting.
+  function galleryCleanupEligible(project) {
+    const timestamps = [Date.parse(project.created_at)];
+    if (project.event_date) timestamps.push(Date.parse(project.event_date + "T23:59:59Z"));
+    for (const photo of photos) {
+      if (photo.project_id === project.id) timestamps.push(Date.parse(photo.created_at));
+    }
+    return Date.now() - Math.max(...timestamps) >= 15 * 86400000;
+  }
+
   function renderProjects() {
     const visibleProjects = projects.filter(project =>
       (projectStatus.value === "all" || project.status === projectStatus.value) &&
@@ -821,6 +831,7 @@
     }
     projectList.innerHTML = visibleProjects.map((p) => {
       const count = photoCounts.get(p.id) || 0;
+      const cleanupEligible = galleryCleanupEligible(p);
       return `<article class="cbk-admin-project">
         <div>
           <span class="cbk-status cbk-status-${p.status}">${p.status}</span>
@@ -831,6 +842,7 @@
           <button class="button" type="button" data-upload="${p.id}">Add Photos</button>
           <button class="button" type="button" data-edit="${p.id}">Edit</button>
           <button class="button" type="button" data-photos="${p.id}">Manage Photos</button>
+          <button class="button" type="button" data-cleanup="${p.id}" ${cleanupEligible && count ? "" : "disabled"} title="${cleanupEligible ? "Review and remove unpurchased photos" : "Available 15 days after the event and latest upload"}">Clear Dated Gallery</button>
           <a class="button" href="gallery.html?project=${encodeURIComponent(p.slug)}" target="_blank" rel="noopener">Preview</a>
           <a class="button" href="qr.html?project=${encodeURIComponent(p.slug)}&label=${encodeURIComponent(p.title)}" target="_blank" rel="noopener">QR Code</a>
           <button class="button" type="button" data-status="${p.id}" data-next="${p.status === "open" ? "closed" : "open"}">${p.status === "open" ? "Close" : "Open"}</button>
@@ -853,6 +865,33 @@
         await api("setProjectStatus", { project_id: button.dataset.status, status: button.dataset.next });
         await refreshAll();
       } catch (error) { alert(error.message); }
+    }));
+
+    projectList.querySelectorAll("[data-cleanup]").forEach(button => button.addEventListener("click", async () => {
+      button.disabled = true;
+      try {
+        const projectId = button.dataset.cleanup;
+        const review = await api("getGalleryCleanupPreview", { project_id: projectId });
+        if (!review.eligible) throw Error("Gallery is not yet eligible. Available after " + new Date(review.eligible_at).toLocaleDateString() + ".");
+        if (review.blocked) throw Error("A real order needs its photo selections verified first.");
+        if (!review.removable_photos) {
+          alert("No unpurchased photos are eligible to clear. Purchased photos and order records remain protected.");
+          return;
+        }
+        const message = 'Clear dated gallery "' + review.title + '"?\\n\\n' +
+          review.removable_photos + " unpurchased photos will be permanently removed.\\n" +
+          review.protected_photos + " photos protected for real orders.\\n" +
+          review.test_orders + " test orders excluded from real sales.\\n\\n" +
+          "The gallery will be closed. No customer sales records will be deleted.";
+        if (!confirm(message)) return;
+        const result = await api("clearDatedGallery", { project_id: projectId, confirm: "CLEAR DATED GALLERY" });
+        alert("Cleared " + result.cleared + " eligible photos; preserved " + result.protected_photos + " purchased photos and all order records.");
+        await refreshAll();
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        button.disabled = false;
+      }
     }));
 
     projectList.querySelectorAll("[data-delete]").forEach((button) => button.addEventListener("click", async () => {
@@ -925,7 +964,7 @@
       <article class="cbk-order-card">
         <div class="cbk-order-top">
           <div>
-            <span class="cbk-status cbk-status-${orderStage(o)}">${orderStage(o).toUpperCase()}</span>
+            <span class="cbk-status cbk-status-${orderStage(o)}">${o.is_test ? "TEST · " : ""}${orderStage(o).toUpperCase()}</span>
             <h3>${escapeHtml(o.order_code)} · ${escapeHtml(o.customer_name)}</h3>
             <p>${escapeHtml(o.cbk_shop_projects?.title || "Gallery")} · $${Number(o.amount).toFixed(2)} · ${escapeHtml(o.payment_method)}</p>
           </div>
@@ -939,8 +978,25 @@
         </div>
         <div class="cbk-admin-actions">
           <button class="button button-dark" data-deliver="${o.id}" type="button">${o.fulfillment_status === "sent" ? "Delivered ✓" : (o.payment_status === "confirmed" ? "Resend Delivery" : "Confirm Payment & Send Photos")}</button>
+          <button class="button" data-test-order="${o.id}" type="button">${o.is_test ? "Mark as real order" : "Mark as test order"}</button>
         </div>
       </article>`).join("");
+
+    orderList.querySelectorAll("[data-test-order]").forEach(button => button.addEventListener("click", async () => {
+      const order = orders.find(item => item.id === button.dataset.testOrder);
+      if (!order) return;
+      const next = !order.is_test;
+      if (!confirm(next ? "Mark this transaction as a TEST? It will not count as a real purchase during cleanup." : "Mark this transaction as REAL? Its purchased photos will be protected.")) return;
+      button.disabled = true;
+      try {
+        await api("markOrderTest", { order_id: order.id, is_test: next });
+        await refreshAll();
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        button.disabled = false;
+      }
+    }));
 
     orderList.querySelectorAll("[data-deliver]").forEach((button) => button.addEventListener("click", async () => {
       const order = orders.find((item) => item.id === button.dataset.deliver);
