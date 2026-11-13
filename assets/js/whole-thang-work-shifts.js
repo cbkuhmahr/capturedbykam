@@ -253,12 +253,16 @@
       const remote = Object.fromEntries(Object.entries(data.selections || {}).filter(([date,value]) =>
         date.startsWith(requestedMonth + "-") && valueValid(value)));
       const local = selections;
-      if (Object.keys(remote).length === 0 && Object.keys(local).length > 0) {
+      if (Object.keys(remote).length === 0 && Object.keys(local).length > 0 &&
+          window.confirm("Your online calendar is empty for " + requestedMonth +
+            ", but this iPhone has saved shifts. Restore the iPhone shifts to the online calendar?")) {
         pending.set(requestedMonth,JSON.parse(JSON.stringify(local)));
-        render();
-        setStatus("Moving saved iPhone shifts to your calendar…");
+        setStatus("Restoring your saved iPhone shifts…");
         await flushPending();
       } else {
+        if (Object.keys(remote).length === 0 && Object.keys(local).length > 0) {
+          try { localStorage.setItem(storeKey(requestedMonth) + ":backup", JSON.stringify(local)); } catch {}
+        }
         selections = remote;
         persistLocal();
         render();
@@ -364,8 +368,8 @@
   el("wt-shifts-clear").addEventListener("click", () => {
     if (Object.keys(selections).length && !window.confirm("Clear every shift for " + MONTHS[month-1] + " " + year + "?")) return;
     selections = {};
-    render();
     queueSave();
+    render();
   });
   const retry = document.createElement("button");
   retry.id = "wt-shifts-retry"; retry.type = "button"; retry.className = "wt-shifts-retry";
