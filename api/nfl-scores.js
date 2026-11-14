@@ -136,6 +136,8 @@ async function weeklyHandler(req,res){
 };
 
 module.exports = async function handler(req,res) {
+  if(req.query?.mode==="game")return require("../lib/nfl-game")(req,res);
+  if(req.query?.mode==="standings")return require("../lib/nfl-standings")(req,res);
   if(req.query?.mode==="odds")return require("../lib/nfl-odds")(req,res);
   if(req.query?.mode==="fantasy")return require("../lib/nfl-fantasy-boxscore")(req,res);
   if(req.query?.mode==="week")return weeklyHandler(req,res);
