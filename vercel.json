@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/api/nfl-game",
+      "destination": "/api/nfl-scores?mode=game"
+    },
+    {
+      "source": "/api/nfl-standings",
+      "destination": "/api/nfl-scores?mode=standings"
+    },
+    {
       "source": "/api/whole-thang-work-calendar",
       "destination": "/api/whole-thang-calendar?work=1"
     },
