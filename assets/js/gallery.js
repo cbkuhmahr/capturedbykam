@@ -762,7 +762,8 @@
   photoSearch?.addEventListener("input", renderPhotos);
   refreshPhotosButton?.addEventListener("click", () => refreshPhotos());
   document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshPhotos(); });
-  window.setInterval(() => { if (!document.hidden) refreshPhotos(); }, 75000);
+  // Manual refresh and return-to-tab still check immediately; avoid excessive background polling.
+  window.setInterval(() => { if (!document.hidden) refreshPhotos(); }, 180000);
   loadGallery();
   loadSquareCheckout();
 })();
