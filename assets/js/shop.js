@@ -112,6 +112,7 @@
   search?.addEventListener("input", renderProjects);
   refresh?.addEventListener("click", loadProjects);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) loadProjects(); });
-  window.setInterval(() => { if (!document.hidden) loadProjects(); }, 60000);
+  // Keep an on-demand refresh and reload when the tab returns; periodic sync can be less frequent.
+  window.setInterval(() => { if (!document.hidden) loadProjects(); }, 180000);
   loadProjects();
 })();
