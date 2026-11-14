@@ -182,7 +182,8 @@
         type:"custom", label:label.value.trim(), start:start.value, end:end.value
       };
       note.textContent = end.value < start.value
-        ? "Saved. Ends the following day." : "Custom shift saved.";
+        ? "Overnight shift entered. Check cloud save status below."
+        : "Shift entered. Check cloud save status below.";
       note.classList.remove("is-error");
       queueSave();
     });
