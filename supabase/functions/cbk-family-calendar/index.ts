@@ -1,9 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 
-const URL = Deno.env.get("SUPABASE_URL")!;
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const db = createClient(URL, KEY, { auth: { persistSession: false, autoRefreshToken: false } });
-const AUTH = URL + "/functions/v1/cbk-auth";
+const db = createClient(SUPABASE_URL, KEY, { auth: { persistSession: false, autoRefreshToken: false } });
+const AUTH = SUPABASE_URL + "/functions/v1/cbk-auth";
 const TABLE = "cbk_family_calendars";
 const ID = "miles-whitmer-basketball";
 const MAX_GAMES = 200;
