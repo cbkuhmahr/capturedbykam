@@ -54,7 +54,7 @@
     ' Calendar is read-only and refreshes when Apple checks the subscription. Your NFL picks are unaffected.</p>',
     '<div class="wt-shifts-privacy">Your shifts are private in the site. Anyone with your unique subscription link can see them, so do not share the link.</div>',
     '</div><div class="wt-shifts-bar"><div class="wt-shifts-barinner">',
-    '<a id="wt-shifts-calendar" class="wt-shifts-export wt-shifts-calendar" href="#" aria-disabled="true">Open Apple Calendar</a>',
+    '<a id="wt-shifts-calendar" class="wt-shifts-export wt-shifts-calendar" href="#" aria-disabled="true">Subscribe to Mimi Work (once)</a>',
     '<button type="button" class="wt-shifts-download" id="wt-shifts-export">Download .ics backup</button>',
     '<p class="wt-shifts-status" id="wt-shifts-status" role="status">Loading your schedule…</p>',
     '</div></div>'
@@ -133,7 +133,7 @@
     remoteReady = !lastSaveError && Boolean(feedUrl) && pending.size === 0;
     updateCalendarLink();
     if (lastSaveError) setStatus("Save failed: " + lastSaveError + ". Tap Retry save.",true);
-    else setStatus("Saved. Tap Open Apple Calendar to subscribe or view your schedule.");
+    else setStatus("Saved. Your existing Mimi Work subscription will update when Apple refreshes it. No need to subscribe again.");
     el("wt-shifts-retry").hidden = !lastSaveError;
   }
   function editorFor(date, initialCustom) {
@@ -269,7 +269,7 @@
         render();
         remoteReady = Boolean(feedUrl);
         updateCalendarLink();
-        setStatus("Ready. Choose your shifts, then tap Open Apple Calendar.");
+        setStatus("Ready. Edit shifts here; your existing Apple Calendar subscription refreshes automatically.");
       }
     } catch (err) {
       if (revision !== loadRevision) return;
@@ -321,8 +321,8 @@
     if (lastFocus?.focus) lastFocus.focus();
   }
 
-  // The calendar link is a real navigation initiated by the user's tap.
-  // Browsers cannot silently insert events; iOS prompts to subscribe the first time.
+  // Subscription setup is separate from saving shifts. Never invite repeat subscriptions.
+  // iOS does not expose a way for websites to inspect existing Calendar subscriptions.
   el("wt-shifts-calendar").addEventListener("click", event => {
     if (el("wt-shifts-calendar").getAttribute("aria-disabled") === "true") {
       event.preventDefault();
@@ -330,7 +330,7 @@
         "Finish saving the schedule before opening Calendar.", Boolean(lastSaveError));
       return;
     }
-    setStatus("Opening Apple Calendar. Approve Subscribe on your iPhone. Use Safari if an in-app browser blocks the handoff.");
+    if (!window.confirm("Only subscribe once. If Mimi Work Schedule already appears in Apple Calendar, tap Cancel. Your saved shifts will update there automatically.\n\nSubscribe to Mimi Work Schedule now?")) {\n      event.preventDefault();\n      setStatus("No new subscription added. Existing Mimi Work calendars update automatically.");\n      return;\n    }\n    setStatus("Opening Apple Calendar for one-time subscription setup. Do not subscribe again after future shift edits.");
   });
   el("wt-shifts-export").addEventListener("click", async () => {
     if (!Object.keys(selections).length) {
@@ -350,7 +350,7 @@
       a.href = url; a.download = filename;
       document.body.appendChild(a); a.click(); a.remove();
       window.setTimeout(() => URL.revokeObjectURL(url),15000);
-      setStatus("Backup downloaded. For automatic Calendar opening use Open Apple Calendar instead.");
+      setStatus("Backup downloaded. For a one-time live subscription use Subscribe to Mimi Work (once) instead.");
     } catch (err) {
       if (err?.name === "AbortError") setStatus("Share cancelled.");
       else setStatus("Could not share backup: " + (err.message || "Try again"),true);
